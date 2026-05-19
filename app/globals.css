@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+@layer base {
+  body {
+    @apply bg-brand-cream text-plum;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-brand-orange hover:bg-brand-orange-light text-white font-bold px-6 py-3 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 min-h-[44px] inline-flex items-center justify-center;
+  }
+  .btn-secondary {
+    @apply bg-transparent border-2 border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-white font-bold px-6 py-3 rounded-full transition-all duration-200 min-h-[44px] inline-flex items-center justify-center;
+  }
+  .btn-teal {
+    @apply bg-brand-teal hover:bg-brand-teal-light text-white font-bold px-6 py-3 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 min-h-[44px] inline-flex items-center justify-center;
+  }
+  .card {
+    @apply bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden;
+  }
+  .section-title {
+    @apply text-2xl sm:text-3xl md:text-4xl font-extrabold text-plum;
+  }
+  .badge {
+    @apply inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full;
+  }
+}
