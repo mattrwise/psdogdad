@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
@@ -7,7 +7,11 @@ export const metadata: Metadata = {
   title: 'PS Dog Dad — Palm Springs Dog Dads Community',
   description: 'The Palm Springs community for gay men and their dogs. Forums, meetups, member profiles, and local resources.',
   keywords: 'Palm Springs, gay, dog dad, community, dog meetups, forums',
-  viewport: 'width=device-width, initial-scale=1',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
