@@ -72,7 +72,7 @@ export default function HomePage() {
               <span>🌴</span> Palm Springs, CA
             </div>
             <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-              Where Gay Dog Dads{' '}
+              Where Dog Dads{' '}
               <span className="text-brand-golden">Come Together</span>
             </h1>
             <p className="text-lg md:text-xl text-white/80 mb-8 leading-relaxed">
