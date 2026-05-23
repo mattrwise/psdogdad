@@ -115,7 +115,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="section-title">Everything Your Pack Needs</h2>
-            <p className="text-plum/60 mt-3 max-w-xl mx-auto">One community for Palm Springs gay dog dads — online and on the trail.</p>
+            <p className="text-plum/60 mt-3 max-w-xl mx-auto">One community for Palm Springs dog dads — online and on the trail.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[

@@ -4,7 +4,7 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
-  title: 'PS Dog Dad — Palm Springs Gay Dog Dads Community',
+  title: 'PS Dog Dad — Palm Springs Dog Dads Community',
   description: 'The Palm Springs community for gay men and their dogs. Forums, meetups, member profiles, and local resources.',
   keywords: 'Palm Springs, gay, dog dad, community, dog meetups, forums',
   viewport: 'width=device-width, initial-scale=1',
