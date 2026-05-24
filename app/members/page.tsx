@@ -1,18 +1,18 @@
 import Link from 'next/link'
 
 const members = [
-  { name: 'Marco', location: 'Uptown PS', dog: 'Biscuit', breed: 'French Bulldog', age: '3 yrs', joined: 'Jan 2023', emoji: '🐾', color: 'from-plum to-plum-light' },
-  { name: 'Tyler', location: 'Palm Canyon', dog: 'Mango', breed: 'Golden Retriever', age: '2 yrs', joined: 'Mar 2023', emoji: '🌟', color: 'from-brand-orange to-brand-orange-light' },
-  { name: 'Derek', location: 'Cathedral City', dog: 'Zeus', breed: 'Doberman', age: '5 yrs', joined: 'Jun 2022', emoji: '⚡', color: 'from-brand-teal to-brand-teal-light' },
-  { name: 'James', location: 'Old Las Palmas', dog: 'Pretzel', breed: 'Dachshund', age: '7 yrs', joined: 'Feb 2021', emoji: '🥨', color: 'from-plum to-brand-teal' },
-  { name: 'Chris', location: 'Movie Colony', dog: 'Noodle', breed: 'Labradoodle', age: '4 yrs', joined: 'Aug 2023', emoji: '🍜', color: 'from-brand-golden to-brand-orange' },
-  { name: 'Ryan', location: 'South PS', dog: 'Taco', breed: 'Chihuahua Mix', age: '6 yrs', joined: 'Nov 2022', emoji: '🌮', color: 'from-brand-orange to-brand-orange-light' },
-  { name: 'Matt', location: 'Rancho Mirage', dog: 'Duke', breed: 'German Shepherd', age: '3 yrs', joined: 'May 2023', emoji: '👑', color: 'from-plum to-plum-light' },
-  { name: 'Alex', location: 'Desert Hot Springs', dog: 'Pepper', breed: 'Border Collie', age: '2 yrs', joined: 'Sep 2023', emoji: '🌶️', color: 'from-brand-teal to-brand-teal-light' },
-  { name: 'Jordan', location: 'Palm Springs', dog: 'Waffle', breed: 'Corgi', age: '1 yr', joined: 'Jan 2024', emoji: '🧇', color: 'from-brand-golden to-brand-orange' },
-  { name: 'Kevin', location: 'Indian Wells', dog: 'Bruno', breed: 'Bulldog', age: '4 yrs', joined: 'Apr 2022', emoji: '🏋️', color: 'from-plum to-brand-teal' },
-  { name: 'Sam', location: 'Uptown PS', dog: 'Olive', breed: 'Italian Greyhound', age: '3 yrs', joined: 'Jul 2023', emoji: '🫒', color: 'from-brand-teal to-brand-teal-light' },
-  { name: 'Will', location: 'Palm Canyon', dog: 'Beans', breed: 'Beagle', age: '5 yrs', joined: 'Dec 2021', emoji: '🫘', color: 'from-brand-orange to-brand-orange-light' },
+  { name: 'Marco', location: 'Uptown PS', dog: 'Biscuit', breed: 'French Bulldog', age: '3 yrs', joined: 'Jan 2023', emoji: '🐾', color: 'from-plum to-plum-light', avatarUrl: null, dogPhotoUrl: null },
+  { name: 'Tyler', location: 'Palm Canyon', dog: 'Mango', breed: 'Golden Retriever', age: '2 yrs', joined: 'Mar 2023', emoji: '🌟', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
+  { name: 'Derek', location: 'Cathedral City', dog: 'Zeus', breed: 'Doberman', age: '5 yrs', joined: 'Jun 2022', emoji: '⚡', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
+  { name: 'James', location: 'Old Las Palmas', dog: 'Pretzel', breed: 'Dachshund', age: '7 yrs', joined: 'Feb 2021', emoji: '🥨', color: 'from-plum to-brand-teal', avatarUrl: null, dogPhotoUrl: null },
+  { name: 'Chris', location: 'Movie Colony', dog: 'Noodle', breed: 'Labradoodle', age: '4 yrs', joined: 'Aug 2023', emoji: '🍜', color: 'from-brand-golden to-brand-orange', avatarUrl: null, dogPhotoUrl: null },
+  { name: 'Ryan', location: 'South PS', dog: 'Taco', breed: 'Chihuahua Mix', age: '6 yrs', joined: 'Nov 2022', emoji: '🌮', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
+  { name: 'Matt', location: 'Rancho Mirage', dog: 'Duke', breed: 'German Shepherd', age: '3 yrs', joined: 'May 2023', emoji: '👑', color: 'from-plum to-plum-light', avatarUrl: null, dogPhotoUrl: null },
+  { name: 'Alex', location: 'Desert Hot Springs', dog: 'Pepper', breed: 'Border Collie', age: '2 yrs', joined: 'Sep 2023', emoji: '🌶️', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
+  { name: 'Jordan', location: 'Palm Springs', dog: 'Waffle', breed: 'Corgi', age: '1 yr', joined: 'Jan 2024', emoji: '🧇', color: 'from-brand-golden to-brand-orange', avatarUrl: null, dogPhotoUrl: null },
+  { name: 'Kevin', location: 'Indian Wells', dog: 'Bruno', breed: 'Bulldog', age: '4 yrs', joined: 'Apr 2022', emoji: '🏋️', color: 'from-plum to-brand-teal', avatarUrl: null, dogPhotoUrl: null },
+  { name: 'Sam', location: 'Uptown PS', dog: 'Olive', breed: 'Italian Greyhound', age: '3 yrs', joined: 'Jul 2023', emoji: '🫒', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
+  { name: 'Will', location: 'Palm Canyon', dog: 'Beans', breed: 'Beagle', age: '5 yrs', joined: 'Dec 2021', emoji: '🫘', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
 ]
 
 export default function MembersPage() {
@@ -56,17 +56,46 @@ export default function MembersPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {members.map((member) => (
           <div key={member.name} className="card hover:-translate-y-1 cursor-pointer group">
-            {/* Avatar gradient */}
-            <div className={`bg-gradient-to-br ${member.color} h-32 flex items-center justify-center text-6xl`}>
-              {member.emoji}
-            </div>
+
+            {/* Photo header — split panel if both photos exist, single if one, gradient if none */}
+            {member.avatarUrl && member.dogPhotoUrl ? (
+              <div className="h-36 flex overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={member.avatarUrl} alt={member.name}
+                  className="w-1/2 h-full object-cover border-r-2 border-white" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={member.dogPhotoUrl} alt={member.dog}
+                  className="w-1/2 h-full object-cover" />
+              </div>
+            ) : member.avatarUrl ? (
+              <div className="h-36 relative overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={member.avatarUrl} alt={member.name} className="w-full h-full object-cover" />
+              </div>
+            ) : member.dogPhotoUrl ? (
+              <div className="h-36 relative overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={member.dogPhotoUrl} alt={member.dog} className="w-full h-full object-cover" />
+              </div>
+            ) : (
+              <div className={`bg-gradient-to-br ${member.color} h-36 flex items-center justify-center text-6xl`}>
+                {member.emoji}
+              </div>
+            )}
+
             <div className="p-4">
               <h3 className="font-extrabold text-plum text-lg">{member.name}</h3>
               <p className="text-xs text-plum/50 mb-3">📍 {member.location}</p>
 
               <div className="bg-brand-cream rounded-xl p-3 mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl">🐶</span>
+                  {member.dogPhotoUrl ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={member.dogPhotoUrl} alt={member.dog}
+                      className="w-8 h-8 rounded-full object-cover flex-shrink-0 border-2 border-white shadow-sm" />
+                  ) : (
+                    <span className="text-2xl">🐶</span>
+                  )}
                   <div>
                     <div className="font-bold text-plum text-sm">{member.dog}</div>
                     <div className="text-xs text-plum/60">{member.breed} · {member.age}</div>
