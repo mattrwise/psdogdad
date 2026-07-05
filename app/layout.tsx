@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
+import PendingPhotoSync from '@/components/PendingPhotoSync'
 
 export const metadata: Metadata = {
   title: 'PS Dog Dad — Palm Springs Dog Dads Community',
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-screen flex flex-col">
+        <PendingPhotoSync />
         <Nav />
         <main className="flex-1">{children}</main>
         <Footer />

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
+import { uploadPhoto } from '@/lib/photos'
 import type { User } from '@supabase/supabase-js'
 
 // ─── constants ────────────────────────────────────────────────────────────────
@@ -121,17 +122,6 @@ function PhotoUpload({ id, label, hint, preview, onFileSelected, onClear }: Phot
 }
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
-
-async function uploadPhoto(userId: string, slot: 'avatar' | 'dog', file: File): Promise<string | null> {
-  const ext = file.name.split('.').pop() ?? 'jpg'
-  const path = `${userId}/${slot}.${ext}`
-  const { error } = await supabase.storage
-    .from('member-photos')
-    .upload(path, file, { upsert: true, contentType: file.type })
-  if (error) { console.error(`Upload ${slot} failed:`, error.message); return null }
-  const { data } = supabase.storage.from('member-photos').getPublicUrl(path)
-  return data.publicUrl ?? null
-}
 
 function initials(name: string) {
   return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()

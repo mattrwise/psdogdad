@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import SignedOut from '@/components/auth/SignedOut'
 
 const categories = [
   {
@@ -169,14 +170,16 @@ export default function ForumsPage() {
             </div>
           </div>
 
-          {/* Join CTA */}
-          <div className="card p-5 border-2 border-brand-orange/30 bg-brand-orange/5">
-            <h3 className="font-extrabold text-plum mb-2">Join the conversation</h3>
-            <p className="text-sm text-plum/60 mb-4">Create a free account to post, reply, and connect.</p>
-            <Link href="/members/join" className="btn-primary w-full text-center block">
-              Sign Up Free
-            </Link>
-          </div>
+          {/* Join CTA — visitors only */}
+          <SignedOut>
+            <div className="card p-5 border-2 border-brand-orange/30 bg-brand-orange/5">
+              <h3 className="font-extrabold text-plum mb-2">Join the conversation</h3>
+              <p className="text-sm text-plum/60 mb-4">Create a free account to post, reply, and connect.</p>
+              <Link href="/members/join" className="btn-primary w-full text-center block">
+                Sign Up Free
+              </Link>
+            </div>
+          </SignedOut>
         </div>
       </div>
     </div>

@@ -1,8 +1,11 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/client'
+import { stashPendingPhotos, uploadPhoto } from '@/lib/photos'
+import { useUser } from '@/lib/useUser'
 
 // ─── constants ────────────────────────────────────────────────────────────────
 
@@ -130,23 +133,6 @@ function PhotoUpload({ id, label, hint, preview, onFileSelected, onClear, error 
   )
 }
 
-// ─── helpers ──────────────────────────────────────────────────────────────────
-
-async function uploadPhoto(
-  userId: string,
-  slot: 'avatar' | 'dog',
-  file: File,
-): Promise<string | null> {
-  const ext = file.name.split('.').pop() ?? 'jpg'
-  const path = `${userId}/${slot}.${ext}`
-  const { error } = await supabase.storage
-    .from('member-photos')
-    .upload(path, file, { upsert: true, contentType: file.type })
-  if (error) { console.error(`Upload ${slot} failed:`, error.message); return null }
-  const { data } = supabase.storage.from('member-photos').getPublicUrl(path)
-  return data.publicUrl ?? null
-}
-
 // ─── types ────────────────────────────────────────────────────────────────────
 
 type FormData = {
@@ -167,13 +153,23 @@ const INITIAL_FORM: FormData = {
 // ─── main page ────────────────────────────────────────────────────────────────
 
 export default function JoinPage() {
+  const router = useRouter()
+  const { user: currentUser, loading: authLoading } = useUser()
   const [form, setForm] = useState<FormData>(INITIAL_FORM)
   const [errors, setErrors] = useState<FormErrors>({})
   const [loading, setLoading] = useState(false)
   const [loadingMsg, setLoadingMsg] = useState('Creating your account…')
   const [success, setSuccess] = useState(false)
+  const [photosPending, setPhotosPending] = useState(false)
   const [serverError, setServerError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
+
+  // Already a member? No need to join again.
+  useEffect(() => {
+    if (!authLoading && currentUser && !success && !loading) {
+      router.replace('/members/profile')
+    }
+  }, [authLoading, currentUser, success, loading, router])
 
   // photos
   const [memberFile, setMemberFile] = useState<File | null>(null)
@@ -236,6 +232,7 @@ export default function JoinPage() {
           dog_name:  form.dogName.trim(),
           dog_breed: form.dogBreed,
         },
+        emailRedirectTo: `${window.location.origin}/welcome`,
       },
     })
 
@@ -243,21 +240,31 @@ export default function JoinPage() {
 
     const userId = data.user?.id
     if (userId && (memberFile || dogFile)) {
-      setLoadingMsg('Uploading your photos…')
+      if (data.session) {
+        // Email confirmation is off — we're signed in and can upload right away.
+        setLoadingMsg('Uploading your photos…')
 
-      const [avatarUrl, dogPhotoUrl] = await Promise.all([
-        memberFile ? uploadPhoto(userId, 'avatar', memberFile) : Promise.resolve(null),
-        dogFile    ? uploadPhoto(userId, 'dog',    dogFile)    : Promise.resolve(null),
-      ])
+        const [avatarUrl, dogPhotoUrl] = await Promise.all([
+          memberFile ? uploadPhoto(userId, 'avatar', memberFile) : Promise.resolve(null),
+          dogFile    ? uploadPhoto(userId, 'dog',    dogFile)    : Promise.resolve(null),
+        ])
 
-      // Store the public URLs back into the user's metadata
-      if (avatarUrl || dogPhotoUrl) {
-        await supabase.auth.updateUser({
-          data: {
-            ...(avatarUrl    && { avatar_url:    avatarUrl }),
-            ...(dogPhotoUrl  && { dog_photo_url: dogPhotoUrl }),
-          },
-        })
+        if (avatarUrl || dogPhotoUrl) {
+          const { error: metaError } = await supabase.auth.updateUser({
+            data: {
+              ...(avatarUrl    && { avatar_url:    avatarUrl }),
+              ...(dogPhotoUrl  && { dog_photo_url: dogPhotoUrl }),
+            },
+          })
+          if (metaError) console.error('Saving photo URLs failed:', metaError.message)
+        }
+      } else {
+        // No session until the email is confirmed, so uploads would be rejected.
+        // Keep compressed copies on this device; PendingPhotoSync uploads them
+        // once the confirmation link signs the member in.
+        setLoadingMsg('Saving your photos…')
+        const stashed = await stashPendingPhotos(memberFile, dogFile)
+        setPhotosPending(stashed)
       }
     }
 
@@ -283,6 +290,13 @@ export default function JoinPage() {
             <span className="font-semibold text-plum">{form.email}</span>.
             Click the link to activate your account, then come back and log in.
           </p>
+          {photosPending && (
+            <div className="bg-brand-teal/10 border border-brand-teal/30 rounded-xl p-4 text-sm text-plum/70 mb-4">
+              📷 Your photos are saved on this device and will be added to your profile
+              automatically when you open the confirmation link in this browser.
+              You can also add or change them anytime from your profile.
+            </div>
+          )}
           <div className="bg-brand-golden/10 border border-brand-golden/30 rounded-xl p-4 text-sm text-plum/70 mb-8">
             Didn&apos;t get it? Check your spam folder, or{' '}
             <button className="text-brand-orange font-semibold hover:underline"

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import SignedOut from '@/components/auth/SignedOut'
 
 export const metadata: Metadata = {
   title: 'About Us — PS Dog Dad',
@@ -97,7 +98,9 @@ export default function AboutPage() {
             . We read everything.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/members/join" className="btn-primary">Join the Community</Link>
+            <SignedOut>
+              <Link href="/members/join" className="btn-primary">Join the Community</Link>
+            </SignedOut>
             <Link href="/events" className="btn-secondary">See Upcoming Events</Link>
           </div>
         </section>

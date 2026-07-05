@@ -1,17 +1,26 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/client'
+import { useUser } from '@/lib/useUser'
 
 export default function LoginPage() {
   const router = useRouter()
+  const { user: currentUser, loading: authLoading } = useUser()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  // Already signed in? Skip the login form.
+  useEffect(() => {
+    if (!authLoading && currentUser && !loading) {
+      router.replace('/members/profile')
+    }
+  }, [authLoading, currentUser, loading, router])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

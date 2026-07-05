@@ -1,21 +1,93 @@
-import Link from 'next/link'
+'use client'
 
-const members = [
-  { name: 'Marco', location: 'Uptown PS', dog: 'Biscuit', breed: 'French Bulldog', age: '3 yrs', joined: 'Jan 2023', emoji: '🐾', color: 'from-plum to-plum-light', avatarUrl: null, dogPhotoUrl: null },
-  { name: 'Tyler', location: 'Palm Canyon', dog: 'Mango', breed: 'Golden Retriever', age: '2 yrs', joined: 'Mar 2023', emoji: '🌟', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
-  { name: 'Derek', location: 'Cathedral City', dog: 'Zeus', breed: 'Doberman', age: '5 yrs', joined: 'Jun 2022', emoji: '⚡', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
-  { name: 'James', location: 'Old Las Palmas', dog: 'Pretzel', breed: 'Dachshund', age: '7 yrs', joined: 'Feb 2021', emoji: '🥨', color: 'from-plum to-brand-teal', avatarUrl: null, dogPhotoUrl: null },
-  { name: 'Chris', location: 'Movie Colony', dog: 'Noodle', breed: 'Labradoodle', age: '4 yrs', joined: 'Aug 2023', emoji: '🍜', color: 'from-brand-golden to-brand-orange', avatarUrl: null, dogPhotoUrl: null },
-  { name: 'Ryan', location: 'South PS', dog: 'Taco', breed: 'Chihuahua Mix', age: '6 yrs', joined: 'Nov 2022', emoji: '🌮', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
-  { name: 'Matt', location: 'Rancho Mirage', dog: 'Duke', breed: 'German Shepherd', age: '3 yrs', joined: 'May 2023', emoji: '👑', color: 'from-plum to-plum-light', avatarUrl: null, dogPhotoUrl: null },
-  { name: 'Alex', location: 'Desert Hot Springs', dog: 'Pepper', breed: 'Border Collie', age: '2 yrs', joined: 'Sep 2023', emoji: '🌶️', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
-  { name: 'Jordan', location: 'Palm Springs', dog: 'Waffle', breed: 'Corgi', age: '1 yr', joined: 'Jan 2024', emoji: '🧇', color: 'from-brand-golden to-brand-orange', avatarUrl: null, dogPhotoUrl: null },
-  { name: 'Kevin', location: 'Indian Wells', dog: 'Bruno', breed: 'Bulldog', age: '4 yrs', joined: 'Apr 2022', emoji: '🏋️', color: 'from-plum to-brand-teal', avatarUrl: null, dogPhotoUrl: null },
-  { name: 'Sam', location: 'Uptown PS', dog: 'Olive', breed: 'Italian Greyhound', age: '3 yrs', joined: 'Jul 2023', emoji: '🫒', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
-  { name: 'Will', location: 'Palm Canyon', dog: 'Beans', breed: 'Beagle', age: '5 yrs', joined: 'Dec 2021', emoji: '🫘', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { supabase } from '@/lib/supabase/client'
+import SignedIn from '@/components/auth/SignedIn'
+import SignedOut from '@/components/auth/SignedOut'
+
+type MemberCard = {
+  id: string
+  name: string
+  location: string
+  dog: string
+  breed: string
+  joined: string
+  emoji: string
+  color: string
+  avatarUrl: string | null
+  dogPhotoUrl: string | null
+}
+
+// Sample members shown until real profiles exist in Supabase
+const sampleMembers: MemberCard[] = [
+  { id: 's1', name: 'Marco', location: 'Uptown PS', dog: 'Biscuit', breed: 'French Bulldog', joined: 'Jan 2023', emoji: '🐾', color: 'from-plum to-plum-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's2', name: 'Tyler', location: 'Palm Canyon', dog: 'Mango', breed: 'Golden Retriever', joined: 'Mar 2023', emoji: '🌟', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's3', name: 'Derek', location: 'Cathedral City', dog: 'Zeus', breed: 'Doberman', joined: 'Jun 2022', emoji: '⚡', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's4', name: 'James', location: 'Old Las Palmas', dog: 'Pretzel', breed: 'Dachshund', joined: 'Feb 2021', emoji: '🥨', color: 'from-plum to-brand-teal', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's5', name: 'Chris', location: 'Movie Colony', dog: 'Noodle', breed: 'Labradoodle', joined: 'Aug 2023', emoji: '🍜', color: 'from-brand-golden to-brand-orange', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's6', name: 'Ryan', location: 'South PS', dog: 'Taco', breed: 'Chihuahua Mix', joined: 'Nov 2022', emoji: '🌮', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's7', name: 'Matt', location: 'Rancho Mirage', dog: 'Duke', breed: 'German Shepherd', joined: 'May 2023', emoji: '👑', color: 'from-plum to-plum-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's8', name: 'Alex', location: 'Desert Hot Springs', dog: 'Pepper', breed: 'Border Collie', joined: 'Sep 2023', emoji: '🌶️', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's9', name: 'Jordan', location: 'Palm Springs', dog: 'Waffle', breed: 'Corgi', joined: 'Jan 2024', emoji: '🧇', color: 'from-brand-golden to-brand-orange', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's10', name: 'Kevin', location: 'Indian Wells', dog: 'Bruno', breed: 'Bulldog', joined: 'Apr 2022', emoji: '🏋️', color: 'from-plum to-brand-teal', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's11', name: 'Sam', location: 'Uptown PS', dog: 'Olive', breed: 'Italian Greyhound', joined: 'Jul 2023', emoji: '🫒', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's12', name: 'Will', location: 'Palm Canyon', dog: 'Beans', breed: 'Beagle', joined: 'Dec 2021', emoji: '🫘', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
 ]
 
+const gradients = [
+  'from-plum to-plum-light',
+  'from-brand-orange to-brand-orange-light',
+  'from-brand-teal to-brand-teal-light',
+  'from-plum to-brand-teal',
+  'from-brand-golden to-brand-orange',
+]
+
+type ProfileRow = {
+  id: string
+  name: string | null
+  city: string | null
+  dog_name: string | null
+  dog_breed: string | null
+  avatar_url: string | null
+  dog_photo_url: string | null
+  created_at: string
+}
+
+function profileToCard(p: ProfileRow, index: number): MemberCard {
+  return {
+    id: p.id,
+    name: p.name ?? 'New Member',
+    location: p.city ?? 'Palm Springs',
+    dog: p.dog_name ?? 'Good Boy',
+    breed: p.dog_breed ?? 'Mixed Breed',
+    joined: new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+    emoji: '🐾',
+    color: gradients[index % gradients.length],
+    avatarUrl: p.avatar_url,
+    dogPhotoUrl: p.dog_photo_url,
+  }
+}
+
 export default function MembersPage() {
+  const [members, setMembers] = useState<MemberCard[] | null>(null)
+
+  useEffect(() => {
+    supabase
+      .from('profiles')
+      .select('id, name, city, dog_name, dog_breed, avatar_url, dog_photo_url, created_at')
+      .order('created_at', { ascending: true })
+      .then(({ data, error }) => {
+        if (error || !data || data.length === 0) {
+          // No profiles table yet, or no confirmed members — show sample community
+          if (error) console.warn('Could not load member profiles:', error.message)
+          setMembers(sampleMembers)
+          return
+        }
+        setMembers((data as ProfileRow[]).map(profileToCard))
+      })
+  }, [])
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Header */}
@@ -24,7 +96,12 @@ export default function MembersPage() {
           <h1 className="section-title">Member Directory</h1>
           <p className="text-plum/60 mt-2">Meet the dog dads of Palm Springs — and their very good boys (and girls).</p>
         </div>
-        <Link href="/members/join" className="btn-primary self-start">Join the Pack</Link>
+        <SignedOut>
+          <Link href="/members/join" className="btn-primary self-start">Join the Pack</Link>
+        </SignedOut>
+        <SignedIn>
+          <Link href="/members/profile" className="btn-secondary self-start">My Profile</Link>
+        </SignedIn>
       </div>
 
       {/* Search/Filter Bar */}
@@ -54,8 +131,8 @@ export default function MembersPage() {
 
       {/* Members Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {members.map((member) => (
-          <div key={member.name} className="card hover:-translate-y-1 cursor-pointer group">
+        {(members ?? []).map((member) => (
+          <div key={member.id} className="card hover:-translate-y-1 cursor-pointer group">
 
             {/* Photo header — split panel if both photos exist, single if one, gradient if none */}
             {member.avatarUrl && member.dogPhotoUrl ? (
@@ -98,7 +175,7 @@ export default function MembersPage() {
                   )}
                   <div>
                     <div className="font-bold text-plum text-sm">{member.dog}</div>
-                    <div className="text-xs text-plum/60">{member.breed} · {member.age}</div>
+                    <div className="text-xs text-plum/60">{member.breed}</div>
                   </div>
                 </div>
               </div>
@@ -111,27 +188,15 @@ export default function MembersPage() {
           </div>
         ))}
 
-        {/* Join card */}
-        <div className="card border-2 border-dashed border-plum/20 hover:-translate-y-1 cursor-pointer flex flex-col items-center justify-center p-8 text-center min-h-[280px]">
-          <div className="w-16 h-16 bg-plum/10 rounded-full flex items-center justify-center text-3xl mb-4">🐾</div>
-          <h3 className="font-extrabold text-plum text-lg mb-2">Be part of the pack</h3>
-          <p className="text-plum/50 text-sm mb-5">Create your free member profile and introduce your dog to the community.</p>
-          <Link href="/members/join" className="btn-primary text-sm">Join Free</Link>
-        </div>
-      </div>
-
-      {/* Pagination */}
-      <div className="flex justify-center gap-2 mt-10">
-        {[1, 2, 3, '...', 12].map((page, i) => (
-          <button
-            key={i}
-            className={`w-10 h-10 rounded-full text-sm font-bold transition-colors ${
-              page === 1 ? 'bg-plum text-white' : 'bg-white text-plum hover:bg-plum/10 shadow-sm'
-            }`}
-          >
-            {page}
-          </button>
-        ))}
+        {/* Join card — visitors only */}
+        <SignedOut>
+          <div className="card border-2 border-dashed border-plum/20 hover:-translate-y-1 cursor-pointer flex flex-col items-center justify-center p-8 text-center min-h-[280px]">
+            <div className="w-16 h-16 bg-plum/10 rounded-full flex items-center justify-center text-3xl mb-4">🐾</div>
+            <h3 className="font-extrabold text-plum text-lg mb-2">Be part of the pack</h3>
+            <p className="text-plum/50 text-sm mb-5">Create your free member profile and introduce your dog to the community.</p>
+            <Link href="/members/join" className="btn-primary text-sm">Join Free</Link>
+          </div>
+        </SignedOut>
       </div>
     </div>
   )

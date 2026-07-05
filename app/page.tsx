@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import SignedIn from '@/components/auth/SignedIn'
+import SignedOut from '@/components/auth/SignedOut'
 
 const stats = [
   { value: '340+', label: 'Members' },
@@ -79,9 +81,16 @@ export default function HomePage() {
               Forums, meetups, member profiles, and local resources — all for the Palm Springs community of men who love their dogs.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link href="/members/join" className="btn-primary text-base">
-                Join the Pack 🐾
-              </Link>
+              <SignedOut>
+                <Link href="/members/join" className="btn-primary text-base">
+                  Join the Pack 🐾
+                </Link>
+              </SignedOut>
+              <SignedIn>
+                <Link href="/forums" className="btn-primary text-base">
+                  Jump into the Forums 💬
+                </Link>
+              </SignedIn>
               <Link href="/events" className="btn-secondary border-white text-white hover:bg-white hover:text-plum text-base">
                 See Upcoming Events
               </Link>
@@ -198,20 +207,22 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA Banner */}
-      <section className="bg-plum py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-            Ready to join the pack?
-          </h2>
-          <p className="text-white/70 text-lg mb-8 max-w-xl mx-auto">
-            Create your free member profile, introduce your dog, and start connecting with Palm Springs&apos; best community.
-          </p>
-          <Link href="/members/join" className="btn-primary text-base sm:text-lg px-6 sm:px-10 py-3.5 sm:py-4 inline-block">
-            Join PS Dog Dad — It&apos;s Free 🐾
-          </Link>
-        </div>
-      </section>
+      {/* CTA Banner — visitors only */}
+      <SignedOut>
+        <section className="bg-plum py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
+              Ready to join the pack?
+            </h2>
+            <p className="text-white/70 text-lg mb-8 max-w-xl mx-auto">
+              Create your free member profile, introduce your dog, and start connecting with Palm Springs&apos; best community.
+            </p>
+            <Link href="/members/join" className="btn-primary text-base sm:text-lg px-6 sm:px-10 py-3.5 sm:py-4 inline-block">
+              Join PS Dog Dad — It&apos;s Free 🐾
+            </Link>
+          </div>
+        </section>
+      </SignedOut>
     </div>
   )
 }

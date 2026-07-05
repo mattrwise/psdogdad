@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import SignedOut from '@/components/auth/SignedOut'
 
 export const metadata: Metadata = {
   title: 'Contact — PS Dog Dad',
@@ -120,17 +121,19 @@ export default function ContactPage() {
 
         </div>
 
-        {/* Bottom CTA */}
-        <div className="mt-10 bg-plum rounded-3xl p-6 sm:p-10 text-center text-white">
-          <div className="text-4xl mb-3">🐾</div>
-          <h2 className="text-2xl font-extrabold mb-3">Not a member yet?</h2>
-          <p className="text-white/70 mb-6 max-w-md mx-auto">
-            Join hundreds of dog dads in the Palm Springs area. It&apos;s free and always will be.
-          </p>
-          <Link href="/members/join" className="btn-primary text-base px-8">
-            Join PS Dog Dad
-          </Link>
-        </div>
+        {/* Bottom CTA — visitors only */}
+        <SignedOut>
+          <div className="mt-10 bg-plum rounded-3xl p-6 sm:p-10 text-center text-white">
+            <div className="text-4xl mb-3">🐾</div>
+            <h2 className="text-2xl font-extrabold mb-3">Not a member yet?</h2>
+            <p className="text-white/70 mb-6 max-w-md mx-auto">
+              Join hundreds of dog dads in the Palm Springs area. It&apos;s free and always will be.
+            </p>
+            <Link href="/members/join" className="btn-primary text-base px-8">
+              Join PS Dog Dad
+            </Link>
+          </div>
+        </SignedOut>
 
       </div>
     </div>
