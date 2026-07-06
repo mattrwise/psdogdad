@@ -29,7 +29,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold mb-3 text-sm uppercase tracking-wider">Community</h4>
             <ul className="space-y-2 text-sm">
-              {[['Forums', '/forums'], ['Members', '/members'], ['Events', '/events'], ['Resources', '/resources']].map(([label, href]) => (
+              {[['Training', '/training'], ['Forums', '/forums'], ['Members', '/members'], ['Events', '/events'], ['Resources', '/resources']].map(([label, href]) => (
                 <li key={href}>
                   <Link href={href} className="hover:text-brand-orange transition-colors">{label}</Link>
                 </li>

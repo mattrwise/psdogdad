@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import HeatAlertBanner from '@/components/HeatAlertBanner'
 import SignedIn from '@/components/auth/SignedIn'
 import SignedOut from '@/components/auth/SignedOut'
 
@@ -63,6 +64,15 @@ const forumPreviews = [
 export default function HomePage() {
   return (
     <div>
+      {/* Under-development notice */}
+      <div className="bg-brand-golden text-plum text-center px-4 py-3 text-sm font-semibold">
+        🚧 This site is currently under development but open for early membership —{' '}
+        <Link href="/members/join" className="underline font-bold hover:text-brand-orange">
+          feel free to sign up
+        </Link>
+        . The full site launches August 1st, 2026. 🐾
+      </div>
+
       {/* Hero */}
       <section className="bg-hero-gradient text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10"
@@ -105,6 +115,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      <HeatAlertBanner />
+
       {/* Stats */}
       <section className="bg-brand-cream py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -144,6 +156,43 @@ export default function HomePage() {
                 </div>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Training & Guides */}
+      <section className="py-16 bg-plum text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10"
+          style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, #F5B82A 0%, transparent 50%)' }} />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-2 text-sm font-semibold mb-5">
+                🎓 Training &amp; Guides
+              </div>
+              <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+                Learn to raise a great dog — <span className="text-brand-golden">in the desert</span>
+              </h2>
+              <p className="text-white/70 leading-relaxed mb-6">
+                Written guides on heat safety, leash skills, recall, reactivity, and Palm Springs living.
+                Free guides for everyone, with in-depth premium programs on the way.
+              </p>
+              <Link href="/training" className="btn-primary">Browse the Guides</Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { href: '/training/desert-heat-safety', icon: '☀️', label: 'Desert Heat Safety', tier: 'Free' },
+                { href: '/training/loose-leash-walking', icon: '🦮', label: 'Loose-Leash Walking', tier: 'Free' },
+                { href: '/training/reliable-recall', icon: '📣', label: 'Reliable Recall', tier: 'Free' },
+                { href: '/training/reactivity-program', icon: '🧠', label: 'Reactivity Program', tier: '★ Premium' },
+              ].map(({ href, icon, label, tier }) => (
+                <Link key={label} href={href} className="bg-white/10 hover:bg-white/20 rounded-2xl p-5 transition-colors block">
+                  <div className="text-3xl mb-2">{icon}</div>
+                  <div className="font-bold text-sm mb-1">{label}</div>
+                  <span className="text-xs text-brand-golden font-semibold">{tier}</span>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>

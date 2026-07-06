@@ -8,6 +8,7 @@ import type { User } from '@supabase/supabase-js'
 
 const links = [
   { href: '/', label: 'Home' },
+  { href: '/training', label: 'Training' },
   { href: '/forums', label: 'Forums' },
   { href: '/members', label: 'Members' },
   { href: '/events', label: 'Events' },
