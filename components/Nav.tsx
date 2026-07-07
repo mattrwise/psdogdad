@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
@@ -23,11 +24,11 @@ function Avatar({ user }: { user: User }) {
   if (avatarUrl) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={avatarUrl} alt={name ?? 'Profile'} className="w-8 h-8 rounded-full object-cover border-2 border-white/30" />
+      <img src={avatarUrl} alt={name ?? 'Profile'} className="w-8 h-8 rounded-full object-cover border-2 border-plum/15" />
     )
   }
   return (
-    <div className="w-8 h-8 rounded-full bg-brand-orange flex items-center justify-center text-xs font-extrabold text-white border-2 border-white/30">
+    <div className="w-8 h-8 rounded-full bg-brand-orange flex items-center justify-center text-xs font-extrabold text-white border-2 border-plum/15">
       {initials}
     </div>
   )
@@ -72,17 +73,19 @@ export default function Nav() {
   const firstName = name?.split(' ')[0]
 
   return (
-    <header className="bg-plum shadow-lg sticky top-0 z-50">
+    <header className="bg-brand-cream shadow-sm border-b border-plum/10 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <span className="text-xl sm:text-2xl">🐾</span>
-            <div className="leading-tight">
-              <span className="font-extrabold text-white text-base sm:text-lg tracking-tight">PS</span>
-              <span className="font-extrabold text-brand-teal text-base sm:text-lg tracking-tight"> DOG </span>
-              <span className="font-extrabold text-brand-orange text-base sm:text-lg tracking-tight">DAD</span>
-            </div>
+          <Link href="/" className="flex items-center group outline-none focus-visible:ring-2 focus-visible:ring-plum/30 rounded-md">
+            <Image
+              src="/logo-nav.png"
+              alt="PS Dog Dad"
+              width={399}
+              height={192}
+              priority
+              className="h-10 sm:h-12 w-auto"
+            />
           </Link>
 
           {/* Desktop nav */}
@@ -94,7 +97,7 @@ export default function Nav() {
                 className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
                   pathname === href
                     ? 'bg-brand-orange text-white'
-                    : 'text-plum-light text-white/80 hover:text-white hover:bg-white/10'
+                    : 'text-plum/70 hover:text-plum hover:bg-plum/5'
                 }`}
               >
                 {label}
@@ -105,11 +108,11 @@ export default function Nav() {
               <div className="relative ml-3" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen(v => !v)}
-                  className="flex items-center gap-2 rounded-full pl-2 pr-3 py-1 bg-white/10 hover:bg-white/20 transition-colors"
+                  className="flex items-center gap-2 rounded-full pl-2 pr-3 py-1 bg-plum/5 hover:bg-plum/10 transition-colors"
                 >
                   <Avatar user={user} />
-                  <span className="text-sm font-semibold text-white">{firstName ?? 'My Account'}</span>
-                  <svg className={`w-3 h-3 text-white/60 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <span className="text-sm font-semibold text-plum">{firstName ?? 'My Account'}</span>
+                  <svg className={`w-3 h-3 text-plum/50 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
@@ -142,20 +145,20 @@ export default function Nav() {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden text-white p-2"
+            className="md:hidden text-plum p-2"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
           >
-            <div className={`w-6 h-0.5 bg-white mb-1.5 transition-all ${open ? 'rotate-45 translate-y-2' : ''}`} />
-            <div className={`w-6 h-0.5 bg-white mb-1.5 transition-all ${open ? 'opacity-0' : ''}`} />
-            <div className={`w-6 h-0.5 bg-white transition-all ${open ? '-rotate-45 -translate-y-2' : ''}`} />
+            <div className={`w-6 h-0.5 bg-plum mb-1.5 transition-all ${open ? 'rotate-45 translate-y-2' : ''}`} />
+            <div className={`w-6 h-0.5 bg-plum mb-1.5 transition-all ${open ? 'opacity-0' : ''}`} />
+            <div className={`w-6 h-0.5 bg-plum transition-all ${open ? '-rotate-45 -translate-y-2' : ''}`} />
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden bg-plum-dark border-t border-white/10 px-4 py-4 flex flex-col gap-2">
+        <div className="md:hidden bg-white border-t border-plum/10 px-4 py-4 flex flex-col gap-2">
           {links.map(({ href, label }) => (
             <Link
               key={href}
@@ -164,7 +167,7 @@ export default function Nav() {
               className={`px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${
                 pathname === href
                   ? 'bg-brand-orange text-white'
-                  : 'text-white/80 hover:bg-white/10 hover:text-white'
+                  : 'text-plum/70 hover:bg-plum/5 hover:text-plum'
               }`}
             >
               {label}
@@ -173,20 +176,20 @@ export default function Nav() {
 
           {user ? (
             <>
-              <div className="flex items-center gap-3 px-4 py-3 border-t border-white/10 mt-1">
+              <div className="flex items-center gap-3 px-4 py-3 border-t border-plum/10 mt-1">
                 <Avatar user={user} />
-                <span className="text-sm font-semibold text-white">{firstName ?? user.email}</span>
+                <span className="text-sm font-semibold text-plum">{firstName ?? user.email}</span>
               </div>
               <Link
                 href="/members/profile"
                 onClick={() => setOpen(false)}
-                className="px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:bg-white/10 hover:text-white transition-colors"
+                className="px-4 py-3 rounded-xl text-sm font-semibold text-plum/70 hover:bg-plum/5 hover:text-plum transition-colors"
               >
                 👤 My Profile
               </Link>
               <button
                 onClick={handleSignOut}
-                className="px-4 py-3 rounded-xl text-sm font-semibold text-red-400 hover:bg-red-500/10 text-left transition-colors"
+                className="px-4 py-3 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 text-left transition-colors"
               >
                 🚪 Sign Out
               </button>
