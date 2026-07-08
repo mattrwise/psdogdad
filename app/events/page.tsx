@@ -1,37 +1,40 @@
-import Link from 'next/link'
+'use client'
 
-const events = [
+import { useState } from 'react'
+import ProposeEventModal from '@/components/events/ProposeEventModal'
+
+const upcomingEvents = [
   {
     id: 1,
-    date: { month: 'JUN', day: '7', year: '2025' },
-    title: 'Morning Dog Walk — Ruth Hardy Park',
-    time: '7:30 AM – 9:00 AM',
-    location: 'Ruth Hardy Park, Palm Springs',
-    description: 'Start your Saturday right with a casual morning walk through Ruth Hardy Park. All breeds welcome, leashed dogs only on main path, off-leash in the fenced area after the walk.',
-    tags: ['Walk', 'All Dogs Welcome', 'Free'],
-    attending: 18,
-    host: 'PS Dog Dad Community',
-    recurring: 'Every other Saturday',
-    color: 'border-brand-teal bg-brand-teal/5',
-    tagColor: 'bg-brand-teal/10 text-brand-teal',
-  },
-  {
-    id: 2,
-    date: { month: 'JUN', day: '14', year: '2025' },
+    date: { month: 'JUL', day: '12' },
     title: 'Yappy Hour at Bootlegger Tiki',
     time: '5:00 PM – 8:00 PM',
     location: 'Bootlegger Tiki Bar, Palm Springs',
     description: 'Monthly Yappy Hour on the patio at Bootlegger. Dog-friendly, happy hour specials, and the best people watching on Palm Canyon. Leashed dogs on the patio.',
     tags: ['Social', '21+', 'Dog-Friendly Patio'],
-    attending: 34,
+    attending: 21,
     host: 'Marco & Biscuit',
     recurring: 'Second Saturday monthly',
     color: 'border-brand-orange bg-brand-orange/5',
     tagColor: 'bg-brand-orange/10 text-brand-orange',
   },
   {
+    id: 2,
+    date: { month: 'JUL', day: '19' },
+    title: 'Morning Dog Walk — Ruth Hardy Park',
+    time: '7:00 AM – 8:30 AM',
+    location: 'Ruth Hardy Park, Palm Springs',
+    description: 'Kick off your Saturday with a casual morning walk through Ruth Hardy Park. All breeds welcome, leashed on the main path. Off-leash in the fenced area after the walk.',
+    tags: ['Walk', 'All Dogs Welcome', 'Free'],
+    attending: 14,
+    host: 'PS Dog Dad Community',
+    recurring: 'Every other Saturday',
+    color: 'border-brand-teal bg-brand-teal/5',
+    tagColor: 'bg-brand-teal/10 text-brand-teal',
+  },
+  {
     id: 3,
-    date: { month: 'JUN', day: '21', year: '2025' },
+    date: { month: 'JUL', day: '26' },
     title: 'Pool Party & Paws',
     time: '1:00 PM – 6:00 PM',
     location: 'Member Hosted — Uptown Palm Springs (address DM\'d to RSVPs)',
@@ -45,13 +48,13 @@ const events = [
   },
   {
     id: 4,
-    date: { month: 'JUN', day: '28', year: '2025' },
+    date: { month: 'AUG', day: '2' },
     title: 'Evening Sunset Hike — Araby Trail',
     time: '6:00 PM – 8:30 PM',
-    location: 'Araby Trail Trailhead',
+    location: 'Araby Trail Trailhead, Palm Springs',
     description: 'Beat the heat with an evening hike up Araby Trail for sunset views. Dogs must be leashed. Bring plenty of water for you and your pup — it\'s desert terrain.',
     tags: ['Hike', 'Moderate Difficulty', 'Bring Water'],
-    attending: 12,
+    attending: 9,
     host: 'Derek & Zeus',
     recurring: null,
     color: 'border-brand-golden bg-brand-golden/5',
@@ -59,27 +62,13 @@ const events = [
   },
   {
     id: 5,
-    date: { month: 'JUL', day: '5', year: '2025' },
-    title: 'Morning Dog Walk — Ruth Hardy Park',
-    time: '7:30 AM – 9:00 AM',
-    location: 'Ruth Hardy Park, Palm Springs',
-    description: 'Our recurring biweekly morning walk. Post-Fourth of July recovery walk — check in on pups that may be stressed from fireworks.',
-    tags: ['Walk', 'All Dogs Welcome', 'Free'],
-    attending: 9,
-    host: 'PS Dog Dad Community',
-    recurring: 'Every other Saturday',
-    color: 'border-brand-teal bg-brand-teal/5',
-    tagColor: 'bg-brand-teal/10 text-brand-teal',
-  },
-  {
-    id: 6,
-    date: { month: 'JUL', day: '12', year: '2025' },
+    date: { month: 'AUG', day: '9' },
     title: 'Yappy Hour at Bootlegger Tiki',
     time: '5:00 PM – 8:00 PM',
     location: 'Bootlegger Tiki Bar, Palm Springs',
-    description: 'Monthly patio Yappy Hour returns. Happy hour drinks and dog-friendly fun on the patio.',
+    description: 'Monthly patio Yappy Hour returns. Happy hour drinks and dog-friendly fun on the patio at Bootlegger.',
     tags: ['Social', '21+', 'Dog-Friendly Patio'],
-    attending: 21,
+    attending: 6,
     host: 'Marco & Biscuit',
     recurring: 'Second Saturday monthly',
     color: 'border-brand-orange bg-brand-orange/5',
@@ -88,31 +77,43 @@ const events = [
 ]
 
 const pastEvents = [
-  { title: 'Spring Paws Picnic at Demuth Park', date: 'May 18, 2025', attended: 42 },
-  { title: 'Yappy Hour at Eight4Nine', date: 'May 10, 2025', attended: 29 },
-  { title: 'Morning Walk — Ruth Hardy Park', date: 'May 3, 2025', attended: 16 },
+  { title: 'Morning Dog Walk — Ruth Hardy Park', date: 'July 5, 2026', attended: 16 },
+  { title: 'Yappy Hour at Bootlegger Tiki', date: 'June 28, 2026', attended: 33 },
+  { title: 'Summer Pool Party Kickoff', date: 'June 21, 2026', attended: 27 },
+  { title: 'Morning Walk — Ruth Hardy Park', date: 'June 14, 2026', attended: 19 },
+  { title: 'Yappy Hour at Eight4Nine', date: 'June 7, 2026', attended: 29 },
+  { title: 'Spring Paws Picnic at Demuth Park', date: 'May 18, 2026', attended: 42 },
 ]
 
+const FILTERS = ['All Events', 'Walks', 'Social', 'Pool / Water', 'Hikes', 'Members Only']
+
 export default function EventsPage() {
+  const [modalOpen, setModalOpen] = useState(false)
+  const [activeFilter, setActiveFilter] = useState('All Events')
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
         <div>
           <h1 className="section-title">Events & Meetups</h1>
-          <p className="text-plum/60 mt-2">Dog walks, yappy hours, pool parties, and community meetups across the Coachella Valley.</p>
+          <p className="text-plum/60 mt-2">Dog walks, yappy hours, pool parties, and community meetups across Palm Springs, Cathedral City, Rancho Mirage, and beyond.</p>
         </div>
-        <button className="btn-primary self-start">+ Propose an Event</button>
+        <button onClick={() => setModalOpen(true)} className="btn-primary self-start md:self-auto whitespace-nowrap">
+          + Propose an Event
+        </button>
       </div>
 
-      {/* Filter bar — horizontally scrollable on mobile */}
-      <div className="bg-white rounded-2xl shadow-sm p-4 mb-8 overflow-x-auto">
+      {/* Filter bar */}
+      <div className="bg-white rounded-2xl shadow-sm p-4 mb-10 overflow-x-auto">
         <div className="flex gap-2 min-w-max sm:min-w-0 sm:flex-wrap">
-          {['All Events', 'Walks', 'Social', 'Pool / Water', 'Hikes', 'Members Only'].map((filter, i) => (
+          {FILTERS.map((filter) => (
             <button
               key={filter}
+              onClick={() => setActiveFilter(filter)}
               className={`px-4 py-2.5 rounded-full text-sm font-semibold transition-colors whitespace-nowrap ${
-                i === 0 ? 'bg-plum text-white' : 'bg-plum/10 text-plum hover:bg-plum/20'
+                activeFilter === filter ? 'bg-plum text-white' : 'bg-plum/10 text-plum hover:bg-plum/20'
               }`}
             >
               {filter}
@@ -121,11 +122,11 @@ export default function EventsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Events list */}
-        <div className="lg:col-span-2 space-y-6 order-2 lg:order-1">
-          <h2 className="font-extrabold text-plum text-xl">Upcoming Events</h2>
-          {events.map((event) => (
+      {/* Upcoming Events */}
+      <section className="mb-14">
+        <h2 className="font-extrabold text-plum text-xl mb-5">Upcoming Events</h2>
+        <div className="space-y-5">
+          {upcomingEvents.map((event) => (
             <div key={event.id} className={`card border-l-4 ${event.color} p-6 hover:-translate-y-0.5`}>
               <div className="flex gap-4">
                 {/* Date badge */}
@@ -137,8 +138,10 @@ export default function EventsPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2 flex-wrap">
                     <h3 className="font-extrabold text-plum text-lg leading-snug">{event.title}</h3>
-                    <div className="flex items-center gap-1 bg-plum/10 rounded-full px-3 py-1 text-xs font-semibold text-plum flex-shrink-0">
-                      👥 {event.attending} going
+                    {/* Attendee count — teal/confirmed style */}
+                    <div className="flex items-center gap-1.5 bg-brand-teal/10 border border-brand-teal/20 rounded-full px-3 py-1 text-xs font-bold text-brand-teal flex-shrink-0">
+                      <span className="text-brand-teal">✓</span>
+                      {event.attending} going
                     </div>
                   </div>
 
@@ -158,70 +161,47 @@ export default function EventsPage() {
                     )}
                   </div>
 
-                  <div className="mt-4">
+                  <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-3">
                     <div className="flex items-center gap-3">
                       <button className="btn-teal text-sm px-5 py-2.5">RSVP</button>
                       <button className="btn-secondary text-sm px-5 py-2.5">Details</button>
                     </div>
-                    <p className="text-xs text-plum/40 mt-2">Hosted by {event.host}</p>
+                    <div className="text-xs text-plum/40 sm:ml-auto">
+                      Hosted by <span className="font-semibold">{event.host}</span>
+                      &nbsp;·&nbsp;
+                      <a href="/conduct" className="text-brand-teal hover:underline">Community Guidelines</a>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
+      </section>
 
-        {/* Sidebar */}
-        <div className="space-y-6 order-1 lg:order-2">
-          {/* Mini calendar placeholder */}
-          <div className="card p-5">
-            <h3 className="font-extrabold text-plum mb-4">June 2025</h3>
-            <div className="grid grid-cols-7 gap-1 text-center text-xs">
-              {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-                <div key={d} className="text-plum/40 font-bold pb-1">{d}</div>
-              ))}
-              {Array.from({ length: 6 }, (_, i) => i + 1).map((offset) => <div key={`o${offset}`} />)}
-              {Array.from({ length: 30 }, (_, i) => i + 1).map((day) => (
-                <div
-                  key={day}
-                  className={`w-7 h-7 mx-auto rounded-full flex items-center justify-center font-semibold cursor-pointer transition-colors
-                    ${[7, 14, 21, 28].includes(day)
-                      ? 'bg-brand-orange text-white'
-                      : 'text-plum/70 hover:bg-plum/10'
-                    }`}
-                >
-                  {day}
-                </div>
-              ))}
+      {/* Past Events */}
+      <section>
+        <h2 className="font-extrabold text-plum text-xl mb-5">Past Events</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {pastEvents.map((e) => (
+            <div key={e.title} className="card p-5 opacity-75 hover:opacity-100 transition-opacity">
+              <p className="font-extrabold text-plum text-sm leading-snug">{e.title}</p>
+              <div className="flex justify-between items-center mt-2">
+                <p className="text-xs text-plum/40">{e.date}</p>
+                <p className="text-xs text-plum/50 font-semibold">{e.attended} attended</p>
+              </div>
             </div>
-            <p className="text-xs text-plum/40 mt-3 text-center">🟠 Event days highlighted</p>
-          </div>
-
-          {/* Past events */}
-          <div className="card p-5">
-            <h3 className="font-extrabold text-plum mb-4">Past Events</h3>
-            <div className="space-y-3">
-              {pastEvents.map((e) => (
-                <div key={e.title} className="border-b border-gray-100 last:border-0 pb-3 last:pb-0">
-                  <p className="text-sm font-semibold text-plum leading-snug">{e.title}</p>
-                  <div className="flex justify-between mt-1">
-                    <p className="text-xs text-plum/40">{e.date}</p>
-                    <p className="text-xs text-plum/50">{e.attended} attended</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <button className="text-brand-orange font-bold text-sm mt-4 hover:underline">View all past events →</button>
-          </div>
-
-          {/* Host an event */}
-          <div className="card p-5 border-2 border-brand-teal/30 bg-brand-teal/5">
-            <h3 className="font-extrabold text-plum mb-2">Host an Event</h3>
-            <p className="text-sm text-plum/60 mb-4">Have a pool? A great trail you want to share? Propose an event for the community.</p>
-            <button className="btn-teal w-full text-sm">Propose an Event</button>
-          </div>
+          ))}
         </div>
-      </div>
+
+        <div className="mt-6 text-center">
+          <button className="text-brand-orange font-bold text-sm hover:underline">View all past events →</button>
+        </div>
+      </section>
+
+      {/* Propose Event Modal */}
+      {modalOpen && <ProposeEventModal onClose={() => setModalOpen(false)} />}
+
     </div>
   )
 }

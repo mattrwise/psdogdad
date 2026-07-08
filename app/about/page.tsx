@@ -4,7 +4,7 @@ import SignedOut from '@/components/auth/SignedOut'
 
 export const metadata: Metadata = {
   title: 'About Us — PS Dog Dad',
-  description: 'Learn about the Palm Springs Dog Dad community — who we are, what we do, and how to get involved.',
+  description: 'Learn about the Coachella Valley Dog Dad community — who we are, what we do, and how to get involved.',
 }
 
 export default function AboutPage() {
@@ -18,7 +18,7 @@ export default function AboutPage() {
           <div className="text-5xl mb-5">🌴🐾</div>
           <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">About PS Dog Dad</h1>
           <p className="text-white/80 text-lg sm:text-xl max-w-xl mx-auto leading-relaxed">
-            A community for men in the Palm Springs area who love their dogs — and love connecting with others who do too.
+            A community for men across the Coachella Valley who love their dogs — and love connecting with others who do too.
           </p>
         </div>
         <div className="absolute bottom-0 left-0 right-0">
@@ -34,7 +34,7 @@ export default function AboutPage() {
         <section className="bg-white rounded-3xl shadow-md p-6 sm:p-10">
           <h2 className="text-2xl font-extrabold text-plum mb-4">How It Started</h2>
           <p className="text-plum/70 leading-relaxed mb-4">
-            PS Dog Dad grew out of a simple observation: Palm Springs has a thriving community of men who have dogs,
+            PS Dog Dad grew out of a simple observation: the Coachella Valley has a thriving community of men who have dogs,
             and those men were scattered across different Facebook groups, Instagram pages, and WhatsApp chats with
             no single home base. A few morning walks at Ruth Hardy Park and some late-night conversations at Bootlegger
             later, the idea for a proper community took shape.
@@ -71,7 +71,7 @@ export default function AboutPage() {
           <ul className="space-y-4">
             {[
               { icon: '🤝', title: 'Welcoming', text: 'This is a judgment-free space. All dogs welcome. All experience levels welcome. Whether you\'ve had dogs your whole life or just got your first pup, you belong here.' },
-              { icon: '🌴', title: 'Local First', text: 'We\'re rooted in the Palm Springs community. Our recommendations, events, and conversations are grounded in what\'s actually happening in the Coachella Valley.' },
+              { icon: '🌴', title: 'Local First', text: 'We\'re rooted in the Coachella Valley. Our recommendations, events, and conversations are grounded in what\'s actually happening across the desert communities.' },
               { icon: '🐾', title: 'Dog-Centered', text: 'The dogs come first. We share knowledge, resources, and experiences that make us better, more informed, and more loving pet owners.' },
               { icon: '🫶', title: 'Respectful', text: 'We treat each other — and each other\'s dogs — with kindness. See our Code of Conduct for the full details.' },
             ].map(({ icon, title, text }) => (

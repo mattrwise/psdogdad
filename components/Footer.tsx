@@ -15,7 +15,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-sm text-white/60 max-w-xs leading-relaxed">
-              Palm Springs&apos; community for gay men and their dogs. Connect, share, and wag together.
+              The Coachella Valley community for gay men and their dogs. Connect, share, and wag together.
             </p>
             <div className="flex gap-4 mt-4">
               {['📘', '📸', '🐦'].map((icon, i) => (
@@ -50,7 +50,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/10 mt-10 pt-6 text-xs text-center text-white/40">
-          © {new Date().getFullYear()} PS Dog Dad · Palm Springs, CA · Made with 🐾 and ☀️
+          © {new Date().getFullYear()} PS Dog Dad · Coachella Valley, CA · Made with 🐾 and ☀️
         </div>
       </div>
     </footer>

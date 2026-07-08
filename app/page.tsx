@@ -81,14 +81,14 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-2 text-sm font-semibold mb-6">
-              <span>🌴</span> Palm Springs, CA
+              <span>🌴</span> Coachella Valley, CA
             </div>
             <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
               Where Dog Dads{' '}
               <span className="text-brand-golden">Come Together</span>
             </h1>
             <p className="text-lg md:text-xl text-white/80 mb-8 leading-relaxed">
-              Forums, meetups, member profiles, and local resources — all for the Palm Springs community of men who love their dogs.
+              Forums, meetups, member profiles, and local resources — all for the Coachella Valley community of men who love their dogs.
             </p>
             <div className="flex flex-wrap gap-4">
               <SignedOut>
@@ -136,7 +136,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="section-title">Everything Your Pack Needs</h2>
-            <p className="text-plum/60 mt-3 max-w-xl mx-auto">One community for Palm Springs dog dads — online and on the trail.</p>
+            <p className="text-plum/60 mt-3 max-w-xl mx-auto">One community for Coachella Valley dog dads — online and on the trail.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -174,7 +174,7 @@ export default function HomePage() {
                 Learn to raise a great dog — <span className="text-brand-golden">in the desert</span>
               </h2>
               <p className="text-white/70 leading-relaxed mb-6">
-                Written guides on heat safety, leash skills, recall, reactivity, and Palm Springs living.
+                Written guides on heat safety, leash skills, recall, reactivity, and desert valley living.
                 Free guides for everyone, with in-depth premium programs on the way.
               </p>
               <Link href="/training" className="btn-primary">Browse the Guides</Link>
@@ -264,7 +264,7 @@ export default function HomePage() {
               Ready to join the pack?
             </h2>
             <p className="text-white/70 text-lg mb-8 max-w-xl mx-auto">
-              Create your free member profile, introduce your dog, and start connecting with Palm Springs&apos; best community.
+              Create your free member profile, introduce your dog, and start connecting with the Coachella Valley&apos;s best community.
             </p>
             <Link href="/members/join" className="btn-primary text-base sm:text-lg px-6 sm:px-10 py-3.5 sm:py-4 inline-block">
               Join PS Dog Dad — It&apos;s Free 🐾

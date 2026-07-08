@@ -5,9 +5,9 @@ import Footer from '@/components/Footer'
 import PendingPhotoSync from '@/components/PendingPhotoSync'
 
 export const metadata: Metadata = {
-  title: 'PS Dog Dad — Palm Springs Dog Dads Community',
-  description: 'The Palm Springs community for gay men and their dogs. Forums, meetups, member profiles, and local resources.',
-  keywords: 'Palm Springs, gay, dog dad, community, dog meetups, forums',
+  title: 'PS Dog Dad — Coachella Valley Dog Dads Community',
+  description: 'The Coachella Valley community for gay men and their dogs. Forums, meetups, member profiles, and local resources.',
+  keywords: 'Coachella Valley, Palm Springs, gay, dog dad, community, dog meetups, forums',
 }
 
 export const viewport: Viewport = {

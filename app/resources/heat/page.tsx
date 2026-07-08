@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'High Heat Guide — PS Dog Dad',
-  description: 'How to keep your dog safe in Palm Springs heat — the 7-second pavement test, walk timing, heatstroke warning signs, and everyday heat rules.',
+  description: 'How to keep your dog safe in the Coachella Valley heat — the 7-second pavement test, walk timing, heatstroke warning signs, and everyday heat rules.',
 }
 
 const walkTimes = [
@@ -41,7 +41,7 @@ export default function HeatGuidePage() {
           <div className="text-5xl mb-5">🌡️🐕</div>
           <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">High Heat Guide</h1>
           <p className="text-white/80 text-lg sm:text-xl max-w-xl mx-auto leading-relaxed">
-            Desert summers are no joke. Here&apos;s how to keep your dog safe when Palm Springs turns up the heat.
+            Desert summers are no joke. Here&apos;s how to keep your dog safe when the Coachella Valley turns up the heat.
           </p>
         </div>
         <div className="absolute bottom-0 left-0 right-0">

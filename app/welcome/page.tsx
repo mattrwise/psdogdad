@@ -73,7 +73,7 @@ export default function WelcomePage() {
             You&apos;re officially a PS Dog Dad 🌴
           </h2>
           <p className="text-plum/70 leading-relaxed mb-3">
-            This is a warm, welcoming community of gay men in the Palm Springs area who share a love for their dogs.
+            This is a warm, welcoming community of gay men across the Coachella Valley who share a love for their dogs.
             Whether you&apos;re looking for a trail buddy, a vet recommendation, or just want to show off your pup —
             you&apos;re in the right place.
           </p>
@@ -107,7 +107,7 @@ export default function WelcomePage() {
               href: '/members',
               icon: '👥',
               label: 'Members',
-              desc: 'Browse member profiles and meet the dog dads of Palm Springs.',
+              desc: 'Browse member profiles and meet the dog dads of the Coachella Valley.',
               gradient: 'from-brand-orange to-brand-orange-light',
               btn: 'btn-primary',
             },

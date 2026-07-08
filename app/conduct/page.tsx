@@ -61,7 +61,7 @@ export default function ConductPage() {
         <Section title="2. Keep It Welcoming">
           <p>
             We want PS Dog Dad to feel like a warm front porch, not a gatekeeping club. Whether someone has a
-            purebred show dog or a scruffy mutt from the shelter, whether they&apos;re new to Palm Springs or a 30-year
+            purebred show dog or a scruffy mutt from the shelter, whether they&apos;re new to the valley or a 30-year
             local — everyone deserves a genuine welcome.
           </p>
           <p>
@@ -76,7 +76,7 @@ export default function ConductPage() {
           </p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Know your dog&apos;s temperament and keep them on leash unless in a designated off-leash area.</li>
-            <li>Bring water for your dog, especially in Palm Springs heat.</li>
+            <li>Bring water for your dog, especially in the desert heat.</li>
             <li>If your dog is unwell, reactive, or not good with other dogs, please sit that event out — no judgment.</li>
             <li>Clean up after your dog. Always.</li>
           </ul>
