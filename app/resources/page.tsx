@@ -7,10 +7,10 @@ const resourceSections = [
     color: 'border-brand-teal',
     titleColor: 'text-brand-teal',
     resources: [
-      { name: 'VCA Desert Animal Hospital', detail: '8555 N Palm Canyon Dr · 24/7 Emergency', badge: 'Emergency', badgeColor: 'bg-red-100 text-red-600', stars: 5, note: 'Member favorite — ask for Dr. Rivera' },
+      { name: 'VEG ER for Pets', detail: '73495 Hwy 111, Palm Desert · 24/7 Emergency', badge: 'Emergency 24/7', badgeColor: 'bg-red-100 text-red-600', stars: 5, note: 'Only true 24/7 ER in the valley · (760) 249-2279' },
+      { name: 'VCA Desert Animal Hospital', detail: '4299 E Ramon Rd, Palm Springs · Full Service', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: 'Mon–Fri 7am–6pm, Sat 7:30am–5pm · Member favorite' },
       { name: 'Palm Springs Animal Hospital', detail: '4500 E Palm Canyon Dr · Full Service', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: null },
       { name: 'Desert Veterinary Clinic', detail: 'Cathedral City · Low-cost options available', badge: 'Budget-Friendly', badgeColor: 'bg-brand-golden/20 text-plum', stars: 4, note: null },
-      { name: 'BluePearl Pet Hospital', detail: 'Rancho Mirage · Specialty & Emergency', badge: 'Specialist', badgeColor: 'bg-plum/10 text-plum', stars: 5, note: 'Oncology, orthopedics, neurology' },
     ],
   },
   {
@@ -19,7 +19,8 @@ const resourceSections = [
     color: 'border-brand-orange',
     titleColor: 'text-brand-orange',
     resources: [
-      { name: 'The Pampered Pup PS', detail: 'Uptown Palm Springs · Full Grooming', badge: 'Member Favorite', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 5, note: 'Book 2 weeks ahead in season' },
+      { name: 'The Wizard of Paws', detail: '400 El Cielo Rd, Palm Springs · Nail trims & full grooming', badge: 'Member Favorite', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 5, note: "Lucy's go-to for nail trims 🐾 · Cage-free, quiet environment" },
+      { name: 'The Pampered Pup PS', detail: 'Uptown Palm Springs · Full Grooming', badge: 'Recommended', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 5, note: 'Book 2 weeks ahead in season' },
       { name: 'Desert Doggy Spa', detail: 'Palm Desert · Mobile grooming available', badge: 'Mobile Option', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 4, note: null },
       { name: 'Fetch Pet Resort', detail: 'Palm Springs · Grooming + Boarding', badge: 'Full Service', badgeColor: 'bg-plum/10 text-plum', stars: 4, note: 'Great for multi-day stays' },
     ],

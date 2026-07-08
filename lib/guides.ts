@@ -14,7 +14,7 @@ export type Guide = {
   shortTitle: string
   category: string
   minutes: number
-  premium: boolean
+  tier: 'free' | 'members' | 'premium'
   description: string
   body: GuideBlock[]
 }
@@ -27,7 +27,7 @@ export const guides: Guide[] = [
     shortTitle: 'Desert Heat Safety',
     category: 'Health & Safety',
     minutes: 6,
-    premium: false,
+    tier: 'free',
     description:
       "Palm Springs summers are no joke. How to exercise, hydrate, and protect your dog when it's 110° outside.",
     body: [
@@ -61,7 +61,7 @@ export const guides: Guide[] = [
     shortTitle: 'Loose-Leash Walking',
     category: 'Training Basics',
     minutes: 8,
-    premium: false,
+    tier: 'free',
     description:
       'Stop the pulling. A simple, positive method to teach your dog to walk beside you — no prong collars needed.',
     body: [
@@ -93,7 +93,7 @@ export const guides: Guide[] = [
     shortTitle: 'New to Palm Springs',
     category: 'Local Life',
     minutes: 5,
-    premium: false,
+    tier: 'members',
     description:
       'Just moved to the desert with your dog? Everything to set up in your first month — vet, licenses, parks, and heat prep.',
     body: [
@@ -119,7 +119,7 @@ export const guides: Guide[] = [
     shortTitle: 'Reliable Recall',
     category: 'Training Basics',
     minutes: 7,
-    premium: false,
+    tier: 'members',
     description:
       "The one command that can save your dog's life. Train a recall that works even with distractions.",
     body: [
@@ -148,7 +148,7 @@ export const guides: Guide[] = [
     shortTitle: 'Reactivity Program',
     category: 'Behavior',
     minutes: 25,
-    premium: true,
+    tier: 'premium',
     description:
       'A structured week-by-week plan for dogs that bark and lunge at other dogs on leash. Our most in-depth guide.',
     body: [
@@ -171,7 +171,7 @@ export const guides: Guide[] = [
     shortTitle: 'Summer Routine Blueprint',
     category: 'Health & Safety',
     minutes: 15,
-    premium: true,
+    tier: 'premium',
     description:
       'A complete June-through-September daily schedule: exercise, enrichment, and cooling strategies for 110° months.',
     body: [
@@ -188,8 +188,9 @@ export const guides: Guide[] = [
   },
 ]
 
-export const freeGuides = guides.filter(g => !g.premium)
-export const premiumGuides = guides.filter(g => g.premium)
+export const freeGuides = guides.filter(g => g.tier === 'free')
+export const memberGuides = guides.filter(g => g.tier === 'members')
+export const premiumGuides = guides.filter(g => g.tier === 'premium')
 
 export function getGuide(slug: string): Guide | undefined {
   return guides.find(g => g.slug === slug)
@@ -197,5 +198,5 @@ export function getGuide(slug: string): Guide | undefined {
 
 /** The two related guides shown at the bottom of each guide page. */
 export function relatedGuides(slug: string): Guide[] {
-  return freeGuides.filter(g => g.slug !== slug).slice(0, 2)
+  return guides.filter(g => g.slug !== slug && g.tier !== 'premium').slice(0, 2)
 }

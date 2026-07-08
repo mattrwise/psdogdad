@@ -12,24 +12,24 @@ const stats = [
 
 const upcomingEvents = [
   {
-    date: { month: 'JUN', day: '7' },
-    title: 'Morning Dog Walk — Ruth Hardy Park',
-    time: '7:30 AM',
-    location: 'Ruth Hardy Park',
-    tags: ['Walk', 'All Dogs Welcome'],
-  },
-  {
-    date: { month: 'JUN', day: '14' },
+    date: { month: 'JUL', day: '12' },
     title: 'Yappy Hour at Bootlegger Tiki',
     time: '5:00 PM',
-    location: 'Bootlegger Tiki Bar',
+    location: 'Bootlegger Tiki Bar, Palm Springs',
     tags: ['Social', '21+'],
   },
   {
-    date: { month: 'JUN', day: '21' },
+    date: { month: 'JUL', day: '19' },
+    title: 'Morning Dog Walk — Ruth Hardy Park',
+    time: '7:00 AM',
+    location: 'Ruth Hardy Park, Palm Springs',
+    tags: ['Walk', 'All Dogs Welcome'],
+  },
+  {
+    date: { month: 'JUL', day: '26' },
     title: 'Pool Party & Paws',
     time: '1:00 PM',
-    location: 'Member Hosted — DM for address',
+    location: 'Member Hosted — Uptown Palm Springs',
     tags: ['Pool', 'Members Only'],
   },
 ]
@@ -175,7 +175,7 @@ export default function HomePage() {
               </h2>
               <p className="text-white/70 leading-relaxed mb-6">
                 Written guides on heat safety, leash skills, recall, reactivity, and desert valley living.
-                Free guides for everyone, with in-depth premium programs on the way.
+                Two free guides for everyone — the rest unlock with a free account.
               </p>
               <Link href="/training" className="btn-primary">Browse the Guides</Link>
             </div>
@@ -183,7 +183,7 @@ export default function HomePage() {
               {[
                 { href: '/training/desert-heat-safety', icon: '☀️', label: 'Desert Heat Safety', tier: 'Free' },
                 { href: '/training/loose-leash-walking', icon: '🦮', label: 'Loose-Leash Walking', tier: 'Free' },
-                { href: '/training/reliable-recall', icon: '📣', label: 'Reliable Recall', tier: 'Free' },
+                { href: '/training/reliable-recall', icon: '📣', label: 'Reliable Recall', tier: 'Members' },
                 { href: '/training/reactivity-program', icon: '🧠', label: 'Reactivity Program', tier: '★ Premium' },
               ].map(({ href, icon, label, tier }) => (
                 <Link key={label} href={href} className="bg-white/10 hover:bg-white/20 rounded-2xl p-5 transition-colors block">
