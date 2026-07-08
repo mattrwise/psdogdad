@@ -5,21 +5,10 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
 import { uploadPhoto } from '@/lib/photos'
+import { Dog, DOG_BREEDS, EMPTY_DOG, dogsFromMetadata } from '@/lib/dogs'
 import type { User } from '@supabase/supabase-js'
 
 // ─── constants ────────────────────────────────────────────────────────────────
-
-const DOG_BREEDS = [
-  'Australian Shepherd', 'Basset Hound', 'Beagle', 'Border Collie', 'Boston Terrier',
-  'Boxer', 'Bulldog', 'Cavalier King Charles Spaniel', 'Chihuahua', 'Chihuahua Mix',
-  'Cocker Spaniel', 'Corgi', 'Dachshund', 'Dalmatian', 'Doberman',
-  'French Bulldog', 'German Shepherd', 'Golden Retriever', 'Great Dane', 'Greyhound',
-  'Havanese', 'Italian Greyhound', 'Jack Russell Terrier', 'Labradoodle', 'Labrador Retriever',
-  'Maltese', 'Miniature Schnauzer', 'Mixed Breed', 'Pomeranian', 'Poodle',
-  'Pug', 'Rhodesian Ridgeback', 'Rottweiler', 'Shiba Inu', 'Shih Tzu',
-  'Siberian Husky', 'Vizsla', 'Weimaraner', 'Whippet', 'Yorkshire Terrier',
-  'Other',
-]
 
 const MAX_FILE_SIZE = 8 * 1024 * 1024
 const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
@@ -129,8 +118,9 @@ function initials(name: string) {
 
 // ─── main page ────────────────────────────────────────────────────────────────
 
-type FormData = { name: string; city: string; dogName: string; dogBreed: string }
+type FormData = { name: string; city: string }
 type FormErrors = Partial<Record<keyof FormData, string>>
+type DogErrors = { name?: string; breed?: string }
 
 export default function ProfilePage() {
   const router = useRouter()
@@ -140,7 +130,9 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false)
   const [saveMsg, setSaveMsg] = useState<string | null>(null)
   const [errors, setErrors] = useState<FormErrors>({})
-  const [form, setForm] = useState<FormData>({ name: '', city: '', dogName: '', dogBreed: '' })
+  const [form, setForm] = useState<FormData>({ name: '', city: '' })
+  const [dogs, setDogs] = useState<Dog[]>([{ ...EMPTY_DOG }])
+  const [dogErrors, setDogErrors] = useState<DogErrors[]>([])
 
   // photos — separate state for current saved URLs vs. pending new files
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
@@ -163,11 +155,13 @@ export default function ProfilePage() {
     setUser(u)
     const m = u.user_metadata ?? {}
     setForm({
-      name:     m.name      ?? '',
-      city:     m.city      ?? '',
-      dogName:  m.dog_name  ?? '',
-      dogBreed: m.dog_breed ?? '',
+      name: m.name ?? '',
+      city: m.city ?? '',
     })
+    // Legacy members' single dog_name/dog_breed loads as row 1, so their
+    // first save migrates it into the dogs array instead of losing it.
+    setDogs(dogsFromMetadata(m))
+    setDogErrors([])
     setAvatarUrl(m.avatar_url    ?? null)
     setDogPhotoUrl(m.dog_photo_url ?? null)
   }
@@ -200,9 +194,16 @@ export default function ProfilePage() {
     const e: FormErrors = {}
     if (!form.name.trim()) e.name = 'Your name is required.'
     if (!form.city.trim()) e.city = 'City is required.'
-    if (!form.dogName.trim()) e.dogName = "Your dog's name is required."
-    if (!form.dogBreed) e.dogBreed = "Please select your dog's breed."
     return e
+  }
+
+  function validateDogs(): DogErrors[] {
+    return dogs.map(d => {
+      const e: DogErrors = {}
+      if (!d.name.trim()) e.name = "Your dog's name is required."
+      if (!d.breed) e.breed = "Please select your dog's breed."
+      return e
+    })
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
@@ -211,10 +212,30 @@ export default function ProfilePage() {
     if (errors[name as keyof FormData]) setErrors(prev => ({ ...prev, [name]: undefined }))
   }
 
+  function updateDog(i: number, field: keyof Dog, value: string) {
+    setDogs(prev => prev.map((d, j) => (j === i ? { ...d, [field]: value } : d)))
+    setDogErrors(prev => prev.map((e, j) => (j === i ? { ...e, [field]: undefined } : e)))
+  }
+
+  function addDog() {
+    setDogs(prev => [...prev, { ...EMPTY_DOG }])
+    setDogErrors(prev => [...prev, {}])
+  }
+
+  function removeDog(i: number) {
+    setDogs(prev => prev.filter((_, j) => j !== i))
+    setDogErrors(prev => prev.filter((_, j) => j !== i))
+  }
+
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
     const validation = validate()
-    if (Object.keys(validation).length > 0) { setErrors(validation); return }
+    const dogValidation = validateDogs()
+    if (Object.keys(validation).length > 0 || dogValidation.some(err => err.name || err.breed)) {
+      setErrors(validation)
+      setDogErrors(dogValidation)
+      return
+    }
 
     setSaving(true)
     const userId = user!.id
@@ -231,12 +252,17 @@ export default function ProfilePage() {
       if (uploaded2) newDogPhotoUrl = uploaded2
     }
 
+    // The `dogs` array is the source of truth; dog_name/dog_breed mirror the
+    // first dog for readers that predate multi-dog support.
+    const cleanDogs = dogs.map(d => ({ name: d.name.trim(), breed: d.breed }))
+
     const { data, error } = await supabase.auth.updateUser({
       data: {
         name:          form.name.trim(),
         city:          form.city.trim(),
-        dog_name:      form.dogName.trim(),
-        dog_breed:     form.dogBreed,
+        dogs:          cleanDogs,
+        dog_name:      cleanDogs[0].name,
+        dog_breed:     cleanDogs[0].breed,
         ...(newAvatarUrl    && { avatar_url:    newAvatarUrl }),
         ...(newDogPhotoUrl  && { dog_photo_url: newDogPhotoUrl }),
       },
@@ -361,34 +387,54 @@ export default function ProfilePage() {
 
               <hr className="border-plum/10" />
 
-              {/* Your Dog */}
+              {/* Your Dogs */}
               <fieldset>
-                <legend className="text-xs font-bold uppercase tracking-widest text-plum/40 mb-5">Your Dog</legend>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div>
-                    <label htmlFor="dogName" className="block text-sm font-semibold text-plum mb-1.5">Dog&apos;s Name</label>
-                    <input id="dogName" name="dogName" type="text"
-                      value={form.dogName} onChange={handleChange} placeholder="Biscuit"
-                      className={`w-full rounded-xl border px-4 py-3 text-sm text-plum placeholder-plum/30 focus:outline-none focus:ring-2 transition min-h-[44px] ${errors.dogName ? 'border-red-400 focus:ring-red-200 bg-red-50' : 'border-plum/20 focus:ring-brand-teal/30 bg-white'}`} />
-                    {errors.dogName && <p className="mt-1.5 text-xs text-red-600">{errors.dogName}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="dogBreed" className="block text-sm font-semibold text-plum mb-1.5">Breed</label>
-                    <select id="dogBreed" name="dogBreed" value={form.dogBreed} onChange={handleChange}
-                      className={`w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 transition min-h-[44px] bg-white appearance-none ${errors.dogBreed ? 'border-red-400 focus:ring-red-200 text-red-700' : form.dogBreed ? 'border-plum/20 focus:ring-brand-teal/30 text-plum' : 'border-plum/20 focus:ring-brand-teal/30 text-plum/40'}`}>
-                      <option value="" disabled>Select a breed…</option>
-                      {DOG_BREEDS.map(b => <option key={b} value={b} className="text-plum">{b}</option>)}
-                    </select>
-                    {errors.dogBreed && <p className="mt-1.5 text-xs text-red-600">{errors.dogBreed}</p>}
-                  </div>
+                <legend className="text-xs font-bold uppercase tracking-widest text-plum/40 mb-5">Your Dogs</legend>
+                <div className="space-y-4">
+                  {dogs.map((dog, i) => (
+                    <div key={i} className="rounded-2xl border border-plum/15 bg-plum/3 p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-bold text-plum">Dog {i + 1}</span>
+                        {dogs.length > 1 && (
+                          <button type="button" onClick={() => removeDog(i)}
+                            className="text-xs text-red-500 hover:text-red-600 font-semibold">
+                            Remove
+                          </button>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                          <label htmlFor={`dogName-${i}`} className="block text-sm font-semibold text-plum mb-1.5">Dog&apos;s Name</label>
+                          <input id={`dogName-${i}`} type="text"
+                            value={dog.name} onChange={e => updateDog(i, 'name', e.target.value)} placeholder="Biscuit"
+                            className={`w-full rounded-xl border px-4 py-3 text-sm text-plum placeholder-plum/30 focus:outline-none focus:ring-2 transition min-h-[44px] ${dogErrors[i]?.name ? 'border-red-400 focus:ring-red-200 bg-red-50' : 'border-plum/20 focus:ring-brand-teal/30 bg-white'}`} />
+                          {dogErrors[i]?.name && <p className="mt-1.5 text-xs text-red-600">{dogErrors[i]?.name}</p>}
+                        </div>
+                        <div>
+                          <label htmlFor={`dogBreed-${i}`} className="block text-sm font-semibold text-plum mb-1.5">Breed</label>
+                          <select id={`dogBreed-${i}`} value={dog.breed} onChange={e => updateDog(i, 'breed', e.target.value)}
+                            className={`w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 transition min-h-[44px] bg-white appearance-none ${dogErrors[i]?.breed ? 'border-red-400 focus:ring-red-200 text-red-700' : dog.breed ? 'border-plum/20 focus:ring-brand-teal/30 text-plum' : 'border-plum/20 focus:ring-brand-teal/30 text-plum/40'}`}>
+                            <option value="" disabled>Select a breed…</option>
+                            {DOG_BREEDS.map(b => <option key={b} value={b} className="text-plum">{b}</option>)}
+                          </select>
+                          {dogErrors[i]?.breed && <p className="mt-1.5 text-xs text-red-600">{dogErrors[i]?.breed}</p>}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <button type="button" onClick={addDog}
+                    className="w-full rounded-xl border-2 border-dashed border-plum/20 py-3 text-sm font-semibold text-brand-orange hover:border-brand-orange/50 hover:bg-brand-orange/5 transition">
+                    ＋ Add another dog
+                  </button>
                 </div>
                 <div className="mt-5">
                   <PhotoUpload
                     id="dogPhoto"
-                    label="Dog Photo"
+                    label={dogs.length > 1 ? 'Dog Photo (your crew, or just one)' : 'Dog Photo'}
                     hint={dogPhotoUrl
                       ? `Upload a new photo to replace current`
-                      : form.dogName ? `Upload a photo of ${form.dogName}` : 'Upload a photo of your dog'}
+                      : dogs[0]?.name ? `Upload a photo of ${dogs[0].name}` : 'Upload a photo of your dog'}
                     preview={dogPreview ?? dogPhotoUrl}
                     onFileSelected={f => setPhoto('dog', f)}
                     onClear={() => clearPhoto('dog')}
@@ -449,15 +495,21 @@ export default function ProfilePage() {
               <div className="bg-white rounded-3xl shadow-md overflow-hidden">
                 {displayDogPhotoUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={displayDogPhotoUrl} alt={form.dogName} className="w-full h-52 object-cover" />
+                  <img src={displayDogPhotoUrl} alt={dogs[0]?.name} className="w-full h-52 object-cover" />
                 ) : (
                   <div className="w-full h-52 bg-gradient-to-br from-brand-teal to-brand-teal-light flex items-center justify-center text-8xl">
                     🐶
                   </div>
                 )}
                 <div className="p-6">
-                  <h2 className="text-2xl font-extrabold text-plum">{form.dogName || '—'}</h2>
-                  <p className="text-plum/50 text-sm mt-1">🐾 {form.dogBreed || '—'}</p>
+                  <h2 className="text-2xl font-extrabold text-plum">{dogs[0]?.name || '—'}</h2>
+                  <p className="text-plum/50 text-sm mt-1">🐾 {dogs[0]?.breed || '—'}</p>
+                  {dogs.slice(1).map((dog, i) => (
+                    <div key={i} className="mt-4 pt-4 border-t border-plum/10">
+                      <h3 className="text-xl font-extrabold text-plum">{dog.name || '—'}</h3>
+                      <p className="text-plum/50 text-sm mt-1">🐾 {dog.breed || '—'}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

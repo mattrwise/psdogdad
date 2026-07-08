@@ -12,12 +12,18 @@ create table if not exists public.profiles (
   city          text,
   dog_name      text,
   dog_breed     text,
+  dogs          jsonb,
   avatar_url    text,
   dog_photo_url text,
   confirmed     boolean not null default false,
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now()
 );
+
+-- Multi-dog support: `dogs` is a JSON list like [{"name": "Biscuit", "breed": "French Bulldog"}].
+-- The old single-dog columns (dog_name/dog_breed) stay as a fallback and always
+-- mirror the first dog. This `alter` upgrades databases created before the column existed.
+alter table public.profiles add column if not exists dogs jsonb;
 
 alter table public.profiles enable row level security;
 
@@ -36,13 +42,23 @@ security definer set search_path = public
 as $$
 begin
   insert into public.profiles
-    (id, name, city, dog_name, dog_breed, avatar_url, dog_photo_url, confirmed, created_at, updated_at)
+    (id, name, city, dog_name, dog_breed, dogs, avatar_url, dog_photo_url, confirmed, created_at, updated_at)
   values (
     new.id,
     new.raw_user_meta_data ->> 'name',
     new.raw_user_meta_data ->> 'city',
     new.raw_user_meta_data ->> 'dog_name',
     new.raw_user_meta_data ->> 'dog_breed',
+    -- Members who signed up before multi-dog support only have dog_name/dog_breed
+    -- in their metadata, so build a one-dog list from those.
+    coalesce(
+      new.raw_user_meta_data -> 'dogs',
+      case when new.raw_user_meta_data ->> 'dog_name' is not null
+        then jsonb_build_array(jsonb_build_object(
+          'name',  new.raw_user_meta_data ->> 'dog_name',
+          'breed', new.raw_user_meta_data ->> 'dog_breed'))
+      end
+    ),
     new.raw_user_meta_data ->> 'avatar_url',
     new.raw_user_meta_data ->> 'dog_photo_url',
     new.email_confirmed_at is not null,
@@ -54,6 +70,7 @@ begin
     city          = excluded.city,
     dog_name      = excluded.dog_name,
     dog_breed     = excluded.dog_breed,
+    dogs          = excluded.dogs,
     avatar_url    = excluded.avatar_url,
     dog_photo_url = excluded.dog_photo_url,
     confirmed     = excluded.confirmed,
@@ -75,19 +92,33 @@ create trigger on_auth_user_updated
 -- ─── 3. Backfill profiles for members who already signed up ──────────────────
 
 insert into public.profiles
-  (id, name, city, dog_name, dog_breed, avatar_url, dog_photo_url, confirmed, created_at)
+  (id, name, city, dog_name, dog_breed, dogs, avatar_url, dog_photo_url, confirmed, created_at)
 select
   id,
   raw_user_meta_data ->> 'name',
   raw_user_meta_data ->> 'city',
   raw_user_meta_data ->> 'dog_name',
   raw_user_meta_data ->> 'dog_breed',
+  coalesce(
+    raw_user_meta_data -> 'dogs',
+    case when raw_user_meta_data ->> 'dog_name' is not null
+      then jsonb_build_array(jsonb_build_object(
+        'name',  raw_user_meta_data ->> 'dog_name',
+        'breed', raw_user_meta_data ->> 'dog_breed'))
+    end
+  ),
   raw_user_meta_data ->> 'avatar_url',
   raw_user_meta_data ->> 'dog_photo_url',
   email_confirmed_at is not null,
   created_at
 from auth.users
 on conflict (id) do nothing;
+
+-- One-time upgrade for profile rows created before the dogs column existed:
+-- turn their single dog into a one-dog list. No-op on databases already upgraded.
+update public.profiles
+set dogs = jsonb_build_array(jsonb_build_object('name', dog_name, 'breed', dog_breed))
+where dogs is null and dog_name is not null;
 
 -- ─── 4. Storage bucket + policies for member photos ──────────────────────────
 

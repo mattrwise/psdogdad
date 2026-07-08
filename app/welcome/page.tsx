@@ -3,6 +3,15 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
+import { dogsFromMetadata } from '@/lib/dogs'
+
+// "Biscuit", "Biscuit & Mango", "Biscuit, Mango & Taco"
+function formatDogNames(meta: Record<string, unknown> | undefined): string | null {
+  const names = dogsFromMetadata(meta).map(d => d.name).filter(Boolean)
+  if (names.length === 0) return null
+  if (names.length === 1) return names[0]
+  return `${names.slice(0, -1).join(', ')} & ${names[names.length - 1]}`
+}
 
 export default function WelcomePage() {
   const [name, setName] = useState<string | null>(null)
@@ -13,7 +22,7 @@ export default function WelcomePage() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         setName(session.user.user_metadata?.name ?? null)
-        setDogName(session.user.user_metadata?.dog_name ?? null)
+        setDogName(formatDogNames(session.user.user_metadata))
       }
     })
 
@@ -21,7 +30,7 @@ export default function WelcomePage() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         setName(session.user.user_metadata?.name ?? null)
-        setDogName(session.user.user_metadata?.dog_name ?? null)
+        setDogName(formatDogNames(session.user.user_metadata))
       }
     })
 

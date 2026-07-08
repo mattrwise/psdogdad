@@ -5,13 +5,13 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
 import SignedIn from '@/components/auth/SignedIn'
 import SignedOut from '@/components/auth/SignedOut'
+import { Dog } from '@/lib/dogs'
 
 type MemberCard = {
   id: string
   name: string
   location: string
-  dog: string
-  breed: string
+  dogs: Dog[]
   joined: string
   emoji: string
   color: string
@@ -21,18 +21,18 @@ type MemberCard = {
 
 // Sample members shown until real profiles exist in Supabase
 const sampleMembers: MemberCard[] = [
-  { id: 's1', name: 'Marco', location: 'Uptown PS', dog: 'Biscuit', breed: 'French Bulldog', joined: 'Jan 2023', emoji: '🐾', color: 'from-plum to-plum-light', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's2', name: 'Tyler', location: 'Palm Canyon', dog: 'Mango', breed: 'Golden Retriever', joined: 'Mar 2023', emoji: '🌟', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's3', name: 'Derek', location: 'Cathedral City', dog: 'Zeus', breed: 'Doberman', joined: 'Jun 2022', emoji: '⚡', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's4', name: 'James', location: 'Old Las Palmas', dog: 'Pretzel', breed: 'Dachshund', joined: 'Feb 2021', emoji: '🥨', color: 'from-plum to-brand-teal', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's5', name: 'Chris', location: 'Movie Colony', dog: 'Noodle', breed: 'Labradoodle', joined: 'Aug 2023', emoji: '🍜', color: 'from-brand-golden to-brand-orange', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's6', name: 'Ryan', location: 'South PS', dog: 'Taco', breed: 'Chihuahua Mix', joined: 'Nov 2022', emoji: '🌮', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's7', name: 'Matt', location: 'Rancho Mirage', dog: 'Duke', breed: 'German Shepherd', joined: 'May 2023', emoji: '👑', color: 'from-plum to-plum-light', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's8', name: 'Alex', location: 'Desert Hot Springs', dog: 'Pepper', breed: 'Border Collie', joined: 'Sep 2023', emoji: '🌶️', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's9', name: 'Jordan', location: 'Palm Springs', dog: 'Waffle', breed: 'Corgi', joined: 'Jan 2024', emoji: '🧇', color: 'from-brand-golden to-brand-orange', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's10', name: 'Kevin', location: 'Indian Wells', dog: 'Bruno', breed: 'Bulldog', joined: 'Apr 2022', emoji: '🏋️', color: 'from-plum to-brand-teal', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's11', name: 'Sam', location: 'Uptown PS', dog: 'Olive', breed: 'Italian Greyhound', joined: 'Jul 2023', emoji: '🫒', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's12', name: 'Will', location: 'Palm Canyon', dog: 'Beans', breed: 'Beagle', joined: 'Dec 2021', emoji: '🫘', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's1', name: 'Marco', location: 'Uptown PS', dogs: [{ name: 'Biscuit', breed: 'French Bulldog' }], joined: 'Jan 2023', emoji: '🐾', color: 'from-plum to-plum-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's2', name: 'Tyler', location: 'Palm Canyon', dogs: [{ name: 'Mango', breed: 'Golden Retriever' }], joined: 'Mar 2023', emoji: '🌟', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's3', name: 'Derek', location: 'Cathedral City', dogs: [{ name: 'Zeus', breed: 'Doberman' }], joined: 'Jun 2022', emoji: '⚡', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's4', name: 'James', location: 'Old Las Palmas', dogs: [{ name: 'Pretzel', breed: 'Dachshund' }, { name: 'Bagel', breed: 'Dachshund' }], joined: 'Feb 2021', emoji: '🥨', color: 'from-plum to-brand-teal', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's5', name: 'Chris', location: 'Movie Colony', dogs: [{ name: 'Noodle', breed: 'Labradoodle' }], joined: 'Aug 2023', emoji: '🍜', color: 'from-brand-golden to-brand-orange', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's6', name: 'Ryan', location: 'South PS', dogs: [{ name: 'Taco', breed: 'Chihuahua Mix' }], joined: 'Nov 2022', emoji: '🌮', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's7', name: 'Matt', location: 'Rancho Mirage', dogs: [{ name: 'Duke', breed: 'German Shepherd' }], joined: 'May 2023', emoji: '👑', color: 'from-plum to-plum-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's8', name: 'Alex', location: 'Desert Hot Springs', dogs: [{ name: 'Pepper', breed: 'Border Collie' }], joined: 'Sep 2023', emoji: '🌶️', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's9', name: 'Jordan', location: 'Palm Springs', dogs: [{ name: 'Waffle', breed: 'Corgi' }], joined: 'Jan 2024', emoji: '🧇', color: 'from-brand-golden to-brand-orange', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's10', name: 'Kevin', location: 'Indian Wells', dogs: [{ name: 'Bruno', breed: 'Bulldog' }], joined: 'Apr 2022', emoji: '🏋️', color: 'from-plum to-brand-teal', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's11', name: 'Sam', location: 'Uptown PS', dogs: [{ name: 'Olive', breed: 'Italian Greyhound' }], joined: 'Jul 2023', emoji: '🫒', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
+  { id: 's12', name: 'Will', location: 'Palm Canyon', dogs: [{ name: 'Beans', breed: 'Beagle' }], joined: 'Dec 2021', emoji: '🫘', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
 ]
 
 const gradients = [
@@ -49,18 +49,22 @@ type ProfileRow = {
   city: string | null
   dog_name: string | null
   dog_breed: string | null
+  dogs: Array<{ name: string | null; breed: string | null }> | null
   avatar_url: string | null
   dog_photo_url: string | null
   created_at: string
 }
 
 function profileToCard(p: ProfileRow, index: number): MemberCard {
+  // Prefer the dogs list; older rows may only have the single-dog columns.
+  const rawDogs = p.dogs && p.dogs.length > 0
+    ? p.dogs
+    : [{ name: p.dog_name, breed: p.dog_breed }]
   return {
     id: p.id,
     name: p.name ?? 'New Member',
     location: p.city ?? 'Coachella Valley',
-    dog: p.dog_name ?? 'Good Boy',
-    breed: p.dog_breed ?? 'Mixed Breed',
+    dogs: rawDogs.map(d => ({ name: d.name ?? 'Good Boy', breed: d.breed ?? 'Mixed Breed' })),
     joined: new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
     emoji: '🐾',
     color: gradients[index % gradients.length],
@@ -75,7 +79,7 @@ export default function MembersPage() {
   useEffect(() => {
     supabase
       .from('profiles')
-      .select('id, name, city, dog_name, dog_breed, avatar_url, dog_photo_url, created_at')
+      .select('id, name, city, dog_name, dog_breed, dogs, avatar_url, dog_photo_url, created_at')
       .order('created_at', { ascending: true })
       .then(({ data, error }) => {
         if (error || !data || data.length === 0) {
@@ -141,7 +145,7 @@ export default function MembersPage() {
                 <img src={member.avatarUrl} alt={member.name}
                   className="w-1/2 h-full object-cover border-r-2 border-white" />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={member.dogPhotoUrl} alt={member.dog}
+                <img src={member.dogPhotoUrl} alt={member.dogs[0]?.name}
                   className="w-1/2 h-full object-cover" />
               </div>
             ) : member.avatarUrl ? (
@@ -152,7 +156,7 @@ export default function MembersPage() {
             ) : member.dogPhotoUrl ? (
               <div className="h-36 relative overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={member.dogPhotoUrl} alt={member.dog} className="w-full h-full object-cover" />
+                <img src={member.dogPhotoUrl} alt={member.dogs[0]?.name} className="w-full h-full object-cover" />
               </div>
             ) : (
               <div className={`bg-gradient-to-br ${member.color} h-36 flex items-center justify-center text-6xl`}>
@@ -164,20 +168,22 @@ export default function MembersPage() {
               <h3 className="font-extrabold text-plum text-lg">{member.name}</h3>
               <p className="text-xs text-plum/50 mb-3">📍 {member.location}</p>
 
-              <div className="bg-brand-cream rounded-xl p-3 mb-3">
-                <div className="flex items-center gap-2">
-                  {member.dogPhotoUrl ? (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img src={member.dogPhotoUrl} alt={member.dog}
-                      className="w-8 h-8 rounded-full object-cover flex-shrink-0 border-2 border-white shadow-sm" />
-                  ) : (
-                    <span className="text-2xl">🐶</span>
-                  )}
-                  <div>
-                    <div className="font-bold text-plum text-sm">{member.dog}</div>
-                    <div className="text-xs text-plum/60">{member.breed}</div>
+              <div className="bg-brand-cream rounded-xl p-3 mb-3 space-y-2">
+                {member.dogs.map((dog, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    {i === 0 && member.dogPhotoUrl ? (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img src={member.dogPhotoUrl} alt={dog.name}
+                        className="w-8 h-8 rounded-full object-cover flex-shrink-0 border-2 border-white shadow-sm" />
+                    ) : (
+                      <span className="text-2xl">🐶</span>
+                    )}
+                    <div>
+                      <div className="font-bold text-plum text-sm">{dog.name}</div>
+                      <div className="text-xs text-plum/60">{dog.breed}</div>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
 
               <div className="flex items-center justify-between">

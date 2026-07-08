@@ -6,20 +6,9 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/client'
 import { stashPendingPhotos, uploadPhoto } from '@/lib/photos'
 import { useUser } from '@/lib/useUser'
+import { Dog, DOG_BREEDS, EMPTY_DOG } from '@/lib/dogs'
 
 // ─── constants ────────────────────────────────────────────────────────────────
-
-const DOG_BREEDS = [
-  'Australian Shepherd', 'Basset Hound', 'Beagle', 'Border Collie', 'Boston Terrier',
-  'Boxer', 'Bulldog', 'Cavalier King Charles Spaniel', 'Chihuahua', 'Chihuahua Mix',
-  'Cocker Spaniel', 'Corgi', 'Dachshund', 'Dalmatian', 'Doberman',
-  'French Bulldog', 'German Shepherd', 'Golden Retriever', 'Great Dane', 'Greyhound',
-  'Havanese', 'Italian Greyhound', 'Jack Russell Terrier', 'Labradoodle', 'Labrador Retriever',
-  'Maltese', 'Miniature Schnauzer', 'Mixed Breed', 'Pomeranian', 'Poodle',
-  'Pug', 'Rhodesian Ridgeback', 'Rottweiler', 'Shiba Inu', 'Shih Tzu',
-  'Siberian Husky', 'Vizsla', 'Weimaraner', 'Whippet', 'Yorkshire Terrier',
-  'Other',
-]
 
 const MAX_FILE_SIZE = 8 * 1024 * 1024 // 8 MB
 const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
@@ -141,13 +130,12 @@ type FormData = {
   password: string
   confirmPassword: string
   city: string
-  dogName: string
-  dogBreed: string
 }
 type FormErrors = Partial<Record<keyof FormData, string>>
+type DogErrors = { name?: string; breed?: string }
 
 const INITIAL_FORM: FormData = {
-  name: '', email: '', password: '', confirmPassword: '', city: '', dogName: '', dogBreed: '',
+  name: '', email: '', password: '', confirmPassword: '', city: '',
 }
 
 // ─── main page ────────────────────────────────────────────────────────────────
@@ -157,6 +145,8 @@ export default function JoinPage() {
   const { user: currentUser, loading: authLoading } = useUser()
   const [form, setForm] = useState<FormData>(INITIAL_FORM)
   const [errors, setErrors] = useState<FormErrors>({})
+  const [dogs, setDogs] = useState<Dog[]>([{ ...EMPTY_DOG }])
+  const [dogErrors, setDogErrors] = useState<DogErrors[]>([])
   const [loading, setLoading] = useState(false)
   const [loadingMsg, setLoadingMsg] = useState('Creating your account…')
   const [success, setSuccess] = useState(false)
@@ -202,9 +192,16 @@ export default function JoinPage() {
     else if (form.password.length < 8) e.password = 'Password must be at least 8 characters.'
     if (form.password !== form.confirmPassword) e.confirmPassword = 'Passwords do not match.'
     if (!form.city.trim()) e.city = 'City is required.'
-    if (!form.dogName.trim()) e.dogName = "Your dog's name is required."
-    if (!form.dogBreed) e.dogBreed = "Please select your dog's breed."
     return e
+  }
+
+  function validateDogs(): DogErrors[] {
+    return dogs.map(d => {
+      const e: DogErrors = {}
+      if (!d.name.trim()) e.name = "Your dog's name is required."
+      if (!d.breed) e.breed = "Please select your dog's breed."
+      return e
+    })
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
@@ -213,14 +210,38 @@ export default function JoinPage() {
     if (errors[name as keyof FormData]) setErrors(prev => ({ ...prev, [name]: undefined }))
   }
 
+  function updateDog(i: number, field: keyof Dog, value: string) {
+    setDogs(prev => prev.map((d, j) => (j === i ? { ...d, [field]: value } : d)))
+    setDogErrors(prev => prev.map((e, j) => (j === i ? { ...e, [field]: undefined } : e)))
+  }
+
+  function addDog() {
+    setDogs(prev => [...prev, { ...EMPTY_DOG }])
+    setDogErrors(prev => [...prev, {}])
+  }
+
+  function removeDog(i: number) {
+    setDogs(prev => prev.filter((_, j) => j !== i))
+    setDogErrors(prev => prev.filter((_, j) => j !== i))
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setServerError(null)
     const validation = validate()
-    if (Object.keys(validation).length > 0) { setErrors(validation); return }
+    const dogValidation = validateDogs()
+    if (Object.keys(validation).length > 0 || dogValidation.some(e => e.name || e.breed)) {
+      setErrors(validation)
+      setDogErrors(dogValidation)
+      return
+    }
 
     setLoading(true)
     setLoadingMsg('Creating your account…')
+
+    // The `dogs` array is the source of truth; dog_name/dog_breed mirror the
+    // first dog for members-page rows and readers that predate multi-dog.
+    const cleanDogs = dogs.map(d => ({ name: d.name.trim(), breed: d.breed }))
 
     const { data, error } = await supabase.auth.signUp({
       email: form.email.trim(),
@@ -229,8 +250,9 @@ export default function JoinPage() {
         data: {
           name:      form.name.trim(),
           city:      form.city.trim(),
-          dog_name:  form.dogName.trim(),
-          dog_breed: form.dogBreed,
+          dogs:      cleanDogs,
+          dog_name:  cleanDogs[0].name,
+          dog_breed: cleanDogs[0].breed,
         },
         emailRedirectTo: `${window.location.origin}/welcome`,
       },
@@ -374,34 +396,53 @@ export default function JoinPage() {
 
             <hr className="border-plum/10" />
 
-            {/* ── Your Dog ───────────────────────────────────────── */}
+            {/* ── Your Dogs ──────────────────────────────────────── */}
             <fieldset>
-              <legend className="text-xs font-bold uppercase tracking-widest text-plum/40 mb-4">Your Dog</legend>
+              <legend className="text-xs font-bold uppercase tracking-widest text-plum/40 mb-4">Your Dogs</legend>
               <div className="space-y-4">
 
-                <div>
-                  <label htmlFor="dogName" className="block text-sm font-semibold text-plum mb-1.5">Dog&apos;s Name</label>
-                  <input id="dogName" name="dogName" type="text"
-                    value={form.dogName} onChange={handleChange} placeholder="Biscuit"
-                    className={`w-full rounded-xl border px-4 py-3 text-sm text-plum placeholder-plum/30 focus:outline-none focus:ring-2 transition min-h-[44px] ${errors.dogName ? 'border-red-400 focus:ring-red-200 bg-red-50' : 'border-plum/20 focus:ring-brand-teal/30 bg-white'}`} />
-                  {errors.dogName && <p className="mt-1.5 text-xs text-red-600">{errors.dogName}</p>}
-                </div>
+                {dogs.map((dog, i) => (
+                  <div key={i} className="rounded-2xl border border-plum/15 bg-plum/3 p-4 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold text-plum">Dog {i + 1}</span>
+                      {dogs.length > 1 && (
+                        <button type="button" onClick={() => removeDog(i)}
+                          className="text-xs text-red-500 hover:text-red-600 font-semibold">
+                          Remove
+                        </button>
+                      )}
+                    </div>
 
-                <div>
-                  <label htmlFor="dogBreed" className="block text-sm font-semibold text-plum mb-1.5">Breed</label>
-                  <select id="dogBreed" name="dogBreed" value={form.dogBreed} onChange={handleChange}
-                    className={`w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 transition min-h-[44px] bg-white appearance-none ${errors.dogBreed ? 'border-red-400 focus:ring-red-200 text-red-700' : form.dogBreed ? 'border-plum/20 focus:ring-brand-teal/30 text-plum' : 'border-plum/20 focus:ring-brand-teal/30 text-plum/40'}`}>
-                    <option value="" disabled>Select a breed…</option>
-                    {DOG_BREEDS.map(b => <option key={b} value={b} className="text-plum">{b}</option>)}
-                  </select>
-                  {errors.dogBreed && <p className="mt-1.5 text-xs text-red-600">{errors.dogBreed}</p>}
-                </div>
+                    <div>
+                      <label htmlFor={`dogName-${i}`} className="block text-sm font-semibold text-plum mb-1.5">Dog&apos;s Name</label>
+                      <input id={`dogName-${i}`} type="text"
+                        value={dog.name} onChange={e => updateDog(i, 'name', e.target.value)} placeholder="Biscuit"
+                        className={`w-full rounded-xl border px-4 py-3 text-sm text-plum placeholder-plum/30 focus:outline-none focus:ring-2 transition min-h-[44px] ${dogErrors[i]?.name ? 'border-red-400 focus:ring-red-200 bg-red-50' : 'border-plum/20 focus:ring-brand-teal/30 bg-white'}`} />
+                      {dogErrors[i]?.name && <p className="mt-1.5 text-xs text-red-600">{dogErrors[i]?.name}</p>}
+                    </div>
+
+                    <div>
+                      <label htmlFor={`dogBreed-${i}`} className="block text-sm font-semibold text-plum mb-1.5">Breed</label>
+                      <select id={`dogBreed-${i}`} value={dog.breed} onChange={e => updateDog(i, 'breed', e.target.value)}
+                        className={`w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 transition min-h-[44px] bg-white appearance-none ${dogErrors[i]?.breed ? 'border-red-400 focus:ring-red-200 text-red-700' : dog.breed ? 'border-plum/20 focus:ring-brand-teal/30 text-plum' : 'border-plum/20 focus:ring-brand-teal/30 text-plum/40'}`}>
+                        <option value="" disabled>Select a breed…</option>
+                        {DOG_BREEDS.map(b => <option key={b} value={b} className="text-plum">{b}</option>)}
+                      </select>
+                      {dogErrors[i]?.breed && <p className="mt-1.5 text-xs text-red-600">{dogErrors[i]?.breed}</p>}
+                    </div>
+                  </div>
+                ))}
+
+                <button type="button" onClick={addDog}
+                  className="w-full rounded-xl border-2 border-dashed border-plum/20 py-3 text-sm font-semibold text-brand-orange hover:border-brand-orange/50 hover:bg-brand-orange/5 transition">
+                  ＋ Add another dog
+                </button>
 
                 {/* Dog photo */}
                 <PhotoUpload
                   id="dogPhoto"
-                  label="Dog Photo"
-                  hint={form.dogName ? `Upload a photo of ${form.dogName}` : "Upload a photo of your dog"}
+                  label={dogs.length > 1 ? 'Dog Photo (your crew, or just one)' : 'Dog Photo'}
+                  hint={dogs[0]?.name ? `Upload a photo of ${dogs[0].name}${dogs.length > 1 ? ' & friends' : ''}` : 'Upload a photo of your dog'}
                   preview={dogPreview}
                   onFileSelected={f => setPhoto('dog', f)}
                   onClear={() => clearPhoto('dog')}
