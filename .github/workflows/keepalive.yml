@@ -1,0 +1,20 @@
+name: Keep Supabase awake
+
+# Free-tier Supabase projects pause after ~1 week without traffic.
+# This pings the database daily so it never goes idle.
+# The apikey below is the public (publishable) key — safe to commit.
+
+on:
+  schedule:
+    - cron: '0 15 * * *' # daily, 8:00 AM Palm Springs time
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping database
+        run: |
+          curl -sf "https://spjeepflyxdnztxposoi.supabase.co/rest/v1/profiles?select=id&limit=1" \
+            -H "apikey: sb_publishable_0RD8bo_ekJT7KRoZ8oxv9g_I2FIUCE8" > /dev/null
+          echo "Supabase pinged successfully"
