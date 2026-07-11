@@ -1,8 +1,8 @@
--- PS Dog Dad — Supabase setup
--- Run this in the Supabase Dashboard → SQL Editor → New query → Run.
+-- PS Dog Dad - Supabase setup
+-- Run this in the Supabase Dashboard -> SQL Editor -> New query -> Run.
 -- Safe to run more than once.
 
--- ─── 1. Member directory table ────────────────────────────────────────────────
+-- --- 1. Member directory table ------------------------------------------------
 -- The anon key can't read auth.users, so the public Members page reads from
 -- this table instead. It is kept in sync with auth.users by the triggers below.
 
@@ -33,7 +33,7 @@ create policy "Confirmed profiles are viewable by everyone"
   on public.profiles for select
   using (confirmed);
 
--- ─── 2. Sync profiles from auth.users ────────────────────────────────────────
+-- --- 2. Sync profiles from auth.users ----------------------------------------
 
 create or replace function public.handle_user_change()
 returns trigger
@@ -89,7 +89,7 @@ create trigger on_auth_user_updated
   after update on auth.users
   for each row execute function public.handle_user_change();
 
--- ─── 3. Backfill profiles for members who already signed up ──────────────────
+-- --- 3. Backfill profiles for members who already signed up ------------------
 
 insert into public.profiles
   (id, name, city, dog_name, dog_breed, dogs, avatar_url, dog_photo_url, confirmed, created_at)
@@ -120,7 +120,7 @@ update public.profiles
 set dogs = jsonb_build_array(jsonb_build_object('name', dog_name, 'breed', dog_breed))
 where dogs is null and dog_name is not null;
 
--- ─── 4. Storage bucket + policies for member photos ──────────────────────────
+-- --- 4. Storage bucket + policies for member photos --------------------------
 
 insert into storage.buckets (id, name, public)
 values ('member-photos', 'member-photos', true)

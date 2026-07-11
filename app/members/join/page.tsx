@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/client'
-import { stashPendingPhotos, uploadPhoto } from '@/lib/photos'
+import { dogSlot, stashPendingPhotos, uploadPhoto } from '@/lib/photos'
 import { useUser } from '@/lib/useUser'
 import { Dog, DOG_BREEDS, EMPTY_DOG } from '@/lib/dogs'
 
@@ -151,6 +151,7 @@ export default function JoinPage() {
   const [loadingMsg, setLoadingMsg] = useState('Creating your account…')
   const [success, setSuccess] = useState(false)
   const [photosPending, setPhotosPending] = useState(false)
+  const [photoUploadWarning, setPhotoUploadWarning] = useState<string | null>(null)
   const [serverError, setServerError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -161,26 +162,38 @@ export default function JoinPage() {
     }
   }, [authLoading, currentUser, success, loading, router])
 
-  // photos
+  // photos — one for the member, one per dog (parallel to `dogs`)
   const [memberFile, setMemberFile] = useState<File | null>(null)
   const [memberPreview, setMemberPreview] = useState<string | null>(null)
-  const [dogFile, setDogFile] = useState<File | null>(null)
-  const [dogPreview, setDogPreview] = useState<string | null>(null)
+  const [dogFiles, setDogFiles] = useState<(File | null)[]>([null])
+  const [dogPreviews, setDogPreviews] = useState<(string | null)[]>([null])
 
-  function setPhoto(slot: 'member' | 'dog', file: File) {
-    const url = URL.createObjectURL(file)
-    if (slot === 'member') { setMemberFile(file); setMemberPreview(url) }
-    else                   { setDogFile(file);    setDogPreview(url) }
+  function setMemberPhoto(file: File) {
+    setMemberFile(file); setMemberPreview(URL.createObjectURL(file))
   }
 
-  function clearPhoto(slot: 'member' | 'dog') {
-    if (slot === 'member') {
-      if (memberPreview) URL.revokeObjectURL(memberPreview)
-      setMemberFile(null); setMemberPreview(null)
-    } else {
-      if (dogPreview) URL.revokeObjectURL(dogPreview)
-      setDogFile(null); setDogPreview(null)
-    }
+  function clearMemberPhoto() {
+    if (memberPreview) URL.revokeObjectURL(memberPreview)
+    setMemberFile(null); setMemberPreview(null)
+  }
+
+  function setDogPhoto(i: number, file: File) {
+    const url = URL.createObjectURL(file)
+    setDogFiles(prev => prev.map((f, j) => (j === i ? file : f)))
+    setDogPreviews(prev => prev.map((p, j) => {
+      if (j !== i) return p
+      if (p) URL.revokeObjectURL(p)
+      return url
+    }))
+  }
+
+  function clearDogPhoto(i: number) {
+    setDogFiles(prev => prev.map((f, j) => (j === i ? null : f)))
+    setDogPreviews(prev => prev.map((p, j) => {
+      if (j !== i) return p
+      if (p) URL.revokeObjectURL(p)
+      return null
+    }))
   }
 
   function validate(): FormErrors {
@@ -218,11 +231,19 @@ export default function JoinPage() {
   function addDog() {
     setDogs(prev => [...prev, { ...EMPTY_DOG }])
     setDogErrors(prev => [...prev, {}])
+    setDogFiles(prev => [...prev, null])
+    setDogPreviews(prev => [...prev, null])
   }
 
   function removeDog(i: number) {
     setDogs(prev => prev.filter((_, j) => j !== i))
     setDogErrors(prev => prev.filter((_, j) => j !== i))
+    setDogFiles(prev => prev.filter((_, j) => j !== i))
+    setDogPreviews(prev => {
+      const gone = prev[i]
+      if (gone) URL.revokeObjectURL(gone)
+      return prev.filter((_, j) => j !== i)
+    })
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -261,21 +282,31 @@ export default function JoinPage() {
     if (error) { setServerError(error.message); setLoading(false); return }
 
     const userId = data.user?.id
-    if (userId && (memberFile || dogFile)) {
+    if (userId && (memberFile || dogFiles.some(f => f))) {
       if (data.session) {
         // Email confirmation is off — we're signed in and can upload right away.
         setLoadingMsg('Uploading your photos…')
 
-        const [avatarUrl, dogPhotoUrl] = await Promise.all([
+        const [avatarUrl, ...dogPhotoUrls] = await Promise.all([
           memberFile ? uploadPhoto(userId, 'avatar', memberFile) : Promise.resolve(null),
-          dogFile    ? uploadPhoto(userId, 'dog',    dogFile)    : Promise.resolve(null),
+          ...dogFiles.map((f, i) => (f ? uploadPhoto(userId, dogSlot(i), f) : Promise.resolve(null))),
         ])
 
-        if (avatarUrl || dogPhotoUrl) {
+        const failedUploads = [
+          ...(memberFile && !avatarUrl ? ['your photo'] : []),
+          ...dogFiles.flatMap((f, i) => (f && !dogPhotoUrls[i] ? [`${cleanDogs[i].name || `Dog ${i + 1}`}'s photo`] : [])),
+        ]
+        if (failedUploads.length > 0) {
+          setPhotoUploadWarning(`We couldn't upload ${failedUploads.join(' and ')}. You can add them from your profile once you're logged in.`)
+        }
+
+        if (avatarUrl || dogPhotoUrls.some(u => u)) {
+          const dogsWithPhotos = cleanDogs.map((d, i) => ({ ...d, photo_url: dogPhotoUrls[i] ?? null }))
           const { error: metaError } = await supabase.auth.updateUser({
             data: {
-              ...(avatarUrl    && { avatar_url:    avatarUrl }),
-              ...(dogPhotoUrl  && { dog_photo_url: dogPhotoUrl }),
+              ...(avatarUrl && { avatar_url: avatarUrl }),
+              dogs: dogsWithPhotos,
+              ...(dogPhotoUrls[0] && { dog_photo_url: dogPhotoUrls[0] }),
             },
           })
           if (metaError) console.error('Saving photo URLs failed:', metaError.message)
@@ -285,7 +316,7 @@ export default function JoinPage() {
         // Keep compressed copies on this device; PendingPhotoSync uploads them
         // once the confirmation link signs the member in.
         setLoadingMsg('Saving your photos…')
-        const stashed = await stashPendingPhotos(memberFile, dogFile)
+        const stashed = await stashPendingPhotos(memberFile, dogFiles)
         setPhotosPending(stashed)
       }
     }
@@ -317,6 +348,11 @@ export default function JoinPage() {
               📷 Your photos are saved on this device and will be added to your profile
               automatically when you open the confirmation link in this browser.
               You can also add or change them anytime from your profile.
+            </div>
+          )}
+          {photoUploadWarning && (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-700 mb-4">
+              ⚠️ {photoUploadWarning}
             </div>
           )}
           <div className="bg-brand-golden/10 border border-brand-golden/30 rounded-xl p-4 text-sm text-plum/70 mb-8">
@@ -387,8 +423,8 @@ export default function JoinPage() {
                   label="Your Photo"
                   hint="Upload a photo of yourself"
                   preview={memberPreview}
-                  onFileSelected={f => setPhoto('member', f)}
-                  onClear={() => clearPhoto('member')}
+                  onFileSelected={setMemberPhoto}
+                  onClear={clearMemberPhoto}
                 />
 
               </div>
@@ -430,6 +466,16 @@ export default function JoinPage() {
                       </select>
                       {dogErrors[i]?.breed && <p className="mt-1.5 text-xs text-red-600">{dogErrors[i]?.breed}</p>}
                     </div>
+
+                    {/* This dog's photo */}
+                    <PhotoUpload
+                      id={`dogPhoto-${i}`}
+                      label="Dog Photo"
+                      hint={dog.name ? `Upload a photo of ${dog.name}` : 'Upload a photo of this dog'}
+                      preview={dogPreviews[i] ?? null}
+                      onFileSelected={f => setDogPhoto(i, f)}
+                      onClear={() => clearDogPhoto(i)}
+                    />
                   </div>
                 ))}
 
@@ -437,16 +483,6 @@ export default function JoinPage() {
                   className="w-full rounded-xl border-2 border-dashed border-plum/20 py-3 text-sm font-semibold text-brand-orange hover:border-brand-orange/50 hover:bg-brand-orange/5 transition">
                   ＋ Add another dog
                 </button>
-
-                {/* Dog photo */}
-                <PhotoUpload
-                  id="dogPhoto"
-                  label={dogs.length > 1 ? 'Dog Photo (your crew, or just one)' : 'Dog Photo'}
-                  hint={dogs[0]?.name ? `Upload a photo of ${dogs[0].name}${dogs.length > 1 ? ' & friends' : ''}` : 'Upload a photo of your dog'}
-                  preview={dogPreview}
-                  onFileSelected={f => setPhoto('dog', f)}
-                  onClear={() => clearPhoto('dog')}
-                />
 
               </div>
             </fieldset>

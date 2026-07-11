@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
-import { uploadPhoto } from '@/lib/photos'
+import { dogSlot, uploadPhoto } from '@/lib/photos'
 import { Dog, DOG_BREEDS, EMPTY_DOG, dogsFromMetadata } from '@/lib/dogs'
 import type { User } from '@supabase/supabase-js'
 
@@ -134,13 +134,13 @@ export default function ProfilePage() {
   const [dogs, setDogs] = useState<Dog[]>([{ ...EMPTY_DOG }])
   const [dogErrors, setDogErrors] = useState<DogErrors[]>([])
 
-  // photos — separate state for current saved URLs vs. pending new files
+  // photos — saved URLs live in metadata (avatar_url + each dog's photo_url);
+  // pending new files/previews are kept here until Save uploads them.
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
-  const [dogPhotoUrl, setDogPhotoUrl] = useState<string | null>(null)
   const [memberFile, setMemberFile] = useState<File | null>(null)
   const [memberPreview, setMemberPreview] = useState<string | null>(null)
-  const [dogFile, setDogFile] = useState<File | null>(null)
-  const [dogPreview, setDogPreview] = useState<string | null>(null)
+  const [dogFiles, setDogFiles] = useState<(File | null)[]>([null])
+  const [dogPreviews, setDogPreviews] = useState<(string | null)[]>([null])
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -160,32 +160,45 @@ export default function ProfilePage() {
     })
     // Legacy members' single dog_name/dog_breed loads as row 1, so their
     // first save migrates it into the dogs array instead of losing it.
-    setDogs(dogsFromMetadata(m))
+    const hydratedDogs = dogsFromMetadata(m)
+    setDogs(hydratedDogs)
     setDogErrors([])
-    setAvatarUrl(m.avatar_url    ?? null)
-    setDogPhotoUrl(m.dog_photo_url ?? null)
+    setDogFiles(hydratedDogs.map(() => null))
+    setDogPreviews(prev => { prev.forEach(p => p && URL.revokeObjectURL(p)); return hydratedDogs.map(() => null) })
+    setAvatarUrl(m.avatar_url ?? null)
   }
 
-  function setPhoto(slot: 'member' | 'dog', file: File) {
+  function setMemberPhoto(file: File) {
+    setMemberFile(file); setMemberPreview(URL.createObjectURL(file))
+  }
+
+  function clearMemberPhoto() {
+    if (memberPreview) URL.revokeObjectURL(memberPreview)
+    setMemberFile(null); setMemberPreview(null)
+  }
+
+  function setDogPhoto(i: number, file: File) {
     const url = URL.createObjectURL(file)
-    if (slot === 'member') { setMemberFile(file); setMemberPreview(url) }
-    else                   { setDogFile(file);    setDogPreview(url) }
+    setDogFiles(prev => prev.map((f, j) => (j === i ? file : f)))
+    setDogPreviews(prev => prev.map((p, j) => {
+      if (j !== i) return p
+      if (p) URL.revokeObjectURL(p)
+      return url
+    }))
   }
 
-  function clearPhoto(slot: 'member' | 'dog') {
-    if (slot === 'member') {
-      if (memberPreview) URL.revokeObjectURL(memberPreview)
-      setMemberFile(null); setMemberPreview(null)
-    } else {
-      if (dogPreview) URL.revokeObjectURL(dogPreview)
-      setDogFile(null); setDogPreview(null)
-    }
+  function clearDogPhoto(i: number) {
+    setDogFiles(prev => prev.map((f, j) => (j === i ? null : f)))
+    setDogPreviews(prev => prev.map((p, j) => {
+      if (j !== i) return p
+      if (p) URL.revokeObjectURL(p)
+      return null
+    }))
   }
 
   function cancelEdit() {
     if (user) hydrateFromUser(user)
-    clearPhoto('member')
-    clearPhoto('dog')
+    clearMemberPhoto()
     setErrors({})
     setEditing(false)
   }
@@ -220,11 +233,19 @@ export default function ProfilePage() {
   function addDog() {
     setDogs(prev => [...prev, { ...EMPTY_DOG }])
     setDogErrors(prev => [...prev, {}])
+    setDogFiles(prev => [...prev, null])
+    setDogPreviews(prev => [...prev, null])
   }
 
   function removeDog(i: number) {
     setDogs(prev => prev.filter((_, j) => j !== i))
     setDogErrors(prev => prev.filter((_, j) => j !== i))
+    setDogFiles(prev => prev.filter((_, j) => j !== i))
+    setDogPreviews(prev => {
+      const gone = prev[i]
+      if (gone) URL.revokeObjectURL(gone)
+      return prev.filter((_, j) => j !== i)
+    })
   }
 
   async function handleSave(e: React.FormEvent) {
@@ -241,20 +262,25 @@ export default function ProfilePage() {
     const userId = user!.id
 
     let newAvatarUrl = avatarUrl
-    let newDogPhotoUrl = dogPhotoUrl
 
-    if (memberFile || dogFile) {
-      const [uploaded1, uploaded2] = await Promise.all([
-        memberFile ? uploadPhoto(userId, 'avatar', memberFile) : Promise.resolve(null),
-        dogFile    ? uploadPhoto(userId, 'dog',    dogFile)    : Promise.resolve(null),
-      ])
-      if (uploaded1) newAvatarUrl = uploaded1
-      if (uploaded2) newDogPhotoUrl = uploaded2
-    }
+    const [uploadedAvatar, ...uploadedDogPhotos] = await Promise.all([
+      memberFile ? uploadPhoto(userId, 'avatar', memberFile) : Promise.resolve(null),
+      ...dogFiles.map((f, i) => (f ? uploadPhoto(userId, dogSlot(i), f) : Promise.resolve(null))),
+    ])
+    if (uploadedAvatar) newAvatarUrl = uploadedAvatar
 
-    // The `dogs` array is the source of truth; dog_name/dog_breed mirror the
-    // first dog for readers that predate multi-dog support.
-    const cleanDogs = dogs.map(d => ({ name: d.name.trim(), breed: d.breed }))
+    const failedUploads = [
+      ...(memberFile && !uploadedAvatar ? ['your photo'] : []),
+      ...dogFiles.flatMap((f, i) => (f && !uploadedDogPhotos[i] ? [`${dogs[i].name || `Dog ${i + 1}`}'s photo`] : [])),
+    ]
+
+    // The `dogs` array is the source of truth; dog_name/dog_breed/dog_photo_url
+    // mirror the first dog for readers that predate multi-dog support.
+    const cleanDogs = dogs.map((d, i) => ({
+      name: d.name.trim(),
+      breed: d.breed,
+      photo_url: uploadedDogPhotos[i] ?? d.photo_url ?? null,
+    }))
 
     const { data, error } = await supabase.auth.updateUser({
       data: {
@@ -263,8 +289,8 @@ export default function ProfilePage() {
         dogs:          cleanDogs,
         dog_name:      cleanDogs[0].name,
         dog_breed:     cleanDogs[0].breed,
-        ...(newAvatarUrl    && { avatar_url:    newAvatarUrl }),
-        ...(newDogPhotoUrl  && { dog_photo_url: newDogPhotoUrl }),
+        ...(cleanDogs[0].photo_url && { dog_photo_url: cleanDogs[0].photo_url }),
+        ...(newAvatarUrl && { avatar_url: newAvatarUrl }),
       },
     })
 
@@ -273,11 +299,14 @@ export default function ProfilePage() {
     if (error) { setSaveMsg('❌ ' + error.message); return }
 
     if (data.user) hydrateFromUser(data.user)
-    clearPhoto('member')
-    clearPhoto('dog')
+    clearMemberPhoto()
     setEditing(false)
-    setSaveMsg('✓ Profile updated!')
-    setTimeout(() => setSaveMsg(null), 3000)
+    if (failedUploads.length > 0) {
+      setSaveMsg(`⚠️ Profile saved, but ${failedUploads.join(' and ')} failed to upload. Please try again.`)
+    } else {
+      setSaveMsg('✓ Profile updated!')
+      setTimeout(() => setSaveMsg(null), 3000)
+    }
   }
 
   if (loading) {
@@ -290,9 +319,7 @@ export default function ProfilePage() {
 
   if (!user) return null
 
-  const meta = user.user_metadata ?? {}
   const displayAvatarUrl: string | null = memberPreview ?? avatarUrl
-  const displayDogPhotoUrl: string | null = dogPreview ?? dogPhotoUrl
   const memberSince = new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
   return (
@@ -343,7 +370,9 @@ export default function ProfilePage() {
         {/* Save confirmation */}
         {saveMsg && (
           <div className={`mb-6 rounded-xl px-4 py-3 text-sm font-semibold ${
-            saveMsg.startsWith('❌') ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-brand-teal/10 text-brand-teal border border-brand-teal/30'
+            saveMsg.startsWith('❌') ? 'bg-red-50 text-red-700 border border-red-200'
+            : saveMsg.startsWith('⚠️') ? 'bg-amber-50 text-amber-700 border border-amber-200'
+            : 'bg-brand-teal/10 text-brand-teal border border-brand-teal/30'
           }`}>
             {saveMsg}
           </div>
@@ -379,8 +408,8 @@ export default function ProfilePage() {
                     label="Your Photo"
                     hint={avatarUrl ? 'Upload a new photo to replace current' : 'Upload a photo of yourself'}
                     preview={memberPreview ?? avatarUrl}
-                    onFileSelected={f => setPhoto('member', f)}
-                    onClear={() => clearPhoto('member')}
+                    onFileSelected={setMemberPhoto}
+                    onClear={clearMemberPhoto}
                   />
                 </div>
               </fieldset>
@@ -420,6 +449,20 @@ export default function ProfilePage() {
                           {dogErrors[i]?.breed && <p className="mt-1.5 text-xs text-red-600">{dogErrors[i]?.breed}</p>}
                         </div>
                       </div>
+
+                      {/* This dog's photo */}
+                      <div className="mt-4">
+                        <PhotoUpload
+                          id={`dogPhoto-${i}`}
+                          label="Dog Photo"
+                          hint={dog.photo_url
+                            ? 'Upload a new photo to replace current'
+                            : dog.name ? `Upload a photo of ${dog.name}` : 'Upload a photo of this dog'}
+                          preview={dogPreviews[i] ?? dog.photo_url ?? null}
+                          onFileSelected={f => setDogPhoto(i, f)}
+                          onClear={() => clearDogPhoto(i)}
+                        />
+                      </div>
                     </div>
                   ))}
 
@@ -427,18 +470,6 @@ export default function ProfilePage() {
                     className="w-full rounded-xl border-2 border-dashed border-plum/20 py-3 text-sm font-semibold text-brand-orange hover:border-brand-orange/50 hover:bg-brand-orange/5 transition">
                     ＋ Add another dog
                   </button>
-                </div>
-                <div className="mt-5">
-                  <PhotoUpload
-                    id="dogPhoto"
-                    label={dogs.length > 1 ? 'Dog Photo (your crew, or just one)' : 'Dog Photo'}
-                    hint={dogPhotoUrl
-                      ? `Upload a new photo to replace current`
-                      : dogs[0]?.name ? `Upload a photo of ${dogs[0].name}` : 'Upload a photo of your dog'}
-                    preview={dogPreview ?? dogPhotoUrl}
-                    onFileSelected={f => setPhoto('dog', f)}
-                    onClear={() => clearPhoto('dog')}
-                  />
                 </div>
               </fieldset>
 
@@ -491,27 +522,23 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              {/* Dog card */}
-              <div className="bg-white rounded-3xl shadow-md overflow-hidden">
-                {displayDogPhotoUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={displayDogPhotoUrl} alt={dogs[0]?.name} className="w-full h-52 object-cover" />
-                ) : (
-                  <div className="w-full h-52 bg-gradient-to-br from-brand-teal to-brand-teal-light flex items-center justify-center text-8xl">
-                    🐶
-                  </div>
-                )}
-                <div className="p-6">
-                  <h2 className="text-2xl font-extrabold text-plum">{dogs[0]?.name || '—'}</h2>
-                  <p className="text-plum/50 text-sm mt-1">🐾 {dogs[0]?.breed || '—'}</p>
-                  {dogs.slice(1).map((dog, i) => (
-                    <div key={i} className="mt-4 pt-4 border-t border-plum/10">
-                      <h3 className="text-xl font-extrabold text-plum">{dog.name || '—'}</h3>
-                      <p className="text-plum/50 text-sm mt-1">🐾 {dog.breed || '—'}</p>
+              {/* One card per dog */}
+              {dogs.map((dog, i) => (
+                <div key={i} className="bg-white rounded-3xl shadow-md overflow-hidden">
+                  {dog.photo_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={dog.photo_url} alt={dog.name} className="w-full h-52 object-cover" />
+                  ) : (
+                    <div className="w-full h-52 bg-gradient-to-br from-brand-teal to-brand-teal-light flex items-center justify-center text-8xl">
+                      🐶
                     </div>
-                  ))}
+                  )}
+                  <div className="p-6">
+                    <h2 className="text-2xl font-extrabold text-plum">{dog.name || '—'}</h2>
+                    <p className="text-plum/50 text-sm mt-1">🐾 {dog.breed || '—'}</p>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
 
             {/* Quick links */}

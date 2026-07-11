@@ -6,12 +6,21 @@ const PENDING_KEY = 'psdogdad_pending_photos'
 const MAX_DIMENSION = 1200
 const JPEG_QUALITY = 0.85
 
-type PendingPhotos = { avatar?: string; dog?: string; savedAt: number }
+// `dog` may still exist in stashes saved before per-dog photos.
+type PendingPhotos = { avatar?: string; dog?: string; dogs?: (string | null)[]; savedAt: number }
+
+/**
+ * Storage slot for dog #i's photo. Dog 1 keeps the original `dog` slot so a
+ * replacement overwrites the pre-multi-dog file instead of orphaning it.
+ */
+export function dogSlot(i: number): string {
+  return i === 0 ? 'dog' : `dog-${i}`
+}
 
 /** Uploads a photo to the member-photos bucket and returns its public URL. */
 export async function uploadPhoto(
   userId: string,
-  slot: 'avatar' | 'dog',
+  slot: string,
   file: Blob,
   contentType?: string,
 ): Promise<string | null> {
@@ -57,16 +66,16 @@ async function compressToDataUrl(file: File): Promise<string | null> {
  */
 export async function stashPendingPhotos(
   memberFile: File | null,
-  dogFile: File | null,
+  dogFiles: (File | null)[],
 ): Promise<boolean> {
-  const [avatar, dog] = await Promise.all([
+  const [avatar, ...dogs] = await Promise.all([
     memberFile ? compressToDataUrl(memberFile) : Promise.resolve(null),
-    dogFile ? compressToDataUrl(dogFile) : Promise.resolve(null),
+    ...dogFiles.map(f => (f ? compressToDataUrl(f) : Promise.resolve(null))),
   ])
-  if (!avatar && !dog) return false
+  if (!avatar && dogs.every(d => !d)) return false
   const payload: PendingPhotos = {
     ...(avatar && { avatar }),
-    ...(dog && { dog }),
+    ...(dogs.some(d => d) && { dogs }),
     savedAt: Date.now(),
   }
   try {
@@ -93,21 +102,35 @@ export async function flushPendingPhotos(userId: string): Promise<void> {
     if (!raw) return
     const pending = JSON.parse(raw) as PendingPhotos
 
-    const uploadDataUrl = async (slot: 'avatar' | 'dog', dataUrl: string) => {
+    const uploadDataUrl = async (slot: string, dataUrl: string) => {
       const blob = await fetch(dataUrl).then(r => r.blob())
       return uploadPhoto(userId, slot, blob, 'image/jpeg')
     }
 
-    const [avatarUrl, dogPhotoUrl] = await Promise.all([
+    // Stashes from before per-dog photos hold a single `dog` entry.
+    const pendingDogs = pending.dogs ?? (pending.dog ? [pending.dog] : [])
+
+    const [avatarUrl, ...dogPhotoUrls] = await Promise.all([
       pending.avatar ? uploadDataUrl('avatar', pending.avatar) : Promise.resolve(null),
-      pending.dog ? uploadDataUrl('dog', pending.dog) : Promise.resolve(null),
+      ...pendingDogs.map((d, i) => (d ? uploadDataUrl(dogSlot(i), d) : Promise.resolve(null))),
     ])
 
-    if (avatarUrl || dogPhotoUrl) {
+    if (avatarUrl || dogPhotoUrls.some(u => u)) {
+      // Merge each uploaded photo into its dog's entry in the metadata list.
+      const { data: { user } } = await supabase.auth.getUser()
+      const currentDogs: Array<Record<string, unknown>> = Array.isArray(user?.user_metadata?.dogs)
+        ? user.user_metadata.dogs
+        : []
+      const mergedDogs = currentDogs.map((d, i) =>
+        dogPhotoUrls[i] ? { ...d, photo_url: dogPhotoUrls[i] } : d,
+      )
+      const firstDogUrl = (mergedDogs[0]?.photo_url as string | undefined) ?? dogPhotoUrls[0] ?? null
+
       const { error } = await supabase.auth.updateUser({
         data: {
           ...(avatarUrl && { avatar_url: avatarUrl }),
-          ...(dogPhotoUrl && { dog_photo_url: dogPhotoUrl }),
+          ...(mergedDogs.length > 0 && { dogs: mergedDogs }),
+          ...(firstDogUrl && { dog_photo_url: firstDogUrl }),
         },
       })
       if (error) { console.error('Saving photo URLs failed:', error.message); return }

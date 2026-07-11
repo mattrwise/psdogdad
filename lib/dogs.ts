@@ -3,9 +3,9 @@
 // database trigger). Members who joined before multi-dog support only have
 // the legacy dog_name/dog_breed metadata keys.
 
-export type Dog = { name: string; breed: string }
+export type Dog = { name: string; breed: string; photo_url?: string | null }
 
-export const EMPTY_DOG: Dog = { name: '', breed: '' }
+export const EMPTY_DOG: Dog = { name: '', breed: '', photo_url: null }
 
 export const DOG_BREEDS = [
   'Australian Shepherd', 'Basset Hound', 'Beagle', 'Border Collie', 'Boston Terrier',
@@ -25,15 +25,24 @@ export const DOG_BREEDS = [
  * can render a first row.
  */
 export function dogsFromMetadata(meta: Record<string, unknown> | undefined): Dog[] {
+  const legacyPhoto = typeof meta?.dog_photo_url === 'string' ? meta.dog_photo_url : null
   const rawDogs = meta?.dogs
   if (Array.isArray(rawDogs) && rawDogs.length > 0) {
-    return rawDogs.map(d => ({
+    const dogs = rawDogs.map(d => ({
       name: typeof d?.name === 'string' ? d.name : '',
       breed: typeof d?.breed === 'string' ? d.breed : '',
+      photo_url: typeof d?.photo_url === 'string' ? d.photo_url : null,
     }))
+    // Members from before per-dog photos have their one photo in dog_photo_url.
+    if (!dogs[0].photo_url && legacyPhoto) dogs[0].photo_url = legacyPhoto
+    return dogs
   }
   if (typeof meta?.dog_name === 'string' && meta.dog_name) {
-    return [{ name: meta.dog_name, breed: typeof meta.dog_breed === 'string' ? meta.dog_breed : '' }]
+    return [{
+      name: meta.dog_name,
+      breed: typeof meta.dog_breed === 'string' ? meta.dog_breed : '',
+      photo_url: legacyPhoto,
+    }]
   }
   return [{ ...EMPTY_DOG }]
 }

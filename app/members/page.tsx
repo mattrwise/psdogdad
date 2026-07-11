@@ -49,7 +49,7 @@ type ProfileRow = {
   city: string | null
   dog_name: string | null
   dog_breed: string | null
-  dogs: Array<{ name: string | null; breed: string | null }> | null
+  dogs: Array<{ name: string | null; breed: string | null; photo_url?: string | null }> | null
   avatar_url: string | null
   dog_photo_url: string | null
   created_at: string
@@ -59,17 +59,23 @@ function profileToCard(p: ProfileRow, index: number): MemberCard {
   // Prefer the dogs list; older rows may only have the single-dog columns.
   const rawDogs = p.dogs && p.dogs.length > 0
     ? p.dogs
-    : [{ name: p.dog_name, breed: p.dog_breed }]
+    : [{ name: p.dog_name, breed: p.dog_breed, photo_url: null }]
+  const cardDogs = rawDogs.map((d, i) => ({
+    name: d.name ?? 'Good Boy',
+    breed: d.breed ?? 'Mixed Breed',
+    // Dog 1's photo may predate per-dog photos and live only in dog_photo_url.
+    photo_url: d.photo_url ?? (i === 0 ? p.dog_photo_url : null),
+  }))
   return {
     id: p.id,
     name: p.name ?? 'New Member',
     location: p.city ?? 'Coachella Valley',
-    dogs: rawDogs.map(d => ({ name: d.name ?? 'Good Boy', breed: d.breed ?? 'Mixed Breed' })),
+    dogs: cardDogs,
     joined: new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
     emoji: '🐾',
     color: gradients[index % gradients.length],
     avatarUrl: p.avatar_url,
-    dogPhotoUrl: p.dog_photo_url,
+    dogPhotoUrl: cardDogs.find(d => d.photo_url)?.photo_url ?? null,
   }
 }
 
@@ -171,9 +177,9 @@ export default function MembersPage() {
               <div className="bg-brand-cream rounded-xl p-3 mb-3 space-y-2">
                 {member.dogs.map((dog, i) => (
                   <div key={i} className="flex items-center gap-2">
-                    {i === 0 && member.dogPhotoUrl ? (
+                    {dog.photo_url ? (
                       /* eslint-disable-next-line @next/next/no-img-element */
-                      <img src={member.dogPhotoUrl} alt={dog.name}
+                      <img src={dog.photo_url} alt={dog.name}
                         className="w-8 h-8 rounded-full object-cover flex-shrink-0 border-2 border-white shadow-sm" />
                     ) : (
                       <span className="text-2xl">🐶</span>
