@@ -142,12 +142,23 @@ export default function ProfilePage() {
   const [dogFiles, setDogFiles] = useState<(File | null)[]>([null])
   const [dogPreviews, setDogPreviews] = useState<(string | null)[]>([null])
 
+  // Signup photos can still be uploading in the background (PendingPhotoSync)
+  // when this page first loads, so listen for the auth update that follows
+  // instead of only reading the session once — otherwise a fast page load
+  // shows a stale profile with no photos until the member manually reloads.
+  const editingRef = useRef(false)
+  useEffect(() => { editingRef.current = editing }, [editing])
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) { router.push('/members/login'); return }
       hydrateFromUser(session.user)
       setLoading(false)
     })
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user && !editingRef.current) hydrateFromUser(session.user)
+    })
+    return () => subscription.unsubscribe()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

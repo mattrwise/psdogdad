@@ -81,6 +81,8 @@ function profileToCard(p: ProfileRow, index: number): MemberCard {
 
 export default function MembersPage() {
   const [members, setMembers] = useState<MemberCard[] | null>(null)
+  // Sample cards are placeholders, not real profiles — nothing to link to.
+  const [usingSamples, setUsingSamples] = useState(false)
 
   useEffect(() => {
     supabase
@@ -92,9 +94,11 @@ export default function MembersPage() {
           // No profiles table yet, or no confirmed members — show sample community
           if (error) console.warn('Could not load member profiles:', error.message)
           setMembers(sampleMembers)
+          setUsingSamples(true)
           return
         }
         setMembers((data as ProfileRow[]).map(profileToCard))
+        setUsingSamples(false)
       })
   }, [])
 
@@ -141,64 +145,77 @@ export default function MembersPage() {
 
       {/* Members Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {(members ?? []).map((member) => (
-          <div key={member.id} className="card hover:-translate-y-1 cursor-pointer group">
+        {(members ?? []).map((member) => {
+          const cardInner = (
+            <>
+              {/* Photo header — split panel if both photos exist, single if one, gradient if none */}
+              {member.avatarUrl && member.dogPhotoUrl ? (
+                <div className="h-36 flex overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={member.avatarUrl} alt={member.name}
+                    className="w-1/2 h-full object-cover border-r-2 border-white" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={member.dogPhotoUrl} alt={member.dogs[0]?.name}
+                    className="w-1/2 h-full object-cover" />
+                </div>
+              ) : member.avatarUrl ? (
+                <div className="h-36 relative overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={member.avatarUrl} alt={member.name} className="w-full h-full object-cover" />
+                </div>
+              ) : member.dogPhotoUrl ? (
+                <div className="h-36 relative overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={member.dogPhotoUrl} alt={member.dogs[0]?.name} className="w-full h-full object-cover" />
+                </div>
+              ) : (
+                <div className={`bg-gradient-to-br ${member.color} h-36 flex items-center justify-center text-6xl`}>
+                  {member.emoji}
+                </div>
+              )}
 
-            {/* Photo header — split panel if both photos exist, single if one, gradient if none */}
-            {member.avatarUrl && member.dogPhotoUrl ? (
-              <div className="h-36 flex overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={member.avatarUrl} alt={member.name}
-                  className="w-1/2 h-full object-cover border-r-2 border-white" />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={member.dogPhotoUrl} alt={member.dogs[0]?.name}
-                  className="w-1/2 h-full object-cover" />
-              </div>
-            ) : member.avatarUrl ? (
-              <div className="h-36 relative overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={member.avatarUrl} alt={member.name} className="w-full h-full object-cover" />
-              </div>
-            ) : member.dogPhotoUrl ? (
-              <div className="h-36 relative overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={member.dogPhotoUrl} alt={member.dogs[0]?.name} className="w-full h-full object-cover" />
-              </div>
-            ) : (
-              <div className={`bg-gradient-to-br ${member.color} h-36 flex items-center justify-center text-6xl`}>
-                {member.emoji}
-              </div>
-            )}
+              <div className="p-4">
+                <h3 className="font-extrabold text-plum text-lg">{member.name}</h3>
+                <p className="text-xs text-plum/50 mb-3">📍 {member.location}</p>
 
-            <div className="p-4">
-              <h3 className="font-extrabold text-plum text-lg">{member.name}</h3>
-              <p className="text-xs text-plum/50 mb-3">📍 {member.location}</p>
-
-              <div className="bg-brand-cream rounded-xl p-3 mb-3 space-y-2">
-                {member.dogs.map((dog, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    {dog.photo_url ? (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img src={dog.photo_url} alt={dog.name}
-                        className="w-8 h-8 rounded-full object-cover flex-shrink-0 border-2 border-white shadow-sm" />
-                    ) : (
-                      <span className="text-2xl">🐶</span>
-                    )}
-                    <div>
-                      <div className="font-bold text-plum text-sm">{dog.name}</div>
-                      <div className="text-xs text-plum/60">{dog.breed}</div>
+                <div className="bg-brand-cream rounded-xl p-3 mb-3 space-y-2">
+                  {member.dogs.map((dog, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      {dog.photo_url ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img src={dog.photo_url} alt={dog.name}
+                          className="w-8 h-8 rounded-full object-cover flex-shrink-0 border-2 border-white shadow-sm" />
+                      ) : (
+                        <span className="text-2xl">🐶</span>
+                      )}
+                      <div>
+                        <div className="font-bold text-plum text-sm">{dog.name}</div>
+                        <div className="text-xs text-plum/60">{dog.breed}</div>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-plum/40">Member since {member.joined}</span>
-                <button className="text-xs font-bold text-brand-orange group-hover:underline">View Profile</button>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-plum/40">Member since {member.joined}</span>
+                  <span className="text-xs font-bold text-brand-orange group-hover:underline">View Profile</span>
+                </div>
               </div>
+            </>
+          )
+
+          // Sample cards are placeholders with no real profile behind them.
+          return usingSamples ? (
+            <div key={member.id} className="card group overflow-hidden">
+              {cardInner}
             </div>
-          </div>
-        ))}
+          ) : (
+            <Link key={member.id} href={`/members/${member.id}`}
+              className="card block hover:-translate-y-1 cursor-pointer group">
+              {cardInner}
+            </Link>
+          )
+        })}
 
         {/* Join card — visitors only */}
         <SignedOut>
