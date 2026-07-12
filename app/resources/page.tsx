@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import SuggestResourceButton from '@/components/resources/SuggestResourceButton'
 
 const resourceSections = [
   {
@@ -91,12 +92,9 @@ export default function ResourcesPage() {
             Community-curated guide to the best pet services, parks, and dog-friendly spots in the Coachella Valley.
           </p>
         </div>
-        <a
-          href="mailto:hello@psdogdad.com?subject=Resource%20suggestion&body=Name%20of%20place%3A%0AWhat%20kind%20(vet%2C%20groomer%2C%20park%2C%20restaurant%2C%20hotel%2C%20store)%3A%0AAddress%2Fneighborhood%3A%0AWhy%20you%20recommend%20it%3A"
-          className="btn-secondary self-start"
-        >
+        <SuggestResourceButton className="btn-secondary self-start">
           + Suggest a Resource
-        </a>
+        </SuggestResourceButton>
       </div>
 
       {/* Jump links */}
@@ -167,12 +165,9 @@ export default function ResourcesPage() {
         <p className="text-white/70 mb-6 max-w-lg mx-auto">
           This guide is built by the community. If you have a vet, groomer, trail, or restaurant to recommend, we want to hear about it.
         </p>
-        <a
-          href="mailto:hello@psdogdad.com?subject=Resource%20suggestion&body=Name%20of%20place%3A%0AWhat%20kind%20(vet%2C%20groomer%2C%20park%2C%20restaurant%2C%20hotel%2C%20store)%3A%0AAddress%2Fneighborhood%3A%0AWhy%20you%20recommend%20it%3A"
-          className="btn-primary text-base px-8 inline-block"
-        >
+        <SuggestResourceButton className="btn-primary text-base px-8">
           Suggest a Resource
-        </a>
+        </SuggestResourceButton>
       </div>
     </div>
   )
