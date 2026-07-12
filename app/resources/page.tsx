@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 const resourceSections = [
   {
+    slug: 'veterinarians',
     icon: '🏥',
     title: 'Veterinarians',
     color: 'border-brand-teal',
@@ -14,6 +15,7 @@ const resourceSections = [
     ],
   },
   {
+    slug: 'groomers',
     icon: '✂️',
     title: 'Groomers',
     color: 'border-brand-orange',
@@ -26,6 +28,7 @@ const resourceSections = [
     ],
   },
   {
+    slug: 'parks-trails',
     icon: '🌳',
     title: 'Dog Parks & Trails',
     color: 'border-brand-golden',
@@ -39,6 +42,7 @@ const resourceSections = [
     ],
   },
   {
+    slug: 'restaurants-bars',
     icon: '🍔',
     title: 'Pet-Friendly Restaurants & Bars',
     color: 'border-plum',
@@ -51,6 +55,7 @@ const resourceSections = [
     ],
   },
   {
+    slug: 'hotels-rentals',
     icon: '🏨',
     title: 'Pet-Friendly Hotels & Rentals',
     color: 'border-brand-teal',
@@ -62,6 +67,7 @@ const resourceSections = [
     ],
   },
   {
+    slug: 'supplies-stores',
     icon: '🛒',
     title: 'Pet Supplies & Stores',
     color: 'border-brand-orange',
@@ -85,7 +91,25 @@ export default function ResourcesPage() {
             Community-curated guide to the best pet services, parks, and dog-friendly spots in the Coachella Valley.
           </p>
         </div>
-        <button className="btn-secondary self-start">+ Suggest a Resource</button>
+        <a
+          href="mailto:hello@psdogdad.com?subject=Resource%20suggestion&body=Name%20of%20place%3A%0AWhat%20kind%20(vet%2C%20groomer%2C%20park%2C%20restaurant%2C%20hotel%2C%20store)%3A%0AAddress%2Fneighborhood%3A%0AWhy%20you%20recommend%20it%3A"
+          className="btn-secondary self-start"
+        >
+          + Suggest a Resource
+        </a>
+      </div>
+
+      {/* Jump links */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        {resourceSections.map((section) => (
+          <a
+            key={section.slug}
+            href={`#${section.slug}`}
+            className="inline-flex items-center gap-1.5 bg-white rounded-full px-4 py-2 text-sm font-semibold text-plum shadow-sm border border-plum/10 hover:border-brand-orange hover:text-brand-orange transition-colors"
+          >
+            <span>{section.icon}</span> {section.title}
+          </a>
+        ))}
       </div>
 
       {/* Quick disclaimer */}
@@ -96,7 +120,7 @@ export default function ResourcesPage() {
       {/* Resource sections */}
       <div className="space-y-10">
         {resourceSections.map((section) => (
-          <div key={section.title}>
+          <div key={section.title} id={section.slug} className="scroll-mt-24">
             <div className={`flex items-start gap-3 mb-5 border-l-4 ${section.color} pl-4`}>
               <span className="text-3xl flex-shrink-0 mt-0.5">{section.icon}</span>
               <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
@@ -143,7 +167,12 @@ export default function ResourcesPage() {
         <p className="text-white/70 mb-6 max-w-lg mx-auto">
           This guide is built by the community. If you have a vet, groomer, trail, or restaurant to recommend, we want to hear about it.
         </p>
-        <button className="btn-primary text-base px-8">Suggest a Resource</button>
+        <a
+          href="mailto:hello@psdogdad.com?subject=Resource%20suggestion&body=Name%20of%20place%3A%0AWhat%20kind%20(vet%2C%20groomer%2C%20park%2C%20restaurant%2C%20hotel%2C%20store)%3A%0AAddress%2Fneighborhood%3A%0AWhy%20you%20recommend%20it%3A"
+          className="btn-primary text-base px-8 inline-block"
+        >
+          Suggest a Resource
+        </a>
       </div>
     </div>
   )
