@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/client'
-import { dogSlot, stashPendingPhotos, uploadPhoto } from '@/lib/photos'
+import { dogSlot, newPendingToken, stagePendingPhotos, uploadPhoto } from '@/lib/photos'
 import { useUser } from '@/lib/useUser'
 import { Dog, DOG_BREEDS, EMPTY_DOG } from '@/lib/dogs'
 
@@ -264,6 +264,10 @@ export default function JoinPage() {
     // first dog for members-page rows and readers that predate multi-dog.
     const cleanDogs = dogs.map(d => ({ name: d.name.trim(), breed: d.breed }))
 
+    // Carried in the confirmation email link so /welcome can claim staged
+    // photos on whatever device the member actually confirms from.
+    const pendingToken = newPendingToken()
+
     const { data, error } = await supabase.auth.signUp({
       email: form.email.trim(),
       password: form.password,
@@ -275,7 +279,7 @@ export default function JoinPage() {
           dog_name:  cleanDogs[0].name,
           dog_breed: cleanDogs[0].breed,
         },
-        emailRedirectTo: `${window.location.origin}/welcome`,
+        emailRedirectTo: `${window.location.origin}/welcome?pt=${pendingToken}`,
       },
     })
 
@@ -313,11 +317,11 @@ export default function JoinPage() {
         }
       } else {
         // No session until the email is confirmed, so uploads would be rejected.
-        // Keep compressed copies on this device; PendingPhotoSync uploads them
-        // once the confirmation link signs the member in.
+        // Stage the photos under pendingToken; /welcome claims them once the
+        // confirmation link signs the member in, on whatever device that is.
         setLoadingMsg('Saving your photos…')
-        const stashed = await stashPendingPhotos(memberFile, dogFiles)
-        setPhotosPending(stashed)
+        const staged = await stagePendingPhotos(pendingToken, memberFile, dogFiles)
+        setPhotosPending(staged)
       }
     }
 
@@ -345,8 +349,8 @@ export default function JoinPage() {
           </p>
           {photosPending && (
             <div className="bg-brand-teal/10 border border-brand-teal/30 rounded-xl p-4 text-sm text-plum/70 mb-4">
-              📷 Your photos are saved on this device and will be added to your profile
-              automatically when you open the confirmation link in this browser.
+              📷 Your photos are saved and will be added to your profile automatically
+              once you click the confirmation link — on this device or any other.
               You can also add or change them anytime from your profile.
             </div>
           )}

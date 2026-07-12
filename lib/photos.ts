@@ -2,12 +2,12 @@
 
 import { supabase } from '@/lib/supabase/client'
 
-const PENDING_KEY = 'psdogdad_pending_photos'
-const MAX_DIMENSION = 1200
-const JPEG_QUALITY = 0.85
-
-// `dog` may still exist in stashes saved before per-dog photos.
-type PendingPhotos = { avatar?: string; dog?: string; dogs?: (string | null)[]; savedAt: number }
+// Backup copy of the in-flight token, in case the /welcome claim attempt
+// gets interrupted (closed tab, network blip) — PendingPhotoSync retries
+// using this on any later page load in the *same* browser. The token
+// itself travels to other devices via the confirmation email link, not
+// via localStorage, which is what makes cross-device confirmation work.
+const PENDING_TOKEN_KEY = 'psdogdad_pending_photo_token'
 
 /**
  * Storage slot for dog #i's photo. Dog 1 keeps the original `dog` slot so a
@@ -36,110 +36,100 @@ export async function uploadPhoto(
   return data.publicUrl ? `${data.publicUrl}?v=${Date.now()}` : null
 }
 
-/**
- * Downscales an image to a JPEG data URL small enough for localStorage.
- * Returns null for formats the browser can't decode (e.g. HEIC on Chrome).
- */
-async function compressToDataUrl(file: File): Promise<string | null> {
-  try {
-    const bitmap = await createImageBitmap(file)
-    const scale = Math.min(1, MAX_DIMENSION / Math.max(bitmap.width, bitmap.height))
-    const canvas = document.createElement('canvas')
-    canvas.width = Math.round(bitmap.width * scale)
-    canvas.height = Math.round(bitmap.height * scale)
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return null
-    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
-    bitmap.close()
-    return canvas.toDataURL('image/jpeg', JPEG_QUALITY)
-  } catch (err) {
-    console.error('Could not compress photo:', err)
-    return null
-  }
+export function newPendingToken(): string {
+  return crypto.randomUUID()
 }
 
 /**
- * Saves compressed copies of the signup photos in localStorage so they can be
- * uploaded after the member confirms their email (signup with email
- * confirmation enabled has no session yet, so uploading now would be rejected).
- * Returns true if at least one photo was stashed.
+ * Signup with email confirmation enabled has no session yet, so members
+ * can't upload straight to their own folder (RLS requires auth.uid() to
+ * match it). Instead, photos are staged in a public `_pending/<token>/`
+ * folder that anyone can write to (the token is the only thing gating it),
+ * and the token rides along in the confirmation email's redirect URL. That
+ * way claimPendingPhotos() can pick them up on /welcome regardless of which
+ * device or browser the member actually clicks the confirmation link from.
  */
-export async function stashPendingPhotos(
+export async function stagePendingPhotos(
+  token: string,
   memberFile: File | null,
   dogFiles: (File | null)[],
 ): Promise<boolean> {
-  const [avatar, ...dogs] = await Promise.all([
-    memberFile ? compressToDataUrl(memberFile) : Promise.resolve(null),
-    ...dogFiles.map(f => (f ? compressToDataUrl(f) : Promise.resolve(null))),
-  ])
-  if (!avatar && dogs.every(d => !d)) return false
-  const payload: PendingPhotos = {
-    ...(avatar && { avatar }),
-    ...(dogs.some(d => d) && { dogs }),
-    savedAt: Date.now(),
-  }
-  try {
-    localStorage.setItem(PENDING_KEY, JSON.stringify(payload))
+  const stageOne = async (slot: string, file: File) => {
+    const type = file.type || 'image/jpeg'
+    const ext = (type.split('/')[1] ?? 'jpg').replace('jpeg', 'jpg')
+    const { error } = await supabase.storage
+      .from('member-photos')
+      .upload(`_pending/${token}/${slot}.${ext}`, file, { upsert: true, contentType: type })
+    if (error) { console.error(`Staging ${slot} failed:`, error.message); return false }
     return true
-  } catch (err) {
-    console.error('Could not stash photos locally:', err)
-    return false
   }
+
+  const results = await Promise.all([
+    memberFile ? stageOne('avatar', memberFile) : Promise.resolve(false),
+    ...dogFiles.map((f, i) => (f ? stageOne(dogSlot(i), f) : Promise.resolve(false))),
+  ])
+  const staged = results.some(Boolean)
+  if (staged) {
+    try { localStorage.setItem(PENDING_TOKEN_KEY, token) } catch { /* best-effort backup only */ }
+  }
+  return staged
 }
 
-export function hasPendingPhotos(): boolean {
-  try { return localStorage.getItem(PENDING_KEY) !== null } catch { return false }
+export function getPendingToken(): string | null {
+  try { return localStorage.getItem(PENDING_TOKEN_KEY) } catch { return null }
 }
 
-let flushing = false
+let claiming = false
 
-/** Uploads any stashed signup photos for the now-signed-in member. */
-export async function flushPendingPhotos(userId: string): Promise<void> {
-  if (flushing) return
-  flushing = true
+/** Copies staged signup photos into the now-confirmed member's own folder and saves their URLs. */
+export async function claimPendingPhotos(token: string, userId: string): Promise<void> {
+  if (claiming) return
+  claiming = true
   try {
-    const raw = localStorage.getItem(PENDING_KEY)
-    if (!raw) return
-    const pending = JSON.parse(raw) as PendingPhotos
+    const { data: files, error: listError } = await supabase.storage
+      .from('member-photos')
+      .list(`_pending/${token}`)
+    if (listError || !files || files.length === 0) return
 
-    const uploadDataUrl = async (slot: string, dataUrl: string) => {
-      const blob = await fetch(dataUrl).then(r => r.blob())
-      return uploadPhoto(userId, slot, blob, 'image/jpeg')
-    }
+    const uploaded: Record<string, string> = {}
+    await Promise.all(files.map(async f => {
+      const slot = f.name.replace(/\.[^.]+$/, '')
+      const { data: blob, error: downloadError } = await supabase.storage
+        .from('member-photos')
+        .download(`_pending/${token}/${f.name}`)
+      if (downloadError || !blob) { console.error(`Claiming ${f.name} failed:`, downloadError?.message); return }
+      const url = await uploadPhoto(userId, slot, blob, blob.type)
+      if (url) uploaded[slot] = url
+    }))
+    if (Object.keys(uploaded).length === 0) return
 
-    // Stashes from before per-dog photos hold a single `dog` entry.
-    const pendingDogs = pending.dogs ?? (pending.dog ? [pending.dog] : [])
+    // Merge each claimed photo into its dog's entry in the metadata list.
+    const { data: { user } } = await supabase.auth.getUser()
+    const currentDogs: Array<Record<string, unknown>> = Array.isArray(user?.user_metadata?.dogs)
+      ? user.user_metadata.dogs
+      : []
+    const mergedDogs = currentDogs.map((d, i) =>
+      uploaded[dogSlot(i)] ? { ...d, photo_url: uploaded[dogSlot(i)] } : d,
+    )
+    const firstDogUrl = (mergedDogs[0]?.photo_url as string | undefined) ?? uploaded[dogSlot(0)] ?? null
 
-    const [avatarUrl, ...dogPhotoUrls] = await Promise.all([
-      pending.avatar ? uploadDataUrl('avatar', pending.avatar) : Promise.resolve(null),
-      ...pendingDogs.map((d, i) => (d ? uploadDataUrl(dogSlot(i), d) : Promise.resolve(null))),
-    ])
+    const { error } = await supabase.auth.updateUser({
+      data: {
+        ...(uploaded.avatar && { avatar_url: uploaded.avatar }),
+        ...(mergedDogs.length > 0 && { dogs: mergedDogs }),
+        ...(firstDogUrl && { dog_photo_url: firstDogUrl }),
+      },
+    })
+    if (error) { console.error('Saving photo URLs failed:', error.message); return }
 
-    if (avatarUrl || dogPhotoUrls.some(u => u)) {
-      // Merge each uploaded photo into its dog's entry in the metadata list.
-      const { data: { user } } = await supabase.auth.getUser()
-      const currentDogs: Array<Record<string, unknown>> = Array.isArray(user?.user_metadata?.dogs)
-        ? user.user_metadata.dogs
-        : []
-      const mergedDogs = currentDogs.map((d, i) =>
-        dogPhotoUrls[i] ? { ...d, photo_url: dogPhotoUrls[i] } : d,
-      )
-      const firstDogUrl = (mergedDogs[0]?.photo_url as string | undefined) ?? dogPhotoUrls[0] ?? null
+    // Best-effort cleanup — a leftover _pending file just wastes space, it's
+    // not visible anywhere, so a failure here isn't worth surfacing.
+    await supabase.storage.from('member-photos').remove(files.map(f => `_pending/${token}/${f.name}`))
 
-      const { error } = await supabase.auth.updateUser({
-        data: {
-          ...(avatarUrl && { avatar_url: avatarUrl }),
-          ...(mergedDogs.length > 0 && { dogs: mergedDogs }),
-          ...(firstDogUrl && { dog_photo_url: firstDogUrl }),
-        },
-      })
-      if (error) { console.error('Saving photo URLs failed:', error.message); return }
-    }
-
-    localStorage.removeItem(PENDING_KEY)
-  } catch (err) {
-    console.error('Uploading pending photos failed:', err)
+    try {
+      if (localStorage.getItem(PENDING_TOKEN_KEY) === token) localStorage.removeItem(PENDING_TOKEN_KEY)
+    } catch { /* ignore */ }
   } finally {
-    flushing = false
+    claiming = false
   }
 }

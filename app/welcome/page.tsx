@@ -1,9 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
 import { dogsFromMetadata } from '@/lib/dogs'
+import { claimPendingPhotos, getPendingToken } from '@/lib/photos'
+import type { Session } from '@supabase/supabase-js'
 
 // "Biscuit", "Biscuit & Mango", "Biscuit, Mango & Taco"
 function formatDogNames(meta: Record<string, unknown> | undefined): string | null {
@@ -14,27 +17,41 @@ function formatDogNames(meta: Record<string, unknown> | undefined): string | nul
 }
 
 export default function WelcomePage() {
+  return (
+    <Suspense fallback={null}>
+      <WelcomeContent />
+    </Suspense>
+  )
+}
+
+function WelcomeContent() {
+  const searchParams = useSearchParams()
   const [name, setName] = useState<string | null>(null)
   const [dogName, setDogName] = useState<string | null>(null)
 
   useEffect(() => {
+    // Photos staged during signup (see JoinPage/stagePendingPhotos) are keyed
+    // by this token, which rides along in the confirmation email link so this
+    // works no matter which device/browser the member actually confirms on.
+    // getPendingToken() is a same-browser fallback for a retry after a failed
+    // claim attempt (e.g. this tab closed before it finished).
+    const token = searchParams.get('pt') ?? getPendingToken()
+
+    function onSession(session: Session | null) {
+      if (!session?.user) return
+      setName(session.user.user_metadata?.name ?? null)
+      setDogName(formatDogNames(session.user.user_metadata))
+      if (token) claimPendingPhotos(token, session.user.id)
+    }
+
     // Exchange the token from the confirmation link and read user metadata
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        setName(session.user.user_metadata?.name ?? null)
-        setDogName(formatDogNames(session.user.user_metadata))
-      }
-    })
+    supabase.auth.getSession().then(({ data: { session } }) => onSession(session))
 
     // Also listen in case the token arrives slightly after mount
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        setName(session.user.user_metadata?.name ?? null)
-        setDogName(formatDogNames(session.user.user_metadata))
-      }
-    })
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => onSession(session))
 
     return () => subscription.unsubscribe()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const firstName = name?.split(' ')[0] ?? null

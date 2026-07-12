@@ -154,3 +154,27 @@ create policy "Members can delete their own photos"
     bucket_id = 'member-photos'
     and (storage.foldername(name))[1] = auth.uid()::text
   );
+
+-- Signup happens before email confirmation, so there's no session yet to
+-- upload straight to a member's own folder. Photos are staged here instead,
+-- under a random token that travels in the confirmation email link, and
+-- claimed into the member's own folder once they're signed in (see
+-- lib/photos.ts stagePendingPhotos / claimPendingPhotos). This is what makes
+-- confirming on a different device than the one used to sign up still work.
+drop policy if exists "Anyone can stage a pending signup photo" on storage.objects;
+create policy "Anyone can stage a pending signup photo"
+  on storage.objects for insert to anon
+  with check (
+    bucket_id = 'member-photos'
+    and (storage.foldername(name))[1] = '_pending'
+  );
+
+-- Lets claimPendingPhotos() remove the staged copy once it's been claimed
+-- into the member's own folder, so _pending/ doesn't grow unbounded.
+drop policy if exists "Members can clear staged photos after claiming them" on storage.objects;
+create policy "Members can clear staged photos after claiming them"
+  on storage.objects for delete to authenticated
+  using (
+    bucket_id = 'member-photos'
+    and (storage.foldername(name))[1] = '_pending'
+  );
