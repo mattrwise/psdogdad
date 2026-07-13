@@ -137,9 +137,14 @@ export default function Nav() {
                 )}
               </div>
             ) : (
-              <Link href="/members/join" className="ml-3 btn-primary text-sm px-5 py-2">
-                Join Now
-              </Link>
+              <>
+                <Link href="/members/login" className="ml-3 btn-secondary text-sm px-5 py-2">
+                  Sign In
+                </Link>
+                <Link href="/members/join" className="ml-2 btn-primary text-sm px-5 py-2">
+                  Join Now
+                </Link>
+              </>
             )}
           </nav>
 
@@ -195,9 +200,14 @@ export default function Nav() {
               </button>
             </>
           ) : (
-            <Link href="/members/join" onClick={() => setOpen(false)} className="btn-primary text-center mt-2">
-              Join Now
-            </Link>
+            <>
+              <Link href="/members/login" onClick={() => setOpen(false)} className="btn-secondary text-center mt-2">
+                Sign In
+              </Link>
+              <Link href="/members/join" onClick={() => setOpen(false)} className="btn-primary text-center mt-2">
+                Join Now
+              </Link>
+            </>
           )}
         </div>
       )}
