@@ -285,10 +285,23 @@ export default function JoinPage() {
 
     if (error) { setServerError(error.message); setLoading(false); return }
 
+    // While confirmation emails are disabled, accounts are auto-confirmed at
+    // signup but no session is returned — so sign in right away. If email
+    // confirmation is ever re-enabled, this fails ("Email not confirmed") and
+    // we fall back to the staged-photos + confirmation-email flow below.
+    let session = data.session
+    if (data.user && !session) {
+      const { data: signInData } = await supabase.auth.signInWithPassword({
+        email: form.email.trim(),
+        password: form.password,
+      })
+      session = signInData?.session ?? null
+    }
+
     const userId = data.user?.id
     if (userId && (memberFile || dogFiles.some(f => f))) {
-      if (data.session) {
-        // Email confirmation is off — we're signed in and can upload right away.
+      if (session) {
+        // Signed in — upload right away, no staging needed.
         setLoadingMsg('Uploading your photos…')
 
         const [avatarUrl, ...dogPhotoUrls] = await Promise.all([
@@ -323,6 +336,14 @@ export default function JoinPage() {
         const staged = await stagePendingPhotos(pendingToken, memberFile, dogFiles)
         setPhotosPending(staged)
       }
+    }
+
+    // Signed in already? Skip the "check your email" screen entirely — the
+    // account is live, so take them straight to the welcome page. (Keep
+    // `loading` true so the already-a-member redirect effect doesn't race us.)
+    if (session) {
+      router.replace('/welcome')
+      return
     }
 
     setLoading(false)
