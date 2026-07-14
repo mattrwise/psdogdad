@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import HeatAlertBanner from '@/components/HeatAlertBanner'
 import SignedIn from '@/components/auth/SignedIn'
 import SignedOut from '@/components/auth/SignedOut'
@@ -74,44 +75,52 @@ export default function HomePage() {
       </div>
 
       {/* Hero */}
-      <section className="bg-hero-gradient text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: 'radial-gradient(circle at 70% 50%, #F5B82A 0%, transparent 60%)' }}
-        />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-2 text-sm font-semibold mb-6">
-              <span>🌴</span> Coachella Valley, CA
-            </div>
-            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-              Where Dog Dads{' '}
-              <span className="text-brand-golden">Come Together</span>
-            </h1>
-            <p className="text-lg md:text-xl text-white/80 mb-8 leading-relaxed">
-              Forums, meetups, member profiles, and local resources — all for the Coachella Valley community of men who love their dogs.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <SignedOut>
-                <Link href="/members/join" className="btn-primary text-base">
-                  Join the Pack 🐾
+      <section className="bg-brand-cream">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+
+            {/* Left: headline & CTAs */}
+            <div>
+              <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 text-sm font-semibold text-plum shadow-sm border border-plum/10 mb-6">
+                <span>🌴</span> Coachella Valley, CA
+              </div>
+              <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6 text-plum">
+                Where Dog Dads{' '}
+                <span className="text-brand-orange">Come Together</span>
+              </h1>
+              <p className="text-lg md:text-xl text-plum/70 mb-8 leading-relaxed">
+                Forums, meetups, member profiles, and local resources — all for the Coachella Valley community of men who love their dogs.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <SignedOut>
+                  <Link href="/members/join" className="btn-primary text-base">
+                    Join the Pack 🐾
+                  </Link>
+                </SignedOut>
+                <SignedIn>
+                  <Link href="/forums" className="btn-primary text-base">
+                    Jump into the Forums 💬
+                  </Link>
+                </SignedIn>
+                <Link href="/events" className="btn-secondary text-base">
+                  See Upcoming Events
                 </Link>
-              </SignedOut>
-              <SignedIn>
-                <Link href="/forums" className="btn-primary text-base">
-                  Jump into the Forums 💬
-                </Link>
-              </SignedIn>
-              <Link href="/events" className="btn-secondary border-white text-white hover:bg-white hover:text-plum text-base">
-                See Upcoming Events
-              </Link>
+              </div>
             </div>
+
+            {/* Right: illustration */}
+            <div className="flex justify-center lg:justify-end">
+              <Image
+                src="/psdogdadbullprint_transparent.png"
+                alt="PS Dog Dad — a dog dad and his bulldog in the Palm Springs sun"
+                width={640}
+                height={640}
+                priority
+                className="w-full max-w-sm md:max-w-md lg:max-w-lg h-auto"
+              />
+            </div>
+
           </div>
-        </div>
-        {/* Wave */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 60" className="w-full h-12 fill-brand-cream">
-            <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" />
-          </svg>
         </div>
       </section>
 
