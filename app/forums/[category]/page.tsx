@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import SignedIn from '@/components/auth/SignedIn'
+import SignedOut from '@/components/auth/SignedOut'
+import NewPostButton from '@/components/forums/NewPostButton'
+import ForumPostList from '@/components/forums/ForumPostList'
 
 const categories: Record<string, {
   icon: string
@@ -141,12 +144,24 @@ export default function CategoryPage({ params }: { params: { category: string } 
             </div>
           </div>
           <SignedIn>
-            <button className="btn-primary self-start sm:self-auto whitespace-nowrap">
+            <NewPostButton
+              category={params.category}
+              categoryTitle={cat.title}
+              className="btn-primary self-start sm:self-auto whitespace-nowrap"
+            >
               + New Post
-            </button>
+            </NewPostButton>
           </SignedIn>
+          <SignedOut>
+            <Link href="/members/login" className="btn-secondary self-start sm:self-auto whitespace-nowrap">
+              Sign in to post
+            </Link>
+          </SignedOut>
         </div>
       </div>
+
+      {/* Real member posts */}
+      <ForumPostList category={params.category} />
 
       {/* Thread List */}
       <div className="space-y-3">
@@ -178,7 +193,13 @@ export default function CategoryPage({ params }: { params: { category: string } 
       {/* Bottom New Post CTA */}
       <div className="mt-8 flex justify-center">
         <SignedIn>
-          <button className="btn-primary">+ Start a New Thread</button>
+          <NewPostButton
+            category={params.category}
+            categoryTitle={cat.title}
+            className="btn-primary"
+          >
+            + Start a New Thread
+          </NewPostButton>
         </SignedIn>
       </div>
     </div>
