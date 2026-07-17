@@ -1,14 +1,19 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
+import { supabase } from '@/lib/supabase/client'
+import { useUser } from '@/lib/useUser'
 
-const CATEGORIES = [
+const TYPES = [
   { value: 'vet', label: '🏥 Veterinarian' },
   { value: 'groomer', label: '✂️ Groomer' },
   { value: 'park', label: '🌳 Park / Trail' },
+  { value: 'trainer', label: '🎓 Trainer' },
   { value: 'restaurant', label: '🍔 Restaurant / Bar' },
   { value: 'hotel', label: '🏨 Hotel / Rental' },
   { value: 'store', label: '🛒 Pet Store' },
+  { value: 'other', label: '📌 Other' },
 ]
 
 interface Props {
@@ -16,15 +21,37 @@ interface Props {
 }
 
 export default function SuggestResourceModal({ onClose }: Props) {
-  const [category, setCategory] = useState('')
-  const [agreed, setAgreed] = useState(false)
+  const { user, loading: authLoading } = useUser()
+  const [resourceName, setResourceName] = useState('')
+  const [type, setType] = useState('')
+  const [description, setDescription] = useState('')
+  const [websiteUrl, setWebsiteUrl] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
 
-  const canSubmit = agreed && category !== ''
+  const canSubmit =
+    resourceName.trim() !== '' && type !== '' && description.trim() !== '' && !saving
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!canSubmit) return
+    if (!canSubmit || !user) return
+    setError(null)
+    setSaving(true)
+
+    const { error: insertError } = await supabase.from('resource_suggestions').insert({
+      user_id: user.id,
+      resource_name: resourceName.trim(),
+      type,
+      description: description.trim(),
+      website_url: websiteUrl.trim() || null,
+    })
+
+    setSaving(false)
+    if (insertError) {
+      setError(insertError.message)
+      return
+    }
     setSubmitted(true)
   }
 
@@ -33,17 +60,37 @@ export default function SuggestResourceModal({ onClose }: Props) {
       <div className="bg-white rounded-2xl w-full max-w-xl my-8 shadow-2xl">
 
         {submitted ? (
+          /* ── Thank-you confirmation ─────────────────────────────── */
           <div className="p-8 text-center">
             <div className="text-5xl mb-4">🎉</div>
             <h2 className="font-extrabold text-plum text-2xl mb-2">Thanks for the Tip!</h2>
             <p className="text-plum/60 text-sm mb-6">
-              Thanks for suggesting a resource! Our team will check it out and, once confirmed, add it to the community guide.
+              We got your suggestion for <span className="font-semibold text-plum">{resourceName.trim()}</span>.
+              Our team will check it out and, once confirmed, add it to the community guide.
             </p>
             <button onClick={onClose} className="btn-primary">Done</button>
           </div>
+        ) : authLoading ? (
+          /* ── Loading auth state ─────────────────────────────────── */
+          <div className="p-10 text-center text-plum/50 text-sm">Loading…</div>
+        ) : !user ? (
+          /* ── Signed-out gate ────────────────────────────────────── */
+          <div className="p-8 text-center">
+            <div className="text-4xl mb-3">🐾</div>
+            <h2 className="font-extrabold text-plum text-xl mb-2">Sign in to suggest a resource</h2>
+            <p className="text-plum/60 text-sm mb-6">
+              Suggestions come from members so we can follow up. Create a free account or sign in
+              to add your recommendation.
+            </p>
+            <div className="flex flex-col gap-3">
+              <Link href="/members/join" className="btn-primary w-full text-center">Join Free</Link>
+              <Link href="/members/login" className="btn-secondary w-full text-center">Sign In</Link>
+              <button onClick={onClose} className="text-sm text-plum/40 hover:text-plum mt-1">Maybe later</button>
+            </div>
+          </div>
         ) : (
+          /* ── The form ───────────────────────────────────────────── */
           <>
-            {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <h2 className="font-extrabold text-plum text-xl">Suggest a Resource</h2>
               <button
@@ -56,29 +103,42 @@ export default function SuggestResourceModal({ onClose }: Props) {
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
+              {error && (
+                <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700 flex gap-3 items-start">
+                  <span className="text-lg flex-shrink-0">⚠️</span>
+                  <span>{error}</span>
+                </div>
+              )}
 
-              {/* Resource Name */}
+              {/* Resource name */}
               <div>
-                <label className="block text-sm font-bold text-plum mb-1">Name of Place <span className="text-brand-orange">*</span></label>
+                <label htmlFor="resourceName" className="block text-sm font-bold text-plum mb-1">
+                  Resource Name <span className="text-brand-orange">*</span>
+                </label>
                 <input
+                  id="resourceName"
                   type="text"
                   required
+                  value={resourceName}
+                  onChange={e => setResourceName(e.target.value)}
                   placeholder="e.g. The Wizard of Paws"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum placeholder:text-plum/30 focus:outline-none focus:border-brand-teal"
                 />
               </div>
 
-              {/* Category */}
+              {/* Type */}
               <div>
-                <label className="block text-sm font-bold text-plum mb-2">Category <span className="text-brand-orange">*</span></label>
+                <label className="block text-sm font-bold text-plum mb-2">
+                  Type <span className="text-brand-orange">*</span>
+                </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {CATEGORIES.map(({ value, label }) => (
+                  {TYPES.map(({ value, label }) => (
                     <button
                       key={value}
                       type="button"
-                      onClick={() => setCategory(value)}
+                      onClick={() => setType(value)}
                       className={`px-3 py-2.5 rounded-xl text-xs font-semibold border transition-colors text-center ${
-                        category === value
+                        type === value
                           ? 'bg-plum text-white border-plum'
                           : 'border-gray-200 text-plum/70 hover:border-plum/30'
                       }`}
@@ -89,90 +149,54 @@ export default function SuggestResourceModal({ onClose }: Props) {
                 </div>
               </div>
 
-              {/* Location */}
+              {/* Description */}
               <div>
-                <label className="block text-sm font-bold text-plum mb-1">Location / Neighborhood <span className="text-brand-orange">*</span></label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Address or general area — e.g. Uptown Palm Springs"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum placeholder:text-plum/30 focus:outline-none focus:border-brand-teal"
-                />
-              </div>
-
-              {/* Phone / Website */}
-              <div>
-                <label className="block text-sm font-bold text-plum mb-1">Phone or Website</label>
-                <input
-                  type="text"
-                  placeholder="Optional — helps us verify faster"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum placeholder:text-plum/30 focus:outline-none focus:border-brand-teal"
-                />
-              </div>
-
-              {/* Why recommend */}
-              <div>
-                <label className="block text-sm font-bold text-plum mb-1">Why do you recommend it? <span className="text-brand-orange">*</span></label>
+                <label htmlFor="description" className="block text-sm font-bold text-plum mb-1">
+                  Description <span className="text-brand-orange">*</span>
+                </label>
                 <textarea
+                  id="description"
                   required
-                  rows={3}
-                  placeholder="Tell us what makes this a great spot for dog dads and their pups..."
+                  rows={4}
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                  placeholder="What makes this a great spot for dog dads and their pups?"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum placeholder:text-plum/30 focus:outline-none focus:border-brand-teal resize-none"
                 />
               </div>
 
-              {/* Your name */}
+              {/* Website URL */}
               <div>
-                <label className="block text-sm font-bold text-plum mb-1">Your Name</label>
+                <label htmlFor="websiteUrl" className="block text-sm font-bold text-plum mb-1">
+                  Website URL
+                </label>
                 <input
-                  type="text"
-                  placeholder="Optional — so we can credit you"
+                  id="websiteUrl"
+                  type="url"
+                  value={websiteUrl}
+                  onChange={e => setWebsiteUrl(e.target.value)}
+                  placeholder="https://… (optional)"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum placeholder:text-plum/30 focus:outline-none focus:border-brand-teal"
                 />
               </div>
 
-              {/* Disclaimer */}
-              <div className="bg-plum/5 border border-plum/10 rounded-xl p-4 text-xs text-plum/70 space-y-2 leading-relaxed">
-                <p className="font-bold text-plum text-sm">Community-Curated Guide</p>
-                <p>
-                  Our resource guide is built from real member recommendations. Before a suggestion is
-                  published, our team confirms the details — so please share accurate information and only
-                  recommend places you&apos;ve actually had a good experience with.
-                </p>
-                <p>
-                  PS Dog Dads reserves the right to decline any submission that doesn&apos;t meet community
-                  standards or can&apos;t be verified.
-                </p>
-              </div>
+              <p className="text-xs text-plum/50 leading-relaxed">
+                Only recommend places you&apos;ve had a good experience with — our team confirms each
+                suggestion before it&apos;s added to the guide.
+              </p>
 
-              {/* Agree */}
-              <label className="flex items-start gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  required
-                  checked={agreed}
-                  onChange={(e) => setAgreed(e.target.checked)}
-                  className="mt-0.5 accent-plum"
-                />
-                <span className="text-sm text-plum font-semibold">
-                  This is a genuine recommendation and the details are accurate to the best of my knowledge. <span className="text-brand-orange">*</span>
-                </span>
-              </label>
-
-              {/* Submit */}
               <div className="flex items-center gap-3 pt-1">
                 <button
                   type="submit"
                   disabled={!canSubmit}
                   className={`btn-primary flex-1 ${!canSubmit ? 'opacity-40 cursor-not-allowed' : ''}`}
                 >
-                  Submit for Review
+                  {saving ? 'Submitting…' : 'Submit Suggestion'}
                 </button>
                 <button type="button" onClick={onClose} className="btn-secondary px-5">
                   Cancel
                 </button>
               </div>
-
             </form>
           </>
         )}
