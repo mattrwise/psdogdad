@@ -85,11 +85,11 @@ export default function HomePage() {
                 <span>🌴</span> Coachella Valley, CA
               </div>
               <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6 text-plum">
-                Where Dog Dads{' '}
-                <span className="text-brand-orange">Come Together</span>
+                They&apos;re Not Pets.{' '}
+                <span className="text-brand-orange">They&apos;re Our Kids.</span>
               </h1>
               <p className="text-lg md:text-xl text-plum/70 mb-8 leading-relaxed">
-                Forums, meetups, member profiles, and local resources — all for the Coachella Valley community of men who love their dogs.
+                Connect with fellow dog dads in the Coachella Valley who understand the special bond. Share experiences, make friends, and celebrate the love we have for our four-legged family members.
               </p>
               <div className="flex flex-wrap gap-4">
                 <SignedOut>
