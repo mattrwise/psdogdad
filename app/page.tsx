@@ -96,6 +96,9 @@ export default function HomePage() {
                   <Link href="/members/join" className="btn-primary text-base">
                     Join the Pack 🐾
                   </Link>
+                  <Link href="/members/login" className="btn-secondary text-base">
+                    Sign In
+                  </Link>
                 </SignedOut>
                 <SignedIn>
                   <Link href="/forums" className="btn-primary text-base">
