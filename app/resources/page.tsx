@@ -66,7 +66,7 @@ const resourceSections: Section[] = [
       { name: 'Animal Samaritans', detail: '', address: '72120 Pet Land Pl, Thousand Palms', phone: '(760) 343-3477', map: 'Animal Samaritans, Thousand Palms, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
       { name: 'El Paseo Animal Hospital', detail: '', address: '72608 El Paseo, Ste 4, Palm Desert', phone: '(760) 491-1008', map: 'El Paseo Animal Hospital, Palm Desert, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
       { name: 'Paws and Claws', detail: '', address: '72895 Fred Waring Dr, Palm Desert', phone: '(760) 610-2454', map: 'Paws and Claws, Palm Desert, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
-      { name: 'Palm Desert Pet Hospital', detail: '', address: '41990 Cook St, Ste B201, Palm Desert', phone: '(760) 259-1066', map: 'Palm Desert Pet Hospital, Palm Desert, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
+      { name: 'Palm Desert Pet Hospital', detail: '', address: '41990 Cook St, Ste B201, Palm Desert', phone: '(760) 568-9377', map: 'Palm Desert Pet Hospital, Palm Desert, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
     ],
   },
   {
@@ -246,6 +246,23 @@ export default function ResourcesPage() {
           >
             <span>{section.icon}</span> {section.title}
           </a>
+        ))}
+      </div>
+
+      {/* Dog Dad Guides */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        {[
+          { href: '/resources/health-wellness', icon: '🩺', title: 'Health & Wellness', text: 'Keeping your best friend healthy — plus a filterable valley-wide vet finder.', color: 'border-brand-teal' },
+          { href: '/resources/training', icon: '🎓', title: 'Training Techniques', text: 'Professional methods, common mistakes, and pro tips from the pack.', color: 'border-brand-orange' },
+          { href: '/resources/handbook', icon: '📖', title: 'Dog Dad Handbook', text: 'The complete 5-chapter guide, from bringing them home to senior years.', color: 'border-plum' },
+          { href: '/resources/products', icon: '🛒', title: 'Product Guide', text: 'Community-tested gear categories and smart shopping tips.', color: 'border-brand-golden' },
+        ].map(guide => (
+          <Link key={guide.href} href={guide.href} className={`card p-5 border-t-4 ${guide.color} hover:-translate-y-0.5 block`}>
+            <div className="text-3xl mb-2">{guide.icon}</div>
+            <h2 className="font-extrabold text-plum text-base mb-1">{guide.title}</h2>
+            <p className="text-sm text-plum/60 leading-relaxed">{guide.text}</p>
+            <p className="text-sm font-semibold text-brand-teal mt-3">Read the guide →</p>
+          </Link>
         ))}
       </div>
 
