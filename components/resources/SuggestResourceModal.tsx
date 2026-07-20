@@ -25,6 +25,7 @@ export default function SuggestResourceModal({ onClose }: Props) {
   const [resourceName, setResourceName] = useState('')
   const [type, setType] = useState('')
   const [description, setDescription] = useState('')
+  const [address, setAddress] = useState('')
   const [websiteUrl, setWebsiteUrl] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -44,6 +45,7 @@ export default function SuggestResourceModal({ onClose }: Props) {
       resource_name: resourceName.trim(),
       type,
       description: description.trim(),
+      address: address.trim() || null,
       website_url: websiteUrl.trim() || null,
     })
 
@@ -162,6 +164,21 @@ export default function SuggestResourceModal({ onClose }: Props) {
                   onChange={e => setDescription(e.target.value)}
                   placeholder="What makes this a great spot for dog dads and their pups?"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum placeholder:text-plum/30 focus:outline-none focus:border-brand-teal resize-none"
+                />
+              </div>
+
+              {/* Address */}
+              <div>
+                <label htmlFor="address" className="block text-sm font-bold text-plum mb-1">
+                  Address
+                </label>
+                <input
+                  id="address"
+                  type="text"
+                  value={address}
+                  onChange={e => setAddress(e.target.value)}
+                  placeholder="e.g. 400 El Cielo Rd, Palm Springs (optional)"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum placeholder:text-plum/30 focus:outline-none focus:border-brand-teal"
                 />
               </div>
 
