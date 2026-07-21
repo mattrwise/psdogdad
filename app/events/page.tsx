@@ -1,9 +1,36 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import ProposeEventModal from '@/components/events/ProposeEventModal'
+import { supabase } from '@/lib/supabase/client'
 import { useUser } from '@/lib/useUser'
+
+const ADMIN_EMAIL = 'psmattreid@gmail.com'
+
+type RealEvent = {
+  id: string
+  title: string
+  event_date: string
+  event_time: string
+  location: string
+  description: string
+}
+
+const realEventColors = [
+  'border-brand-teal bg-brand-teal/5',
+  'border-brand-orange bg-brand-orange/5',
+  'border-plum bg-plum/5',
+  'border-brand-golden bg-brand-golden/5',
+]
+
+function dateBadge(isoDate: string) {
+  const d = new Date(isoDate + 'T12:00:00')
+  return {
+    month: d.toLocaleString('en-US', { month: 'short' }).toUpperCase(),
+    day: String(d.getDate()),
+  }
+}
 
 type Event = {
   id: number
@@ -206,6 +233,106 @@ function SignInPrompt({ eventTitle, onClose }: { eventTitle: string; onClose: ()
   )
 }
 
+// ── Admin: Create Event ────────────────────────────────────────────────────────
+function AdminEventForm({ onCreated }: { onCreated: (event: RealEvent) => void }) {
+  const { user } = useUser()
+  const [open, setOpen] = useState(false)
+  const [title, setTitle] = useState('')
+  const [eventDate, setEventDate] = useState('')
+  const [eventTime, setEventTime] = useState('')
+  const [location, setLocation] = useState('')
+  const [description, setDescription] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const canSubmit =
+    [title, eventDate, eventTime, location, description].every(v => v.trim() !== '') && !saving
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!canSubmit || !user) return
+    setError(null)
+    setSaving(true)
+
+    const { data, error: insertError } = await supabase
+      .from('events')
+      .insert({
+        title: title.trim(),
+        event_date: eventDate,
+        event_time: eventTime.trim(),
+        location: location.trim(),
+        description: description.trim(),
+        created_by: user.id,
+      })
+      .select('id, title, event_date, event_time, location, description')
+      .single()
+
+    setSaving(false)
+    if (insertError) {
+      setError(insertError.message)
+      return
+    }
+    setTitle(''); setEventDate(''); setEventTime(''); setLocation(''); setDescription('')
+    setOpen(false)
+    onCreated(data as RealEvent)
+  }
+
+  const inputClass =
+    'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum placeholder:text-plum/30 focus:outline-none focus:border-brand-teal'
+
+  return (
+    <div className="card border border-plum/15 p-5 mb-8">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <h2 className="font-extrabold text-plum text-base">🗓️ Create an Event</h2>
+          <p className="text-xs text-plum/50 mt-0.5">Only you can see this — admin tools</p>
+        </div>
+        <button onClick={() => setOpen(o => !o)} className="btn-secondary text-sm px-4 py-2">
+          {open ? 'Close' : '+ New Event'}
+        </button>
+      </div>
+
+      {open && (
+        <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">
+              ⚠️ {error}
+            </div>
+          )}
+          <div>
+            <label htmlFor="evTitle" className="block text-sm font-bold text-plum mb-1">Event Name <span className="text-brand-orange">*</span></label>
+            <input id="evTitle" type="text" required value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Yappy Hour at Bootlegger Tiki" className={inputClass} />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="evDate" className="block text-sm font-bold text-plum mb-1">Date <span className="text-brand-orange">*</span></label>
+              <input id="evDate" type="date" required value={eventDate} onChange={e => setEventDate(e.target.value)} className={inputClass} />
+            </div>
+            <div>
+              <label htmlFor="evTime" className="block text-sm font-bold text-plum mb-1">Time <span className="text-brand-orange">*</span></label>
+              <input id="evTime" type="text" required value={eventTime} onChange={e => setEventTime(e.target.value)} placeholder="e.g. 5:00 PM – 8:00 PM" className={inputClass} />
+            </div>
+          </div>
+          <div>
+            <label htmlFor="evLocation" className="block text-sm font-bold text-plum mb-1">Location <span className="text-brand-orange">*</span></label>
+            <input id="evLocation" type="text" required value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. Ruth Hardy Park, Palm Springs" className={inputClass} />
+          </div>
+          <div>
+            <label htmlFor="evDescription" className="block text-sm font-bold text-plum mb-1">Description <span className="text-brand-orange">*</span></label>
+            <textarea id="evDescription" required rows={4} value={description} onChange={e => setDescription(e.target.value)} placeholder="What should members know? Leash rules, what to bring, parking…" className={`${inputClass} resize-none`} />
+          </div>
+          <div className="flex items-center gap-3">
+            <button type="submit" disabled={!canSubmit} className={`btn-primary text-sm px-6 ${!canSubmit ? 'opacity-40 cursor-not-allowed' : ''}`}>
+              {saving ? 'Creating…' : 'Create Event'}
+            </button>
+            <button type="button" onClick={() => setOpen(false)} className="text-sm font-semibold text-plum/50 hover:text-plum">Cancel</button>
+          </div>
+        </form>
+      )}
+    </div>
+  )
+}
+
 // ── Page ───────────────────────────────────────────────────────────────────────
 export default function EventsPage() {
   const { user } = useUser()
@@ -217,6 +344,65 @@ export default function EventsPage() {
     Object.fromEntries(upcomingEvents.map(e => [e.id, e.attending]))
   )
   const [activeFilter, setActiveFilter] = useState('All Events')
+
+  // Real events from Supabase, shown above the sample listings.
+  const [realEvents, setRealEvents] = useState<RealEvent[]>([])
+  const [realRsvps, setRealRsvps] = useState<Record<string, { count: number; mine: boolean }>>({})
+  const [signInTitle, setSignInTitle] = useState<string | null>(null)
+
+  const loadReal = useCallback(async () => {
+    const today = new Date()
+    const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
+    const { data, error } = await supabase
+      .from('events')
+      .select('id, title, event_date, event_time, location, description')
+      .gte('event_date', todayIso)
+      .order('event_date', { ascending: true })
+    if (error) { console.error('Could not load events:', error.message); return }
+    const events = (data as RealEvent[]) ?? []
+    setRealEvents(events)
+
+    if (events.length > 0) {
+      const { data: rsvpData, error: rsvpError } = await supabase
+        .from('event_rsvps')
+        .select('event_id, user_id')
+        .in('event_id', events.map(e => e.id))
+      if (rsvpError) { console.error('Could not load RSVPs:', rsvpError.message); return }
+      const grouped: Record<string, { count: number; mine: boolean }> = {}
+      for (const row of (rsvpData as { event_id: string; user_id: string }[]) ?? []) {
+        const entry = (grouped[row.event_id] ??= { count: 0, mine: false })
+        entry.count += 1
+        if (user && row.user_id === user.id) entry.mine = true
+      }
+      setRealRsvps(grouped)
+    }
+  }, [user])
+
+  useEffect(() => { loadReal() }, [loadReal])
+
+  async function handleRealRsvp(event: RealEvent) {
+    if (!user) { setSignInTitle(event.title); return }
+    const current = realRsvps[event.id] ?? { count: 0, mine: false }
+
+    if (current.mine) {
+      const { error } = await supabase
+        .from('event_rsvps')
+        .delete()
+        .eq('event_id', event.id)
+        .eq('user_id', user.id)
+      if (error) { console.error('Could not cancel RSVP:', error.message); return }
+      setRealRsvps(prev => ({ ...prev, [event.id]: { count: Math.max(0, current.count - 1), mine: false } }))
+    } else {
+      const meta = user.user_metadata ?? {}
+      const dogName = Array.isArray(meta.dogs) && meta.dogs[0]?.name ? meta.dogs[0].name : meta.dog_name
+      const memberName = [meta.name, dogName].filter(Boolean).join(' & ') || 'A Dog Dad'
+      const { error } = await supabase
+        .from('event_rsvps')
+        .insert({ event_id: event.id, user_id: user.id, member_name: memberName })
+      if (error) { console.error('Could not RSVP:', error.message); return }
+      setRealRsvps(prev => ({ ...prev, [event.id]: { count: current.count + 1, mine: true } }))
+    }
+  }
 
   function handleRsvp(event: Event) {
     if (!user) {
@@ -268,10 +454,66 @@ export default function EventsPage() {
         </div>
       </div>
 
+      {/* Admin: create events (visible to admin only) */}
+      {user?.email === ADMIN_EMAIL && <AdminEventForm onCreated={() => loadReal()} />}
+
       {/* Upcoming Events */}
       <section className="mb-14">
         <h2 className="font-extrabold text-plum text-xl mb-5">Upcoming Events</h2>
         <div className="space-y-5">
+          {realEvents.map((event, i) => {
+            const rsvp = realRsvps[event.id] ?? { count: 0, mine: false }
+            const badge = dateBadge(event.event_date)
+            return (
+              <div key={event.id} className={`card border-l-4 ${realEventColors[i % realEventColors.length]} p-6 hover:-translate-y-0.5`}>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-16 h-16 bg-plum rounded-xl flex flex-col items-center justify-center text-white shadow-md">
+                    <span className="text-xs font-bold uppercase tracking-wider text-brand-golden">{badge.month}</span>
+                    <span className="text-2xl font-extrabold leading-none">{badge.day}</span>
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2 flex-wrap">
+                      <h3 className="font-extrabold text-plum text-lg leading-snug">{event.title}</h3>
+                      <div className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold flex-shrink-0 transition-colors ${
+                        rsvp.mine
+                          ? 'bg-brand-teal text-white'
+                          : 'bg-brand-teal/10 border border-brand-teal/20 text-brand-teal'
+                      }`}>
+                        <span>✓</span> {rsvp.count} going
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-plum/60 mt-1">
+                      <span>🕐 {event.event_time}</span>
+                      <span>📍 {event.location}</span>
+                    </div>
+
+                    <p className="text-plum/70 text-sm mt-3 leading-relaxed whitespace-pre-wrap">{event.description}</p>
+
+                    <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-3">
+                      <button
+                        onClick={() => handleRealRsvp(event)}
+                        className={`self-start text-sm px-5 py-2.5 rounded-xl font-bold transition-all ${
+                          rsvp.mine
+                            ? 'bg-brand-teal text-white'
+                            : 'bg-brand-teal/10 text-brand-teal hover:bg-brand-teal hover:text-white border border-brand-teal/30'
+                        }`}
+                      >
+                        {rsvp.mine ? '✓ Going!' : 'RSVP'}
+                      </button>
+                      <div className="text-xs text-plum/40 sm:ml-auto">
+                        Hosted by <span className="font-semibold">PS Dog Dad</span>
+                        &nbsp;·&nbsp;
+                        <a href="/conduct" className="text-brand-teal hover:underline">Community Guidelines</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+
           {upcomingEvents.map((event) => {
             const isGoing = rsvpedIds.has(event.id)
             const count = attendingCounts[event.id]
@@ -381,6 +623,13 @@ export default function EventsPage() {
         <SignInPrompt
           eventTitle={signInEvent.title}
           onClose={() => setSignInEvent(null)}
+        />
+      )}
+
+      {signInTitle && (
+        <SignInPrompt
+          eventTitle={signInTitle}
+          onClose={() => setSignInTitle(null)}
         />
       )}
 
