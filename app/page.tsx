@@ -11,13 +11,8 @@ const karla = Karla({ subsets: ['latin'], weight: ['400', '700'], variable: '--f
 
 export const metadata: Metadata = {
   title: 'Founding Member | PS Dog Dad',
-  description: 'Fifty founding memberships for PS Dog Dad. Three guides, the Palm Springs resources list, founding status locked in, and direct email access. $49.',
+  description: 'Founding membership for PS Dog Dad. Three guides, the Palm Springs resources list, founding status locked in, and direct email access. $49.',
 }
-
-// Update this by hand when someone buys — nothing else drives it, there's no
-// backend tracking real Stripe purchases yet.
-const TOTAL_SPOTS = 50
-const CLAIMED = 0
 
 const WHAT_IS_IT = [
   {
@@ -29,16 +24,8 @@ const WHAT_IS_IT = [
     desc: 'Training, separation anxiety, nutrition, exercise in 115 degree heat. Written for dogs living here.',
   },
   {
-    title: 'Forum.',
-    desc: 'Local questions answered by locals.',
-  },
-  {
-    title: 'Meetups.',
-    desc: 'Get out with the dog dads in your neighborhood.',
-  },
-  {
-    title: 'Profiles.',
-    desc: 'One for you, one for every dog in your house. Message any member, day one.',
+    title: 'Community.',
+    desc: 'Forum, meetups, and member profiles opening this fall.',
   },
 ]
 
@@ -66,8 +53,6 @@ const WHAT_YOU_GET = [
 ]
 
 export default function Page() {
-  const left = TOTAL_SPOTS - CLAIMED
-
   return (
     <main
       className={`${fraunces.variable} ${karla.variable} min-h-screen bg-[#F7F2E7] text-[#2E3640] text-[17px] leading-[1.65]`}
@@ -94,10 +79,10 @@ export default function Page() {
             className="text-[clamp(2.1rem,7vw,3.05rem)] leading-[1.12] tracking-[-.015em] text-[#3B4754] font-semibold mb-[18px]"
             style={{ fontFamily: 'var(--font-fraunces), Georgia, serif' }}
           >
-            Fifty spots. Then it <em className="italic text-[#C9A24B]">closes</em>.
+            <em className="italic text-[#C9A24B]">Founding</em> membership for PS Dog Dad.
           </h1>
           <p className="text-[1.09rem] mx-auto max-w-[30rem] text-[#2E3640]">
-            PS Dog Dad opens this year. Fifty people get in first, at a price that never goes up, and they help shape what it becomes.
+            PS Dog Dad opens this year. Founding members lock in this price for good, and help shape what it becomes.
           </p>
         </div>
 
@@ -110,7 +95,7 @@ export default function Page() {
             What is PS Dog Dad?
           </h2>
           <p className="mb-[22px]">A community for Palm Springs dog dads.</p>
-          <ul className="list-none m-0 p-0 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-[10px]">
+          <ul className="list-none m-0 p-0 flex flex-col gap-y-[10px]">
             {WHAT_IS_IT.map((item) => (
               <li key={item.title} className="py-[6px]">
                 <strong className="font-bold text-[#3B4754]">{item.title}</strong>{' '}
@@ -144,32 +129,6 @@ export default function Page() {
               </li>
             ))}
           </ul>
-        </section>
-
-        {/* How many are left */}
-        <section className="py-11 border-b border-[#2E3640]/[.14]">
-          <h2
-            className="text-[1.45rem] font-semibold text-[#3B4754] tracking-[-.01em] mb-[22px]"
-            style={{ fontFamily: 'var(--font-fraunces), Georgia, serif' }}
-          >
-            How many are left
-          </h2>
-          {/* To update: change CLAIMED at the top of this file. Nothing else. */}
-          <div
-            className="mb-[14px] flex flex-wrap gap-[7px] justify-center"
-            role="img"
-            aria-label={`${left} of ${TOTAL_SPOTS} founding spots still open`}
-          >
-            {Array.from({ length: TOTAL_SPOTS }, (_, i) => (
-              <span
-                key={i}
-                className={`w-[15px] h-[15px] rounded-full border-[1.5px] border-[#C9A24B] ${i < CLAIMED ? 'bg-[#C9A24B]' : ''}`}
-              />
-            ))}
-          </div>
-          <p className="text-center text-[.93rem] tracking-[.03em] text-[#2E3640] opacity-80">
-            <b className="text-[#3B4754]">{left}</b> of {TOTAL_SPOTS} spots still open
-          </p>
         </section>
 
         {/* Offer / CTA */}
