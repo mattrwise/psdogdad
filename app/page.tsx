@@ -110,14 +110,11 @@ export default function Page() {
             What is PS Dog Dad?
           </h2>
           <p className="mb-[22px]">A community for Palm Springs dog dads.</p>
-          <ul className="list-none m-0 p-0">
-            {WHAT_IS_IT.map((item, i) => (
-              <li
-                key={item.title}
-                className={`py-[15px] border-t border-[#2E3640]/[.14] ${i === 0 ? 'border-t-0 pt-0' : ''}`}
-              >
-                <strong className="block font-bold text-[#3B4754]">{item.title}</strong>
-                <span className="block text-[.96rem] text-[#2E3640] opacity-[.85]">{item.desc}</span>
+          <ul className="list-none m-0 p-0 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-[10px]">
+            {WHAT_IS_IT.map((item) => (
+              <li key={item.title} className="py-[6px]">
+                <strong className="font-bold text-[#3B4754]">{item.title}</strong>{' '}
+                <span className="text-[.96rem] text-[#2E3640] opacity-[.85]">{item.desc}</span>
               </li>
             ))}
           </ul>
