@@ -19,6 +19,29 @@ export const metadata: Metadata = {
 const TOTAL_SPOTS = 50
 const CLAIMED = 0
 
+const WHAT_IS_IT = [
+  {
+    title: 'Resources.',
+    desc: 'Vets, groomers, boarders, day cares, sitters. Real numbers, kept current.',
+  },
+  {
+    title: 'Guides.',
+    desc: 'Training, separation anxiety, nutrition, exercise in 115 degree heat. Written for dogs living here.',
+  },
+  {
+    title: 'Forum.',
+    desc: 'Local questions answered by locals.',
+  },
+  {
+    title: 'Meetups.',
+    desc: 'Get out with the dog dads in your neighborhood.',
+  },
+  {
+    title: 'Profiles.',
+    desc: 'One for you, one for every dog in your house. Message any member, day one.',
+  },
+]
+
 const WHAT_YOU_GET = [
   {
     icon: 'M6.5 6a2.5 2.5 0 1 1 1.9 2.4l.6.6h6l.6-.6A2.5 2.5 0 1 1 18 9.4l-.6.6.6.6a2.5 2.5 0 1 1-2.4 1.9l-.6-.6H9l-.6.6A2.5 2.5 0 1 1 6 10.6l.6-.6-.6-.6A2.5 2.5 0 0 1 6.5 6Z',
@@ -77,6 +100,28 @@ export default function Page() {
             PS Dog Dad opens this year. Fifty people get in first, at a price that never goes up, and they help shape what it becomes.
           </p>
         </div>
+
+        {/* What is PS Dog Dad */}
+        <section className="py-11 border-b border-[#2E3640]/[.14]">
+          <h2
+            className="text-[1.45rem] font-semibold text-[#3B4754] tracking-[-.01em] mb-[22px]"
+            style={{ fontFamily: 'var(--font-fraunces), Georgia, serif' }}
+          >
+            What is PS Dog Dad?
+          </h2>
+          <p className="mb-[22px]">A community for Palm Springs dog dads.</p>
+          <ul className="list-none m-0 p-0">
+            {WHAT_IS_IT.map((item, i) => (
+              <li
+                key={item.title}
+                className={`py-[15px] border-t border-[#2E3640]/[.14] ${i === 0 ? 'border-t-0 pt-0' : ''}`}
+              >
+                <strong className="block font-bold text-[#3B4754]">{item.title}</strong>
+                <span className="block text-[.96rem] text-[#2E3640] opacity-[.85]">{item.desc}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
 
         {/* What you get today */}
         <section className="py-11 border-b border-[#2E3640]/[.14]">
