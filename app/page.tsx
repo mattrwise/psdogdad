@@ -10,178 +10,41 @@ const fraunces = Fraunces({ subsets: ['latin'], weight: ['600'], style: ['normal
 const karla = Karla({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-karla' })
 
 export const metadata: Metadata = {
-  title: 'Founding Member | PS Dog Dad',
-  description: 'Founding membership for PS Dog Dad. Three guides, the Palm Springs resources list, founding status locked in, and direct email access.',
+  title: 'PS Dog Dad',
+  description: 'PS Dog Dad. Something for Palm Springs dog dads is on the way.',
 }
-
-const WHAT_IS_IT = [
-  {
-    title: 'Resources.',
-    desc: 'Vets, groomers, boarders, day cares, sitters. Real numbers, kept current.',
-  },
-  {
-    title: 'Guides.',
-    desc: 'Training, separation anxiety, nutrition, exercise in 115 degree heat. Written for dogs living here.',
-  },
-  {
-    title: 'Community.',
-    desc: 'Forum, meetups, and member profiles opening this fall.',
-  },
-]
-
-const WHAT_YOU_GET = [
-  {
-    icon: 'M6.5 6a2.5 2.5 0 1 1 1.9 2.4l.6.6h6l.6-.6A2.5 2.5 0 1 1 18 9.4l-.6.6.6.6a2.5 2.5 0 1 1-2.4 1.9l-.6-.6H9l-.6.6A2.5 2.5 0 1 1 6 10.6l.6-.6-.6-.6A2.5 2.5 0 0 1 6.5 6Z',
-    title: 'Three guides, right away',
-    desc: 'Separation anxiety, dog nutrition, and the symptoms that mean call the vet now.',
-  },
-  {
-    icon: 'M12 2c3.9 0 7 3 7 6.8 0 4.9-5.3 10.9-6.4 12.1a.8.8 0 0 1-1.2 0C10.3 19.7 5 13.7 5 8.8 5 5 8.1 2 12 2Zm0 4.4a2.6 2.6 0 1 0 0 5.2 2.6 2.6 0 0 0 0-5.2Z',
-    title: 'The Palm Springs resources list',
-    desc: 'Vets, groomers, boarding, emergency numbers. Real ones, with phone numbers that work.',
-  },
-  {
-    icon: 'M12 2.6l2.7 5.7 6.3.9-4.6 4.4 1.1 6.2-5.5-2.9-5.5 2.9L7.6 13.6 3 9.2l6.3-.9L12 2.6Z',
-    title: 'Founding status, locked in',
-    desc: 'When the full community opens, you are already in, at this rate, permanently.',
-  },
-  {
-    icon: 'M3.5 5.5h17c.6 0 1 .4 1 1v11c0 .6-.4 1-1 1h-17c-.6 0-1-.4-1-1v-11c0-.6.4-1 1-1Zm1.6 2L12 12.4 18.9 7.5H5.1Z',
-    title: 'My actual email address',
-    desc: 'Not a help desk. You write, I write back.',
-  },
-]
 
 export default function Page() {
   return (
     <main
-      className={`${fraunces.variable} ${karla.variable} min-h-screen bg-[#F7F2E7] text-[#2E3640] text-[17px] leading-[1.65]`}
+      className={`${fraunces.variable} ${karla.variable} min-h-screen bg-[#F7F2E7] text-[#2E3640] text-[17px] leading-[1.65] flex items-center justify-center`}
       style={{ fontFamily: 'var(--font-karla), system-ui, sans-serif' }}
     >
-      <div className="max-w-[660px] mx-auto px-[22px]">
+      <div className="max-w-[460px] mx-auto px-[22px] py-[60px] text-center">
 
-        {/* Header */}
-        <header className="pt-11 pb-2 text-center">
-          <Image
-            src={logoFull}
-            alt="PS Dog Dad"
-            priority
-            className="w-full max-w-[330px] h-auto block mx-auto"
-          />
-        </header>
+        <Image
+          src={logoFull}
+          alt="PS Dog Dad"
+          priority
+          className="w-full max-w-[300px] h-auto block mx-auto mb-[36px]"
+        />
 
-        {/* Hero */}
-        <div className="pt-[30px] pb-[44px] text-center border-b border-[#2E3640]/[.14]">
-          <p className="text-[12.5px] tracking-[.16em] uppercase font-bold text-[#5F8D8B] mb-[18px]">
-            Founding Membership
-          </p>
-          <h1
-            className="text-[clamp(2.1rem,7vw,3.05rem)] leading-[1.12] tracking-[-.015em] text-[#3B4754] font-semibold mb-[18px]"
-            style={{ fontFamily: 'var(--font-fraunces), Georgia, serif' }}
-          >
-            <em className="italic text-[#C9A24B]">Founding</em> membership for PS Dog Dad.
-          </h1>
-          <p className="text-[1.09rem] mx-auto max-w-[30rem] text-[#2E3640]">
-            PS Dog Dad opens this year. Founding members lock in this price for good, and help shape what it becomes.
-          </p>
-        </div>
+        <h1
+          className="text-[clamp(1.7rem,6vw,2.3rem)] leading-[1.15] tracking-[-.015em] text-[#3B4754] font-semibold mb-[18px]"
+          style={{ fontFamily: 'var(--font-fraunces), Georgia, serif' }}
+        >
+          We&apos;re working on something.
+        </h1>
 
-        {/* What is PS Dog Dad */}
-        <section className="py-11 border-b border-[#2E3640]/[.14]">
-          <h2
-            className="text-[1.45rem] font-semibold text-[#3B4754] tracking-[-.01em] mb-[22px]"
-            style={{ fontFamily: 'var(--font-fraunces), Georgia, serif' }}
-          >
-            What is PS Dog Dad?
-          </h2>
-          <p className="mb-[22px]">A community for Palm Springs dog dads.</p>
-          <ul className="list-none m-0 p-0 flex flex-col gap-y-[10px]">
-            {WHAT_IS_IT.map((item) => (
-              <li key={item.title} className="py-[6px]">
-                <strong className="font-bold text-[#3B4754]">{item.title}</strong>{' '}
-                <span className="text-[.96rem] text-[#2E3640] opacity-[.85]">{item.desc}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <p className="text-[1.05rem] mx-auto max-w-[24rem] text-[#2E3640] opacity-[.85] mb-[30px]">
+          Something for Palm Springs dog dads is on the way. Check back soon.
+        </p>
 
-        {/* What you get today */}
-        <section className="py-11 border-b border-[#2E3640]/[.14]">
-          <h2
-            className="text-[1.45rem] font-semibold text-[#3B4754] tracking-[-.01em] mb-[22px]"
-            style={{ fontFamily: 'var(--font-fraunces), Georgia, serif' }}
-          >
-            What you get today
-          </h2>
-          <ul className="list-none m-0 p-0">
-            {WHAT_YOU_GET.map((item, i) => (
-              <li
-                key={item.title}
-                className={`flex items-start gap-[15px] py-[15px] border-t border-[#2E3640]/[.14] ${i === 0 ? 'border-t-0 pt-0' : ''}`}
-              >
-                <svg className="flex-none w-[22px] h-[22px] mt-[3px] text-[#C9A24B]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d={item.icon} />
-                </svg>
-                <div>
-                  <strong className="block font-bold text-[#3B4754]">{item.title}</strong>
-                  <span className="block text-[.96rem] text-[#2E3640] opacity-[.85]">{item.desc}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* Offer / CTA */}
-        <div className="py-[46px] text-center">
-          <p
-            className="text-[2.4rem] font-bold text-[#3B4754] leading-none tracking-[-.02em] mb-[14px]"
-            style={{ fontFamily: 'var(--font-fraunces), Georgia, serif' }}
-          >
-            Coming soon
-          </p>
-          <p className="text-[1rem] opacity-80 mx-auto max-w-[26rem]">
-            Founding membership opens soon. Check back, or email me and I will let you know the moment it does.
-          </p>
-          <p className="mt-6 text-[.9rem]">
-            <a href="mailto:psdogdadmc@gmail.com" className="text-[#5F8D8B] font-bold hover:underline">
-              psdogdadmc@gmail.com
-            </a>
-          </p>
-        </div>
-
-        {/* Why I am doing this */}
-        <section className="py-11 border-b border-[#2E3640]/[.14]">
-          <h2
-            className="text-[1.45rem] font-semibold text-[#3B4754] tracking-[-.01em] mb-[22px]"
-            style={{ fontFamily: 'var(--font-fraunces), Georgia, serif' }}
-          >
-            Why I am doing this
-          </h2>
-          <p className="mb-[15px]">
-            A few years ago I adopted Lucy. She's a chiweenie with a coat that makes her look like a teacup holstein. I think it's called piebald. I quickly found out the stuff that nobody from the animal shelter tells you: how to train your new pup kid, what to do at 2am when something seems wrong, who to call, and how to keep going on the days it feels like too much.
-          </p>
-          <p className="mb-[15px]">
-            PS Dog Dad has lived in my heart for quite sometime. Finally with a group of close friends, I was able to turn this into a reality. An independant site that actually focuses on the health and wellbeing of its members (human or otherwise).
-          </p>
-          <p
-            className="italic text-[1.1rem] text-[#3B4754] mb-0"
-            style={{ fontFamily: 'var(--font-fraunces), Georgia, serif' }}
-          >
-            Matt and Lucy
-          </p>
-        </section>
-
-        {/* Footer */}
-        <footer className="pt-[34px] pb-[50px] text-center text-[.86rem] opacity-[.68]">
-          <p>
-            PS Dog Dad · Palm Springs, California
-            <br />
-            Questions before you join?{' '}
-            <a href="mailto:psdogdadmc@gmail.com" className="text-[#5F8D8B] hover:underline">
-              psdogdadmc@gmail.com
-            </a>
-          </p>
-        </footer>
+        <p className="text-[.92rem]">
+          <a href="mailto:psdogdadmc@gmail.com" className="text-[#5F8D8B] font-bold hover:underline">
+            psdogdadmc@gmail.com
+          </a>
+        </p>
 
       </div>
     </main>
