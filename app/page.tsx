@@ -158,13 +158,10 @@ export default function Page() {
             Why I am doing this
           </h2>
           <p className="mb-[15px]">
-            I adopted a small tan Chiweenie named Lucy and found out fast how much nobody tells you. Not the training part. The other part. What to do at 2am when something is wrong, who to call, and how to keep going on the days it feels like too much.
+            A few years ago I adopted Lucy. She's a chiweenie with a coat that makes her look like a teacup holstein. I think it's called piebald. I quickly found out the stuff that nobody from the animal shelter tells you: how to train your new pup kid, what to do at 2am when something seems wrong, who to call, and how to keep going on the days it feels like too much.
           </p>
           <p className="mb-[15px]">
-            PS Dog Dad is the thing I wanted when I started. It is being built here in Palm Springs, by one person, slowly and carefully.
-          </p>
-          <p className="mb-[15px]">
-            Fifty founding members is not a marketing number. It is how many people I can actually answer.
+            PS Dog Dad has lived in my heart for quite sometime. Finally with a group of close friends, I was able to turn this into a reality. An independant site that actually focuses on the health and wellbeing of its members (human or otherwise).
           </p>
           <p
             className="italic text-[1.1rem] text-[#3B4754] mb-0"
