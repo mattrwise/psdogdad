@@ -11,7 +11,7 @@ const karla = Karla({ subsets: ['latin'], weight: ['400', '700'], variable: '--f
 
 export const metadata: Metadata = {
   title: 'Founding Member | PS Dog Dad',
-  description: 'Founding membership for PS Dog Dad. Three guides, the Palm Springs resources list, founding status locked in, and direct email access. $49.',
+  description: 'Founding membership for PS Dog Dad. Three guides, the Palm Springs resources list, founding status locked in, and direct email access.',
 }
 
 const WHAT_IS_IT = [
@@ -134,19 +134,19 @@ export default function Page() {
         {/* Offer / CTA */}
         <div className="py-[46px] text-center">
           <p
-            className="text-[3.4rem] font-bold text-[#3B4754] leading-none tracking-[-.02em] mb-[6px]"
+            className="text-[2.4rem] font-bold text-[#3B4754] leading-none tracking-[-.02em] mb-[14px]"
             style={{ fontFamily: 'var(--font-fraunces), Georgia, serif' }}
           >
-            $49
+            Coming soon
           </p>
-          <p className="text-[.97rem] opacity-80 mb-[30px]">One time. Not a subscription. Nothing renews.</p>
-          <a
-            href="https://buy.stripe.com/14A3cw1F74y1fX64Pud7q00"
-            className="inline-block bg-[#3B4754] text-[#F7F2E7] font-bold text-[1.06rem] tracking-[.02em] py-[17px] px-10 rounded-[3px] no-underline border-[1.5px] border-[#3B4754] transition-colors duration-[180ms] motion-reduce:transition-none hover:bg-[#C9A24B] hover:border-[#C9A24B] hover:text-[#2E3640] focus-visible:bg-[#C9A24B] focus-visible:border-[#C9A24B] focus-visible:text-[#2E3640] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#5F8D8B] focus-visible:outline-offset-[3px]"
-          >
-            Become a founding member
-          </a>
-          <p className="mt-4 text-[.86rem] opacity-70">Secure checkout through Stripe. Your guides arrive by email.</p>
+          <p className="text-[1rem] opacity-80 mx-auto max-w-[26rem]">
+            Founding membership opens soon. Check back, or email me and I will let you know the moment it does.
+          </p>
+          <p className="mt-6 text-[.9rem]">
+            <a href="mailto:psdogdadmc@gmail.com" className="text-[#5F8D8B] font-bold hover:underline">
+              psdogdadmc@gmail.com
+            </a>
+          </p>
         </div>
 
         {/* Why I am doing this */}
