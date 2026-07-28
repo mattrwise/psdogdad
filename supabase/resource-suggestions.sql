@@ -8,9 +8,15 @@ create table if not exists public.resource_suggestions (
   resource_name text not null,
   type          text not null,
   description   text not null,
+  address       text,
   website_url   text,
   created_at    timestamptz not null default now()
 );
+
+-- `address` was added to the live table on 2026-07-19, after this file was first
+-- written; it is included above so a fresh setup matches production. This line
+-- brings an older existing table up to date.
+alter table public.resource_suggestions add column if not exists address text;
 
 alter table public.resource_suggestions enable row level security;
 

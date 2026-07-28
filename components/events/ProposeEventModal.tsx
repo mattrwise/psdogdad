@@ -1,6 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
+import { supabase } from '@/lib/supabase/client'
+import { useUser } from '@/lib/useUser'
 
 const EVENT_TAGS = ['Walk', 'Social', 'Pool / Water', 'Hike', 'Free', '21+', 'Members Only', 'All Dogs Welcome']
 
@@ -9,14 +12,33 @@ interface Props {
 }
 
 export default function ProposeEventModal({ onClose }: Props) {
+  const { user, loading: authLoading } = useUser()
+  const [title, setTitle] = useState('')
+  const [eventDate, setEventDate] = useState('')
+  const [startTime, setStartTime] = useState('')
+  const [endTime, setEndTime] = useState('')
+  const [maxAttendees, setMaxAttendees] = useState('')
+  const [location, setLocation] = useState('')
+  const [description, setDescription] = useState('')
   const [venueType, setVenueType] = useState('')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [venueConfirmed, setVenueConfirmed] = useState(false)
   const [agreedToDisclaimer, setAgreedToDisclaimer] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
 
   const isBusiness = venueType === 'business'
-  const canSubmit = agreedToDisclaimer && (!isBusiness || venueConfirmed)
+  const canSubmit =
+    title.trim() !== '' &&
+    eventDate !== '' &&
+    startTime !== '' &&
+    venueType !== '' &&
+    location.trim() !== '' &&
+    description.trim() !== '' &&
+    agreedToDisclaimer &&
+    (!isBusiness || venueConfirmed) &&
+    !saving
 
   function toggleTag(tag: string) {
     setSelectedTags((prev) =>
@@ -24,9 +46,31 @@ export default function ProposeEventModal({ onClose }: Props) {
     )
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!canSubmit) return
+    if (!canSubmit || !user) return
+    setError(null)
+    setSaving(true)
+
+    const { error: insertError } = await supabase.from('event_proposals').insert({
+      user_id: user.id,
+      title: title.trim(),
+      event_date: eventDate,
+      start_time: startTime,
+      end_time: endTime || null,
+      max_attendees: maxAttendees ? Number(maxAttendees) : null,
+      venue_type: venueType,
+      venue_confirmed: isBusiness ? venueConfirmed : false,
+      location: location.trim(),
+      description: description.trim(),
+      tags: selectedTags,
+    })
+
+    setSaving(false)
+    if (insertError) {
+      setError(insertError.message)
+      return
+    }
     setSubmitted(true)
   }
 
@@ -42,6 +86,23 @@ export default function ProposeEventModal({ onClose }: Props) {
               Thanks for proposing an event! Our team will review it and reach out to you shortly. Once approved, it'll appear on the community calendar.
             </p>
             <button onClick={onClose} className="btn-primary">Done</button>
+          </div>
+        ) : authLoading ? (
+          <div className="p-10 text-center text-plum/50 text-sm">Loading…</div>
+        ) : !user ? (
+          /* ── Signed-out gate ────────────────────────────────────── */
+          <div className="p-8 text-center">
+            <div className="text-4xl mb-3">🐾</div>
+            <h2 className="font-extrabold text-plum text-xl mb-2">Sign in to propose an event</h2>
+            <p className="text-plum/60 text-sm mb-6">
+              Proposals come from members so we can follow up with you about the details.
+              Create a free account or sign in to get started.
+            </p>
+            <div className="flex flex-col gap-3">
+              <Link href="/members/join" className="btn-primary w-full text-center">Join Free</Link>
+              <Link href="/members/login" className="btn-secondary w-full text-center">Sign In</Link>
+              <button onClick={onClose} className="text-sm text-plum/40 hover:text-plum mt-1">Maybe later</button>
+            </div>
           </div>
         ) : (
           <>
@@ -59,12 +120,21 @@ export default function ProposeEventModal({ onClose }: Props) {
 
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
 
+              {error && (
+                <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700 flex gap-3 items-start">
+                  <span className="text-lg flex-shrink-0">⚠️</span>
+                  <span>{error}</span>
+                </div>
+              )}
+
               {/* Event Name */}
               <div>
                 <label className="block text-sm font-bold text-plum mb-1">Event Name <span className="text-brand-orange">*</span></label>
                 <input
                   type="text"
                   required
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. Morning Walk at Demuth Park"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum placeholder:text-plum/30 focus:outline-none focus:border-brand-teal"
                 />
@@ -77,6 +147,8 @@ export default function ProposeEventModal({ onClose }: Props) {
                   <input
                     type="date"
                     required
+                    value={eventDate}
+                    onChange={(e) => setEventDate(e.target.value)}
                     className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum focus:outline-none focus:border-brand-teal"
                   />
                 </div>
@@ -85,6 +157,8 @@ export default function ProposeEventModal({ onClose }: Props) {
                   <input
                     type="time"
                     required
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
                     className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum focus:outline-none focus:border-brand-teal"
                   />
                 </div>
@@ -95,6 +169,8 @@ export default function ProposeEventModal({ onClose }: Props) {
                   <label className="block text-sm font-bold text-plum mb-1">End Time</label>
                   <input
                     type="time"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
                     className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum focus:outline-none focus:border-brand-teal"
                   />
                 </div>
@@ -103,6 +179,8 @@ export default function ProposeEventModal({ onClose }: Props) {
                   <input
                     type="number"
                     min="2"
+                    value={maxAttendees}
+                    onChange={(e) => setMaxAttendees(e.target.value)}
                     placeholder="No limit"
                     className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum placeholder:text-plum/30 focus:outline-none focus:border-brand-teal"
                   />
@@ -162,6 +240,8 @@ export default function ProposeEventModal({ onClose }: Props) {
                 <input
                   type="text"
                   required
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
                   placeholder="Full address or description"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum placeholder:text-plum/30 focus:outline-none focus:border-brand-teal"
                 />
@@ -174,6 +254,8 @@ export default function ProposeEventModal({ onClose }: Props) {
                 <textarea
                   required
                   rows={3}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                   placeholder="Tell people what to expect, what to bring, any rules or restrictions..."
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum placeholder:text-plum/30 focus:outline-none focus:border-brand-teal resize-none"
                 />
@@ -235,7 +317,7 @@ export default function ProposeEventModal({ onClose }: Props) {
                   disabled={!canSubmit}
                   className={`btn-primary flex-1 ${!canSubmit ? 'opacity-40 cursor-not-allowed' : ''}`}
                 >
-                  Submit for Review
+                  {saving ? 'Submitting…' : 'Submit for Review'}
                 </button>
                 <button type="button" onClick={onClose} className="btn-secondary px-5">
                   Cancel

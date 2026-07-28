@@ -14,6 +14,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
 
   // Already signed in? Skip the login form.
   useEffect(() => {
@@ -25,6 +26,7 @@ export default function LoginPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
+    setNotice(null)
 
     if (!email.trim()) { setError('Please enter your email address.'); return }
     if (!password) { setError('Please enter your password.'); return }
@@ -54,12 +56,18 @@ export default function LoginPage() {
       return
     }
     setLoading(true)
-    await supabase.auth.resetPasswordForEmail(email.trim(), {
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
       redirectTo: `${window.location.origin}/members/reset-password`,
     })
     setLoading(false)
+
+    if (resetError) {
+      setError(resetError.message)
+      return
+    }
+
     setError(null)
-    alert(`Password reset email sent to ${email}. Check your inbox.`)
+    setNotice(`Reset link sent to ${email.trim()}. Check your inbox — it expires shortly, so use it soon.`)
   }
 
   return (
@@ -91,6 +99,13 @@ export default function LoginPage() {
             </div>
           )}
 
+          {notice && (
+            <div className="mb-5 bg-brand-teal/10 border border-brand-teal/30 rounded-xl p-4 text-sm text-plum flex gap-3 items-start">
+              <span className="text-lg flex-shrink-0">📬</span>
+              <span>{notice}</span>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} noValidate className="space-y-5">
 
             {/* Email */}
@@ -103,7 +118,7 @@ export default function LoginPage() {
                 type="email"
                 autoComplete="email"
                 value={email}
-                onChange={e => { setEmail(e.target.value); setError(null) }}
+                onChange={e => { setEmail(e.target.value); setError(null); setNotice(null) }}
                 placeholder="you@example.com"
                 className="w-full rounded-xl border border-plum/20 px-4 py-3 text-sm text-plum placeholder-plum/30 focus:outline-none focus:ring-2 focus:ring-brand-teal/30 bg-white min-h-[44px]"
               />
