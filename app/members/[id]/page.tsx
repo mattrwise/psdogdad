@@ -72,36 +72,27 @@ export default function MemberProfilePage() {
   return (
     <div className="bg-brand-cream min-h-screen pb-16">
 
-      {/* Hero */}
-      <div className="bg-hero-gradient text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: 'radial-gradient(circle at 70% 50%, #F5B82A 0%, transparent 60%)' }} />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
-          <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6">
-            <div className="relative flex-shrink-0">
-              {profile.avatar_url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={profile.avatar_url} alt={profile.name ?? 'Member'}
-                  className="w-28 h-28 rounded-full object-cover border-4 border-white/30 shadow-xl" />
-              ) : (
-                <div className="w-28 h-28 rounded-full bg-brand-orange flex items-center justify-center text-4xl font-extrabold text-white border-4 border-white/30 shadow-xl">
-                  {profile.name ? initials(profile.name) : '?'}
-                </div>
-              )}
-            </div>
-            <div className="text-center sm:text-left pb-1">
-              <h1 className="text-3xl sm:text-4xl font-extrabold leading-tight">{profile.name || 'PS Dog Dad'}</h1>
-              <p className="text-white/70 mt-1">
-                {profile.city && <span>📍 {profile.city} · </span>}
-                Member since {memberSince}
-              </p>
-            </div>
+      {/* Header — cream like the rest of the site; the avatar carries the colour */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+        <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6">
+          <div className="relative flex-shrink-0">
+            {profile.avatar_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={profile.avatar_url} alt={profile.name ?? 'Member'}
+                className="w-28 h-28 rounded-full object-cover object-top border-4 border-white shadow-lg" />
+            ) : (
+              <div className="w-28 h-28 rounded-full bg-brand-orange flex items-center justify-center text-4xl font-extrabold text-white border-4 border-white shadow-lg">
+                {profile.name ? initials(profile.name) : '?'}
+              </div>
+            )}
           </div>
-        </div>
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 60" className="w-full h-10 fill-brand-cream">
-            <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" />
-          </svg>
+          <div className="text-center sm:text-left pb-1">
+            <h1 className="section-title leading-tight">{profile.name || 'PS Dog Dad'}</h1>
+            <p className="text-plum/60 mt-1">
+              {profile.city && <span>📍 {profile.city} · </span>}
+              Member since {memberSince}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -118,7 +109,7 @@ export default function MemberProfilePage() {
             <div key={i} className="bg-white rounded-3xl shadow-md overflow-hidden">
               {dog.photo_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={dog.photo_url} alt={dog.name} className="w-full h-52 object-cover" />
+                <img src={dog.photo_url} alt={dog.name} className="w-full h-64 object-cover object-top" />
               ) : (
                 <div className="w-full h-52 bg-gradient-to-br from-brand-teal to-brand-teal-light flex items-center justify-center text-8xl">
                   🐶

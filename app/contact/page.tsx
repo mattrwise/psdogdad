@@ -11,25 +11,16 @@ export default function ContactPage() {
   return (
     <div className="bg-brand-cream min-h-screen">
 
-      {/* Header */}
-      <div className="bg-hero-gradient text-white py-14 sm:py-20 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: 'radial-gradient(circle at 70% 50%, #F5B82A 0%, transparent 60%)' }} />
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
-          <div className="text-4xl mb-4">✉️</div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold mb-3">Get in Touch</h1>
-          <p className="text-white/80 max-w-lg mx-auto leading-relaxed">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        {/* Header — matches the main nav pages */}
+        <div className="mb-10">
+          <h1 className="section-title">Get in Touch</h1>
+          <p className="text-plum/60 mt-2 max-w-2xl">
             We&apos;re a small community run by real people. We read every email and try to reply within a day or two.
           </p>
         </div>
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 60" className="w-full h-10 fill-brand-cream">
-            <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" />
-          </svg>
-        </div>
-      </div>
 
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
 

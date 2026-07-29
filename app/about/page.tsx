@@ -10,25 +10,15 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div>
-      {/* Hero */}
-      <div className="bg-hero-gradient text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: 'radial-gradient(circle at 70% 50%, #F5B82A 0%, transparent 60%)' }} />
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 relative text-center">
-          <div className="text-5xl mb-5">🌴🐾</div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">About PS Dog Dad</h1>
-          <p className="text-white/80 text-lg sm:text-xl max-w-xl mx-auto leading-relaxed">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+
+        {/* Header — matches the main nav pages */}
+        <div>
+          <h1 className="section-title">About PS Dog Dad</h1>
+          <p className="text-plum/60 mt-2 max-w-2xl">
             A community for men across the Coachella Valley who love their dogs — and love connecting with others who do too.
           </p>
         </div>
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 60" className="w-full h-10 fill-brand-cream">
-            <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" />
-          </svg>
-        </div>
-      </div>
-
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-12">
 
         {/* Origin */}
         <section className="bg-white rounded-3xl shadow-md p-6 sm:p-10">

@@ -153,20 +153,20 @@ export default function MembersPage() {
                 <div className="h-36 flex overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={member.avatarUrl} alt={member.name}
-                    className="w-1/2 h-full object-cover border-r-2 border-white" />
+                    className="w-1/2 h-full object-cover object-top border-r-2 border-white" />
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={member.dogPhotoUrl} alt={member.dogs[0]?.name}
-                    className="w-1/2 h-full object-cover" />
+                    className="w-1/2 h-full object-cover object-top" />
                 </div>
               ) : member.avatarUrl ? (
                 <div className="h-36 relative overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={member.avatarUrl} alt={member.name} className="w-full h-full object-cover" />
+                  <img src={member.avatarUrl} alt={member.name} className="w-full h-full object-cover object-top" />
                 </div>
               ) : member.dogPhotoUrl ? (
                 <div className="h-36 relative overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={member.dogPhotoUrl} alt={member.dogs[0]?.name} className="w-full h-full object-cover" />
+                  <img src={member.dogPhotoUrl} alt={member.dogs[0]?.name} className="w-full h-full object-cover object-top" />
                 </div>
               ) : (
                 <div className={`bg-gradient-to-br ${member.color} h-36 flex items-center justify-center text-6xl`}>
@@ -184,7 +184,7 @@ export default function MembersPage() {
                       {dog.photo_url ? (
                         /* eslint-disable-next-line @next/next/no-img-element */
                         <img src={dog.photo_url} alt={dog.name}
-                          className="w-8 h-8 rounded-full object-cover flex-shrink-0 border-2 border-white shadow-sm" />
+                          className="w-8 h-8 rounded-full object-cover object-top flex-shrink-0 border-2 border-white shadow-sm" />
                       ) : (
                         <span className="text-2xl">🐶</span>
                       )}

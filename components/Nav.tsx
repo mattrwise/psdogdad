@@ -24,7 +24,7 @@ function Avatar({ user }: { user: User }) {
   if (avatarUrl) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={avatarUrl} alt={name ?? 'Profile'} className="w-8 h-8 rounded-full object-cover border-2 border-plum/15" />
+      <img src={avatarUrl} alt={name ?? 'Profile'} className="w-8 h-8 rounded-full object-cover object-top border-2 border-plum/15" />
     )
   }
   return (

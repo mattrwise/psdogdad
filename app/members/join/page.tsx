@@ -68,7 +68,7 @@ function PhotoUpload({ id, label, hint, preview, onFileSelected, onClear, error 
         // ── Preview ──
         <div className="relative rounded-2xl overflow-hidden border-2 border-brand-teal/40 bg-plum/5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={preview} alt="Preview" className="w-full h-44 object-cover" />
+          <img src={preview} alt="Preview" className="w-full h-52 object-cover object-top" />
           <button
             type="button"
             onClick={onClear}
@@ -358,7 +358,7 @@ export default function JoinPage() {
           {memberPreview ? (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img src={memberPreview} alt="Your photo"
-              className="w-24 h-24 rounded-full object-cover mx-auto mb-5 border-4 border-brand-teal shadow-lg" />
+              className="w-24 h-24 rounded-full object-cover object-top mx-auto mb-5 border-4 border-brand-teal shadow-lg" />
           ) : (
             <div className="w-20 h-20 bg-brand-teal/10 rounded-full flex items-center justify-center text-5xl mx-auto mb-6">🐾</div>
           )}
