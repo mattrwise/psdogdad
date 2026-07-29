@@ -105,11 +105,14 @@ export default function ResetPasswordPage() {
           {status === 'done' && (
             <div className="text-center py-4">
               <div className="text-5xl mb-4">🎉</div>
+              {/* The recovery link leaves the member signed in, so there is no
+                  second sign-in step — send them somewhere useful instead. */}
               <p className="text-sm text-plum/70 mb-6">
-                You&rsquo;re all set. You can sign in with your new password now.
+                You&rsquo;re all set, and already signed in — no need to log in again.
+                Use your new password next time.
               </p>
-              <button onClick={() => router.push('/members/login')} className="btn-primary px-6 py-3 text-sm">
-                Sign In 🐾
+              <button onClick={() => router.push('/members/profile')} className="btn-primary px-6 py-3 text-sm">
+                Go to My Profile 🐾
               </button>
             </div>
           )}

@@ -234,11 +234,13 @@ export default function ProfilePage() {
     const { name, value } = e.target
     setForm(prev => ({ ...prev, [name]: value }))
     if (errors[name as keyof FormData]) setErrors(prev => ({ ...prev, [name]: undefined }))
+    setSaveMsg(null)
   }
 
   function updateDog(i: number, field: keyof Dog, value: string) {
     setDogs(prev => prev.map((d, j) => (j === i ? { ...d, [field]: value } : d)))
     setDogErrors(prev => prev.map((e, j) => (j === i ? { ...e, [field]: undefined } : e)))
+    setSaveMsg(null)
   }
 
   function addDog() {
@@ -266,6 +268,28 @@ export default function ProfilePage() {
     if (Object.keys(validation).length > 0 || dogValidation.some(err => err.name || err.breed)) {
       setErrors(validation)
       setDogErrors(dogValidation)
+
+      // Without this, Save looks like a dead button: the field is marked red but
+      // it may be well off-screen, so nothing appears to happen at all. Say what
+      // is wrong and take the member to it.
+      const badDog = dogValidation.findIndex(err => err.name || err.breed)
+      const firstProblem =
+        validation.name ? { id: 'name', msg: validation.name }
+        : validation.city ? { id: 'city', msg: validation.city }
+        : badDog !== -1
+          ? dogValidation[badDog].name
+            ? { id: `dogName-${badDog}`, msg: dogValidation[badDog].name! }
+            : { id: `dogBreed-${badDog}`, msg: dogValidation[badDog].breed! }
+          : null
+
+      if (firstProblem) {
+        setSaveMsg(`❌ ${firstProblem.msg}`)
+        requestAnimationFrame(() => {
+          const el = document.getElementById(firstProblem.id)
+          el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          ;(el as HTMLElement | null)?.focus({ preventScroll: true })
+        })
+      }
       return
     }
 
