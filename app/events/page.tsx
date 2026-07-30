@@ -268,13 +268,22 @@ export default function EventsPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2 flex-wrap">
                       <h3 className="font-extrabold text-plum text-lg leading-snug">{event.title}</h3>
-                      <div className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold flex-shrink-0 transition-colors ${
-                        rsvp.mine
-                          ? 'bg-brand-teal text-white'
-                          : 'bg-brand-teal/10 border border-brand-teal/20 text-brand-teal'
-                      }`}>
-                        <span>✓</span> {rsvp.count} going
-                      </div>
+                      {/* Attendance is members-only, so a signed-out visitor's
+                          browser genuinely cannot read it. Showing the badge
+                          anyway would render a confident, wrong "0 going". */}
+                      {user ? (
+                        <div className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold flex-shrink-0 transition-colors ${
+                          rsvp.mine
+                            ? 'bg-brand-teal text-white'
+                            : 'bg-brand-teal/10 border border-brand-teal/20 text-brand-teal'
+                        }`}>
+                          <span>✓</span> {rsvp.count} going
+                        </div>
+                      ) : (
+                        <div className="rounded-full px-3 py-1 text-xs font-bold flex-shrink-0 bg-plum/5 text-plum/40 border border-plum/10">
+                          Members see who&rsquo;s going
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-plum/60 mt-1">
