@@ -28,7 +28,7 @@ export default function HomePage() {
         <Link href="/members/join" className="underline font-bold hover:text-brand-orange">
           feel free to sign up
         </Link>
-        . The full site launches August 1st, 2026. 🐾
+        . The full site launches August 15th, 2026. 🐾
       </div>
 
       {/* Hero */}
