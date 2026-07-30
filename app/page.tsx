@@ -3,6 +3,7 @@ import Image from 'next/image'
 import HeatAlertBanner from '@/components/HeatAlertBanner'
 import SignedIn from '@/components/auth/SignedIn'
 import SignedOut from '@/components/auth/SignedOut'
+import ShelterEventCallout from '@/components/ShelterEventCallout'
 import UpcomingEventsPreview from '@/components/home/UpcomingEventsPreview'
 import LatestDiscussionsPreview from '@/components/home/LatestDiscussionsPreview'
 // Imported (not linked by URL) so Next.js serves it from /_next/static/… —
@@ -97,6 +98,15 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Launch weekend — the shelter's adoption drive. Sits high on the page
+          because it is time-sensitive, and against cream rather than the plum
+          Training band so two dark blocks don't stack. */}
+      <section className="bg-brand-cream pb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ShelterEventCallout />
         </div>
       </section>
 
