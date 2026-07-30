@@ -15,6 +15,7 @@ type RealEvent = {
   event_time: string
   location: string
   description: string
+  host: string | null
 }
 
 const realEventColors = [
@@ -61,6 +62,7 @@ function AdminEventForm({ onCreated }: { onCreated: (event: RealEvent) => void }
   const [eventTime, setEventTime] = useState('')
   const [location, setLocation] = useState('')
   const [description, setDescription] = useState('')
+  const [host, setHost] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -81,9 +83,10 @@ function AdminEventForm({ onCreated }: { onCreated: (event: RealEvent) => void }
         event_time: eventTime.trim(),
         location: location.trim(),
         description: description.trim(),
+        host: host.trim() || null,
         created_by: user.id,
       })
-      .select('id, title, event_date, event_time, location, description')
+      .select('id, title, event_date, event_time, location, description, host')
       .single()
 
     setSaving(false)
@@ -91,7 +94,7 @@ function AdminEventForm({ onCreated }: { onCreated: (event: RealEvent) => void }
       setError(insertError.message)
       return
     }
-    setTitle(''); setEventDate(''); setEventTime(''); setLocation(''); setDescription('')
+    setTitle(''); setEventDate(''); setEventTime(''); setLocation(''); setDescription(''); setHost('')
     setOpen(false)
     onCreated(data as RealEvent)
   }
@@ -137,6 +140,11 @@ function AdminEventForm({ onCreated }: { onCreated: (event: RealEvent) => void }
             <input id="evLocation" type="text" required value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. Ruth Hardy Park, Palm Springs" className={inputClass} />
           </div>
           <div>
+            <label htmlFor="evHost" className="block text-sm font-bold text-plum mb-1">Hosted by</label>
+            <input id="evHost" type="text" value={host} onChange={e => setHost(e.target.value)} placeholder="Leave blank for PS Dog Dad's own events" className={inputClass} />
+            <p className="text-xs text-plum/40 mt-1">Name whoever is actually running it — a shelter, a business, a member. Blank shows no host at all.</p>
+          </div>
+          <div>
             <label htmlFor="evDescription" className="block text-sm font-bold text-plum mb-1">Description <span className="text-brand-orange">*</span></label>
             <textarea id="evDescription" required rows={4} value={description} onChange={e => setDescription(e.target.value)} placeholder="What should members know? Leash rules, what to bring, parking…" className={`${inputClass} resize-none`} />
           </div>
@@ -169,7 +177,7 @@ export default function EventsPage() {
     const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
     const { data, error } = await supabase
       .from('events')
-      .select('id, title, event_date, event_time, location, description')
+      .select('id, title, event_date, event_time, location, description, host')
       .gte('event_date', todayIso)
       .order('event_date', { ascending: true })
     if (error) {
@@ -288,8 +296,9 @@ export default function EventsPage() {
                         {rsvp.mine ? '✓ Going!' : 'RSVP'}
                       </button>
                       <div className="text-xs text-plum/40 sm:ml-auto">
-                        Hosted by <span className="font-semibold">PS Dog Dad</span>
-                        &nbsp;·&nbsp;
+                        {event.host && (
+                          <>Hosted by <span className="font-semibold">{event.host}</span>&nbsp;·&nbsp;</>
+                        )}
                         <a href="/conduct" className="text-brand-teal hover:underline">Community Guidelines</a>
                       </div>
                     </div>
