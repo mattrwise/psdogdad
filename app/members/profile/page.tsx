@@ -27,16 +27,21 @@ interface PhotoUploadProps {
 function PhotoUpload({ id, label, hint, preview, onFileSelected, onClear }: PhotoUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [dragOver, setDragOver] = useState(false)
+  const [fileError, setFileError] = useState<string | null>(null)
 
   function processFile(file: File) {
+    // Inline rather than alert() — a native popup is easy to dismiss without
+    // reading, which made a rejected photo look like nothing had happened.
     if (!ACCEPTED_TYPES.includes(file.type)) {
-      alert('Please upload a JPG, PNG, WebP, or HEIC image.')
+      setFileError('That file type isn’t supported. Please use a JPG, PNG, WebP or HEIC image.')
       return
     }
     if (file.size > MAX_FILE_SIZE) {
-      alert('Photo must be under 8 MB.')
+      const mb = (file.size / 1024 / 1024).toFixed(1)
+      setFileError(`That photo is ${mb} MB — please use one under 8 MB.`)
       return
     }
+    setFileError(null)
     onFileSelected(file)
   }
 
@@ -92,6 +97,13 @@ function PhotoUpload({ id, label, hint, preview, onFileSelected, onClear }: Phot
             Choose Photo
           </span>
         </div>
+      )}
+
+      {fileError && (
+        <p className="mt-1.5 text-xs text-red-600 flex gap-1.5 items-start">
+          <span aria-hidden="true">⚠️</span>
+          <span>{fileError}</span>
+        </p>
       )}
 
       <input
@@ -183,9 +195,20 @@ export default function ProfilePage() {
     setMemberFile(file); setMemberPreview(URL.createObjectURL(file))
   }
 
+  /** Drops a *pending* selection only — used after a save, and by Cancel. */
   function clearMemberPhoto() {
     if (memberPreview) URL.revokeObjectURL(memberPreview)
     setMemberFile(null); setMemberPreview(null)
+  }
+
+  /**
+   * What the member's "Remove" button does: forget the pending file AND the
+   * already-saved photo, so the tile empties and Save persists the removal.
+   */
+  function removeMemberPhoto() {
+    clearMemberPhoto()
+    setAvatarUrl(null)
+    setSaveMsg(null)
   }
 
   function setDogPhoto(i: number, file: File) {
@@ -205,6 +228,10 @@ export default function ProfilePage() {
       if (p) URL.revokeObjectURL(p)
       return null
     }))
+    // Also forget the saved photo, otherwise the tile keeps showing it and Save
+    // just writes the old URL straight back.
+    setDogs(prev => prev.map((d, j) => (j === i ? { ...d, photo_url: null } : d)))
+    setSaveMsg(null)
   }
 
   function cancelEdit() {
@@ -324,8 +351,10 @@ export default function ProfilePage() {
         dogs:          cleanDogs,
         dog_name:      cleanDogs[0].name,
         dog_breed:     cleanDogs[0].breed,
-        ...(cleanDogs[0].photo_url && { dog_photo_url: cleanDogs[0].photo_url }),
-        ...(newAvatarUrl && { avatar_url: newAvatarUrl }),
+        // Sent unconditionally, including as null — writing these only when
+        // truthy meant a removal was silently dropped and could never persist.
+        dog_photo_url: cleanDogs[0].photo_url,
+        avatar_url:    newAvatarUrl,
       },
     })
 
@@ -435,7 +464,7 @@ export default function ProfilePage() {
                     hint={avatarUrl ? 'Upload a new photo to replace current' : 'Upload a photo of yourself'}
                     preview={memberPreview ?? avatarUrl}
                     onFileSelected={setMemberPhoto}
-                    onClear={clearMemberPhoto}
+                    onClear={removeMemberPhoto}
                   />
                 </div>
               </fieldset>
