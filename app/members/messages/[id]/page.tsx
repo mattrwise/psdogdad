@@ -135,8 +135,11 @@ export default function ConversationPage() {
     setMessages(prev => [...prev, result.message])
     setBody('')
     clearPhoto()
-    if (result.message.photo_path) {
-      setPhotoUrls(prev => ({ ...prev, ...(await Promise.resolve(signPhotoUrls([result.message.photo_path!]))) }))
+
+    const newPath = result.message.photo_path
+    if (newPath) {
+      const signed = await signPhotoUrls([newPath])
+      setPhotoUrls(prev => ({ ...prev, ...signed }))
     }
   }
 

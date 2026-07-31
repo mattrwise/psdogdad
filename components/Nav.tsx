@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
+import { unreadCount } from '@/lib/messages'
 
 const links = [
   { href: '/', label: 'Home' },
@@ -38,6 +39,7 @@ export default function Nav() {
   const pathname = usePathname()
   const router = useRouter()
   const [open, setOpen] = useState(false)
+  const [unread, setUnread] = useState(0)
   const [user, setUser] = useState<User | null>(null)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -61,6 +63,18 @@ export default function Nav() {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
+
+  // Unread count for the Messages badge. Re-checked on navigation so it clears
+  // as soon as you've read a thread, and polled so a message arriving while
+  // you're sitting on a page still shows up.
+  useEffect(() => {
+    if (!user) { setUnread(0); return }
+    let cancelled = false
+    const check = () => { unreadCount().then(n => { if (!cancelled) setUnread(n) }) }
+    check()
+    const t = setInterval(check, 30000)
+    return () => { cancelled = true; clearInterval(t) }
+  }, [user, pathname])
 
   async function handleSignOut() {
     await supabase.auth.signOut()
@@ -103,6 +117,20 @@ export default function Nav() {
                 {label}
               </Link>
             ))}
+
+            {user && (
+              <Link
+                href="/members/messages"
+                className="relative ml-1 px-3 py-2 text-sm font-semibold text-plum/70 hover:text-plum transition-colors"
+              >
+                Messages
+                {unread > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-orange text-white text-[11px] font-bold flex items-center justify-center">
+                    {unread > 9 ? '9+' : unread}
+                  </span>
+                )}
+              </Link>
+            )}
 
             {user ? (
               <div className="relative ml-3" ref={dropdownRef}>
@@ -185,6 +213,18 @@ export default function Nav() {
                 <Avatar user={user} />
                 <span className="text-sm font-semibold text-plum">{firstName ?? user.email}</span>
               </div>
+              <Link
+                href="/members/messages"
+                onClick={() => setOpen(false)}
+                className="px-4 py-3 rounded-xl text-sm font-semibold text-plum/70 hover:bg-plum/5 hover:text-plum transition-colors flex items-center gap-2"
+              >
+                💬 Messages
+                {unread > 0 && (
+                  <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-brand-orange text-white text-[11px] font-bold flex items-center justify-center">
+                    {unread > 9 ? '9+' : unread}
+                  </span>
+                )}
+              </Link>
               <Link
                 href="/members/profile"
                 onClick={() => setOpen(false)}
