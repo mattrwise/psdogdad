@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
+import { useUser } from '@/lib/useUser'
 
 type ProfileRow = {
   id: string
@@ -23,6 +24,7 @@ function initials(name: string) {
 
 export default function MemberProfilePage() {
   const { id } = useParams<{ id: string }>()
+  const { user: viewer } = useUser()
   // undefined = still loading, null = no such (confirmed) member
   const [profile, setProfile] = useState<ProfileRow | null | undefined>(undefined)
 
@@ -98,10 +100,17 @@ export default function MemberProfilePage() {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <div className="mb-6">
+        <div className="flex items-center justify-between gap-4 mb-6">
           <Link href="/members" className="text-sm font-semibold text-brand-orange hover:underline">
             ← Back to Member Directory
           </Link>
+          {/* Hidden on your own profile — messaging yourself isn't a thing, and
+              the database rejects it anyway. */}
+          {viewer && viewer.id !== profile.id && (
+            <Link href={`/members/messages/${profile.id}`} className="btn-primary text-sm px-5 py-2.5">
+              💬 Message
+            </Link>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
