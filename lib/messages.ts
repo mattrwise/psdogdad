@@ -80,7 +80,29 @@ export async function sendMessage(
     }
     return { ok: false, error: 'That message could not be sent. Please try again.' }
   }
-  return { ok: true, message: data as Message }
+
+  const sent = data as Message
+  // Fire and forget. The message is already saved, so a failed or slow email
+  // must never make the send look like it failed.
+  notifyByEmail(sent.id)
+  return { ok: true, message: sent }
+}
+
+async function notifyByEmail(messageId: string): Promise<void> {
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) return
+    await fetch('/api/notify-message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ messageId }),
+    })
+  } catch (e) {
+    console.error('Could not trigger the notification email:', e)
+  }
 }
 
 /**

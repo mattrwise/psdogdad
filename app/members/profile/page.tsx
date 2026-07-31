@@ -146,6 +146,12 @@ export default function ProfilePage() {
   const [dogs, setDogs] = useState<Dog[]>([{ ...EMPTY_DOG }])
   const [dogErrors, setDogErrors] = useState<DogErrors[]>([])
 
+  // Kept in auth metadata rather than the profiles table: members have no write
+  // access to profiles, and profiles is readable by everyone, which is the wrong
+  // home for a personal preference.
+  const [notifyOnMessage, setNotifyOnMessage] = useState(true)
+  const [savingNotify, setSavingNotify] = useState(false)
+
   // photos, saved URLs live in metadata (avatar_url + each dog's photo_url);
   // pending new files/previews are kept here until Save uploads them.
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
@@ -189,6 +195,25 @@ export default function ProfilePage() {
     setDogFiles(hydratedDogs.map(() => null))
     setDogPreviews(prev => { prev.forEach(p => p && URL.revokeObjectURL(p)); return hydratedDogs.map(() => null) })
     setAvatarUrl(m.avatar_url ?? null)
+    // Defaults to on, so a member who has never touched it still hears about
+    // messages while the site is quiet.
+    setNotifyOnMessage(m.notify_on_message !== false)
+  }
+
+  /**
+   * Saved on its own, immediately. A preference buried behind the Edit/Save
+   * cycle is one people flip and assume took effect.
+   */
+  async function saveNotifyPreference(next: boolean) {
+    setNotifyOnMessage(next)
+    setSavingNotify(true)
+    const { error } = await supabase.auth.updateUser({ data: { notify_on_message: next } })
+    setSavingNotify(false)
+    if (error) {
+      console.error('Could not save notification preference:', error.message)
+      setNotifyOnMessage(!next)
+      setSaveMsg('❌ That setting could not be saved. Please try again.')
+    }
   }
 
   function setMemberPhoto(file: File) {
@@ -596,10 +621,32 @@ export default function ProfilePage() {
               ))}
             </div>
 
+            {/* Notification preference */}
+            <div className="bg-white rounded-2xl shadow-sm p-5 mb-6">
+              <h3 className="font-extrabold text-plum mb-1">Notifications</h3>
+              <p className="text-sm text-plum/50 mb-4">
+                Messages from other members are private. This only controls whether we let you know.
+              </p>
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={notifyOnMessage}
+                  onChange={e => saveNotifyPreference(e.target.checked)}
+                  disabled={savingNotify}
+                  className="mt-0.5 w-5 h-5 accent-brand-teal cursor-pointer disabled:opacity-50"
+                />
+                <span className="text-sm text-plum">
+                  Email me when someone sends me a message
+                  {savingNotify && <span className="text-plum/40"> (saving...)</span>}
+                </span>
+              </label>
+            </div>
+
             {/* Quick links */}
             <div className="bg-white rounded-2xl shadow-sm p-5">
               <h3 className="font-extrabold text-plum mb-4">Quick Links</h3>
               <div className="flex flex-wrap gap-3">
+                <Link href="/members/messages" className="btn-secondary text-sm px-5 py-2.5">💬 Messages</Link>
                 <Link href="/forums" className="btn-secondary text-sm px-5 py-2.5">💬 Forums</Link>
                 <Link href="/events" className="btn-secondary text-sm px-5 py-2.5">📅 Events</Link>
                 <Link href="/members" className="btn-secondary text-sm px-5 py-2.5">👥 Members</Link>
