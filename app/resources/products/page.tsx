@@ -92,9 +92,9 @@ export default function ProductsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-6">
-        <h1 className="section-title">Community-Tested Products</h1>
+        <h1 className="section-title">Dog Gear Basics</h1>
         <p className="text-plum/60 mt-2 max-w-2xl">
-          The gear categories our members reach for every day, and what to look for before you buy.
+          The gear worth owning, and what to look for before you buy.
         </p>
       </div>
 

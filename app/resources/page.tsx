@@ -228,7 +228,7 @@ export default function ResourcesPage() {
         <div>
           <h1 className="section-title">Local Resources</h1>
           <p className="text-plum/60 mt-2">
-            Community-curated guide to the best pet services, parks, and dog-friendly spots in the Coachella Valley.
+            Pet services, parks, and dog-friendly spots around the Coachella Valley.
           </p>
         </div>
         <SuggestResourceButton className="btn-secondary self-start">
@@ -255,7 +255,7 @@ export default function ResourcesPage() {
           { href: '/resources/health-wellness', icon: '🩺', title: 'Health & Wellness', text: 'Keeping your best friend healthy, plus a filterable valley-wide vet finder.', color: 'border-brand-teal' },
           { href: '/resources/training', icon: '🎓', title: 'Training Techniques', text: 'Professional methods, common mistakes, and pro tips from the pack.', color: 'border-brand-orange' },
           { href: '/resources/handbook', icon: '📖', title: 'Dog Dad Handbook', text: 'The complete 5-chapter guide, from bringing them home to senior years.', color: 'border-plum' },
-          { href: '/resources/products', icon: '🛒', title: 'Product Guide', text: 'Community-tested gear categories and smart shopping tips.', color: 'border-brand-golden' },
+          { href: '/resources/products', icon: '🛒', title: 'Product Guide', text: 'The gear worth owning, and smart shopping tips.', color: 'border-brand-golden' },
         ].map(guide => (
           <Link key={guide.href} href={guide.href} className={`card p-5 border-t-4 ${guide.color} hover:-translate-y-0.5 block`}>
             <div className="text-3xl mb-2">{guide.icon}</div>
@@ -268,7 +268,7 @@ export default function ResourcesPage() {
 
       {/* Quick disclaimer */}
       <div className="bg-brand-golden/10 border border-brand-golden/30 rounded-xl p-4 mb-10 text-sm text-plum/70">
-        <strong className="text-plum">Community-curated:</strong> These recommendations come from PS Dog Dad members. Always call ahead to confirm hours, pricing, and pet policies, things change!
+        <strong className="text-plum">Worth checking:</strong> Always call ahead to confirm hours, pricing, and pet policies. Things change, and we can&rsquo;t promise this list is current.
       </div>
 
       {/* Resource sections */}
