@@ -107,7 +107,7 @@ function AdminEventForm({ onCreated }: { onCreated: (event: RealEvent) => void }
       <div className="flex items-center justify-between gap-3">
         <div>
           <h2 className="font-extrabold text-plum text-base">🗓️ Create an Event</h2>
-          <p className="text-xs text-plum/50 mt-0.5">Only you can see this — admin tools</p>
+          <p className="text-xs text-plum/50 mt-0.5">Admin tools. Only you can see this</p>
         </div>
         <button onClick={() => setOpen(o => !o)} className="btn-secondary text-sm px-4 py-2">
           {open ? 'Close' : '+ New Event'}
@@ -132,7 +132,7 @@ function AdminEventForm({ onCreated }: { onCreated: (event: RealEvent) => void }
             </div>
             <div>
               <label htmlFor="evTime" className="block text-sm font-bold text-plum mb-1">Time <span className="text-brand-orange">*</span></label>
-              <input id="evTime" type="text" required value={eventTime} onChange={e => setEventTime(e.target.value)} placeholder="e.g. 5:00 PM – 8:00 PM" className={inputClass} />
+              <input id="evTime" type="text" required value={eventTime} onChange={e => setEventTime(e.target.value)} placeholder="e.g. 5:00 PM, 8:00 PM" className={inputClass} />
             </div>
           </div>
           <div>
@@ -142,7 +142,7 @@ function AdminEventForm({ onCreated }: { onCreated: (event: RealEvent) => void }
           <div>
             <label htmlFor="evHost" className="block text-sm font-bold text-plum mb-1">Hosted by</label>
             <input id="evHost" type="text" value={host} onChange={e => setHost(e.target.value)} placeholder="Leave blank for PS Dog Dad's own events" className={inputClass} />
-            <p className="text-xs text-plum/40 mt-1">Name whoever is actually running it — a shelter, a business, a member. Blank shows no host at all.</p>
+            <p className="text-xs text-plum/40 mt-1">Name whoever is actually running it: a shelter, a business, a member. Blank shows no host at all.</p>
           </div>
           <div>
             <label htmlFor="evDescription" className="block text-sm font-bold text-plum mb-1">Description <span className="text-brand-orange">*</span></label>
@@ -165,7 +165,7 @@ export default function EventsPage() {
   const { user } = useUser()
   const [proposeOpen, setProposeOpen] = useState(false)
 
-  // Events come from Supabase — there are no placeholder listings.
+  // Events come from Supabase, there are no placeholder listings.
   const [realEvents, setRealEvents] = useState<RealEvent[]>([])
   const [loadingReal, setLoadingReal] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
@@ -334,7 +334,7 @@ export default function EventsPage() {
               <h3 className="font-extrabold text-plum text-xl mb-2">This calendar is yours to build</h3>
               <p className="text-plum/60 text-sm max-w-md mx-auto mb-6 leading-relaxed">
                 PS Dog Dad is brand new. Every walk, yappy hour, and pool party that ends up here
-                will be one a member started — so the first ones are up for grabs. Got a favourite
+                will be one a member started, so the first ones are up for grabs. Got a favourite
                 trail, patio, or park? Put it on the map.
               </p>
               <button onClick={() => setProposeOpen(true)} className="btn-primary">

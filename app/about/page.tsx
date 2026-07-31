@@ -3,8 +3,8 @@ import type { Metadata } from 'next'
 import SignedOut from '@/components/auth/SignedOut'
 
 export const metadata: Metadata = {
-  title: 'About Us — PS Dog Dad',
-  description: 'Learn about the Coachella Valley Dog Dad community — who we are, what we do, and how to get involved.',
+  title: 'About Us, PS Dog Dad',
+  description: 'Learn about the Coachella Valley Dog Dad community, who we are, what we do, and how to get involved.',
 }
 
 export default function AboutPage() {
@@ -12,11 +12,11 @@ export default function AboutPage() {
     <div>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
 
-        {/* Header — matches the main nav pages */}
+        {/* Header, matches the main nav pages */}
         <div>
           <h1 className="section-title">About PS Dog Dad</h1>
           <p className="text-plum/60 mt-2 max-w-2xl">
-            A community for men across the Coachella Valley who love their dogs — and love connecting with others who do too.
+            A community for men across the Coachella Valley who love their dogs, and love connecting with others who do too.
           </p>
         </div>
 
@@ -31,7 +31,7 @@ export default function AboutPage() {
           </p>
           <p className="text-plum/70 leading-relaxed">
             We launched with a handful of members and a lot of enthusiasm. Now we have hundreds of members across
-            Palm Springs, Cathedral City, Rancho Mirage, and the wider Coachella Valley — all connected by their love
+            Palm Springs, Cathedral City, Rancho Mirage, and the wider Coachella Valley, all connected by their love
             of dogs and this unique desert community.
           </p>
         </section>
@@ -63,7 +63,7 @@ export default function AboutPage() {
               { icon: '🤝', title: 'Welcoming', text: 'This is a judgment-free space. All dogs welcome. All experience levels welcome. Whether you\'ve had dogs your whole life or just got your first pup, you belong here.' },
               { icon: '🌴', title: 'Local First', text: 'We\'re rooted in the Coachella Valley. Our recommendations, events, and conversations are grounded in what\'s actually happening across the desert communities.' },
               { icon: '🐾', title: 'Dog-Centered', text: 'The dogs come first. We share knowledge, resources, and experiences that make us better, more informed, and more loving pet owners.' },
-              { icon: '🫶', title: 'Respectful', text: 'We treat each other — and each other\'s dogs — with kindness. See our Code of Conduct for the full details.' },
+              { icon: '🫶', title: 'Respectful', text: 'We treat each other, and each other\'s dogs, with kindness. See our Code of Conduct for the full details.' },
             ].map(({ icon, title, text }) => (
               <li key={title} className="flex gap-4 items-start">
                 <span className="text-2xl flex-shrink-0">{icon}</span>

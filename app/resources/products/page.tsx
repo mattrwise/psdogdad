@@ -1,9 +1,9 @@
 const shoppingTips = [
   { icon: '📏', title: 'Measure first', text: 'Harnesses, crates, and beds are sized by girth and length, not "small/medium/large" vibes. Two minutes with a tape measure saves two returns.' },
   { icon: '⭐', title: 'Read the 3-star reviews', text: 'Five-star reviews are love letters, one-star are rage. The 3-star reviews tell you the honest trade-offs.' },
-  { icon: '🧪', title: 'Buy one before buying five', text: 'Test a single bag, toy, or bed before stocking up — your dog gets the final vote, and dogs love vetoing.' },
+  { icon: '🧪', title: 'Buy one before buying five', text: 'Test a single bag, toy, or bed before stocking up, your dog gets the final vote, and dogs love vetoing.' },
   { icon: '🏷️', title: 'Ingredients over marketing', text: 'For food and treats, flip the bag over. A named meat first and short ingredient list beats any wolf on the front.' },
-  { icon: '🔄', title: 'Check return policies', text: 'Many pet retailers take back opened food and unused gear. Know the policy before you buy — especially for pricey items.' },
+  { icon: '🔄', title: 'Check return policies', text: 'Many pet retailers take back opened food and unused gear. Know the policy before you buy, especially for pricey items.' },
   { icon: '💬', title: 'Ask the pack first', text: 'Before any big purchase, search our forums or ask at a meetup. Somebody here has already tried it in desert conditions.' },
 ]
 
@@ -14,9 +14,9 @@ const categories = [
     color: 'border-brand-teal',
     titleColor: 'text-brand-teal',
     products: [
-      { name: 'Premium Dry Dog Food', price: '$45–$90 / large bag', note: 'Look for AAFCO complete-and-balanced, a named protein first, and a formula matched to your dog’s age and size.' },
-      { name: 'Training Treats', price: '$5–$15 / bag', note: 'Pea-sized, soft, and smelly wins training sessions. Keep them under 10% of daily calories.' },
-      { name: 'Dental Chews', price: '$15–$35 / month', note: 'Choose VOHC-accepted chews sized for your dog. Daily chewing genuinely slows tartar buildup.' },
+      { name: 'Premium Dry Dog Food', price: '$45 to $90 / large bag', note: 'Look for AAFCO complete-and-balanced, a named protein first, and a formula matched to your dog’s age and size.' },
+      { name: 'Training Treats', price: '$5 to $15 / bag', note: 'Pea-sized, soft, and smelly wins training sessions. Keep them under 10% of daily calories.' },
+      { name: 'Dental Chews', price: '$15 to $35 / month', note: 'Choose VOHC-accepted chews sized for your dog. Daily chewing genuinely slows tartar buildup.' },
     ],
   },
   {
@@ -25,9 +25,9 @@ const categories = [
     color: 'border-brand-orange',
     titleColor: 'text-brand-orange',
     products: [
-      { name: 'No-Pull Harness', price: '$25–$50', note: 'A front-clip harness redirects pulling without pressure on the throat. Fit it snug — two fingers under every strap.' },
-      { name: 'Durable Leash', price: '$15–$40', note: 'A 6-foot flat leash with traffic handle covers 95% of life. Skip retractables near roads — you have no control when it matters.' },
-      { name: 'Travel Water Bottle', price: '$12–$25', note: 'Non-negotiable in the desert. The flip-bowl style lets your dog drink anywhere — carry it on every walk May through October.' },
+      { name: 'No-Pull Harness', price: '$25 to $50', note: 'A front-clip harness redirects pulling without pressure on the throat. Fit it snug, two fingers under every strap.' },
+      { name: 'Durable Leash', price: '$15 to $40', note: 'A 6-foot flat leash with traffic handle covers 95% of life. Skip retractables near roads, you have no control when it matters.' },
+      { name: 'Travel Water Bottle', price: '$12 to $25', note: 'Non-negotiable in the desert. The flip-bowl style lets your dog drink anywhere, carry it on every walk May through October.' },
     ],
   },
   {
@@ -36,9 +36,9 @@ const categories = [
     color: 'border-brand-golden',
     titleColor: 'text-plum',
     products: [
-      { name: 'Indestructible Chew Toys', price: '$10–$30', note: '"Indestructible" is a challenge your dog will accept. Buy for power-chewer rating and inspect weekly for damage.' },
-      { name: 'Interactive Puzzle Feeder', price: '$15–$45', note: 'Turns dinner into a 20-minute brain workout. Start on easy mode — frustrated dogs quit, successful dogs get hooked.' },
-      { name: 'Fetch & Tug Toy', price: '$8–$20', note: 'A dedicated "us" toy that only comes out when you play together makes you the most exciting thing in the yard.' },
+      { name: 'Indestructible Chew Toys', price: '$10 to $30', note: '"Indestructible" is a challenge your dog will accept. Buy for power-chewer rating and inspect weekly for damage.' },
+      { name: 'Interactive Puzzle Feeder', price: '$15 to $45', note: 'Turns dinner into a 20-minute brain workout. Start on easy mode, frustrated dogs quit, successful dogs get hooked.' },
+      { name: 'Fetch & Tug Toy', price: '$8 to $20', note: 'A dedicated "us" toy that only comes out when you play together makes you the most exciting thing in the yard.' },
     ],
   },
   {
@@ -47,9 +47,9 @@ const categories = [
     color: 'border-plum',
     titleColor: 'text-plum',
     products: [
-      { name: 'Slicker Brush', price: '$10–$25', note: 'A few minutes weekly cuts shedding dramatically and doubles as bonding time. Undercoat rakes for double-coated breeds.' },
-      { name: 'Nail Clippers', price: '$10–$30', note: 'Clippers with a safety guard, or a quiet grinder for wigglers. If you can hear nails on tile, it’s time.' },
-      { name: 'Dog Shampoo', price: '$8–$20', note: 'Dog-specific only — human shampoo strips their skin. Oatmeal formulas are gentle for desert-dry coats.' },
+      { name: 'Slicker Brush', price: '$10 to $25', note: 'A few minutes weekly cuts shedding dramatically and doubles as bonding time. Undercoat rakes for double-coated breeds.' },
+      { name: 'Nail Clippers', price: '$10 to $30', note: 'Clippers with a safety guard, or a quiet grinder for wigglers. If you can hear nails on tile, it’s time.' },
+      { name: 'Dog Shampoo', price: '$8 to $20', note: 'Dog-specific only, human shampoo strips their skin. Oatmeal formulas are gentle for desert-dry coats.' },
     ],
   },
   {
@@ -58,9 +58,9 @@ const categories = [
     color: 'border-brand-teal',
     titleColor: 'text-brand-teal',
     products: [
-      { name: 'Orthopedic Dog Bed', price: '$50–$150', note: 'Real memory foam holds its shape under weight — worth it from puppyhood, essential for seniors and big breeds.' },
-      { name: 'Cozy Blanket', price: '$15–$35', note: 'A washable blanket that smells like home makes crates, car rides, and hotel stays instantly familiar.' },
-      { name: 'Calming Bed', price: '$30–$80', note: 'The donut-style bolster bed gives anxious dogs something to burrow into. Great for thunder, fireworks, and new-home jitters.' },
+      { name: 'Orthopedic Dog Bed', price: '$50 to $150', note: 'Real memory foam holds its shape under weight, worth it from puppyhood, essential for seniors and big breeds.' },
+      { name: 'Cozy Blanket', price: '$15 to $35', note: 'A washable blanket that smells like home makes crates, car rides, and hotel stays instantly familiar.' },
+      { name: 'Calming Bed', price: '$30 to $80', note: 'The donut-style bolster bed gives anxious dogs something to burrow into. Great for thunder, fireworks, and new-home jitters.' },
     ],
   },
   {
@@ -69,20 +69,20 @@ const categories = [
     color: 'border-brand-orange',
     titleColor: 'text-brand-orange',
     products: [
-      { name: 'Personalized ID Tag', price: '$8–$20', note: 'Name and two phone numbers, checked yearly for legibility. The cheapest insurance you will ever buy — pair it with a microchip.' },
-      { name: 'LED Collar Light', price: '$10–$25', note: 'Desert dog walks happen in the dark half the year. A clip-on light makes your dog visible to cars and easy to spot off-leash.' },
-      { name: 'GPS Tracker', price: '$30–$100 + subscription', note: 'Real-time location for escape artists and off-leash adventurers. Check battery life and cellular coverage before committing.' },
+      { name: 'Personalized ID Tag', price: '$8 to $20', note: 'Name and two phone numbers, checked yearly for legibility. The cheapest insurance you will ever buy, pair it with a microchip.' },
+      { name: 'LED Collar Light', price: '$10 to $25', note: 'Desert dog walks happen in the dark half the year. A clip-on light makes your dog visible to cars and easy to spot off-leash.' },
+      { name: 'GPS Tracker', price: '$30 to $100 + subscription', note: 'Real-time location for escape artists and off-leash adventurers. Check battery life and cellular coverage before committing.' },
     ],
   },
 ]
 
 const budgetTips = [
-  'Buy food in the largest bag your dog will finish within 6 weeks — the per-pound savings are real.',
-  'Subscribe-and-save programs typically knock 5–15% off recurring items like food and chews.',
-  'Rotate two or three toys instead of owning twenty — novelty is free when you swap weekly.',
+  'Buy food in the largest bag your dog will finish within 6 weeks, the per-pound savings are real.',
+  'Subscribe-and-save programs typically knock 5 to 15% off recurring items like food and chews.',
+  'Rotate two or three toys instead of owning twenty, novelty is free when you swap weekly.',
   'Watch for seasonal sales: pet gear drops hard around holidays and back-to-school.',
   'A DIY snuffle mat or frozen KONG costs pennies and rivals any $40 enrichment toy.',
-  'Skip gimmicks; spend where safety lives — harness, ID, and vet fund come before outfits.',
+  'Skip gimmicks; spend where safety lives, harness, ID, and vet fund come before outfits.',
 ]
 
 const shopUrl = (product: string) =>
@@ -94,13 +94,13 @@ export default function ProductsPage() {
       <div className="mb-6">
         <h1 className="section-title">Community-Tested Products</h1>
         <p className="text-plum/60 mt-2 max-w-2xl">
-          The gear categories our members reach for every day — and what to look for before you buy.
+          The gear categories our members reach for every day, and what to look for before you buy.
         </p>
       </div>
 
       {/* Disclaimer */}
       <div className="bg-brand-golden/10 border border-brand-golden/30 rounded-xl p-4 mb-10 text-sm text-plum/70">
-        <strong className="text-plum">Just so you know:</strong> PS Dog Dad is not affiliated with, sponsored by, or paid by any brand or retailer. These are general recommendations from our community&apos;s experience — the &ldquo;View Options&rdquo; buttons simply open a shopping search so you can compare brands and prices yourself.
+        <strong className="text-plum">Just so you know:</strong> PS Dog Dad is not affiliated with, sponsored by, or paid by any brand or retailer. These are general recommendations from our community&apos;s experience, the &ldquo;View Options&rdquo; buttons simply open a shopping search so you can compare brands and prices yourself.
       </div>
 
       {/* Smart shopping tips */}

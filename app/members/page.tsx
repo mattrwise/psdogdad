@@ -81,7 +81,7 @@ function profileToCard(p: ProfileRow, index: number): MemberCard {
 
 export default function MembersPage() {
   const [members, setMembers] = useState<MemberCard[] | null>(null)
-  // Sample cards are placeholders, not real profiles — nothing to link to.
+  // Sample cards are placeholders, not real profiles, nothing to link to.
   const [usingSamples, setUsingSamples] = useState(false)
 
   useEffect(() => {
@@ -91,7 +91,7 @@ export default function MembersPage() {
       .order('created_at', { ascending: true })
       .then(({ data, error }) => {
         if (error || !data || data.length === 0) {
-          // No profiles table yet, or no confirmed members — show sample community
+          // No profiles table yet, or no confirmed members, show sample community
           if (error) console.warn('Could not load member profiles:', error.message)
           setMembers(sampleMembers)
           setUsingSamples(true)
@@ -108,7 +108,7 @@ export default function MembersPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
         <div>
           <h1 className="section-title">Member Directory</h1>
-          <p className="text-plum/60 mt-2">Meet the dog dads of the Coachella Valley — and their very good boys (and girls).</p>
+          <p className="text-plum/60 mt-2">Meet the dog dads of the Coachella Valley, and their very good boys (and girls).</p>
         </div>
         <SignedOut>
           <Link href="/members/join" className="btn-primary self-start">Join the Pack</Link>
@@ -148,7 +148,7 @@ export default function MembersPage() {
         {(members ?? []).map((member) => {
           const cardInner = (
             <>
-              {/* Photo header — split panel if both photos exist, single if one, gradient if none */}
+              {/* Photo header, split panel if both photos exist, single if one, gradient if none */}
               {member.avatarUrl && member.dogPhotoUrl ? (
                 <div className="h-36 flex overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -217,7 +217,7 @@ export default function MembersPage() {
           )
         })}
 
-        {/* Join card — visitors only */}
+        {/* Join card, visitors only */}
         <SignedOut>
           <div className="card border-2 border-dashed border-plum/20 hover:-translate-y-1 cursor-pointer flex flex-col items-center justify-center p-8 text-center min-h-[280px]">
             <div className="w-16 h-16 bg-plum/10 rounded-full flex items-center justify-center text-3xl mb-4">🐾</div>

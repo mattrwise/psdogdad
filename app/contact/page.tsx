@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import SignedOut from '@/components/auth/SignedOut'
 
 export const metadata: Metadata = {
-  title: 'Contact — PS Dog Dad',
+  title: 'Contact, PS Dog Dad',
   description: 'Get in touch with the PS Dog Dad community team.',
 }
 
@@ -13,7 +13,7 @@ export default function ContactPage() {
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-        {/* Header — matches the main nav pages */}
+        {/* Header, matches the main nav pages */}
         <div className="mb-10">
           <h1 className="section-title">Get in Touch</h1>
           <p className="text-plum/60 mt-2 max-w-2xl">
@@ -111,7 +111,7 @@ export default function ContactPage() {
 
         </div>
 
-        {/* Bottom CTA — visitors only */}
+        {/* Bottom CTA, visitors only */}
         <SignedOut>
           <div className="mt-10 bg-plum rounded-3xl p-6 sm:p-10 text-center text-white">
             <div className="text-4xl mb-3">🐾</div>

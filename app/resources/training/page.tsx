@@ -1,9 +1,9 @@
 import Link from 'next/link'
 
 const principles = [
-  { icon: '📅', title: 'Consistency is Key', text: 'Same cues, same rules, same rewards — from everyone in the house. Dogs learn fastest when the answer never changes.' },
+  { icon: '📅', title: 'Consistency is Key', text: 'Same cues, same rules, same rewards, from everyone in the house. Dogs learn fastest when the answer never changes.' },
   { icon: '🎉', title: 'Positive Reinforcement', text: 'Reward what you want to see more of. Treats, praise, and play build behavior far faster than punishment ever will.' },
-  { icon: '⏱️', title: 'Patience & Timing', text: 'Mark the exact moment your dog gets it right — within a second or two. Short 5–10 minute sessions beat marathon drills.' },
+  { icon: '⏱️', title: 'Patience & Timing', text: 'Mark the exact moment your dog gets it right, within a second or two. Short 5 to 10 minute sessions beat marathon drills.' },
   { icon: '🎾', title: 'Make it Fun', text: 'If training feels like a game, your dog will beg to play it. End every session on a win, while tails are still wagging.' },
 ]
 
@@ -40,17 +40,17 @@ const modules = [
 
 const mistakes = [
   { mistake: 'Repeating commands over and over', solution: 'Say it once, then help your dog succeed. Repetition teaches them that "sit-sit-SIT" is the actual cue.' },
-  { mistake: 'Punishing after the fact', solution: 'Dogs connect consequences only to the current moment. Interrupt and redirect in the act — or let it go and manage better next time.' },
+  { mistake: 'Punishing after the fact', solution: 'Dogs connect consequences only to the current moment. Interrupt and redirect in the act, or let it go and manage better next time.' },
   { mistake: 'Training only when things go wrong', solution: 'Practice daily in calm moments. A skill that only gets rehearsed during chaos will never be reliable.' },
-  { mistake: 'Inconsistent rules between people', solution: 'Agree on the house rules — if the couch is off-limits with you but fine with your partner, your dog just hears noise.' },
+  { mistake: 'Inconsistent rules between people', solution: 'Agree on the house rules, if the couch is off-limits with you but fine with your partner, your dog just hears noise.' },
   { mistake: 'Ending sessions on frustration', solution: 'When it stops going well, ask for one easy win, reward big, and stop. Tomorrow is another session.' },
 ]
 
 const proTips = [
   { author: 'James & Rocky', tip: 'Carry treats on every single walk for the first year. Every time Rocky checked in with me unprompted, he got paid. Now he never leaves my side.' },
-  { author: 'Mike & Buddy', tip: 'We do "commercial break training" — every ad break during a game, Buddy and I run one two-minute drill. It adds up to real skills without setting aside time.' },
+  { author: 'Mike & Buddy', tip: 'We do "commercial break training", every ad break during a game, Buddy and I run one two-minute drill. It adds up to real skills without setting aside time.' },
   { author: 'David & Max', tip: 'Train at sunrise in summer. Max learns twice as fast when the pavement is not scorching and there are fewer distractions at the park.' },
-  { author: 'Alex & Charlie', tip: 'Film your sessions on your phone. Watching them back, I realized my timing was late by two seconds — fixing that changed everything for Charlie.' },
+  { author: 'Alex & Charlie', tip: 'Film your sessions on your phone. Watching them back, I realized my timing was late by two seconds, fixing that changed everything for Charlie.' },
 ]
 
 export default function TrainingResourcesPage() {
@@ -59,7 +59,7 @@ export default function TrainingResourcesPage() {
       <div className="mb-10">
         <h1 className="section-title">Professional Training Techniques</h1>
         <p className="text-plum/60 mt-2 max-w-2xl">
-          The methods professional trainers actually use — broken down for everyday dog dads.
+          The methods professional trainers actually use, broken down for everyday dog dads.
         </p>
       </div>
 
@@ -133,7 +133,7 @@ export default function TrainingResourcesPage() {
         {proTips.map(t => (
           <div key={t.author} className="card p-6">
             <p className="text-sm text-plum/70 leading-relaxed italic">&ldquo;{t.tip}&rdquo;</p>
-            <p className="text-sm font-extrabold text-brand-teal mt-3">— {t.author}</p>
+            <p className="text-sm font-extrabold text-brand-teal mt-3">, {t.author}</p>
           </div>
         ))}
       </div>
@@ -142,7 +142,7 @@ export default function TrainingResourcesPage() {
         <div className="text-4xl mb-4">🎓</div>
         <h2 className="text-2xl font-extrabold mb-3">Want step-by-step guides?</h2>
         <p className="text-white/70 mb-6 max-w-lg mx-auto">
-          Our Training section has full written guides — from loose-leash walking to desert heat safety.
+          Our Training section has full written guides, from loose-leash walking to desert heat safety.
         </p>
         <Link href="/training" className="btn-primary text-base px-8">Browse Training Guides</Link>
       </div>

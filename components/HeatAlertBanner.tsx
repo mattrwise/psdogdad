@@ -31,7 +31,7 @@ export default function HeatAlertBanner() {
 
   return (
     <section className={extreme ? 'bg-[#ff1a1a]' : 'bg-[#f7ff00]'}>
-      {/* Hazard tape — top */}
+      {/* Hazard tape, top */}
       <div className="h-2 w-full" style={HAZARD_STRIPES} />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 text-center">
@@ -57,7 +57,7 @@ export default function HeatAlertBanner() {
         </Link>
       </div>
 
-      {/* Hazard tape — bottom */}
+      {/* Hazard tape, bottom */}
       <div className="h-2 w-full" style={HAZARD_STRIPES} />
     </section>
   )

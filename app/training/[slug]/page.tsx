@@ -12,7 +12,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const guide = getGuide(params.slug)
   if (!guide) return {}
   return {
-    title: `${guide.title} — PS Dog Dad`,
+    title: `${guide.title}, PS Dog Dad`,
     description: guide.description,
   }
 }
@@ -49,7 +49,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
           <p className="text-sm text-plum/50">By PS Dog Dad</p>
         </div>
 
-        {/* Body — client component handles auth gate */}
+        {/* Body, client component handles auth gate */}
         <GuideBody guide={guide} />
 
         {/* Related guides */}

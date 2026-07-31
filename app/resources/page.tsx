@@ -59,7 +59,7 @@ const resourceSections: Section[] = [
     color: 'border-brand-teal',
     titleColor: 'text-brand-teal',
     resources: [
-      { name: 'VCA Desert Animal Hospital', detail: 'Full Service', address: '4299 E Ramon Rd, Palm Springs', phone: '(760) 778-9999', map: 'VCA Desert Animal Hospital, 4299 E Ramon Rd, Palm Springs, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: 'Mon–Fri 7am–6pm, Sat 7:30am–5pm · Member favorite' },
+      { name: 'VCA Desert Animal Hospital', detail: 'Full Service', address: '4299 E Ramon Rd, Palm Springs', phone: '(760) 778-9999', map: 'VCA Desert Animal Hospital, 4299 E Ramon Rd, Palm Springs, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: 'Mon, Fri 7am, 6pm, Sat 7:30am, 5pm · Member favorite' },
       { name: 'Palm Springs Animal Hospital', detail: 'Full Service', address: '4500 E Palm Canyon Dr, Palm Springs', phone: '(760) 324-0450', map: 'Palm Springs Animal Hospital, 4500 E Palm Canyon Dr, Palm Springs, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: null },
       { name: 'Desert Veterinary Clinic', detail: 'Cathedral City · Low-cost options available', address: null, phone: null, map: 'Desert Veterinary Clinic, Cathedral City, CA', badge: 'Budget-Friendly', badgeColor: 'bg-brand-golden/20 text-plum', stars: 4, note: null },
       { name: 'Pet Lux', detail: '', address: '1801 E Tahquitz Canyon Way, Ste 102, Palm Springs', phone: '(760) 297-7747', map: 'Pet Lux, Palm Springs, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
@@ -119,9 +119,9 @@ const resourceSections: Section[] = [
     resources: [
       { name: 'Ruth Hardy Park', detail: 'Off-leash fenced area', address: '700 E Tamarisk Rd, Palm Springs', phone: null, map: 'Ruth Hardy Park, Palm Springs, CA', badge: 'Off-Leash', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: 'Best morning walk spot. Community meetup location.' },
       { name: 'Demuth Park Dog Run', detail: 'Large & small dog areas', address: '4365 E Mesquite Ave, Palm Springs', phone: null, map: 'Demuth Park, Palm Springs, CA', badge: 'Off-Leash', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 4, note: 'Small dog area recently renovated (May 2025)' },
-      { name: 'Araby Trail', detail: 'South PS · Moderate 2-mile hike', address: null, phone: null, map: 'Araby Trail, Palm Springs, CA', badge: 'Leashed', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 5, note: 'Go at sunrise or sunset in summer — rocky terrain' },
+      { name: 'Araby Trail', detail: 'South PS · Moderate 2-mile hike', address: null, phone: null, map: 'Araby Trail, Palm Springs, CA', badge: 'Leashed', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 5, note: 'Go at sunrise or sunset in summer, rocky terrain' },
       { name: 'South Lykken Trail', detail: 'Museum Dr · Scenic ridge trail', address: null, phone: null, map: 'South Lykken Trail, Palm Springs, CA', badge: 'Leashed', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 4, note: 'Bring extra water. No shade. Incredible views.' },
-      { name: 'Tahquitz Creek Trail', detail: 'Gene Autry Trail · Flat, shaded', address: null, phone: null, map: 'Tahquitz Creek Trail, Palm Springs, CA', badge: 'Leashed', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 4, note: 'Best summer option — stays cooler' },
+      { name: 'Tahquitz Creek Trail', detail: 'Gene Autry Trail · Flat, shaded', address: null, phone: null, map: 'Tahquitz Creek Trail, Palm Springs, CA', badge: 'Leashed', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 4, note: 'Best summer option, stays cooler' },
       { name: 'David H. Ready Palm Springs Dog Park', detail: 'Behind City Hall', address: '222 N Civic Dr, Palm Springs', phone: '(760) 323-8253', map: 'David H. Ready Palm Springs Dog Park, Palm Springs, CA', badge: 'Off-Leash', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
       { name: 'Rancho Mirage Dog Park', detail: '', address: '34100 Key Largo Ave, Rancho Mirage', phone: '(760) 324-4511', map: 'Rancho Mirage Dog Park, Rancho Mirage, CA', badge: 'Off-Leash', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
       { name: 'Panorama Park Dog Park', detail: '', address: '28905 Avenida Maravilla, Cathedral City', phone: '(760) 770-0340', map: 'Panorama Park, Cathedral City, CA', badge: 'Off-Leash', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
@@ -150,7 +150,7 @@ const resourceSections: Section[] = [
     resources: [
       { name: 'Alcazar Palm Springs', detail: 'Boutique hotel', address: '622 N Palm Canyon Dr, Palm Springs', phone: null, map: 'Alcazar Palm Springs, Palm Springs, CA', badge: 'Dogs Welcome', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: 'Small dogs (under 25 lbs). Request pool view.' },
       { name: 'Arrive Palm Springs', detail: 'Boutique hotel', address: '1551 N Palm Canyon Dr, Palm Springs', phone: null, map: 'ARRIVE Palm Springs, Palm Springs, CA', badge: 'Dogs Welcome', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 4, note: 'Pet fee applies. Very dog-welcoming staff.' },
-      { name: 'Various Airbnb / VRBO', detail: 'Filter: "Pets Allowed"', address: null, phone: null, map: null, badge: 'Filter Needed', badgeColor: 'bg-plum/10 text-plum', stars: null, note: 'Always confirm dog policy before booking — many have weight/breed limits' },
+      { name: 'Various Airbnb / VRBO', detail: 'Filter: "Pets Allowed"', address: null, phone: null, map: null, badge: 'Filter Needed', badgeColor: 'bg-plum/10 text-plum', stars: null, note: 'Always confirm dog policy before booking, many have weight/breed limits' },
     ],
   },
   {
@@ -252,7 +252,7 @@ export default function ResourcesPage() {
       {/* Dog Dad Guides */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         {[
-          { href: '/resources/health-wellness', icon: '🩺', title: 'Health & Wellness', text: 'Keeping your best friend healthy — plus a filterable valley-wide vet finder.', color: 'border-brand-teal' },
+          { href: '/resources/health-wellness', icon: '🩺', title: 'Health & Wellness', text: 'Keeping your best friend healthy, plus a filterable valley-wide vet finder.', color: 'border-brand-teal' },
           { href: '/resources/training', icon: '🎓', title: 'Training Techniques', text: 'Professional methods, common mistakes, and pro tips from the pack.', color: 'border-brand-orange' },
           { href: '/resources/handbook', icon: '📖', title: 'Dog Dad Handbook', text: 'The complete 5-chapter guide, from bringing them home to senior years.', color: 'border-plum' },
           { href: '/resources/products', icon: '🛒', title: 'Product Guide', text: 'Community-tested gear categories and smart shopping tips.', color: 'border-brand-golden' },
@@ -268,7 +268,7 @@ export default function ResourcesPage() {
 
       {/* Quick disclaimer */}
       <div className="bg-brand-golden/10 border border-brand-golden/30 rounded-xl p-4 mb-10 text-sm text-plum/70">
-        <strong className="text-plum">Community-curated:</strong> These recommendations come from PS Dog Dad members. Always call ahead to confirm hours, pricing, and pet policies — things change!
+        <strong className="text-plum">Community-curated:</strong> These recommendations come from PS Dog Dad members. Always call ahead to confirm hours, pricing, and pet policies, things change!
       </div>
 
       {/* Resource sections */}

@@ -100,7 +100,7 @@ function WelcomeContent() {
           </h2>
           <p className="text-plum/70 leading-relaxed mb-3">
             This is a warm, welcoming community of gay men across the Coachella Valley who share a love for their dogs.
-            Whether you&apos;re looking for a trail buddy, a vet recommendation, or just want to show off your pup —
+            Whether you&apos;re looking for a trail buddy, a vet recommendation, or just want to show off your pup, 
             you&apos;re in the right place.
           </p>
           <p className="text-plum/70 leading-relaxed">
@@ -158,8 +158,8 @@ function WelcomeContent() {
           <h3 className="font-extrabold text-plum text-lg mb-5">✅ A few good first steps</h3>
           <ul className="space-y-4">
             {[
-              { icon: '👋', text: 'Post an introduction in the Forums — tell us about yourself and your dog.' },
-              { icon: '📅', text: 'RSVP for an upcoming event — our morning walks at Ruth Hardy Park are a great way to meet people.' },
+              { icon: '👋', text: 'Post an introduction in the Forums, tell us about yourself and your dog.' },
+              { icon: '📅', text: 'RSVP for an upcoming event, our morning walks at Ruth Hardy Park are a great way to meet people.' },
               { icon: '🌴', text: 'Check the Resources page for our curated guide to PS vets, groomers, and dog-friendly spots.' },
               { icon: '🐶', text: 'Browse the Member Directory and connect with dog dads near your neighborhood.' },
             ].map(({ icon, text }) => (

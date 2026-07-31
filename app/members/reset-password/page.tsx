@@ -18,7 +18,7 @@ export default function ResetPasswordPage() {
   const [linkError, setLinkError] = useState<string | null>(null)
 
   // Supabase uses the implicit flow, so the recovery token arrives in the URL
-  // hash and the client picks it up on load. Watch for the resulting session —
+  // hash and the client picks it up on load. Watch for the resulting session, 
   // it may land before or after this effect runs, so check both ways.
   useEffect(() => {
     const hash = new URLSearchParams(window.location.hash.replace(/^#/, ''))
@@ -76,7 +76,7 @@ export default function ResetPasswordPage() {
             {status === 'done' ? 'Password Updated' : 'Choose a New Password'}
           </h1>
           {status === 'ready' && (
-            <p className="text-plum/60 mt-2">Pick something you&rsquo;ll remember — at least 8 characters.</p>
+            <p className="text-plum/60 mt-2">Pick something you&rsquo;ll remember, at least 8 characters.</p>
           )}
         </div>
 
@@ -106,9 +106,9 @@ export default function ResetPasswordPage() {
             <div className="text-center py-4">
               <div className="text-5xl mb-4">🎉</div>
               {/* The recovery link leaves the member signed in, so there is no
-                  second sign-in step — send them somewhere useful instead. */}
+                  second sign-in step, send them somewhere useful instead. */}
               <p className="text-sm text-plum/70 mb-6">
-                You&rsquo;re all set, and already signed in — no need to log in again.
+                You&rsquo;re all set, and already signed in, no need to log in again.
                 Use your new password next time.
               </p>
               <button onClick={() => router.push('/members/profile')} className="btn-primary px-6 py-3 text-sm">

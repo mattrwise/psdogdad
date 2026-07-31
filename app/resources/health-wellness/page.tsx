@@ -9,9 +9,9 @@ const healthSections = [
     color: 'border-brand-teal',
     tips: [
       'Annual wellness exams for adult dogs, twice a year for seniors (7+)',
-      'Keep vaccinations current — rabies, DHPP, and bordetella at minimum',
+      'Keep vaccinations current, rabies, DHPP, and bordetella at minimum',
       'Monthly heartworm, flea, and tick prevention year-round in the desert',
-      'Dental checks every visit — dental disease affects most dogs by age 3',
+      'Dental checks every visit, dental disease affects most dogs by age 3',
       'Keep a folder (or phone album) of records so any vet can help fast',
     ],
   },
@@ -21,10 +21,10 @@ const healthSections = [
     color: 'border-brand-orange',
     tips: [
       'Choose a food appropriate for your dog’s age, size, and activity level',
-      'Measure meals — obesity is the most common preventable health issue',
+      'Measure meals, obesity is the most common preventable health issue',
       'Fresh water always, and twice as much as you think in summer heat',
       'Treats should be under 10% of daily calories',
-      'Ask your vet before switching foods, and transition over 7–10 days',
+      'Ask your vet before switching foods, and transition over 7 to 10 days',
     ],
   },
   {
@@ -32,10 +32,10 @@ const healthSections = [
     title: 'Exercise & Activity',
     color: 'border-brand-golden',
     tips: [
-      'Most dogs need 30–120 minutes of activity daily, depending on breed',
-      'In summer, walk at sunrise or after sunset — test pavement with your palm',
+      'Most dogs need 30 to 120 minutes of activity daily, depending on breed',
+      'In summer, walk at sunrise or after sunset, test pavement with your palm',
       'Mix it up: walks, fetch, swimming, and sniffy “decompression” strolls',
-      'Watch for limping, lagging, or heavy panting — stop and rest',
+      'Watch for limping, lagging, or heavy panting, stop and rest',
       'Senior dogs still need movement: shorter, gentler, more often',
     ],
   },
@@ -44,11 +44,11 @@ const healthSections = [
     title: 'Mental Health',
     color: 'border-plum',
     tips: [
-      'Boredom looks like “bad behavior” — enrichment prevents both',
+      'Boredom looks like “bad behavior”, enrichment prevents both',
       'Puzzle feeders, snuffle mats, and training games tire the brain',
-      'Keep a predictable daily routine — dogs find comfort in rhythm',
+      'Keep a predictable daily routine, dogs find comfort in rhythm',
       'Socialization is lifelong, not just for puppies',
-      'Sudden behavior changes can signal pain — call your vet first',
+      'Sudden behavior changes can signal pain, call your vet first',
     ],
   },
 ]
@@ -70,7 +70,7 @@ const vets: Vet[] = [
   { name: 'Valley Veterinary Urgent Care', city: 'La Quinta', specialty: 'Urgent Care', phone: '(760) 760-7000', address: 'At La Quinta Pet Hospital, La Quinta' },
   { name: 'Mobile Pet Vet Inc', city: 'Palm Desert', specialty: 'Mobile Service', phone: '(760) 423-3688', address: 'House calls valley-wide' },
   { name: 'Banfield Pet Hospital', city: 'Palm Desert', specialty: 'General Practice', phone: '(760) 202-1837', address: 'Palm Desert' },
-  { name: 'El Paseo Animal Hospital – Dr. Bardini', city: 'Palm Desert', specialty: 'General Practice', phone: '(760) 491-1008', address: '72608 El Paseo, Ste 4, Palm Desert' },
+  { name: 'El Paseo Animal Hospital, Dr. Bardini', city: 'Palm Desert', specialty: 'General Practice', phone: '(760) 491-1008', address: '72608 El Paseo, Ste 4, Palm Desert' },
   { name: 'VCA Desert Dunes', city: 'Indio', specialty: 'General Practice', phone: '(760) 345-8227', address: '42430 Washington St, Bermuda Dunes' },
   { name: 'Animal Samaritans Indio', city: 'Indio', specialty: 'General Practice', phone: '(760) 343-3477', address: 'Indio' },
   { name: 'VEG ER for Pets', city: 'Palm Desert', specialty: 'Emergency', phone: '(760) 249-2279', address: '73495 Hwy 111, Palm Desert' },
@@ -110,7 +110,7 @@ export default function HealthWellnessPage() {
       <div className="mb-10">
         <h1 className="section-title">Keeping Your Best Friend Healthy</h1>
         <p className="text-plum/60 mt-2 max-w-2xl">
-          The essentials of desert dog health — plus a directory of trusted veterinarians across the Coachella Valley.
+          The essentials of desert dog health, plus a directory of trusted veterinarians across the Coachella Valley.
         </p>
       </div>
 
@@ -176,7 +176,7 @@ export default function HealthWellnessPage() {
         {filtered.length === 0 ? (
           <div className="card p-10 text-center text-plum/50">
             <div className="text-4xl mb-3">🐾</div>
-            No vets match those filters yet — try &ldquo;All Cities&rdquo; or a different specialty.
+            No vets match those filters yet, try &ldquo;All Cities&rdquo; or a different specialty.
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -200,7 +200,7 @@ export default function HealthWellnessPage() {
         )}
 
         <div className="mt-8 bg-brand-golden/10 border border-brand-golden/30 rounded-xl p-4 text-sm text-plum/70">
-          <strong className="text-plum">In an emergency:</strong> VEG ER for Pets in Palm Desert is the valley&apos;s only true 24/7 ER — <a href="tel:+17602492279" className="font-semibold text-brand-teal hover:underline">(760) 249-2279</a>. Always call ahead so they can prepare for your arrival.
+          <strong className="text-plum">In an emergency:</strong> VEG ER for Pets in Palm Desert is the valley&apos;s only true 24/7 ER, <a href="tel:+17602492279" className="font-semibold text-brand-teal hover:underline">(760) 249-2279</a>. Always call ahead so they can prepare for your arrival.
         </div>
       </div>
     </div>

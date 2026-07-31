@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Code of Conduct — PS Dog Dad',
+  title: 'Code of Conduct, PS Dog Dad',
   description: 'The PS Dog Dad community code of conduct. How we treat each other, our dogs, and our shared spaces.',
 }
 
@@ -27,7 +27,7 @@ export default function ConductPage() {
           <div className="text-4xl mb-4">🤝</div>
           <h1 className="text-3xl sm:text-4xl font-extrabold mb-3">Code of Conduct</h1>
           <p className="text-white/70 max-w-xl mx-auto leading-relaxed">
-            PS Dog Dad is a community built on mutual respect — for each other, our dogs, and our shared spaces.
+            PS Dog Dad is a community built on mutual respect, for each other, our dogs, and our shared spaces.
             These are the standards we hold ourselves to.
           </p>
         </div>
@@ -42,7 +42,7 @@ export default function ConductPage() {
             <p className="font-bold text-plum mb-1">The short version</p>
             <p className="text-plum/70 text-sm leading-relaxed">
               Be kind. Be welcoming. Look after your dog and others'. Don't be a jerk.
-              If something feels wrong, it probably is — reach out to us at{' '}
+              If something feels wrong, it probably is, reach out to us at{' '}
               <a href="mailto:hello@psdogdad.com" className="text-brand-orange font-semibold hover:underline">hello@psdogdad.com</a>.
             </p>
           </div>
@@ -51,7 +51,7 @@ export default function ConductPage() {
         <Section title="1. Be Respectful">
           <p>
             Treat every member with kindness and respect regardless of background, experience, dog breed, or lifestyle.
-            Disagreements happen — that&apos;s fine. Personal attacks, harassment, and deliberate cruelty are not.
+            Disagreements happen, that&apos;s fine. Personal attacks, harassment, and deliberate cruelty are not.
           </p>
           <p>
             This applies in forums, at events, in direct messages, and anywhere you represent the PS Dog Dad community.
@@ -62,7 +62,7 @@ export default function ConductPage() {
           <p>
             We want PS Dog Dad to feel like a warm front porch, not a gatekeeping club. Whether someone has a
             purebred show dog or a scruffy mutt from the shelter, whether they&apos;re new to the valley or a 30-year
-            local — everyone deserves a genuine welcome.
+            local, everyone deserves a genuine welcome.
           </p>
           <p>
             Avoid condescending or unsolicited advice. If someone asks for help, help them. If they didn&apos;t ask,
@@ -77,7 +77,7 @@ export default function ConductPage() {
           <ul className="list-disc pl-5 space-y-1">
             <li>Know your dog&apos;s temperament and keep them on leash unless in a designated off-leash area.</li>
             <li>Bring water for your dog, especially in the desert heat.</li>
-            <li>If your dog is unwell, reactive, or not good with other dogs, please sit that event out — no judgment.</li>
+            <li>If your dog is unwell, reactive, or not good with other dogs, please sit that event out, no judgment.</li>
             <li>Clean up after your dog. Always.</li>
           </ul>
         </Section>
@@ -108,7 +108,7 @@ export default function ConductPage() {
           </p>
           <p>
             Violations may result in a warning, removal from events, or removal from the community depending on severity.
-            We aim to be fair, not punitive — but we will act when we need to.
+            We aim to be fair, not punitive, but we will act when we need to.
           </p>
         </Section>
 

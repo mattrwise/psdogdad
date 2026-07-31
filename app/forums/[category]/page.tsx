@@ -20,7 +20,7 @@ const categories: Record<string, {
     color: 'bg-brand-teal/10 border-brand-teal/30',
     badge: 'bg-brand-teal/10 text-brand-teal',
     threads: [
-      { id: '1', author: 'Tyler & Mango', time: '2h ago', title: 'Just moved from WeHo — golden retriever dad here!', replies: 22, views: 88 },
+      { id: '1', author: 'Tyler & Mango', time: '2h ago', title: 'Just moved from WeHo, golden retriever dad here!', replies: 22, views: 88 },
       { id: '2', author: 'Sam & Peanut', time: '1d ago', title: 'Hello from Cathedral City 🐶', replies: 9, views: 41 },
       { id: '3', author: 'Jordan & Fig', time: '3d ago', title: 'First-time dog dad, excited to be here', replies: 17, views: 63 },
     ],
@@ -45,7 +45,7 @@ const categories: Record<string, {
     badge: 'bg-plum/10 text-plum',
     threads: [
       { id: '1', author: 'Derek & Zeus', time: '4h ago', title: 'Trainer referral for reactive dog near DT Palm Springs?', replies: 7, views: 34 },
-      { id: '2', author: 'Alex & Taco', time: '1d ago', title: 'Loose leash walking — what worked for you?', replies: 18, views: 95 },
+      { id: '2', author: 'Alex & Taco', time: '1d ago', title: 'Loose leash walking, what worked for you?', replies: 18, views: 95 },
       { id: '3', author: 'Ryan & Boba', time: '4d ago', title: 'Separation anxiety getting worse in summer heat', replies: 25, views: 130 },
     ],
   },
@@ -58,7 +58,7 @@ const categories: Record<string, {
     threads: [
       { id: '1', author: 'James & Pretzel', time: '6h ago', title: 'Demuth Park small dog area is finally fixed!', replies: 19, views: 88 },
       { id: '2', author: 'Mike & Salsa', time: '1d ago', title: 'Best dog-friendly patios in PS?', replies: 31, views: 155 },
-      { id: '3', author: 'Luis & Frito', time: '3d ago', title: 'Murray Canyon trail — leash required?', replies: 11, views: 62 },
+      { id: '3', author: 'Luis & Frito', time: '3d ago', title: 'Murray Canyon trail, leash required?', replies: 11, views: 62 },
     ],
   },
   'nutrition-food': {
@@ -69,7 +69,7 @@ const categories: Record<string, {
     badge: 'bg-brand-teal/10 text-brand-teal',
     threads: [
       { id: '1', author: 'Chris & Noodle', time: '1d ago', title: "Anyone tried Farmer's Dog delivery?", replies: 8, views: 44 },
-      { id: '2', author: 'Tom & Dumpling', time: '2d ago', title: 'Raw feeding in summer — any concerns?', replies: 14, views: 67 },
+      { id: '2', author: 'Tom & Dumpling', time: '2d ago', title: 'Raw feeding in summer, any concerns?', replies: 14, views: 67 },
       { id: '3', author: 'Pat & Mochi', time: '5d ago', title: 'Frozen treat recipes for hot days', replies: 29, views: 180 },
     ],
   },
@@ -82,7 +82,7 @@ const categories: Record<string, {
     threads: [
       { id: '1', author: 'Greg & Rocky', time: '3h ago', title: "Rocky's first birthday pool party 🎉", replies: 41, views: 210 },
       { id: '2', author: 'Chris & Noodle', time: '8h ago', title: "Noodle's first swim of the season 🏊", replies: 31, views: 148 },
-      { id: '3', author: 'Dan & Pretzel', time: '1d ago', title: 'Caught him mid-zoomies — classic', replies: 17, views: 93 },
+      { id: '3', author: 'Dan & Pretzel', time: '1d ago', title: 'Caught him mid-zoomies, classic', replies: 17, views: 93 },
     ],
   },
   'travel': {
@@ -92,9 +92,9 @@ const categories: Record<string, {
     color: 'bg-plum/10 border-plum/30',
     badge: 'bg-plum/10 text-plum',
     threads: [
-      { id: '1', author: 'Brian & Gnocchi', time: '2d ago', title: 'Flying with a French Bulldog — tips?', replies: 12, views: 58 },
+      { id: '1', author: 'Brian & Gnocchi', time: '2d ago', title: 'Flying with a French Bulldog, tips?', replies: 12, views: 58 },
       { id: '2', author: 'Nick & Wonton', time: '4d ago', title: 'Pet-friendly Airbnbs in Big Bear?', replies: 8, views: 39 },
-      { id: '3', author: 'Eric & Nacho', time: '1w ago', title: 'Road trip from PS to SF with two dogs — our story', replies: 22, views: 121 },
+      { id: '3', author: 'Eric & Nacho', time: '1w ago', title: 'Road trip from PS to SF with two dogs, our story', replies: 22, views: 121 },
     ],
   },
   'events-meetups': {
@@ -106,7 +106,7 @@ const categories: Record<string, {
     threads: [
       { id: '1', author: 'Admin', time: '5d ago', title: 'Pool party recap + photos from Saturday!', replies: 38, views: 204 },
       { id: '2', author: 'Jake & Pepper', time: '1w ago', title: 'Suggestion: morning meetup at Demuth?', replies: 15, views: 77 },
-      { id: '3', author: 'Matt & Biscuit', time: '2w ago', title: 'Fall social — who\'s interested?', replies: 27, views: 130 },
+      { id: '3', author: 'Matt & Biscuit', time: '2w ago', title: 'Fall social, who\'s interested?', replies: 27, views: 130 },
     ],
   },
 }

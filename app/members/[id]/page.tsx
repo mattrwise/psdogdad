@@ -64,8 +64,8 @@ export default function MemberProfilePage() {
     ? profile.dogs
     : [{ name: profile.dog_name, breed: profile.dog_breed, photo_url: null }]
   const dogs = rawDogs.map((d, i) => ({
-    name: d.name || '—',
-    breed: d.breed || '—',
+    name: d.name || ', ',
+    breed: d.breed || ', ',
     photo_url: d.photo_url ?? (i === 0 ? profile.dog_photo_url : null),
   }))
 
@@ -74,7 +74,7 @@ export default function MemberProfilePage() {
   return (
     <div className="bg-brand-cream min-h-screen pb-16">
 
-      {/* Header — cream like the rest of the site; the avatar carries the colour */}
+      {/* Header, cream like the rest of the site; the avatar carries the colour */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
         <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6">
           <div className="relative flex-shrink-0">
@@ -104,7 +104,7 @@ export default function MemberProfilePage() {
           <Link href="/members" className="text-sm font-semibold text-brand-orange hover:underline">
             ← Back to Member Directory
           </Link>
-          {/* Hidden on your own profile — messaging yourself isn't a thing, and
+          {/* Hidden on your own profile, messaging yourself isn't a thing, and
               the database rejects it anyway. */}
           {viewer && viewer.id !== profile.id && (
             <Link href={`/members/messages/${profile.id}`} className="btn-primary text-sm px-5 py-2.5">

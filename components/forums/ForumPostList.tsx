@@ -21,7 +21,7 @@ type Reply = {
   created_at: string
 }
 
-/** "2h ago", "3d ago" — matches the phrasing of the sample threads. */
+/** "2h ago", "3d ago", matches the phrasing of the sample threads. */
 function timeAgo(iso: string) {
   const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60000)
   if (mins < 1) return 'just now'

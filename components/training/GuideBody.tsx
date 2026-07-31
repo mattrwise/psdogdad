@@ -39,7 +39,7 @@ function MembersLock() {
       <div className="text-3xl mb-3">🔐</div>
       <h3 className="font-extrabold text-plum text-lg mb-2">This guide is for members only</h3>
       <p className="text-plum/60 text-sm mb-5 max-w-sm mx-auto">
-        Join free to unlock all member guides — no credit card, no catch.
+        Join free to unlock all member guides, no credit card, no catch.
       </p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <Link href="/members/join" className="btn-primary">Join Free</Link>
@@ -65,7 +65,7 @@ function PremiumLock() {
 export default function GuideBody({ guide }: { guide: Guide }) {
   const { user, loading } = useUser()
 
-  // Free guides — always show everything
+  // Free guides, always show everything
   if (guide.tier === 'free') {
     return (
       <article className="bg-white rounded-3xl shadow-md p-6 sm:p-10">
@@ -74,7 +74,7 @@ export default function GuideBody({ guide }: { guide: Guide }) {
     )
   }
 
-  // Premium guides — show preview then lock (auth doesn't matter yet)
+  // Premium guides, show preview then lock (auth doesn't matter yet)
   if (guide.tier === 'premium') {
     return (
       <article className="bg-white rounded-3xl shadow-md p-6 sm:p-10">
@@ -111,7 +111,7 @@ export default function GuideBody({ guide }: { guide: Guide }) {
     )
   }
 
-  // Signed-in member — full content
+  // Signed-in member, full content
   return (
     <article className="bg-white rounded-3xl shadow-md p-6 sm:p-10">
       <FullBody body={guide.body} />

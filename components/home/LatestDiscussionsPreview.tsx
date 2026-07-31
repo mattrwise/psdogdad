@@ -74,7 +74,7 @@ export default function LatestDiscussionsPreview() {
             <div className="text-5xl mb-4">💬</div>
             <h3 className="font-extrabold text-plum text-lg mb-2">Nobody&rsquo;s started talking yet</h3>
             <p className="text-plum/60 text-sm max-w-md mx-auto mb-6 leading-relaxed">
-              The forums are brand new and completely empty — the best vet, the shadiest morning
+              The forums are brand new and completely empty, the best vet, the shadiest morning
               walk, the patio that actually means it about dogs. Ask the first question.
             </p>
             <Link href="/forums" className="btn-primary inline-block">Start the First Thread</Link>

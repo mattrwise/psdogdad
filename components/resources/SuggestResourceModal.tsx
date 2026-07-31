@@ -198,7 +198,7 @@ export default function SuggestResourceModal({ onClose }: Props) {
               </div>
 
               <p className="text-xs text-plum/50 leading-relaxed">
-                Only recommend places you&apos;ve had a good experience with — our team confirms each
+                Only recommend places you&apos;ve had a good experience with, our team confirms each
                 suggestion before it&apos;s added to the guide.
               </p>
 

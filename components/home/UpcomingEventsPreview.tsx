@@ -58,7 +58,7 @@ export default function UpcomingEventsPreview() {
             <div className="text-5xl mb-4">🌴</div>
             <h3 className="font-extrabold text-plum text-lg mb-2">The calendar is wide open</h3>
             <p className="text-plum/60 text-sm max-w-md mx-auto mb-6 leading-relaxed">
-              No meetups on the books yet — which means the first one is still up for grabs.
+              No meetups on the books yet, which means the first one is still up for grabs.
               Pick a park, a patio, or a trail and get it on the map.
             </p>
             <Link href="/events" className="btn-primary inline-block">Propose the First Event</Link>

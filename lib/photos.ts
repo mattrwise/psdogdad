@@ -3,7 +3,7 @@
 import { supabase } from '@/lib/supabase/client'
 
 // Backup copy of the in-flight token, in case the /welcome claim attempt
-// gets interrupted (closed tab, network blip) — PendingPhotoSync retries
+// gets interrupted (closed tab, network blip), PendingPhotoSync retries
 // using this on any later page load in the *same* browser. The token
 // itself travels to other devices via the confirmation email link, not
 // via localStorage, which is what makes cross-device confirmation work.
@@ -122,7 +122,7 @@ export async function claimPendingPhotos(token: string, userId: string): Promise
     })
     if (error) { console.error('Saving photo URLs failed:', error.message); return }
 
-    // Best-effort cleanup — a leftover _pending file just wastes space, it's
+    // Best-effort cleanup, a leftover _pending file just wastes space, it's
     // not visible anywhere, so a failure here isn't worth surfacing.
     await supabase.storage.from('member-photos').remove(files.map(f => `_pending/${token}/${f.name}`))
 

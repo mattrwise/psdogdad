@@ -67,7 +67,7 @@ export default function LoginPage() {
     }
 
     setError(null)
-    setNotice(`Reset link sent to ${email.trim()}. Check your inbox — it expires shortly, so use it soon.`)
+    setNotice(`Reset link sent to ${email.trim()}. Check your inbox, it expires shortly, so use it soon.`)
   }
 
   return (

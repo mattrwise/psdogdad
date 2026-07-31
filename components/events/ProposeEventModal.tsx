@@ -212,12 +212,12 @@ export default function ProposeEventModal({ onClose }: Props) {
                 </div>
               </div>
 
-              {/* Business confirmation — shown only when venue = business */}
+              {/* Business confirmation, shown only when venue = business */}
               {isBusiness && (
                 <div className="bg-brand-orange/5 border border-brand-orange/30 rounded-xl p-4">
                   <p className="text-sm font-bold text-plum mb-1">⚠️ Business Venue Confirmation Required</p>
                   <p className="text-xs text-plum/60 mb-3">
-                    Before listing an event at a bar, restaurant, or any business, you must confirm with that business that they are aware of and welcoming our group — including dogs on the premises on that date.
+                    Before listing an event at a bar, restaurant, or any business, you must confirm with that business that they are aware of and welcoming our group, including dogs on the premises on that date.
                   </p>
                   <label className="flex items-start gap-2 cursor-pointer">
                     <input
@@ -245,7 +245,7 @@ export default function ProposeEventModal({ onClose }: Props) {
                   placeholder="Full address or description"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum placeholder:text-plum/30 focus:outline-none focus:border-brand-teal"
                 />
-                <p className="text-xs text-plum/40 mt-1">For private homes, you can share the general neighborhood — exact address will be DM'd to RSVPs only.</p>
+                <p className="text-xs text-plum/40 mt-1">For private homes, you can share the general neighborhood, exact address will be DM'd to RSVPs only.</p>
               </div>
 
               {/* Description */}
@@ -286,7 +286,7 @@ export default function ProposeEventModal({ onClose }: Props) {
               <div className="bg-plum/5 border border-plum/10 rounded-xl p-4 text-xs text-plum/70 space-y-2 leading-relaxed">
                 <p className="font-bold text-plum text-sm">Event Disclaimer & Community Responsibility</p>
                 <p>
-                  PS Dog Dads is a community organizing platform — we are <strong>not responsible</strong> for any injuries, incidents, property damage, or disputes that occur before, during, or after any community event.
+                  PS Dog Dads is a community organizing platform, we are <strong>not responsible</strong> for any injuries, incidents, property damage, or disputes that occur before, during, or after any community event.
                 </p>
                 <p>
                   By proposing an event, you agree that: (1) attendees participate at their own risk; (2) each dog owner is solely responsible for their dog's behavior and any damage or injury caused; (3) you as the event proposer have provided accurate information about the venue, time, and requirements; and (4) all participants are expected to follow our <a href="/conduct" className="text-brand-teal underline" target="_blank">Community Code of Conduct</a>.

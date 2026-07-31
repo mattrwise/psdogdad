@@ -30,7 +30,7 @@ function PhotoUpload({ id, label, hint, preview, onFileSelected, onClear }: Phot
   const [fileError, setFileError] = useState<string | null>(null)
 
   function processFile(file: File) {
-    // Inline rather than alert() — a native popup is easy to dismiss without
+    // Inline rather than alert(), a native popup is easy to dismiss without
     // reading, which made a rejected photo look like nothing had happened.
     if (!ACCEPTED_TYPES.includes(file.type)) {
       setFileError('That file type isn’t supported. Please use a JPG, PNG, WebP or HEIC image.')
@@ -38,7 +38,7 @@ function PhotoUpload({ id, label, hint, preview, onFileSelected, onClear }: Phot
     }
     if (file.size > MAX_FILE_SIZE) {
       const mb = (file.size / 1024 / 1024).toFixed(1)
-      setFileError(`That photo is ${mb} MB — please use one under 8 MB.`)
+      setFileError(`That photo is ${mb} MB, please use one under 8 MB.`)
       return
     }
     setFileError(null)
@@ -146,7 +146,7 @@ export default function ProfilePage() {
   const [dogs, setDogs] = useState<Dog[]>([{ ...EMPTY_DOG }])
   const [dogErrors, setDogErrors] = useState<DogErrors[]>([])
 
-  // photos — saved URLs live in metadata (avatar_url + each dog's photo_url);
+  // photos, saved URLs live in metadata (avatar_url + each dog's photo_url);
   // pending new files/previews are kept here until Save uploads them.
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [memberFile, setMemberFile] = useState<File | null>(null)
@@ -156,7 +156,7 @@ export default function ProfilePage() {
 
   // Signup photos can still be uploading in the background (PendingPhotoSync)
   // when this page first loads, so listen for the auth update that follows
-  // instead of only reading the session once — otherwise a fast page load
+  // instead of only reading the session once, otherwise a fast page load
   // shows a stale profile with no photos until the member manually reloads.
   const editingRef = useRef(false)
   useEffect(() => { editingRef.current = editing }, [editing])
@@ -195,7 +195,7 @@ export default function ProfilePage() {
     setMemberFile(file); setMemberPreview(URL.createObjectURL(file))
   }
 
-  /** Drops a *pending* selection only — used after a save, and by Cancel. */
+  /** Drops a *pending* selection only, used after a save, and by Cancel. */
   function clearMemberPhoto() {
     if (memberPreview) URL.revokeObjectURL(memberPreview)
     setMemberFile(null); setMemberPreview(null)
@@ -351,7 +351,7 @@ export default function ProfilePage() {
         dogs:          cleanDogs,
         dog_name:      cleanDogs[0].name,
         dog_breed:     cleanDogs[0].breed,
-        // Sent unconditionally, including as null — writing these only when
+        // Sent unconditionally, including as null, writing these only when
         // truthy meant a removal was silently dropped and could never persist.
         dog_photo_url: cleanDogs[0].photo_url,
         avatar_url:    newAvatarUrl,
@@ -389,7 +389,7 @@ export default function ProfilePage() {
   return (
     <div className="bg-brand-cream min-h-screen pb-16">
 
-      {/* Header — cream like the rest of the site; the avatar carries the colour */}
+      {/* Header, cream like the rest of the site; the avatar carries the colour */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
         <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6">
           {/* Avatar */}
@@ -570,8 +570,8 @@ export default function ProfilePage() {
                   </div>
                 )}
                 <div className="p-6">
-                  <h2 className="text-2xl font-extrabold text-plum">{form.name || '—'}</h2>
-                  <p className="text-plum/50 text-sm mt-1">📍 {form.city || '—'}</p>
+                  <h2 className="text-2xl font-extrabold text-plum">{form.name || ', '}</h2>
+                  <p className="text-plum/50 text-sm mt-1">📍 {form.city || ', '}</p>
                   <p className="text-plum/40 text-xs mt-2">Member since {memberSince}</p>
                   <p className="text-plum/40 text-xs mt-0.5">{user.email}</p>
                 </div>
@@ -589,8 +589,8 @@ export default function ProfilePage() {
                     </div>
                   )}
                   <div className="p-6">
-                    <h2 className="text-2xl font-extrabold text-plum">{dog.name || '—'}</h2>
-                    <p className="text-plum/50 text-sm mt-1">🐾 {dog.breed || '—'}</p>
+                    <h2 className="text-2xl font-extrabold text-plum">{dog.name || ', '}</h2>
+                    <p className="text-plum/50 text-sm mt-1">🐾 {dog.breed || ', '}</p>
                   </div>
                 </div>
               ))}

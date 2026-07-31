@@ -107,7 +107,7 @@ export default function NewPostModal({ category, categoryTitle, onClose, onPoste
           </div>
 
           <p className="text-xs text-plum/50 leading-relaxed">
-            Be kind and keep it dog-friendly — posts follow our{' '}
+            Be kind and keep it dog-friendly, posts follow our{' '}
             <a href="/conduct" target="_blank" className="text-brand-teal underline">Code of Conduct</a>.
           </p>
 

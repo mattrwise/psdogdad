@@ -2,13 +2,13 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'High Heat Guide — PS Dog Dad',
-  description: 'How to keep your dog safe in the Coachella Valley heat — the 7-second pavement test, walk timing, heatstroke warning signs, and everyday heat rules.',
+  title: 'High Heat Guide, PS Dog Dad',
+  description: 'How to keep your dog safe in the Coachella Valley heat, the 7-second pavement test, walk timing, heatstroke warning signs, and everyday heat rules.',
 }
 
 const walkTimes = [
   { badge: 'Best', badgeColor: 'bg-brand-teal/10 text-brand-teal', text: 'Before 8 AM, when overnight lows have cooled the pavement' },
-  { badge: 'Okay', badgeColor: 'bg-brand-golden/20 text-plum', text: 'After sunset, but test the pavement — asphalt holds heat for hours' },
+  { badge: 'Okay', badgeColor: 'bg-brand-golden/20 text-plum', text: 'After sunset, but test the pavement, asphalt holds heat for hours' },
   { badge: 'Never', badgeColor: 'bg-red-100 text-red-600', text: '10 AM to 7 PM on 100°F+ days' },
   { badge: 'Tip', badgeColor: 'bg-plum/10 text-plum', text: 'Stick to grass, dirt trails, or shaded sidewalks when possible' },
 ]
@@ -22,9 +22,9 @@ const heatstrokeSigns = [
 ]
 
 const everydayRules = [
-  { icon: '🚗', text: 'Never leave your dog in a parked car — not even for a minute, not even with windows cracked. Car interiors can pass 120°F in 10 minutes here.' },
+  { icon: '🚗', text: 'Never leave your dog in a parked car, not even for a minute, not even with windows cracked. Car interiors can pass 120°F in 10 minutes here.' },
   { icon: '💧', text: 'Bring water on every walk, even short ones' },
-  { icon: '🐶', text: 'Flat-faced breeds (bulldogs, pugs, frenchies), seniors, puppies, and overweight dogs overheat much faster — shorten everything' },
+  { icon: '🐶', text: 'Flat-faced breeds (bulldogs, pugs, frenchies), seniors, puppies, and overweight dogs overheat much faster, shorten everything' },
   { icon: '🥾', text: 'Booties or paw wax help if you must walk on pavement' },
   { icon: '🏊', text: 'Give your dog a way to cool off at home: AC, cooling mats, or a kiddie pool in the shade' },
 ]
@@ -35,7 +35,7 @@ export default function HeatGuidePage() {
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
 
-        {/* Header — matches the main nav pages */}
+        {/* Header, matches the main nav pages */}
         <div>
           <h1 className="section-title">High Heat Guide</h1>
           <p className="text-plum/60 mt-2 max-w-2xl">
@@ -51,7 +51,7 @@ export default function HeatGuidePage() {
           <p className="text-plum/70 leading-relaxed">
             Press the back of your hand on the pavement for 7 seconds. If it&apos;s too hot for
             your hand, it&apos;s too hot for their paws. Asphalt can hit 140°F+ when the air is
-            only 100°F — hot enough to burn paw pads in under a minute.
+            only 100°F, hot enough to burn paw pads in under a minute.
           </p>
         </section>
 

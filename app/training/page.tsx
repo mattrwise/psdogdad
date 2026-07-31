@@ -3,8 +3,8 @@ import type { Metadata } from 'next'
 import { freeGuides, memberGuides, premiumGuides, type Guide } from '@/lib/guides'
 
 export const metadata: Metadata = {
-  title: 'Training & Guides — PS Dog Dad',
-  description: 'Practical, written guides for raising a great dog in the desert — from leash basics to 110° summer survival.',
+  title: 'Training & Guides, PS Dog Dad',
+  description: 'Practical, written guides for raising a great dog in the desert, from leash basics to 110° summer survival.',
 }
 
 function FreeCard({ guide }: { guide: Guide }) {
@@ -58,11 +58,11 @@ export default function TrainingPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-      {/* Header — same shape as Events, Forums, Members and Resources */}
+      {/* Header, same shape as Events, Forums, Members and Resources */}
       <div className="mb-10">
         <h1 className="section-title">Training &amp; Guides</h1>
         <p className="text-plum/60 mt-2 max-w-2xl">
-          Practical, written guides for raising a great dog in the desert — from leash basics to 110° summer survival.
+          Practical, written guides for raising a great dog in the desert, from leash basics to 110° summer survival.
         </p>
       </div>
 
@@ -96,7 +96,7 @@ export default function TrainingPage() {
         <span className="badge bg-brand-golden/20 text-plum">★ Coming soon</span>
       </div>
       <p className="text-plum/60 text-sm mb-6 max-w-2xl">
-        Our most structured, in-depth programs. The premium tier isn&apos;t open yet —
+        Our most structured, in-depth programs. The premium tier isn&apos;t open yet, 
         join free and we&apos;ll email you when it launches.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-14">
@@ -109,7 +109,7 @@ export default function TrainingPage() {
         <h2 className="text-2xl font-extrabold mb-3">Want to write a guide?</h2>
         <p className="text-white/70 mb-6 max-w-lg mx-auto">
           Members can contribute guides. Send us your idea or draft and we&apos;ll review it for
-          publishing — with full credit to you and your pup.
+          publishing, with full credit to you and your pup.
         </p>
         <a href="mailto:hello@psdogdad.com?subject=Guide%20submission" className="btn-primary text-base px-8">
           Submit a Guide Idea

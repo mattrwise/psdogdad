@@ -9,7 +9,7 @@ const categories = [
     description: 'New to the community? Introduce yourself and your dog(s) here.',
     threads: 87,
     posts: 412,
-    latest: { title: 'Just moved from WeHo — golden retriever dad here!', time: '1h ago' },
+    latest: { title: 'Just moved from WeHo, golden retriever dad here!', time: '1h ago' },
     color: 'bg-brand-teal/10 border-brand-teal/30',
     badge: 'bg-brand-teal/10 text-brand-teal',
   },
@@ -75,7 +75,7 @@ const categories = [
     description: 'Pet-friendly hotels, airlines, road trips, and travel tips.',
     threads: 41,
     posts: 187,
-    latest: { title: 'Flying with a French Bulldog — tips?', time: '2d ago' },
+    latest: { title: 'Flying with a French Bulldog, tips?', time: '2d ago' },
     color: 'bg-plum/10 border-plum/30',
     badge: 'bg-plum/10 text-plum',
   },
@@ -94,7 +94,7 @@ const categories = [
 
 const recentPosts = [
   { author: 'Marco & Biscuit', time: '1h ago', category: 'Health & Wellness', categorySlug: 'health-wellness', title: 'Best vets in PS for senior dogs?', replies: 14 },
-  { author: 'Tyler & Mango', time: '2h ago', category: 'Introductions', categorySlug: 'introductions', title: 'Just moved from WeHo — golden retriever dad here!', replies: 22 },
+  { author: 'Tyler & Mango', time: '2h ago', category: 'Introductions', categorySlug: 'introductions', title: 'Just moved from WeHo, golden retriever dad here!', replies: 22 },
   { author: 'Derek & Zeus', time: '4h ago', category: 'Training', categorySlug: 'training-behavior', title: 'Trainer referral for reactive dog near DT Palm Springs?', replies: 7 },
   { author: 'James & Pretzel', time: '6h ago', category: 'Local Spots', categorySlug: 'local-spots', title: 'Demuth Park small dog area is finally fixed!', replies: 19 },
   { author: 'Chris & Noodle', time: '8h ago', category: 'Show Off', categorySlug: 'show-off', title: "Noodle's first swim of the season 🏊", replies: 31 },
@@ -109,7 +109,7 @@ export default function ForumsPage() {
         <p className="text-plum/60 mt-2">Ask questions, share tips, and connect with dog dads across the Coachella Valley.</p>
       </div>
 
-      {/* Join CTA — visitors only */}
+      {/* Join CTA, visitors only */}
       <SignedOut>
         <div className="card p-5 border-2 border-brand-orange/30 bg-brand-orange/5 mb-8 flex flex-col sm:flex-row sm:items-center gap-4">
           <div className="flex-1">

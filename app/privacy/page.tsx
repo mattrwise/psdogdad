@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — PS Dog Dad',
+  title: 'Privacy Policy, PS Dog Dad',
   description: 'How PS Dog Dad collects, uses, and protects your personal information.',
 }
 
@@ -52,8 +52,8 @@ export default function PrivacyPage() {
             <li>Your dog&apos;s name and breed</li>
           </ul>
           <p>
-            We also collect standard technical information when you use the site — IP address, browser type,
-            pages visited, and time on site — via anonymous analytics. This data is never tied to your personal identity.
+            We also collect standard technical information when you use the site, IP address, browser type,
+            pages visited, and time on site, via anonymous analytics. This data is never tied to your personal identity.
           </p>
         </Section>
 
@@ -106,8 +106,8 @@ export default function PrivacyPage() {
         <Section title="Third-Party Services">
           <p>We use the following third-party services to operate the site:</p>
           <ul className="list-disc pl-5 space-y-1">
-            <li><strong className="text-plum">Supabase</strong> — authentication and data storage</li>
-            <li><strong className="text-plum">Vercel</strong> — website hosting and deployment</li>
+            <li><strong className="text-plum">Supabase</strong>, authentication and data storage</li>
+            <li><strong className="text-plum">Vercel</strong>, website hosting and deployment</li>
           </ul>
           <p>Each service has its own privacy policy governing how they handle data.</p>
         </Section>

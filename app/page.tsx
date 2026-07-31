@@ -6,13 +6,13 @@ import SignedOut from '@/components/auth/SignedOut'
 import ShelterEventCallout from '@/components/ShelterEventCallout'
 import UpcomingEventsPreview from '@/components/home/UpcomingEventsPreview'
 import LatestDiscussionsPreview from '@/components/home/LatestDiscussionsPreview'
-// Imported (not linked by URL) so Next.js serves it from /_next/static/… —
+// Imported (not linked by URL) so Next.js serves it from /_next/static/…, 
 // while middleware.ts is in place it redirects every other path back to '/',
 // including plain files under /public, so a src="/…png" string would 404-loop.
 import heroArt from '@/public/psdogdadbullprint_transparent.png'
 
 // Deliberately not member/event counts. Those would either be invented or, this
-// early, unflatteringly small — these read the same on day one and at 500 members.
+// early, unflatteringly small, these read the same on day one and at 500 members.
 const stats = [
   { value: '🌴', label: 'Coachella Valley' },
   { value: 'Free', label: 'To Join' },
@@ -25,7 +25,7 @@ export default function HomePage() {
     <div>
       {/* Under-development notice */}
       <div className="bg-brand-golden text-plum text-center px-4 py-3 text-sm font-semibold">
-        🚧 This site is currently under development but open for early membership —{' '}
+        🚧 This site is currently under development but open for early membership, {' '}
         <Link href="/members/join" className="underline font-bold hover:text-brand-orange">
           feel free to sign up
         </Link>
@@ -73,7 +73,7 @@ export default function HomePage() {
             <div className="flex justify-center lg:justify-end">
               <Image
                 src={heroArt}
-                alt="PS Dog Dad — a dog dad and his bulldog in the Palm Springs sun"
+                alt="PS Dog Dad, a dog dad and his bulldog in the Palm Springs sun"
                 width={640}
                 height={640}
                 priority
@@ -101,7 +101,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Launch weekend — the shelter's adoption drive. Sits high on the page
+      {/* Launch weekend, the shelter's adoption drive. Sits high on the page
           because it is time-sensitive, and against cream rather than the plum
           Training band so two dark blocks don't stack. */}
       <section className="bg-brand-cream pb-4">
@@ -115,7 +115,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="section-title">Everything Your Pack Needs</h2>
-            <p className="text-plum/60 mt-3 max-w-xl mx-auto">One community for Coachella Valley dog dads — online and on the trail.</p>
+            <p className="text-plum/60 mt-3 max-w-xl mx-auto">One community for Coachella Valley dog dads, online and on the trail.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -150,11 +150,11 @@ export default function HomePage() {
                 🎓 Training &amp; Guides
               </div>
               <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-                Learn to raise a great dog — <span className="text-brand-golden">in the desert</span>
+                Learn to raise a great dog, <span className="text-brand-golden">in the desert</span>
               </h2>
               <p className="text-white/70 leading-relaxed mb-6">
                 Written guides on heat safety, leash skills, recall, reactivity, and desert valley living.
-                Two free guides for everyone — the rest unlock with a free account.
+                Two free guides for everyone, the rest unlock with a free account.
               </p>
               <Link href="/training" className="btn-primary">Browse the Guides</Link>
             </div>
@@ -176,11 +176,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Both load live from Supabase — no placeholder listings. */}
+      {/* Both load live from Supabase, no placeholder listings. */}
       <UpcomingEventsPreview />
       <LatestDiscussionsPreview />
 
-      {/* CTA Banner — visitors only */}
+      {/* CTA Banner, visitors only */}
       <SignedOut>
         <section className="bg-plum py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -191,7 +191,7 @@ export default function HomePage() {
               Create your free member profile, introduce your dog, and start connecting with the Coachella Valley&apos;s best community.
             </p>
             <Link href="/members/join" className="btn-primary text-base sm:text-lg px-6 sm:px-10 py-3.5 sm:py-4 inline-block">
-              Join PS Dog Dad — It&apos;s Free 🐾
+              Join PS Dog Dad, It&apos;s Free 🐾
             </Link>
           </div>
         </section>

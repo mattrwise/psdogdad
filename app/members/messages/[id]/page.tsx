@@ -106,7 +106,7 @@ export default function ConversationPage() {
       return
     }
     if (file.size > MAX_PHOTO_SIZE) {
-      setError(`That photo is ${(file.size / 1024 / 1024).toFixed(1)} MB — please use one under 8 MB.`)
+      setError(`That photo is ${(file.size / 1024 / 1024).toFixed(1)} MB, please use one under 8 MB.`)
       return
     }
     setError(null)
@@ -234,7 +234,7 @@ export default function ConversationPage() {
           <div className="py-10 text-center">
             <div className="text-4xl mb-3">👋</div>
             <p className="text-plum/60 text-sm max-w-xs mx-auto leading-relaxed">
-              No messages yet. Say hello — ask about their dog, or where they walk.
+              No messages yet. Say hello, ask about their dog, or where they walk.
             </p>
           </div>
         ) : (
@@ -327,7 +327,7 @@ export default function ConversationPage() {
 
       <p className="text-xs text-plum/40 mt-5 leading-relaxed">
         Messages are private between the two of you. Please keep to the{' '}
-        <Link href="/conduct" className="text-brand-teal hover:underline">Community Guidelines</Link> —
+        <Link href="/conduct" className="text-brand-teal hover:underline">Community Guidelines</Link>, 
         if someone makes you uncomfortable, block them and let us know at{' '}
         <a href="mailto:psdogdadmc@gmail.com" className="text-brand-teal hover:underline">psdogdadmc@gmail.com</a>.
       </p>

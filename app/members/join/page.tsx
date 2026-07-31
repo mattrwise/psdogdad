@@ -162,7 +162,7 @@ export default function JoinPage() {
     }
   }, [authLoading, currentUser, success, loading, router])
 
-  // photos — one for the member, one per dog (parallel to `dogs`)
+  // photos, one for the member, one per dog (parallel to `dogs`)
   const [memberFile, setMemberFile] = useState<File | null>(null)
   const [memberPreview, setMemberPreview] = useState<string | null>(null)
   const [dogFiles, setDogFiles] = useState<(File | null)[]>([null])
@@ -286,7 +286,7 @@ export default function JoinPage() {
     if (error) { setServerError(error.message); setLoading(false); return }
 
     // While confirmation emails are disabled, accounts are auto-confirmed at
-    // signup but no session is returned — so sign in right away. If email
+    // signup but no session is returned, so sign in right away. If email
     // confirmation is ever re-enabled, this fails ("Email not confirmed") and
     // we fall back to the staged-photos + confirmation-email flow below.
     let session = data.session
@@ -301,7 +301,7 @@ export default function JoinPage() {
     const userId = data.user?.id
     if (userId && (memberFile || dogFiles.some(f => f))) {
       if (session) {
-        // Signed in — upload right away, no staging needed.
+        // Signed in, upload right away, no staging needed.
         setLoadingMsg('Uploading your photos…')
 
         const [avatarUrl, ...dogPhotoUrls] = await Promise.all([
@@ -338,7 +338,7 @@ export default function JoinPage() {
       }
     }
 
-    // Signed in already? Skip the "check your email" screen entirely — the
+    // Signed in already? Skip the "check your email" screen entirely, the
     // account is live, so take them straight to the welcome page. (Keep
     // `loading` true so the already-a-member redirect effect doesn't race us.)
     if (session) {
@@ -371,7 +371,7 @@ export default function JoinPage() {
           {photosPending && (
             <div className="bg-brand-teal/10 border border-brand-teal/30 rounded-xl p-4 text-sm text-plum/70 mb-4">
               📷 Your photos are saved and will be added to your profile automatically
-              once you click the confirmation link — on this device or any other.
+              once you click the confirmation link, on this device or any other.
               You can also add or change them anytime from your profile.
             </div>
           )}
@@ -402,7 +402,7 @@ export default function JoinPage() {
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-plum rounded-2xl text-3xl mb-4 shadow-lg">🐾</div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-plum">Join the Pack</h1>
-          <p className="text-plum/60 mt-2">Create your free PS Dog Dad account — it only takes a minute.</p>
+          <p className="text-plum/60 mt-2">Create your free PS Dog Dad account, it only takes a minute.</p>
           <p className="text-sm text-plum/50 mt-1">
             Already a member?{' '}
             <Link href="/members/login" className="text-brand-orange font-semibold hover:underline">Sign in here</Link>
