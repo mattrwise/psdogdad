@@ -20,30 +20,58 @@ export default function AboutPage() {
           </p>
         </div>
 
-        {/* Origin */}
+        {/* Why it exists */}
         <section className="bg-white rounded-3xl shadow-md p-6 sm:p-10">
-          <h2 className="text-2xl font-extrabold text-plum mb-4">How It Started</h2>
+          <h2 className="text-2xl font-extrabold text-plum mb-4">Why This Exists</h2>
           <p className="text-plum/70 leading-relaxed mb-4">
-            PS Dog Dad grew out of a simple observation: the Coachella Valley has a thriving community of men who have dogs,
-            and those men were scattered across different Facebook groups, Instagram pages, and WhatsApp chats with
-            no single home base. A few morning walks at Ruth Hardy Park and some late-night conversations at Bootlegger
-            later, the idea for a proper community took shape.
+            Most places you might gather online are built to hold your attention. They watch what you
+            look at, sell what they learn to advertisers, and arrange what you see to keep you coming
+            back. That is a strange way to run a neighbourhood.
+          </p>
+          <p className="text-plum/70 leading-relaxed mb-4">
+            PS Dog Dad is deliberately none of that. It is a small, independent community for people
+            across the Coachella Valley who love their dogs, run by one person rather than a company
+            that needs your attention to grow.
           </p>
           <p className="text-plum/70 leading-relaxed">
-            We launched with a handful of members and a lot of enthusiasm. Now we have hundreds of members across
-            Palm Springs, Cathedral City, Rancho Mirage, and the wider Coachella Valley, all connected by their love
-            of dogs and this unique desert community.
+            It is also brand new. Right now the calendar is empty and the forums are quiet, and that
+            is simply the honest state of it. The first walk, the first thread and the first meetup
+            have not happened yet. They are yours to start.
           </p>
+        </section>
+
+        {/* The promise, all of which is verifiable in how the site is built */}
+        <section className="bg-white rounded-3xl shadow-md p-6 sm:p-10">
+          <h2 className="text-2xl font-extrabold text-plum mb-4">What You Will Not Find Here</h2>
+          <ul className="space-y-3">
+            {[
+              ['No tracking', 'No analytics, no pixels, no third party scripts watching what you do. Even the fonts are served from this site rather than from Google, so nobody else sees you visit.'],
+              ['No advertising', 'Nothing is for sale here and nobody is paying to reach you.'],
+              ['No algorithm', 'Posts and events appear in plain order. Nothing is ranked, boosted or arranged to keep you scrolling.'],
+              ['No scores', 'No likes, no upvotes, no ratings on people or their dogs. This is a neighbourhood, not a leaderboard.'],
+            ].map(([title, text]) => (
+              <li key={title} className="flex gap-3 items-start">
+                <span className="text-brand-teal font-bold flex-shrink-0 mt-0.5">✓</span>
+                <p className="text-plum/70 text-sm leading-relaxed">
+                  <strong className="text-plum">{title}.</strong> {text}
+                </p>
+              </li>
+            ))}
+          </ul>
         </section>
 
         {/* What we do */}
         <section>
-          <h2 className="text-2xl font-extrabold text-plum mb-6 text-center">What We Do</h2>
+          <h2 className="text-2xl font-extrabold text-plum mb-2 text-center">What This Is For</h2>
+          <p className="text-plum/50 text-sm text-center mb-6 max-w-lg mx-auto">
+            None of this has happened yet. It is what the community is built to do, once there are
+            enough of us to do it.
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {[
-              { icon: '🐕', title: 'Dog Walks', desc: 'Biweekly morning walks at Ruth Hardy Park and other local spots. All breeds, all ages, leash or off-leash depending on location.' },
-              { icon: '🍹', title: 'Yappy Hours', desc: 'Monthly patio meetups at dog-friendly bars and restaurants on Palm Canyon Drive. Happy hour specials, great dogs, great people.' },
-              { icon: '🏊', title: 'Pool Parties', desc: 'Member-hosted summer pool parties for you and your pup. Some of the best afternoons in the desert happen at these.' },
+              { icon: '🐕', title: 'Dog Walks', desc: 'Morning walks at Ruth Hardy Park and other local spots. All breeds, all ages, leash or off leash depending on where we end up.' },
+              { icon: '🍹', title: 'Yappy Hours', desc: 'Patio meetups at dog friendly bars and restaurants on Palm Canyon Drive. Happy hour specials, great dogs, great people.' },
+              { icon: '🏊', title: 'Pool Parties', desc: 'Member hosted summer pool parties for you and your pup. Somebody has to host the first one.' },
               { icon: '💬', title: 'Online Community', desc: 'Forums for health questions, training tips, local recommendations, and everything else that comes with dog parenthood in the desert.' },
             ].map(({ icon, title, desc }) => (
               <div key={title} className="bg-white rounded-2xl shadow-md p-6">
@@ -61,7 +89,7 @@ export default function AboutPage() {
           <ul className="space-y-4">
             {[
               { icon: '🤝', title: 'Welcoming', text: 'This is a judgment-free space. All dogs welcome. All experience levels welcome. Whether you\'ve had dogs your whole life or just got your first pup, you belong here.' },
-              { icon: '🌴', title: 'Local First', text: 'We\'re rooted in the Coachella Valley. Our recommendations, events, and conversations are grounded in what\'s actually happening across the desert communities.' },
+              { icon: '🌴', title: 'Local First', text: 'This is for the Coachella Valley specifically. Recommendations, events and conversations should come from people who actually live here and walk their dogs in this heat.' },
               { icon: '🐾', title: 'Dog-Centered', text: 'The dogs come first. We share knowledge, resources, and experiences that make us better, more informed, and more loving pet owners.' },
               { icon: '🫶', title: 'Respectful', text: 'We treat each other, and each other\'s dogs, with kindness. See our Code of Conduct for the full details.' },
             ].map(({ icon, title, text }) => (
