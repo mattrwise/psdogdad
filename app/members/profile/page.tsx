@@ -67,7 +67,7 @@ function PhotoUpload({ id, label, hint, preview, onFileSelected, onClear }: Phot
       {preview ? (
         <div className="relative rounded-2xl overflow-hidden border-2 border-brand-teal/40 bg-plum/5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={preview} alt="Preview" className="w-full h-48 object-cover object-top" />
+          <img src={preview} alt="Preview" className="w-full h-auto max-h-80 object-contain bg-plum/5" />
           <button
             type="button"
             onClick={onClear}
@@ -588,15 +588,15 @@ export default function ProfilePage() {
               <div className="bg-white rounded-3xl shadow-md overflow-hidden">
                 {displayAvatarUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={displayAvatarUrl} alt={form.name} className="w-full h-64 object-cover object-top" />
+                  <img src={displayAvatarUrl} alt={form.name} className="w-full h-auto max-h-[34rem] object-contain bg-plum/5" />
                 ) : (
                   <div className="w-full h-52 bg-gradient-to-br from-plum to-plum-light flex items-center justify-center text-7xl font-extrabold text-white/20">
                     {form.name ? initials(form.name) : '?'}
                   </div>
                 )}
                 <div className="p-6">
-                  <h2 className="text-2xl font-extrabold text-plum">{form.name || ', '}</h2>
-                  <p className="text-plum/50 text-sm mt-1">📍 {form.city || ', '}</p>
+                  <h2 className="text-2xl font-extrabold text-plum">{form.name || 'Not set'}</h2>
+                  <p className="text-plum/50 text-sm mt-1">📍 {form.city || 'Not set'}</p>
                   <p className="text-plum/40 text-xs mt-2">Member since {memberSince}</p>
                   <p className="text-plum/40 text-xs mt-0.5">{user.email}</p>
                 </div>
@@ -607,15 +607,15 @@ export default function ProfilePage() {
                 <div key={i} className="bg-white rounded-3xl shadow-md overflow-hidden">
                   {dog.photo_url ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={dog.photo_url} alt={dog.name} className="w-full h-64 object-cover object-top" />
+                    <img src={dog.photo_url} alt={dog.name} className="w-full h-auto max-h-[34rem] object-contain bg-plum/5" />
                   ) : (
                     <div className="w-full h-52 bg-gradient-to-br from-brand-teal to-brand-teal-light flex items-center justify-center text-8xl">
                       🐶
                     </div>
                   )}
                   <div className="p-6">
-                    <h2 className="text-2xl font-extrabold text-plum">{dog.name || ', '}</h2>
-                    <p className="text-plum/50 text-sm mt-1">🐾 {dog.breed || ', '}</p>
+                    <h2 className="text-2xl font-extrabold text-plum">{dog.name || 'Not set'}</h2>
+                    <p className="text-plum/50 text-sm mt-1">🐾 {dog.breed || 'Not set'}</p>
                   </div>
                 </div>
               ))}

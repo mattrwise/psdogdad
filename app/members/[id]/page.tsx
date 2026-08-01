@@ -64,8 +64,8 @@ export default function MemberProfilePage() {
     ? profile.dogs
     : [{ name: profile.dog_name, breed: profile.dog_breed, photo_url: null }]
   const dogs = rawDogs.map((d, i) => ({
-    name: d.name || ', ',
-    breed: d.breed || ', ',
+    name: d.name || 'Not set',
+    breed: d.breed || 'Not set',
     photo_url: d.photo_url ?? (i === 0 ? profile.dog_photo_url : null),
   }))
 
@@ -118,7 +118,7 @@ export default function MemberProfilePage() {
             <div key={i} className="bg-white rounded-3xl shadow-md overflow-hidden">
               {dog.photo_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={dog.photo_url} alt={dog.name} className="w-full h-64 object-cover object-top" />
+                <img src={dog.photo_url} alt={dog.name} className="w-full h-auto max-h-[34rem] object-contain bg-plum/5" />
               ) : (
                 <div className="w-full h-52 bg-gradient-to-br from-brand-teal to-brand-teal-light flex items-center justify-center text-8xl">
                   🐶
