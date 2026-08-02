@@ -11,7 +11,7 @@ const categories: Record<string, {
   description: string
   color: string
   badge: string
-  threads: Thread[]
+  ideas: string[]
 }> = {
   'introductions': {
     icon: '👋',
@@ -19,10 +19,10 @@ const categories: Record<string, {
     description: 'New to the community? Introduce yourself and your dog(s) here.',
     color: 'bg-brand-teal/10 border-brand-teal/30',
     badge: 'bg-brand-teal/10 text-brand-teal',
-    threads: [
-      { id: '1', author: 'Tyler & Mango', time: '2h ago', title: 'Just moved from WeHo, golden retriever dad here!', replies: 22, views: 88 },
-      { id: '2', author: 'Sam & Peanut', time: '1d ago', title: 'Hello from Cathedral City 🐶', replies: 9, views: 41 },
-      { id: '3', author: 'Jordan & Fig', time: '3d ago', title: 'First-time dog dad, excited to be here', replies: 17, views: 63 },
+    ideas: [
+      'Just moved to Palm Springs with a two year old lab, where do you all walk?',
+      'Hello from Cathedral City, this is Biscuit',
+      'First time dog dad, what do you wish you had known?',
     ],
   },
   'health-wellness': {
@@ -31,10 +31,10 @@ const categories: Record<string, {
     description: 'Vet recommendations, supplements, senior dog care, and more.',
     color: 'bg-brand-orange/10 border-brand-orange/30',
     badge: 'bg-brand-orange/10 text-brand-orange',
-    threads: [
-      { id: '1', author: 'Marco & Biscuit', time: '1h ago', title: 'Best vets in PS for senior dogs?', replies: 14, views: 72 },
-      { id: '2', author: 'Kevin & Waffle', time: '5h ago', title: 'Anyone use VCA Desert Animal Hospital?', replies: 6, views: 29 },
-      { id: '3', author: 'Ben & Churro', time: '2d ago', title: 'Hip dysplasia management tips?', replies: 21, views: 110 },
+    ideas: [
+      'Which vet do you actually use, and why?',
+      'How do you protect paws on hot pavement in July?',
+      'Anyone dealt with allergies in the desert?',
     ],
   },
   'training-behavior': {
@@ -43,10 +43,10 @@ const categories: Record<string, {
     description: 'Tips, trainer recommendations, and behavior questions.',
     color: 'bg-plum/10 border-plum/30',
     badge: 'bg-plum/10 text-plum',
-    threads: [
-      { id: '1', author: 'Derek & Zeus', time: '4h ago', title: 'Trainer referral for reactive dog near DT Palm Springs?', replies: 7, views: 34 },
-      { id: '2', author: 'Alex & Taco', time: '1d ago', title: 'Loose leash walking, what worked for you?', replies: 18, views: 95 },
-      { id: '3', author: 'Ryan & Boba', time: '4d ago', title: 'Separation anxiety getting worse in summer heat', replies: 25, views: 130 },
+    ideas: [
+      'Any trainers near downtown who work with reactive dogs?',
+      'Loose leash walking, what actually worked for you?',
+      'How do you stop the barking at the door?',
     ],
   },
   'local-spots': {
@@ -55,10 +55,10 @@ const categories: Record<string, {
     description: 'Dog parks, hiking trails, pet-friendly patios and more in the Coachella Valley.',
     color: 'bg-brand-golden/10 border-brand-golden/30',
     badge: 'bg-brand-golden/10 text-plum',
-    threads: [
-      { id: '1', author: 'James & Pretzel', time: '6h ago', title: 'Demuth Park small dog area is finally fixed!', replies: 19, views: 88 },
-      { id: '2', author: 'Mike & Salsa', time: '1d ago', title: 'Best dog-friendly patios in PS?', replies: 31, views: 155 },
-      { id: '3', author: 'Luis & Frito', time: '3d ago', title: 'Murray Canyon trail, leash required?', replies: 11, views: 62 },
+    ideas: [
+      'Which patios genuinely welcome dogs, not just tolerate them?',
+      'Best shaded walk for a July morning?',
+      'Is the small dog area at Demuth worth it?',
     ],
   },
   'nutrition-food': {
@@ -67,10 +67,10 @@ const categories: Record<string, {
     description: 'Raw feeding, brands, treat recipes, and diet advice.',
     color: 'bg-brand-teal/10 border-brand-teal/30',
     badge: 'bg-brand-teal/10 text-brand-teal',
-    threads: [
-      { id: '1', author: 'Chris & Noodle', time: '1d ago', title: "Anyone tried Farmer's Dog delivery?", replies: 8, views: 44 },
-      { id: '2', author: 'Tom & Dumpling', time: '2d ago', title: 'Raw feeding in summer, any concerns?', replies: 14, views: 67 },
-      { id: '3', author: 'Pat & Mochi', time: '5d ago', title: 'Frozen treat recipes for hot days', replies: 29, views: 180 },
+    ideas: [
+      'What are you feeding when it is this hot?',
+      'Anywhere local for raw food?',
+      'Treats that survive a walk without melting?',
     ],
   },
   'show-off': {
@@ -79,10 +79,10 @@ const categories: Record<string, {
     description: 'Photos, milestones, and all the good boy energy.',
     color: 'bg-brand-orange/10 border-brand-orange/30',
     badge: 'bg-brand-orange/10 text-brand-orange',
-    threads: [
-      { id: '1', author: 'Greg & Rocky', time: '3h ago', title: "Rocky's first birthday pool party 🎉", replies: 41, views: 210 },
-      { id: '2', author: 'Chris & Noodle', time: '8h ago', title: "Noodle's first swim of the season 🏊", replies: 31, views: 148 },
-      { id: '3', author: 'Dan & Pretzel', time: '1d ago', title: 'Caught him mid-zoomies, classic', replies: 17, views: 93 },
+    ideas: [
+      'First swim of the season',
+      'Adoption day, one year on',
+      'Caught mid zoomies',
     ],
   },
   'travel': {
@@ -91,10 +91,10 @@ const categories: Record<string, {
     description: 'Pet-friendly hotels, airlines, road trips, and travel tips.',
     color: 'bg-plum/10 border-plum/30',
     badge: 'bg-plum/10 text-plum',
-    threads: [
-      { id: '1', author: 'Brian & Gnocchi', time: '2d ago', title: 'Flying with a French Bulldog, tips?', replies: 12, views: 58 },
-      { id: '2', author: 'Nick & Wonton', time: '4d ago', title: 'Pet-friendly Airbnbs in Big Bear?', replies: 8, views: 39 },
-      { id: '3', author: 'Eric & Nacho', time: '1w ago', title: 'Road trip from PS to SF with two dogs, our story', replies: 22, views: 121 },
+    ideas: [
+      'Driving to San Diego with a nervous dog, any tips?',
+      'Which hotels here actually mean pet friendly?',
+      'Flying with a dog out of PSP, how did it go?',
     ],
   },
   'events-meetups': {
@@ -103,21 +103,12 @@ const categories: Record<string, {
     description: 'Community event planning, feedback, and coordination.',
     color: 'bg-brand-golden/10 border-brand-golden/30',
     badge: 'bg-brand-golden/10 text-plum',
-    threads: [
-      { id: '1', author: 'Admin', time: '5d ago', title: 'Pool party recap + photos from Saturday!', replies: 38, views: 204 },
-      { id: '2', author: 'Jake & Pepper', time: '1w ago', title: 'Suggestion: morning meetup at Demuth?', replies: 15, views: 77 },
-      { id: '3', author: 'Matt & Biscuit', time: '2w ago', title: 'Fall social, who\'s interested?', replies: 27, views: 130 },
+    ideas: [
+      'Would anyone come to an early morning walk at Ruth Hardy Park?',
+      'Yappy hour, which patio should we try first?',
+      'Pool party season, anyone willing to host?',
     ],
   },
-}
-
-type Thread = {
-  id: string
-  author: string
-  time: string
-  title: string
-  replies: number
-  views: number
 }
 
 export default function CategoryPage({ params }: { params: { category: string } }) {
@@ -161,34 +152,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
       </div>
 
       {/* Real member posts */}
-      <ForumPostList category={params.category} />
-
-      {/* Thread List */}
-      <div className="space-y-3">
-        {cat.threads.map((thread) => (
-          <div
-            key={thread.id}
-            className="card p-5 hover:-translate-y-0.5 cursor-pointer flex items-start gap-4"
-          >
-            <div className="flex-1 min-w-0">
-              <h2 className="font-extrabold text-plum text-base leading-snug hover:text-brand-teal transition-colors cursor-pointer">
-                {thread.title}
-              </h2>
-              <p className="text-xs text-plum/40 mt-1">{thread.author} · {thread.time}</p>
-            </div>
-            <div className="flex-shrink-0 flex gap-6 text-center hidden sm:flex">
-              <div>
-                <div className="text-base font-extrabold text-plum">{thread.replies}</div>
-                <div className="text-xs text-plum/40 uppercase tracking-wider">replies</div>
-              </div>
-              <div>
-                <div className="text-base font-extrabold text-plum">{thread.views}</div>
-                <div className="text-xs text-plum/40 uppercase tracking-wider">views</div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <ForumPostList category={params.category} ideas={cat.ideas} />
 
       {/* Bottom New Post CTA */}
       <div className="mt-8 flex justify-center">

@@ -1,5 +1,9 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import SignedOut from '@/components/auth/SignedOut'
+import { supabase } from '@/lib/supabase/client'
 
 const categories = [
   {
@@ -7,9 +11,6 @@ const categories = [
     icon: '👋',
     title: 'Introductions',
     description: 'New to the community? Introduce yourself and your dog(s) here.',
-    threads: 87,
-    posts: 412,
-    latest: { title: 'Just moved from WeHo, golden retriever dad here!', time: '1h ago' },
     color: 'bg-brand-teal/10 border-brand-teal/30',
     badge: 'bg-brand-teal/10 text-brand-teal',
   },
@@ -18,9 +19,6 @@ const categories = [
     icon: '🏥',
     title: 'Health & Wellness',
     description: 'Vet recommendations, supplements, senior dog care, and more.',
-    threads: 134,
-    posts: 891,
-    latest: { title: 'Best vets in PS for senior dogs?', time: '2h ago' },
     color: 'bg-brand-orange/10 border-brand-orange/30',
     badge: 'bg-brand-orange/10 text-brand-orange',
   },
@@ -29,9 +27,6 @@ const categories = [
     icon: '🎓',
     title: 'Training & Behavior',
     description: 'Tips, trainer recommendations, and behavior questions.',
-    threads: 62,
-    posts: 348,
-    latest: { title: 'Trainer referral for reactive dog?', time: '4h ago' },
     color: 'bg-plum/10 border-plum/30',
     badge: 'bg-plum/10 text-plum',
   },
@@ -40,9 +35,6 @@ const categories = [
     icon: '🌴',
     title: 'Local Spots',
     description: 'Dog parks, hiking trails, pet-friendly patios and more in the Coachella Valley.',
-    threads: 98,
-    posts: 623,
-    latest: { title: 'Demuth Park small dog area is finally fixed!', time: '6h ago' },
     color: 'bg-brand-golden/10 border-brand-golden/30',
     badge: 'bg-brand-golden/10 text-plum',
   },
@@ -51,9 +43,6 @@ const categories = [
     icon: '🍽️',
     title: 'Nutrition & Food',
     description: 'Raw feeding, brands, treat recipes, and diet advice.',
-    threads: 45,
-    posts: 218,
-    latest: { title: "Anyone tried Farmer's Dog delivery?", time: '1d ago' },
     color: 'bg-brand-teal/10 border-brand-teal/30',
     badge: 'bg-brand-teal/10 text-brand-teal',
   },
@@ -62,9 +51,6 @@ const categories = [
     icon: '📸',
     title: 'Show Off Your Pup',
     description: 'Photos, milestones, and all the good boy energy.',
-    threads: 203,
-    posts: 1240,
-    latest: { title: "Rocky's first birthday pool party 🎉", time: '3h ago' },
     color: 'bg-brand-orange/10 border-brand-orange/30',
     badge: 'bg-brand-orange/10 text-brand-orange',
   },
@@ -73,9 +59,6 @@ const categories = [
     icon: '✈️',
     title: 'Travel with Dogs',
     description: 'Pet-friendly hotels, airlines, road trips, and travel tips.',
-    threads: 41,
-    posts: 187,
-    latest: { title: 'Flying with a French Bulldog, tips?', time: '2d ago' },
     color: 'bg-plum/10 border-plum/30',
     badge: 'bg-plum/10 text-plum',
   },
@@ -84,23 +67,58 @@ const categories = [
     icon: '🎉',
     title: 'Events & Meetups',
     description: 'Community event planning, feedback, and coordination.',
-    threads: 58,
-    posts: 394,
-    latest: { title: 'Pool party recap + photos from Saturday!', time: '5d ago' },
     color: 'bg-brand-golden/10 border-brand-golden/30',
     badge: 'bg-brand-golden/10 text-plum',
   },
 ]
 
-const recentPosts = [
-  { author: 'Marco & Biscuit', time: '1h ago', category: 'Health & Wellness', categorySlug: 'health-wellness', title: 'Best vets in PS for senior dogs?', replies: 14 },
-  { author: 'Tyler & Mango', time: '2h ago', category: 'Introductions', categorySlug: 'introductions', title: 'Just moved from WeHo, golden retriever dad here!', replies: 22 },
-  { author: 'Derek & Zeus', time: '4h ago', category: 'Training', categorySlug: 'training-behavior', title: 'Trainer referral for reactive dog near DT Palm Springs?', replies: 7 },
-  { author: 'James & Pretzel', time: '6h ago', category: 'Local Spots', categorySlug: 'local-spots', title: 'Demuth Park small dog area is finally fixed!', replies: 19 },
-  { author: 'Chris & Noodle', time: '8h ago', category: 'Show Off', categorySlug: 'show-off', title: "Noodle's first swim of the season 🏊", replies: 31 },
-]
+type RecentPost = {
+  id: string
+  title: string
+  category: string
+  author_name: string | null
+  created_at: string
+}
+
+function timeAgo(iso: string) {
+  const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60000)
+  if (mins < 1) return 'just now'
+  if (mins < 60) return `${mins}m ago`
+  const hours = Math.floor(mins / 60)
+  if (hours < 24) return `${hours}h ago`
+  const days = Math.floor(hours / 24)
+  if (days < 7) return `${days}d ago`
+  return `${Math.floor(days / 7)}w ago`
+}
 
 export default function ForumsPage() {
+  // Counts used to be invented: 87 threads, 412 posts, and a "latest" line for
+  // categories that had never held a post. They now come from the database, and
+  // a category with nothing in it says so.
+  const [threadCounts, setThreadCounts] = useState<Record<string, number> | null>(null)
+  const [recent, setRecent] = useState<RecentPost[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      const { data, error } = await supabase
+        .from('forum_posts')
+        .select('id, title, category, author_name, created_at')
+        .order('created_at', { ascending: false })
+      if (cancelled) return
+      if (error) { console.error('Could not load forum posts:', error.message); setThreadCounts({}); return }
+      const posts = (data as RecentPost[]) ?? []
+      const counts: Record<string, number> = {}
+      for (const post of posts) counts[post.category] = (counts[post.category] ?? 0) + 1
+      setThreadCounts(counts)
+      setRecent(posts.slice(0, 5))
+    })()
+    return () => { cancelled = true }
+  }, [])
+
+  const categoryLabel = (slug: string) =>
+    categories.find(c => c.slug === slug)?.title ?? slug
+
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Header */}
@@ -135,39 +153,48 @@ export default function ForumsPage() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="font-extrabold text-plum text-base group-hover:text-brand-teal transition-colors">{cat.title}</h3>
-                <span className={`badge text-xs ${cat.badge}`}>{cat.threads} threads</span>
+                {threadCounts && (
+                  <span className={`badge text-xs ${cat.badge}`}>
+                    {threadCounts[cat.slug]
+                      ? `${threadCounts[cat.slug]} ${threadCounts[cat.slug] === 1 ? 'thread' : 'threads'}`
+                      : 'No threads yet'}
+                  </span>
+                )}
               </div>
               <p className="text-plum/60 text-sm mt-1">{cat.description}</p>
-              <div className="mt-2 text-xs text-plum/40">
-                Latest: <span className="text-plum/70 font-medium">{cat.latest.title}</span> · {cat.latest.time}
-              </div>
-            </div>
-            <div className="flex-shrink-0 text-center hidden sm:block">
-              <div className="text-xl font-extrabold text-plum">{cat.posts}</div>
-              <div className="text-xs text-plum/40 uppercase tracking-wider">posts</div>
             </div>
           </Link>
         ))}
       </div>
 
-      {/* Recent Activity */}
+      {/* Recent Activity, real posts only */}
       <div className="card p-6">
         <h3 className="font-extrabold text-plum text-lg mb-4">Recent Activity</h3>
-        <div className="divide-y divide-gray-100">
-          {recentPosts.map((post) => (
-            <div key={post.title} className="py-3 first:pt-0 last:pb-0">
-              <Link href={`/forums/${post.categorySlug}`} className="text-xs text-brand-orange font-semibold hover:underline">
-                {post.category}
-              </Link>
-              <p className="text-sm font-semibold text-plum leading-snug mt-0.5">{post.title}</p>
-              <div className="flex items-center justify-between mt-1">
-                <p className="text-xs text-plum/40">{post.author} · {post.time}</p>
-                <p className="text-xs text-plum/50">{post.replies} replies</p>
+        {recent.length === 0 ? (
+          <div className="text-center py-6">
+            <div className="text-4xl mb-3">💬</div>
+            <p className="text-plum/60 text-sm max-w-sm mx-auto leading-relaxed">
+              Nothing posted yet. Pick a category above and ask the first question, or
+              introduce yourself and your dog.
+            </p>
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-100">
+            {recent.map(post => (
+              <div key={post.id} className="py-3 first:pt-0 last:pb-0">
+                <Link href={`/forums/${post.category}`} className="text-xs text-brand-orange font-semibold hover:underline">
+                  {categoryLabel(post.category)}
+                </Link>
+                <p className="text-sm font-semibold text-plum leading-snug mt-0.5">{post.title}</p>
+                <p className="text-xs text-plum/40 mt-1">
+                  {post.author_name || 'A Dog Dad'} · {timeAgo(post.created_at)}
+                </p>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
+
     </div>
   )
 }

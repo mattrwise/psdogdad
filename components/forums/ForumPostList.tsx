@@ -99,7 +99,7 @@ function ReplyForm({ postId, onReplied, onCancel }: { postId: string; onReplied:
   )
 }
 
-export default function ForumPostList({ category }: { category: string }) {
+export default function ForumPostList({ category, ideas = [] }: { category: string; ideas?: string[] }) {
   const { user } = useUser()
   const [posts, setPosts] = useState<Post[] | null>(null)
   const [replies, setReplies] = useState<Record<string, Reply[]>>({})
@@ -132,7 +132,28 @@ export default function ForumPostList({ category }: { category: string }) {
 
   useEffect(() => { load() }, [load])
 
-  if (!posts || posts.length === 0) return null
+  // Nothing here yet. Offer starting points rather than a blank space, but keep
+  // them visibly prompts: no author, no reply count, no timestamp, nothing that
+  // could be mistaken for a real thread by a real member.
+  if (!posts || posts.length === 0) {
+    if (ideas.length === 0) return null
+    return (
+      <div className="card border-2 border-dashed border-plum/15 bg-plum/[0.02] p-6 mb-3">
+        <h2 className="font-extrabold text-plum text-base mb-1">No threads here yet</h2>
+        <p className="text-plum/60 text-sm mb-4">
+          Somebody has to go first. If you want a starting point, people usually ask things like:
+        </p>
+        <ul className="space-y-2">
+          {ideas.map(idea => (
+            <li key={idea} className="text-sm text-plum/70 flex gap-2.5 items-start">
+              <span className="flex-shrink-0 mt-0.5">💬</span>
+              <span className="italic">&ldquo;{idea}&rdquo;</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-3 mb-3">
