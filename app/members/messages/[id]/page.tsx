@@ -329,7 +329,7 @@ export default function ConversationPage() {
         Messages are private between the two of you. Please keep to the{' '}
         <Link href="/conduct" className="text-brand-teal hover:underline">Community Guidelines</Link>, 
         if someone makes you uncomfortable, block them and let us know at{' '}
-        <a href="mailto:psdogdadmc@gmail.com" className="text-brand-teal hover:underline">psdogdadmc@gmail.com</a>.
+        <a href="mailto:hello@psdogdad.com" className="text-brand-teal hover:underline">hello@psdogdad.com</a>.
       </p>
     </div>
   )
