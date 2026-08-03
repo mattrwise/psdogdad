@@ -236,6 +236,21 @@ export default function ResourcesPage() {
         </SuggestResourceButton>
       </div>
 
+      {/* New member roadmap */}
+      <Link
+        href="/resources/roadmap"
+        className="flex flex-col sm:flex-row sm:items-center gap-4 bg-plum rounded-2xl p-5 sm:p-6 mb-8 text-white hover:-translate-y-0.5 transition-transform"
+      >
+        <div className="text-4xl flex-shrink-0">🗺️</div>
+        <div className="flex-1">
+          <h2 className="font-extrabold text-lg">New to PS Dog Dad?</h2>
+          <p className="text-white/70 text-sm mt-0.5">Get your printable roadmap, a step-by-step guide to everything worth exploring first.</p>
+        </div>
+        <span className="text-sm font-bold text-brand-golden whitespace-nowrap self-start sm:self-auto">
+          View Roadmap →
+        </span>
+      </Link>
+
       {/* Jump links */}
       <div className="flex flex-wrap gap-2 mb-6">
         {resourceSections.map((section) => (

@@ -171,6 +171,13 @@ function WelcomeContent() {
           </ul>
         </div>
 
+        {/* Roadmap link */}
+        <div className="text-center mb-10">
+          <Link href="/resources/roadmap" className="text-sm font-semibold text-brand-teal hover:underline">
+            🗺️ Want a printable roadmap of it all? View your Getting Started Roadmap →
+          </Link>
+        </div>
+
         {/* Support callout */}
         <div className="bg-plum/5 border border-plum/15 rounded-2xl p-6 text-center">
           <p className="text-plum/70 text-sm leading-relaxed">

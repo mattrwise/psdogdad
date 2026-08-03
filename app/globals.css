@@ -29,3 +29,17 @@
     @apply inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full;
   }
 }
+
+/* Printable pages (e.g. the member roadmap) hide site chrome and drop
+   shadows/backgrounds that just waste ink or turn to gray blocks on paper. */
+@media print {
+  header, footer {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
