@@ -5,46 +5,37 @@ import Link from 'next/link'
 const steps = [
   {
     number: 1,
-    icon: '🐾',
-    title: 'Create Your Free Account',
+    icon: '🌴',
+    title: 'Browse Local Resources',
     color: 'bg-brand-teal',
-    text: 'Sign up with your name, city, and your dog(s). It takes about two minutes and it\'s always free.',
-    href: '/members/join',
-    linkLabel: 'Join Now',
+    text: 'Our full guide to vets, groomers, parks, trails, and dog-friendly spots across the Coachella Valley, everything local in one place.',
+    href: '/resources',
+    linkLabel: 'Browse Resources',
   },
   {
     number: 2,
-    icon: '📸',
-    title: 'Complete Your Profile',
+    icon: '🎓',
+    title: 'Explore the Training Library',
     color: 'bg-brand-orange',
-    text: 'Add a photo of you and your pup so other members recognize a friendly face at the dog park.',
-    href: '/members/profile',
-    linkLabel: 'Edit Profile',
+    text: 'Real, practical guides on everything from loose-leash walking to desert heat safety.',
+    href: '/training',
+    linkLabel: 'See Training Guides',
   },
   {
     number: 3,
-    icon: '👋',
-    title: 'Say Hello in the Forums',
+    icon: '📖',
+    title: 'Read the Dog Dad Handbook',
     color: 'bg-plum',
-    text: 'Post a quick introduction in the Introductions category. Tell us your name, your dog\'s name, and what neighborhood you\'re in.',
-    href: '/forums/introductions',
-    linkLabel: 'Introduce Yourself',
+    text: 'The complete guide, from bringing your dog home through their senior years. Five chapters, read start to finish or jump to what you need.',
+    href: '/resources/handbook',
+    linkLabel: 'Open the Handbook',
   },
   {
     number: 4,
-    icon: '📅',
-    title: 'RSVP to an Event',
-    color: 'bg-brand-golden',
-    text: 'Morning walks, yappy hours, and pool parties are the easiest way to turn online friends into real ones.',
-    href: '/events',
-    linkLabel: 'See Upcoming Events',
-  },
-  {
-    number: 5,
     icon: '👥',
-    title: 'Browse the Member Directory',
-    color: 'bg-brand-teal',
-    text: 'See who else is in the community and find dog dads near your part of the valley.',
+    title: 'Meet the Members',
+    color: 'bg-brand-golden',
+    text: 'See who else is already part of the community and find dog dads near your part of the valley.',
     href: '/members',
     linkLabel: 'Meet the Members',
   },
@@ -58,34 +49,16 @@ const exploreAnytime = [
     href: '/resources/health-wellness',
   },
   {
-    icon: '🎓',
+    icon: '💪',
     title: 'Training Techniques',
-    text: 'Core principles, modules, and pro tips from other dog dads.',
+    text: 'Core principles, common mistakes, and pro tips from other dog dads.',
     href: '/resources/training',
-  },
-  {
-    icon: '📖',
-    title: 'Dog Dad Handbook',
-    text: 'The full 5-chapter guide, from puppyhood to senior years.',
-    href: '/resources/handbook',
   },
   {
     icon: '🛒',
     title: 'Product Guide',
     text: 'Community-tested gear, with smart shopping tips.',
     href: '/resources/products',
-  },
-  {
-    icon: '🌴',
-    title: 'Local Resources',
-    text: 'Vets, groomers, parks, restaurants, and more across the Coachella Valley.',
-    href: '/resources',
-  },
-  {
-    icon: '💬',
-    title: 'Community Forums',
-    text: 'Every category, from training questions to show-off-your-pup photos.',
-    href: '/forums',
   },
 ]
 
@@ -97,7 +70,7 @@ export default function RoadmapPage() {
         <div>
           <h1 className="section-title">Your PS Dog Dad Roadmap</h1>
           <p className="text-plum/60 mt-2 max-w-xl">
-            New here? This is the order most members find works best, from your first login to becoming a regular around the valley.
+            Now that you&apos;re a member, here&apos;s where things are richest. This order is a good default, but feel free to jump around.
           </p>
         </div>
         <button
@@ -153,7 +126,7 @@ export default function RoadmapPage() {
         <p className="text-plum/60 text-sm mb-6 max-w-xl">
           No particular order here, just come back whenever you need one of these.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {exploreAnytime.map(item => (
             <div key={item.title} className="card p-5 print:shadow-none print:border print:border-plum/20 print:break-inside-avoid">
               <div className="text-2xl mb-1.5">{item.icon}</div>
