@@ -153,11 +153,9 @@ export default function ForumsPage() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="font-extrabold text-plum text-base group-hover:text-brand-teal transition-colors">{cat.title}</h3>
-                {threadCounts && (
+                {threadCounts && threadCounts[cat.slug] > 0 && (
                   <span className={`badge text-xs ${cat.badge}`}>
-                    {threadCounts[cat.slug]
-                      ? `${threadCounts[cat.slug]} ${threadCounts[cat.slug] === 1 ? 'thread' : 'threads'}`
-                      : 'No threads yet'}
+                    {threadCounts[cat.slug]} {threadCounts[cat.slug] === 1 ? 'thread' : 'threads'}
                   </span>
                 )}
               </div>
