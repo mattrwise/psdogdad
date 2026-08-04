@@ -120,7 +120,7 @@ export default function MembersPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
         <div>
           <h1 className="section-title">Member Directory</h1>
-          <p className="text-plum/60 mt-2">Meet the dog dads of the Coachella Valley, and their very good boys (and girls).</p>
+          <p className="text-plum/60 mt-2">Meet the dog dads of the Coachella Valley.</p>
         </div>
         <SignedOut>
           <Link href="/members/join" className="btn-primary self-start">Join the Pack</Link>
