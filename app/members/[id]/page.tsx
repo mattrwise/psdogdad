@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
 import { useUser } from '@/lib/useUser'
+import { thumbUrl } from '@/lib/images'
 
 type ProfileRow = {
   id: string
@@ -80,7 +81,7 @@ export default function MemberProfilePage() {
           <div className="relative flex-shrink-0">
             {profile.avatar_url ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={profile.avatar_url} alt={profile.name ?? 'Member'}
+              <img src={thumbUrl(profile.avatar_url, 224)!} alt={profile.name ?? 'Member'}
                 className="w-28 h-28 rounded-full object-cover object-top border-4 border-white shadow-lg" />
             ) : (
               <div className="w-28 h-28 rounded-full bg-brand-orange flex items-center justify-center text-4xl font-extrabold text-white border-4 border-white shadow-lg">
@@ -118,7 +119,9 @@ export default function MemberProfilePage() {
             <div key={i} className="bg-white rounded-3xl shadow-md overflow-hidden">
               {dog.photo_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={dog.photo_url} alt={dog.name} className="w-full h-auto max-h-[34rem] object-contain bg-plum/5" />
+                <img src={thumbUrl(dog.photo_url, 1200)!} alt={dog.name}
+                  loading={i === 0 ? undefined : 'lazy'} decoding="async"
+                  className="w-full h-auto max-h-[34rem] object-contain bg-plum/5" />
               ) : (
                 <div className="w-full h-52 bg-gradient-to-br from-brand-teal to-brand-teal-light flex items-center justify-center text-8xl">
                   🐶

@@ -1,6 +1,7 @@
 'use client'
 
 import { supabase } from '@/lib/supabase/client'
+import { downscaleImage } from '@/lib/images'
 
 export type Message = {
   id: string
@@ -47,12 +48,13 @@ export async function sendMessage(
 
   let photoPath: string | null = null
   if (photo) {
-    const type = photo.type || 'image/jpeg'
+    const image = await downscaleImage(photo)
+    const type = image === photo ? (photo.type || 'image/jpeg') : image.type
     const ext = (type.split('/')[1] ?? 'jpg').replace('jpeg', 'jpg')
     const path = `${conversationFolder(user.id, recipientId)}/${crypto.randomUUID()}.${ext}`
     const { error: uploadError } = await supabase.storage
       .from(MESSAGE_PHOTO_BUCKET)
-      .upload(path, photo, { contentType: type })
+      .upload(path, image, { contentType: type })
     if (uploadError) {
       console.error('Message photo upload failed:', uploadError.message)
       return { ok: false, error: 'That photo could not be uploaded. Please try again.' }

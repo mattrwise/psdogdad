@@ -1,6 +1,14 @@
 'use client'
 
 import { supabase } from '@/lib/supabase/client'
+import { downscaleImage } from '@/lib/images'
+
+// A year. Safe despite photos being replaceable in place, because every URL
+// this module hands out carries a ?v= stamp, so a new photo is a new URL and
+// a cached copy of the old one can never be served in its place. Without this
+// Supabase defaults to no-cache, which revalidates on every single view and
+// bills at the dearer uncached egress rate.
+const PHOTO_CACHE_CONTROL = '31536000'
 
 // Backup copy of the in-flight token, in case the /welcome claim attempt
 // gets interrupted (closed tab, network blip), PendingPhotoSync retries
@@ -24,12 +32,17 @@ export async function uploadPhoto(
   file: Blob,
   contentType?: string,
 ): Promise<string | null> {
-  const type = contentType ?? file.type ?? 'image/jpeg'
+  const image = await downscaleImage(file)
+  // Read the type off the result, not the original: a HEIC that got converted
+  // must not be stored under a .heic name. Anything downscaleImage re-encodes
+  // comes back as JPEG, which also gives iPhone uploads a format that Chrome
+  // and Firefox can actually display.
+  const type = image === file ? (contentType ?? file.type ?? 'image/jpeg') : image.type
   const ext = (type.split('/')[1] ?? 'jpg').replace('jpeg', 'jpg')
   const path = `${userId}/${slot}.${ext}`
   const { error } = await supabase.storage
     .from('member-photos')
-    .upload(path, file, { upsert: true, contentType: type })
+    .upload(path, image, { upsert: true, contentType: type, cacheControl: PHOTO_CACHE_CONTROL })
   if (error) { console.error(`Upload ${slot} failed:`, error.message); return null }
   const { data } = supabase.storage.from('member-photos').getPublicUrl(path)
   // Bust browser cache when a photo at the same path is replaced
@@ -55,11 +68,18 @@ export async function stagePendingPhotos(
   dogFiles: (File | null)[],
 ): Promise<boolean> {
   const stageOne = async (slot: string, file: File) => {
-    const type = file.type || 'image/jpeg'
+    // Shrink here too, not just on the claim: a staged photo travels the wire
+    // twice, up now and back down on /welcome.
+    const image = await downscaleImage(file)
+    const type = image === file ? (file.type || 'image/jpeg') : image.type
     const ext = (type.split('/')[1] ?? 'jpg').replace('jpeg', 'jpg')
     const { error } = await supabase.storage
       .from('member-photos')
-      .upload(`_pending/${token}/${slot}.${ext}`, file, { upsert: true, contentType: type })
+      .upload(`_pending/${token}/${slot}.${ext}`, image, {
+        upsert: true,
+        contentType: type,
+        cacheControl: PHOTO_CACHE_CONTROL,
+      })
     if (error) { console.error(`Staging ${slot} failed:`, error.message); return false }
     return true
   }

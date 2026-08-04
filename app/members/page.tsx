@@ -6,6 +6,17 @@ import { supabase } from '@/lib/supabase/client'
 import SignedIn from '@/components/auth/SignedIn'
 import SignedOut from '@/components/auth/SignedOut'
 import { Dog } from '@/lib/dogs'
+import { thumbUrl } from '@/lib/images'
+
+// Cards rendered before the Show more button. Every card carries up to two
+// photos, so this is really a cap on how much of the directory a single page
+// view downloads, which is what used to make this page grow without limit as
+// members joined.
+const PAGE_SIZE = 24
+
+/** Widths the photos are actually displayed at, doubled for retina screens. */
+const CARD_PHOTO_WIDTH = 640
+const DOG_CHIP_WIDTH = 96
 
 type MemberCard = {
   id: string
@@ -83,6 +94,7 @@ export default function MembersPage() {
   const [members, setMembers] = useState<MemberCard[] | null>(null)
   // Sample cards are placeholders, not real profiles, nothing to link to.
   const [usingSamples, setUsingSamples] = useState(false)
+  const [shown, setShown] = useState(PAGE_SIZE)
 
   useEffect(() => {
     supabase
@@ -145,28 +157,34 @@ export default function MembersPage() {
 
       {/* Members Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {(members ?? []).map((member) => {
+        {(members ?? []).slice(0, shown).map((member) => {
           const cardInner = (
             <>
               {/* Photo header, split panel if both photos exist, single if one, gradient if none */}
               {member.avatarUrl && member.dogPhotoUrl ? (
                 <div className="h-36 flex overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={member.avatarUrl} alt={member.name}
+                  <img src={thumbUrl(member.avatarUrl, CARD_PHOTO_WIDTH)!} alt={member.name}
+                    loading="lazy" decoding="async"
                     className="w-1/2 h-full object-cover object-top border-r-2 border-white" />
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={member.dogPhotoUrl} alt={member.dogs[0]?.name}
+                  <img src={thumbUrl(member.dogPhotoUrl, CARD_PHOTO_WIDTH)!} alt={member.dogs[0]?.name}
+                    loading="lazy" decoding="async"
                     className="w-1/2 h-full object-cover object-top" />
                 </div>
               ) : member.avatarUrl ? (
                 <div className="h-36 relative overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={member.avatarUrl} alt={member.name} className="w-full h-full object-cover object-top" />
+                  <img src={thumbUrl(member.avatarUrl, CARD_PHOTO_WIDTH)!} alt={member.name}
+                    loading="lazy" decoding="async"
+                    className="w-full h-full object-cover object-top" />
                 </div>
               ) : member.dogPhotoUrl ? (
                 <div className="h-36 relative overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={member.dogPhotoUrl} alt={member.dogs[0]?.name} className="w-full h-full object-cover object-top" />
+                  <img src={thumbUrl(member.dogPhotoUrl, CARD_PHOTO_WIDTH)!} alt={member.dogs[0]?.name}
+                    loading="lazy" decoding="async"
+                    className="w-full h-full object-cover object-top" />
                 </div>
               ) : (
                 <div className={`bg-gradient-to-br ${member.color} h-36 flex items-center justify-center text-6xl`}>
@@ -183,7 +201,8 @@ export default function MembersPage() {
                     <div key={i} className="flex items-center gap-2">
                       {dog.photo_url ? (
                         /* eslint-disable-next-line @next/next/no-img-element */
-                        <img src={dog.photo_url} alt={dog.name}
+                        <img src={thumbUrl(dog.photo_url, DOG_CHIP_WIDTH)!} alt={dog.name}
+                          loading="lazy" decoding="async"
                           className="w-8 h-8 rounded-full object-cover object-top flex-shrink-0 border-2 border-white shadow-sm" />
                       ) : (
                         <span className="text-2xl">🐶</span>
@@ -227,6 +246,21 @@ export default function MembersPage() {
           </div>
         </SignedOut>
       </div>
+
+      {/* Say how many are still hidden rather than quietly stopping at 24. */}
+      {members && members.length > shown && (
+        <div className="mt-10 text-center">
+          <button
+            onClick={() => setShown(n => n + PAGE_SIZE)}
+            className="btn-secondary"
+          >
+            Show more members
+          </button>
+          <p className="text-xs text-plum/40 mt-3">
+            Showing {shown} of {members.length}
+          </p>
+        </div>
+      )}
     </div>
   )
 }
