@@ -30,21 +30,17 @@ type MemberCard = {
   dogPhotoUrl: string | null
 }
 
-// Sample members shown until real profiles exist in Supabase
-const sampleMembers: MemberCard[] = [
-  { id: 's1', name: 'Marco', location: 'Uptown PS', dogs: [{ name: 'Biscuit', breed: 'French Bulldog' }], joined: 'Jan 2023', emoji: '🐾', color: 'from-plum to-plum-light', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's2', name: 'Tyler', location: 'Palm Canyon', dogs: [{ name: 'Mango', breed: 'Golden Retriever' }], joined: 'Mar 2023', emoji: '🌟', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's3', name: 'Derek', location: 'Cathedral City', dogs: [{ name: 'Zeus', breed: 'Doberman' }], joined: 'Jun 2022', emoji: '⚡', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's4', name: 'James', location: 'Old Las Palmas', dogs: [{ name: 'Pretzel', breed: 'Dachshund' }, { name: 'Bagel', breed: 'Dachshund' }], joined: 'Feb 2021', emoji: '🥨', color: 'from-plum to-brand-teal', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's5', name: 'Chris', location: 'Movie Colony', dogs: [{ name: 'Noodle', breed: 'Labradoodle' }], joined: 'Aug 2023', emoji: '🍜', color: 'from-brand-golden to-brand-orange', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's6', name: 'Ryan', location: 'South PS', dogs: [{ name: 'Taco', breed: 'Chihuahua Mix' }], joined: 'Nov 2022', emoji: '🌮', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's7', name: 'Matt', location: 'Rancho Mirage', dogs: [{ name: 'Duke', breed: 'German Shepherd' }], joined: 'May 2023', emoji: '👑', color: 'from-plum to-plum-light', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's8', name: 'Alex', location: 'Desert Hot Springs', dogs: [{ name: 'Pepper', breed: 'Border Collie' }], joined: 'Sep 2023', emoji: '🌶️', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's9', name: 'Jordan', location: 'Palm Springs', dogs: [{ name: 'Waffle', breed: 'Corgi' }], joined: 'Jan 2024', emoji: '🧇', color: 'from-brand-golden to-brand-orange', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's10', name: 'Kevin', location: 'Indian Wells', dogs: [{ name: 'Bruno', breed: 'Bulldog' }], joined: 'Apr 2022', emoji: '🏋️', color: 'from-plum to-brand-teal', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's11', name: 'Sam', location: 'Uptown PS', dogs: [{ name: 'Olive', breed: 'Italian Greyhound' }], joined: 'Jul 2023', emoji: '🫒', color: 'from-brand-teal to-brand-teal-light', avatarUrl: null, dogPhotoUrl: null },
-  { id: 's12', name: 'Will', location: 'Palm Canyon', dogs: [{ name: 'Beans', breed: 'Beagle' }], joined: 'Dec 2021', emoji: '🫘', color: 'from-brand-orange to-brand-orange-light', avatarUrl: null, dogPhotoUrl: null },
-]
+/**
+ * Members type their own city, so "Palm Springs" and "palm springs" are the
+ * same neighbourhood typed twice. Normalising here keeps them as one filter
+ * option, and stops the directory showing the same place two different ways.
+ */
+function tidyCity(city: string): string {
+  return city
+    .trim()
+    .replace(/\s+/g, ' ')
+    .replace(/\S+/g, w => (w.length > 2 || /^[A-Z]+$/.test(w) ? w[0].toUpperCase() + w.slice(1) : w))
+}
 
 const gradients = [
   'from-plum to-plum-light',
@@ -80,7 +76,7 @@ function profileToCard(p: ProfileRow, index: number): MemberCard {
   return {
     id: p.id,
     name: p.name ?? 'New Member',
-    location: p.city ?? 'Coachella Valley',
+    location: p.city ? tidyCity(p.city) : 'Coachella Valley',
     dogs: cardDogs,
     joined: new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
     emoji: '🐾',
@@ -92,9 +88,12 @@ function profileToCard(p: ProfileRow, index: number): MemberCard {
 
 export default function MembersPage() {
   const [members, setMembers] = useState<MemberCard[] | null>(null)
-  // Sample cards are placeholders, not real profiles, nothing to link to.
-  const [usingSamples, setUsingSamples] = useState(false)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [shown, setShown] = useState(PAGE_SIZE)
+
+  const [query, setQuery] = useState('')
+  const [city, setCity] = useState('')
+  const [breed, setBreed] = useState('')
 
   useEffect(() => {
     supabase
@@ -102,17 +101,41 @@ export default function MembersPage() {
       .select('id, name, city, dog_name, dog_breed, dogs, avatar_url, dog_photo_url, created_at')
       .order('created_at', { ascending: true })
       .then(({ data, error }) => {
-        if (error || !data || data.length === 0) {
-          // No profiles table yet, or no confirmed members, show sample community
-          if (error) console.warn('Could not load member profiles:', error.message)
-          setMembers(sampleMembers)
-          setUsingSamples(true)
+        if (error) {
+          console.warn('Could not load member profiles:', error.message)
+          setLoadError('We could not load the directory just now. Please refresh in a moment.')
+          setMembers([])
           return
         }
-        setMembers((data as ProfileRow[]).map(profileToCard))
-        setUsingSamples(false)
+        setMembers((data ?? []).map((row, i) => profileToCard(row as ProfileRow, i)))
       })
   }, [])
+
+  /**
+   * Both dropdowns are built from the members who are actually here, rather
+   * than a fixed list. A fixed list drifts: it used to offer five Palm Springs
+   * neighbourhoods that no member had ever typed, so every option found nobody.
+   */
+  const cities = Array.from(new Set((members ?? []).map(m => m.location))).sort()
+  const breeds = Array.from(
+    new Set((members ?? []).flatMap(m => m.dogs.map(d => d.breed).filter(Boolean))),
+  ).sort()
+
+  const needle = query.trim().toLowerCase()
+  const filtered = (members ?? []).filter(m => {
+    if (city && m.location !== city) return false
+    if (breed && !m.dogs.some(d => d.breed === breed)) return false
+    if (needle) {
+      const haystack = [m.name, ...m.dogs.map(d => d.name)].join(' ').toLowerCase()
+      if (!haystack.includes(needle)) return false
+    }
+    return true
+  })
+
+  const filtersActive = Boolean(needle || city || breed)
+  function clearFilters() {
+    setQuery(''); setCity(''); setBreed(''); setShown(PAGE_SIZE)
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -134,30 +157,50 @@ export default function MembersPage() {
       <div className="bg-white rounded-2xl shadow-sm p-4 mb-8 flex flex-col gap-3">
         <input
           type="text"
+          value={query}
+          onChange={e => { setQuery(e.target.value); setShown(PAGE_SIZE) }}
           placeholder="🔍  Search members or dog names..."
+          aria-label="Search members or dog names"
           className="w-full border border-plum/20 rounded-xl px-4 py-3 text-sm text-plum placeholder-plum/40 focus:outline-none focus:ring-2 focus:ring-brand-teal/30 min-h-[44px]"
         />
         <div className="flex flex-col sm:flex-row gap-3">
-          <select className="flex-1 border border-plum/20 rounded-xl px-4 py-3 text-sm text-plum focus:outline-none focus:ring-2 focus:ring-brand-teal/30 min-h-[44px] bg-white">
-            <option>All Neighborhoods</option>
-            <option>Uptown PS</option>
-            <option>Palm Canyon</option>
-            <option>Old Las Palmas</option>
-            <option>Cathedral City</option>
-            <option>Rancho Mirage</option>
+          <select
+            value={city}
+            onChange={e => { setCity(e.target.value); setShown(PAGE_SIZE) }}
+            aria-label="Filter by neighborhood"
+            className="flex-1 border border-plum/20 rounded-xl px-4 py-3 text-sm text-plum focus:outline-none focus:ring-2 focus:ring-brand-teal/30 min-h-[44px] bg-white"
+          >
+            <option value="">All Neighborhoods</option>
+            {cities.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
-          <select className="flex-1 border border-plum/20 rounded-xl px-4 py-3 text-sm text-plum focus:outline-none focus:ring-2 focus:ring-brand-teal/30 min-h-[44px] bg-white">
-            <option>All Breeds</option>
-            <option>Small Dogs</option>
-            <option>Medium Dogs</option>
-            <option>Large Dogs</option>
+          <select
+            value={breed}
+            onChange={e => { setBreed(e.target.value); setShown(PAGE_SIZE) }}
+            aria-label="Filter by breed"
+            className="flex-1 border border-plum/20 rounded-xl px-4 py-3 text-sm text-plum focus:outline-none focus:ring-2 focus:ring-brand-teal/30 min-h-[44px] bg-white"
+          >
+            <option value="">All Breeds</option>
+            {breeds.map(b => <option key={b} value={b}>{b}</option>)}
           </select>
         </div>
+
+        {filtersActive && (
+          <div className="flex items-center justify-between gap-3 text-xs text-plum/60 pt-1">
+            <span>
+              {filtered.length === 0
+                ? 'No matches'
+                : `${filtered.length} of ${members?.length ?? 0} member${members?.length === 1 ? '' : 's'}`}
+            </span>
+            <button onClick={clearFilters} className="font-bold text-brand-orange hover:underline">
+              Clear filters
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Members Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {(members ?? []).slice(0, shown).map((member) => {
+        {filtered.slice(0, shown).map((member) => {
           const cardInner = (
             <>
               {/* Photo header, split panel if both photos exist, single if one, gradient if none */}
@@ -223,12 +266,7 @@ export default function MembersPage() {
             </>
           )
 
-          // Sample cards are placeholders with no real profile behind them.
-          return usingSamples ? (
-            <div key={member.id} className="card group overflow-hidden">
-              {cardInner}
-            </div>
-          ) : (
+          return (
             <Link key={member.id} href={`/members/${member.id}`}
               className="card block hover:-translate-y-1 cursor-pointer group">
               {cardInner}
@@ -236,19 +274,53 @@ export default function MembersPage() {
           )
         })}
 
-        {/* Join card, visitors only */}
-        <SignedOut>
-          <div className="card border-2 border-dashed border-plum/20 hover:-translate-y-1 cursor-pointer flex flex-col items-center justify-center p-8 text-center min-h-[280px]">
-            <div className="w-16 h-16 bg-plum/10 rounded-full flex items-center justify-center text-3xl mb-4">🐾</div>
-            <h3 className="font-extrabold text-plum text-lg mb-2">Be part of the pack</h3>
-            <p className="text-plum/50 text-sm mb-5">Create your free member profile and introduce your dog to the community.</p>
-            <Link href="/members/join" className="btn-primary text-sm">Join Free</Link>
-          </div>
-        </SignedOut>
+        {/* Join card, visitors only. Hidden while filtering, where it reads as a result. */}
+        {!filtersActive && (
+          <SignedOut>
+            <div className="card border-2 border-dashed border-plum/20 hover:-translate-y-1 cursor-pointer flex flex-col items-center justify-center p-8 text-center min-h-[280px]">
+              <div className="w-16 h-16 bg-plum/10 rounded-full flex items-center justify-center text-3xl mb-4">🐾</div>
+              <h3 className="font-extrabold text-plum text-lg mb-2">Be part of the pack</h3>
+              <p className="text-plum/50 text-sm mb-5">Create your free member profile and introduce your dog to the community.</p>
+              <Link href="/members/join" className="btn-primary text-sm">Join Free</Link>
+            </div>
+          </SignedOut>
+        )}
       </div>
 
+      {/* Nothing matched the filters, as opposed to nobody having joined yet. */}
+      {members && filtered.length === 0 && filtersActive && (
+        <div className="card p-10 text-center mt-2">
+          <div className="text-5xl mb-4">🔍</div>
+          <h3 className="font-extrabold text-plum text-xl mb-2">No members match that</h3>
+          <p className="text-plum/60 text-sm max-w-md mx-auto mb-6 leading-relaxed">
+            The pack is still small, so there is a good chance nobody fits yet. Try a wider search.
+          </p>
+          <button onClick={clearFilters} className="btn-secondary">Clear filters</button>
+        </div>
+      )}
+
+      {/* Genuinely nobody yet. An invitation, not an apology. */}
+      {members && members.length === 0 && !loadError && (
+        <div className="card p-10 text-center mt-2">
+          <div className="text-5xl mb-4">🐾</div>
+          <h3 className="font-extrabold text-plum text-xl mb-2">The directory starts with you</h3>
+          <p className="text-plum/60 text-sm max-w-md mx-auto mb-6 leading-relaxed">
+            No profiles here yet. Be the first dog dad on the board, introduce your pup, and give
+            everyone who lands here next someone to say hello to.
+          </p>
+          <Link href="/members/join" className="btn-primary">Join the Pack 🐾</Link>
+        </div>
+      )}
+
+      {loadError && (
+        <div className="card p-8 text-center mt-2">
+          <div className="text-4xl mb-3">⚠️</div>
+          <p className="text-sm text-plum/70">{loadError}</p>
+        </div>
+      )}
+
       {/* Say how many are still hidden rather than quietly stopping at 24. */}
-      {members && members.length > shown && (
+      {filtered.length > shown && (
         <div className="mt-10 text-center">
           <button
             onClick={() => setShown(n => n + PAGE_SIZE)}
@@ -257,7 +329,7 @@ export default function MembersPage() {
             Show more members
           </button>
           <p className="text-xs text-plum/40 mt-3">
-            Showing {shown} of {members.length}
+            Showing {shown} of {filtered.length}
           </p>
         </div>
       )}
