@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PS Dog Dad">
+  <rect width="64" height="64" rx="14" fill="#3D1A5C"/>
+  <g fill="#F5B82A">
+    <ellipse cx="32" cy="43" rx="14" ry="11"/>
+    <ellipse cx="15" cy="27" rx="6" ry="8" transform="rotate(-20 15 27)"/>
+    <ellipse cx="26" cy="19" rx="6" ry="8.5"/>
+    <ellipse cx="38" cy="19" rx="6" ry="8.5"/>
+    <ellipse cx="49" cy="27" rx="6" ry="8" transform="rotate(20 49 27)"/>
+  </g>
+</svg>

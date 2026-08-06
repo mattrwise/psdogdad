@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import SignedIn from '@/components/auth/SignedIn'
 import SignedOut from '@/components/auth/SignedOut'
@@ -109,6 +110,15 @@ const categories: Record<string, {
       'Pool party season, anyone willing to host?',
     ],
   },
+}
+
+/** Each category gets its own title, so a search result says which forum it is. */
+export async function generateMetadata(
+  { params }: { params: { category: string } },
+): Promise<Metadata> {
+  const cat = categories[params.category]
+  if (!cat) return { title: 'Forum not found, PS Dog Dad' }
+  return { title: `${cat.title}, PS Dog Dad Forums`, description: cat.description }
 }
 
 export default function CategoryPage({ params }: { params: { category: string } }) {

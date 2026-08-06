@@ -1,5 +1,11 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import SuggestResourceButton from '@/components/resources/SuggestResourceButton'
+
+export const metadata: Metadata = {
+  title: 'Local Resources, PS Dog Dad',
+  description: 'Vets, emergency clinics, groomers, daycare, dog parks and pet-friendly spots across the Coachella Valley.',
+}
 
 type Resource = {
   name: string
