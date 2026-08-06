@@ -64,10 +64,10 @@ export function newPendingToken(): string {
  */
 export async function stagePendingPhotos(
   token: string,
-  memberFile: File | null,
-  dogFiles: (File | null)[],
+  memberFile: Blob | null,
+  dogFiles: (Blob | null)[],
 ): Promise<boolean> {
-  const stageOne = async (slot: string, file: File) => {
+  const stageOne = async (slot: string, file: Blob) => {
     // Shrink here too, not just on the claim: a staged photo travels the wire
     // twice, up now and back down on /welcome.
     const image = await downscaleImage(file)

@@ -7,11 +7,9 @@ import { supabase } from '@/lib/supabase/client'
 import { dogSlot, newPendingToken, stagePendingPhotos, uploadPhoto } from '@/lib/photos'
 import { useUser } from '@/lib/useUser'
 import { Dog, DOG_BREEDS, EMPTY_DOG } from '@/lib/dogs'
+import { ACCEPTED_TYPES, preparePhoto } from '@/lib/images'
 
 // ─── constants ────────────────────────────────────────────────────────────────
-
-const MAX_FILE_SIZE = 8 * 1024 * 1024 // 8 MB
-const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
 
 // ─── PhotoUpload component ─────────────────────────────────────────────────────
 
@@ -20,7 +18,7 @@ interface PhotoUploadProps {
   label: string
   hint: string
   preview: string | null
-  onFileSelected: (file: File) => void
+  onFileSelected: (blob: Blob, previewUrl: string) => void
   onClear: () => void
   error?: string
 }
@@ -28,17 +26,22 @@ interface PhotoUploadProps {
 function PhotoUpload({ id, label, hint, preview, onFileSelected, onClear, error }: PhotoUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [dragOver, setDragOver] = useState(false)
+  const [busy, setBusy] = useState(false)
+  // Problems with the file itself, as opposed to `error`, which is the form's.
+  const [fileError, setFileError] = useState<string | null>(null)
 
-  function processFile(file: File) {
-    if (!ACCEPTED_TYPES.includes(file.type)) {
-      alert('Please upload a JPG, PNG, WebP, or HEIC image.')
-      return
+  async function processFile(file: File) {
+    setFileError(null)
+    setBusy(true)
+    try {
+      const prepared = await preparePhoto(file)
+      if (!prepared.ok) { setFileError(prepared.message); return }
+      // Hand up the shrunk bytes, not the original: what the member sees in the
+      // preview is then exactly what everyone else will see on the directory.
+      onFileSelected(prepared.blob, prepared.previewUrl)
+    } finally {
+      setBusy(false)
     }
-    if (file.size > MAX_FILE_SIZE) {
-      alert('Photo must be under 8 MB.')
-      return
-    }
-    onFileSelected(file)
   }
 
   const handleDrop = useCallback((e: React.DragEvent) => {
@@ -96,8 +99,10 @@ function PhotoUpload({ id, label, hint, preview, onFileSelected, onClear, error 
               : 'border-plum/20 bg-plum/3 hover:border-brand-teal/50 hover:bg-brand-teal/5'
             }`}
         >
-          <span className="text-4xl">📷</span>
-          <p className="text-sm font-semibold text-plum text-center">{hint}</p>
+          <span className="text-4xl">{busy ? '⏳' : '📷'}</span>
+          <p className="text-sm font-semibold text-plum text-center">
+            {busy ? 'Getting your photo ready…' : hint}
+          </p>
           <p className="text-xs text-plum/40 text-center">JPG · PNG · WebP · HEIC · up to 8 MB</p>
           <span className="mt-1 text-xs font-bold text-brand-orange border border-brand-orange/40 rounded-full px-3 py-1">
             Choose Photo
@@ -117,7 +122,9 @@ function PhotoUpload({ id, label, hint, preview, onFileSelected, onClear, error 
           e.target.value = ''          // allow re-selecting same file
         }}
       />
-      {error && <p className="mt-1.5 text-xs text-red-600">{error}</p>}
+      {(fileError || error) && (
+        <p className="mt-1.5 text-xs text-red-600 leading-relaxed">{fileError ?? error}</p>
+      )}
     </div>
   )
 }
@@ -162,14 +169,16 @@ export default function JoinPage() {
     }
   }, [authLoading, currentUser, success, loading, router])
 
-  // photos, one for the member, one per dog (parallel to `dogs`)
-  const [memberFile, setMemberFile] = useState<File | null>(null)
+  // photos, one for the member, one per dog (parallel to `dogs`). These hold the
+  // already-shrunk bytes from preparePhoto, not the originals off the camera.
+  const [memberFile, setMemberFile] = useState<Blob | null>(null)
   const [memberPreview, setMemberPreview] = useState<string | null>(null)
-  const [dogFiles, setDogFiles] = useState<(File | null)[]>([null])
+  const [dogFiles, setDogFiles] = useState<(Blob | null)[]>([null])
   const [dogPreviews, setDogPreviews] = useState<(string | null)[]>([null])
 
-  function setMemberPhoto(file: File) {
-    setMemberFile(file); setMemberPreview(URL.createObjectURL(file))
+  function setMemberPhoto(blob: Blob, url: string) {
+    if (memberPreview) URL.revokeObjectURL(memberPreview)
+    setMemberFile(blob); setMemberPreview(url)
   }
 
   function clearMemberPhoto() {
@@ -177,9 +186,8 @@ export default function JoinPage() {
     setMemberFile(null); setMemberPreview(null)
   }
 
-  function setDogPhoto(i: number, file: File) {
-    const url = URL.createObjectURL(file)
-    setDogFiles(prev => prev.map((f, j) => (j === i ? file : f)))
+  function setDogPhoto(i: number, blob: Blob, url: string) {
+    setDogFiles(prev => prev.map((f, j) => (j === i ? blob : f)))
     setDogPreviews(prev => prev.map((p, j) => {
       if (j !== i) return p
       if (p) URL.revokeObjectURL(p)
@@ -498,7 +506,7 @@ export default function JoinPage() {
                       label="Dog Photo"
                       hint={dog.name ? `Upload a photo of ${dog.name}` : 'Upload a photo of this dog'}
                       preview={dogPreviews[i] ?? null}
-                      onFileSelected={f => setDogPhoto(i, f)}
+                      onFileSelected={(blob, url) => setDogPhoto(i, blob, url)}
                       onClear={() => clearDogPhoto(i)}
                     />
                   </div>

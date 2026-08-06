@@ -18,6 +18,23 @@ const JPEG_QUALITY = 0.82
 /** Below this, re-encoding costs more quality than it saves bytes. */
 const SKIP_BELOW_BYTES = 400 * 1024
 
+/** Ceiling on what a member may pick, before any shrinking. */
+export const MAX_UPLOAD_BYTES = 8 * 1024 * 1024
+
+/**
+ * What the file picker offers. HEIC is here on purpose: iOS hands a picked
+ * photo over as JPEG most of the time, and Safari can decode the HEIC when it
+ * doesn't, so accepting it is right far more often than not. preparePhoto()
+ * is what catches the cases where this browser genuinely cannot read it.
+ */
+export const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
+
+function isHeic(file: Blob & { name?: string }): boolean {
+  if (/^image\/hei[cf]$/i.test(file.type)) return true
+  // Finder and some Android pickers hand over an empty type; fall back to the name.
+  return /\.hei[cf]$/i.test(file.name ?? '')
+}
+
 /**
  * Returns a smaller JPEG copy of an image, or the original file untouched if
  * it is already small enough or the browser cannot decode it. Never throws,
@@ -61,6 +78,44 @@ export async function downscaleImage(file: Blob): Promise<Blob> {
   } finally {
     bitmap.close()
   }
+}
+
+export type PreparedPhoto =
+  | { ok: true; blob: Blob; type: string; previewUrl: string }
+  | { ok: false; message: string }
+
+/**
+ * Checks a member's chosen file and hands back the exact bytes that will be
+ * stored, plus a preview built from those same bytes.
+ *
+ * This exists because "upload it anyway" is the wrong failure. A HEIC that
+ * this browser cannot decode also cannot be *displayed* by Chrome, Firefox or
+ * Edge, so storing it produces a member whose photo is a broken image for most
+ * of the community, with nothing anywhere to say why. Better to say so at the
+ * only moment the member can still do something about it.
+ */
+export async function preparePhoto(file: File): Promise<PreparedPhoto> {
+  if (file.size > MAX_UPLOAD_BYTES) {
+    return { ok: false, message: 'That photo is over 8 MB. Please pick a smaller one.' }
+  }
+  if (file.type && !ACCEPTED_TYPES.includes(file.type) && !isHeic(file)) {
+    return { ok: false, message: 'Please choose a JPG, PNG, WebP or HEIC photo.' }
+  }
+
+  const blob = await downscaleImage(file)
+
+  // Unchanged plus undecodable means createImageBitmap refused it.
+  if (blob === file && isHeic(file)) {
+    return {
+      ok: false,
+      message:
+        "This browser can't read HEIC photos. On your iPhone open Settings › Camera › Formats " +
+        "and pick 'Most Compatible', then take the photo again. Emailing or AirDropping the " +
+        'photo to yourself also converts it to JPG.',
+    }
+  }
+
+  return { ok: true, blob, type: blob === file ? file.type || 'image/jpeg' : blob.type, previewUrl: URL.createObjectURL(blob) }
 }
 
 /**

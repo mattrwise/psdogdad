@@ -6,12 +6,10 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
 import { dogSlot, uploadPhoto } from '@/lib/photos'
 import { Dog, DOG_BREEDS, EMPTY_DOG, dogsFromMetadata } from '@/lib/dogs'
+import { ACCEPTED_TYPES, preparePhoto } from '@/lib/images'
 import type { User } from '@supabase/supabase-js'
 
 // ─── constants ────────────────────────────────────────────────────────────────
-
-const MAX_FILE_SIZE = 8 * 1024 * 1024
-const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
 
 // ─── PhotoUpload ──────────────────────────────────────────────────────────────
 
@@ -20,29 +18,28 @@ interface PhotoUploadProps {
   label: string
   hint: string
   preview: string | null
-  onFileSelected: (file: File) => void
+  onFileSelected: (blob: Blob, previewUrl: string) => void
   onClear: () => void
 }
 
 function PhotoUpload({ id, label, hint, preview, onFileSelected, onClear }: PhotoUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [dragOver, setDragOver] = useState(false)
+  const [busy, setBusy] = useState(false)
   const [fileError, setFileError] = useState<string | null>(null)
 
-  function processFile(file: File) {
-    // Inline rather than alert(), a native popup is easy to dismiss without
-    // reading, which made a rejected photo look like nothing had happened.
-    if (!ACCEPTED_TYPES.includes(file.type)) {
-      setFileError('That file type isn’t supported. Please use a JPG, PNG, WebP or HEIC image.')
-      return
-    }
-    if (file.size > MAX_FILE_SIZE) {
-      const mb = (file.size / 1024 / 1024).toFixed(1)
-      setFileError(`That photo is ${mb} MB, please use one under 8 MB.`)
-      return
-    }
+  // Inline rather than alert(), a native popup is easy to dismiss without
+  // reading, which made a rejected photo look like nothing had happened.
+  async function processFile(file: File) {
     setFileError(null)
-    onFileSelected(file)
+    setBusy(true)
+    try {
+      const prepared = await preparePhoto(file)
+      if (!prepared.ok) { setFileError(prepared.message); return }
+      onFileSelected(prepared.blob, prepared.previewUrl)
+    } finally {
+      setBusy(false)
+    }
   }
 
   const handleDrop = useCallback((e: React.DragEvent) => {
@@ -90,8 +87,10 @@ function PhotoUpload({ id, label, hint, preview, onFileSelected, onClear }: Phot
             dragOver ? 'border-brand-teal bg-brand-teal/10' : 'border-plum/20 bg-plum/3 hover:border-brand-teal/50 hover:bg-brand-teal/5'
           }`}
         >
-          <span className="text-3xl">📷</span>
-          <p className="text-sm font-semibold text-plum text-center">{hint}</p>
+          <span className="text-3xl">{busy ? '⏳' : '📷'}</span>
+          <p className="text-sm font-semibold text-plum text-center">
+            {busy ? 'Getting your photo ready…' : hint}
+          </p>
           <p className="text-xs text-plum/40">JPG · PNG · WebP · HEIC · up to 8 MB</p>
           <span className="mt-1 text-xs font-bold text-brand-orange border border-brand-orange/40 rounded-full px-3 py-1">
             Choose Photo
@@ -155,9 +154,9 @@ export default function ProfilePage() {
   // photos, saved URLs live in metadata (avatar_url + each dog's photo_url);
   // pending new files/previews are kept here until Save uploads them.
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
-  const [memberFile, setMemberFile] = useState<File | null>(null)
+  const [memberFile, setMemberFile] = useState<Blob | null>(null)
   const [memberPreview, setMemberPreview] = useState<string | null>(null)
-  const [dogFiles, setDogFiles] = useState<(File | null)[]>([null])
+  const [dogFiles, setDogFiles] = useState<(Blob | null)[]>([null])
   const [dogPreviews, setDogPreviews] = useState<(string | null)[]>([null])
 
   // Signup photos can still be uploading in the background (PendingPhotoSync)
@@ -216,8 +215,9 @@ export default function ProfilePage() {
     }
   }
 
-  function setMemberPhoto(file: File) {
-    setMemberFile(file); setMemberPreview(URL.createObjectURL(file))
+  function setMemberPhoto(blob: Blob, url: string) {
+    if (memberPreview) URL.revokeObjectURL(memberPreview)
+    setMemberFile(blob); setMemberPreview(url)
   }
 
   /** Drops a *pending* selection only, used after a save, and by Cancel. */
@@ -236,9 +236,8 @@ export default function ProfilePage() {
     setSaveMsg(null)
   }
 
-  function setDogPhoto(i: number, file: File) {
-    const url = URL.createObjectURL(file)
-    setDogFiles(prev => prev.map((f, j) => (j === i ? file : f)))
+  function setDogPhoto(i: number, blob: Blob, url: string) {
+    setDogFiles(prev => prev.map((f, j) => (j === i ? blob : f)))
     setDogPreviews(prev => prev.map((p, j) => {
       if (j !== i) return p
       if (p) URL.revokeObjectURL(p)
@@ -539,7 +538,7 @@ export default function ProfilePage() {
                             ? 'Upload a new photo to replace current'
                             : dog.name ? `Upload a photo of ${dog.name}` : 'Upload a photo of this dog'}
                           preview={dogPreviews[i] ?? dog.photo_url ?? null}
-                          onFileSelected={f => setDogPhoto(i, f)}
+                          onFileSelected={(blob, url) => setDogPhoto(i, blob, url)}
                           onClear={() => clearDogPhoto(i)}
                         />
                       </div>
