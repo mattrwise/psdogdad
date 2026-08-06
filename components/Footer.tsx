@@ -17,13 +17,6 @@ export default function Footer() {
             <p className="text-sm text-white/60 max-w-xs leading-relaxed">
               The Coachella Valley community for gay men and their dogs. Connect, share, and wag together.
             </p>
-            <div className="flex gap-4 mt-4">
-              {['📘', '📸', '🐦'].map((icon, i) => (
-                <a key={i} href="#" className="w-9 h-9 bg-white/10 hover:bg-brand-orange rounded-full flex items-center justify-center transition-colors text-sm">
-                  {icon}
-                </a>
-              ))}
-            </div>
           </div>
 
           <div>

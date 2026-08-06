@@ -117,7 +117,8 @@ export default function ContactPage() {
             <div className="text-4xl mb-3">🐾</div>
             <h2 className="text-2xl font-extrabold mb-3">Not a member yet?</h2>
             <p className="text-white/70 mb-6 max-w-md mx-auto">
-              Join hundreds of dog dads across the Coachella Valley. It&apos;s free and always will be.
+              We&apos;re just getting started in the Coachella Valley, which makes this a good moment
+              to be one of the first. It&apos;s free and always will be.
             </p>
             <Link href="/members/join" className="btn-primary text-base px-8">
               Join PS Dog Dad

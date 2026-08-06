@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import ProposeEventModal from '@/components/events/ProposeEventModal'
+import ShelterEventCallout from '@/components/ShelterEventCallout'
 import { supabase } from '@/lib/supabase/client'
 import { useUser } from '@/lib/useUser'
 
@@ -250,6 +251,12 @@ export default function EventsPage() {
       {/* Admin: create events (visible to admin only) */}
       {user?.email === ADMIN_EMAIL && <AdminEventForm onCreated={() => loadReal()} />}
 
+      {/* The homepage leads with this and its button points here, so landing on
+          an empty calendar made the site look like it had lost the event. */}
+      <section className="mb-14">
+        <ShelterEventCallout />
+      </section>
+
       {/* Upcoming Events */}
       <section className="mb-14">
         <h2 className="font-extrabold text-plum text-xl mb-5">Upcoming Events</h2>
@@ -334,7 +341,7 @@ export default function EventsPage() {
               <h3 className="font-extrabold text-plum text-xl mb-2">This calendar is yours to build</h3>
               <p className="text-plum/60 text-sm max-w-md mx-auto mb-6 leading-relaxed">
                 PS Dog Dad is brand new. Every walk, yappy hour, and pool party that ends up here
-                will be one a member started, so the first ones are up for grabs. Got a favourite
+                will be one a member started, so the first ones are up for grabs. Got a favorite
                 trail, patio, or park? Put it on the map.
               </p>
               <button onClick={() => setProposeOpen(true)} className="btn-primary">
