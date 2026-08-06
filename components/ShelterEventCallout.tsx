@@ -42,14 +42,14 @@ export default function ShelterEventCallout() {
 
             <p className="text-white/75 leading-relaxed mb-5 max-w-xl">
               The Palm Springs Animal Shelter is running its annual adoption drive over the
-              weekend of <strong className="text-white">August 15&nbsp;&amp;&nbsp;16, 10am&nbsp;, &nbsp;5pm</strong>.
+              weekend of <strong className="text-white">August 15&nbsp;&amp;&nbsp;16, 10am&nbsp;&ndash;&nbsp;5pm</strong>.
               It&rsquo;s the same weekend PS Dog Dad opens properly, which felt like the right
               way to start a community built around dogs who needed someone.
             </p>
 
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-white/60 mb-6">
               <span>📍 Palm Springs Animal Shelter</span>
-              <span>🕐 10:00 AM, 5:00 PM</span>
+              <span>🕐 10:00 AM &ndash; 5:00 PM</span>
             </div>
 
             <div className="flex flex-wrap gap-3">
