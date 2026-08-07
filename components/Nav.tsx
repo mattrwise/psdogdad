@@ -41,15 +41,21 @@ export default function Nav() {
   const [open, setOpen] = useState(false)
   const [unread, setUnread] = useState(0)
   const [user, setUser] = useState<User | null>(null)
+  // Starts true so we render a neutral placeholder instead of guessing. Without
+  // it the nav renders the signed-out buttons on first paint and a signed-in
+  // member watches "Sign In / Join Now" flip to their avatar a moment later.
+  const [loading, setLoading] = useState(true)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
+      setLoading(false)
     })
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
+      setLoading(false)
     })
     return () => subscription.unsubscribe()
   }, [])
@@ -132,7 +138,14 @@ export default function Nav() {
               </Link>
             )}
 
-            {user ? (
+            {loading ? (
+              // Same footprint as the buttons it stands in for, so the nav
+              // doesn't jump once the session resolves.
+              <div className="ml-3 flex items-center gap-2" aria-hidden>
+                <div className="h-11 w-[92px] rounded-full bg-plum/5" />
+                <div className="h-11 w-[108px] rounded-full bg-plum/5" />
+              </div>
+            ) : user ? (
               <div className="relative ml-3" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen(v => !v)}
@@ -176,16 +189,32 @@ export default function Nav() {
             )}
           </nav>
 
-          {/* Mobile hamburger */}
-          <button
-            className="md:hidden text-plum p-2"
-            onClick={() => setOpen(!open)}
-            aria-label="Toggle menu"
-          >
-            <div className={`w-6 h-0.5 bg-plum mb-1.5 transition-all ${open ? 'rotate-45 translate-y-2' : ''}`} />
-            <div className={`w-6 h-0.5 bg-plum mb-1.5 transition-all ${open ? 'opacity-0' : ''}`} />
-            <div className={`w-6 h-0.5 bg-plum transition-all ${open ? '-rotate-45 -translate-y-2' : ''}`} />
-          </button>
+          {/* Mobile: Sign In sits outside the hamburger. The desktop nav is
+              hidden below md, so on a phone the only way in used to be opening
+              the menu first, which reads as the site having no sign-in at all. */}
+          <div className="md:hidden flex items-center gap-2">
+            {loading ? (
+              <div className="h-11 w-[84px] rounded-full bg-plum/5" aria-hidden />
+            ) : !user ? (
+              <Link href="/members/login" className="btn-secondary text-sm px-4 py-2">
+                Sign In
+              </Link>
+            ) : (
+              <Link href="/members/profile" aria-label="My profile">
+                <Avatar user={user} />
+              </Link>
+            )}
+
+            <button
+              className="text-plum p-2"
+              onClick={() => setOpen(!open)}
+              aria-label="Toggle menu"
+            >
+              <div className={`w-6 h-0.5 bg-plum mb-1.5 transition-all ${open ? 'rotate-45 translate-y-2' : ''}`} />
+              <div className={`w-6 h-0.5 bg-plum mb-1.5 transition-all ${open ? 'opacity-0' : ''}`} />
+              <div className={`w-6 h-0.5 bg-plum transition-all ${open ? '-rotate-45 -translate-y-2' : ''}`} />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -207,7 +236,7 @@ export default function Nav() {
             </Link>
           ))}
 
-          {user ? (
+          {loading ? null : user ? (
             <>
               <div className="flex items-center gap-3 px-4 py-3 border-t border-plum/10 mt-1">
                 <Avatar user={user} />

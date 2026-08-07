@@ -4,6 +4,7 @@ import HeatAlertBanner from '@/components/HeatAlertBanner'
 import SignedIn from '@/components/auth/SignedIn'
 import SignedOut from '@/components/auth/SignedOut'
 import ShelterEventCallout from '@/components/ShelterEventCallout'
+import ClubLaunchCallout from '@/components/ClubLaunchCallout'
 import UpcomingEventsPreview from '@/components/home/UpcomingEventsPreview'
 import LatestDiscussionsPreview from '@/components/home/LatestDiscussionsPreview'
 // Imported (not linked by URL) so Next.js serves it from /_next/static/…, 
@@ -29,7 +30,7 @@ export default function HomePage() {
         <Link href="/members/join" className="underline font-bold hover:text-brand-orange">
           feel free to sign up
         </Link>
-        . The full site launches August 15th, 2026. 🐾
+        . The club officially starts with a group walk on October 17th at 8am. 🐾
       </div>
 
       {/* Hero */}
@@ -101,9 +102,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Launch weekend, the shelter's adoption drive. Sits high on the page
-          because it is time-sensitive, and against cream rather than the plum
-          Training band so two dark blocks don't stack. */}
+      {/* The club's official start. Sits above the shelter drive because it's
+          the thing a first-time visitor most needs to leave with. */}
+      <section className="bg-brand-cream pt-4 pb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ClubLaunchCallout />
+        </div>
+      </section>
+
+      {/* The shelter's adoption drive. Time-sensitive, and against cream rather
+          than the plum Training band so two dark blocks don't stack. */}
       <section className="bg-brand-cream pb-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ShelterEventCallout />
