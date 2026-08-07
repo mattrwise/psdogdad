@@ -1,8 +1,9 @@
 import Link from 'next/link'
 
 /**
- * Points members at the Palm Springs Animal Shelter's adoption weekend, which is
- * when PS Dog Dad launches. Deliberately built from our own type and colours, 
+ * Points members at the Palm Springs Animal Shelter's adoption weekend. The club's
+ * own start is the October 17th group walk, see KickoffCallout, so this no
+ * longer claims the two are the same date. Deliberately built from our own type and colours,
  * the shelter's own artwork carries NBC/Univision/sponsor logos and a trademark,
  * so none of it is reused here. Dates, times and venue are plain facts.
  *
@@ -55,14 +56,14 @@ export default function ShelterEventCallout() {
             </span>
 
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight mb-3">
-              Clear the Shelters is on, and so are we
+              Clear the Shelters is on
             </h2>
 
             <p className="text-white/75 leading-relaxed mb-5 max-w-xl">
               The Palm Springs Animal Shelter is running its annual adoption drive over the
               weekend of <strong className="text-white">August 15&nbsp;&amp;&nbsp;16, 10am&nbsp;&ndash;&nbsp;5pm</strong>.
-              It&rsquo;s the same weekend PS Dog Dad opens properly, which felt like the right
-              way to start a community built around dogs who needed someone.
+              A community built around dogs who needed someone may as well help a few more
+              of them find people. Our own first outing is the group walk on October 17th.
             </p>
 
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-white/60 mb-6">
