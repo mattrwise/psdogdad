@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
 import { useUser } from '@/lib/useUser'
 import { thumbUrl } from '@/lib/images'
+import { type GalleryPhoto, fetchGallery, galleryPhotoUrl } from '@/lib/gallery'
 
 type ProfileRow = {
   id: string
@@ -28,6 +29,7 @@ export default function MemberProfilePage() {
   const { user: viewer } = useUser()
   // undefined = still loading, null = no such (confirmed) member
   const [profile, setProfile] = useState<ProfileRow | null | undefined>(undefined)
+  const [gallery, setGallery] = useState<GalleryPhoto[]>([])
 
   useEffect(() => {
     supabase
@@ -40,6 +42,10 @@ export default function MemberProfilePage() {
         setProfile(data as ProfileRow)
       })
   }, [id])
+
+  // Separate from the profile fetch so a member with no extra photos still
+  // renders everything else the moment their profile arrives.
+  useEffect(() => { fetchGallery(id).then(setGallery) }, [id])
 
   if (profile === undefined) {
     return (
@@ -134,6 +140,35 @@ export default function MemberProfilePage() {
             </div>
           ))}
         </div>
+
+        {/* Extra photos. Nothing shows at all when there are none — an empty
+            "Photos" heading would just point at what isn't there. */}
+        {gallery.length > 0 && (
+          <div className="mt-10">
+            <h2 className="text-2xl font-extrabold text-plum mb-5">
+              More of {profile.name?.split(' ')[0] || 'them'} and the dogs
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {gallery.map(photo => (
+                <figure key={photo.id} className="bg-white rounded-2xl shadow-md overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={thumbUrl(galleryPhotoUrl(photo.path), 800)!}
+                    alt={photo.caption ?? 'Member photo'}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-56 object-cover bg-plum/5"
+                  />
+                  {photo.caption && (
+                    <figcaption className="px-4 py-3 text-sm text-plum/60 leading-snug">
+                      {photo.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
