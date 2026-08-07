@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import PrintButton from '@/components/PrintButton'
 
 const healthSections = [
   {
@@ -107,11 +108,14 @@ export default function HealthWellnessPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-10">
-        <h1 className="section-title">Keeping Your Best Friend Healthy</h1>
-        <p className="text-plum/60 mt-2 max-w-2xl">
-          The essentials of desert dog health, plus a directory of trusted veterinarians across the Coachella Valley.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+        <div>
+          <h1 className="section-title">Keeping Your Best Friend Healthy</h1>
+          <p className="text-plum/60 mt-2 max-w-2xl">
+            The essentials of desert dog health, plus a directory of trusted veterinarians across the Coachella Valley.
+          </p>
+        </div>
+        <PrintButton />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">

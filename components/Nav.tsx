@@ -14,6 +14,9 @@ const links = [
   { href: '/forums', label: 'Forums' },
   { href: '/members', label: 'Members' },
   { href: '/events', label: 'Events' },
+  // Next to Resources on purpose: the two are the reference half of the site,
+  // one written by us and one a directory of other people's businesses.
+  { href: '/guides', label: 'Guides' },
   { href: '/resources', label: 'Resources' },
 ]
 

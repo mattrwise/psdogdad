@@ -1,3 +1,5 @@
+import PrintButton from '@/components/PrintButton'
+
 const chapters = [
   {
     number: 1,
@@ -87,11 +89,14 @@ const mantras = [
 export default function HandbookPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-10">
-        <h1 className="section-title">The Complete Dog Dad Handbook</h1>
-        <p className="text-plum/60 mt-2 max-w-2xl">
-          Five chapters covering the whole journey, from the day you decide to get a dog to becoming a pillar of the pack. Tap a chapter to expand it.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+        <div>
+          <h1 className="section-title">The Complete Dog Dad Handbook</h1>
+          <p className="text-plum/60 mt-2 max-w-2xl">
+            Five chapters covering the whole journey, from the day you decide to get a dog to becoming a pillar of the pack. Tap a chapter to expand it.
+          </p>
+        </div>
+        <PrintButton />
       </div>
 
       <div className="space-y-4 mb-16">

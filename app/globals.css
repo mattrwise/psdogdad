@@ -30,7 +30,7 @@
   }
 }
 
-/* Printable pages (e.g. the member roadmap) hide site chrome and drop
+/* Printable pages (the guides, the member roadmap) hide site chrome and drop
    shadows/backgrounds that just waste ink or turn to gray blocks on paper. */
 @media print {
   header, footer {
@@ -41,5 +41,33 @@
   }
   .no-print {
     display: none !important;
+  }
+
+  @page {
+    margin: 1.5cm;
+  }
+
+  /* Applied to every card on the site rather than page by page, so a guide
+     prints sensibly without each one having to remember to say so. A card
+     split across a page break is the thing that makes printed pages unreadable,
+     and drop shadows come out as muddy grey rectangles. */
+  .card {
+    box-shadow: none !important;
+    border: 1px solid rgba(0, 0, 0, 0.18) !important;
+    break-inside: avoid;
+  }
+
+  /* A heading stranded at the foot of a page with its text overleaf. */
+  h1, h2, h3 {
+    break-after: avoid;
+  }
+
+  /* Underlines everywhere are noise on paper — nothing is clickable there. */
+  a {
+    text-decoration: none !important;
+  }
+
+  img {
+    max-width: 100% !important;
   }
 }
