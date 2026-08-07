@@ -88,7 +88,7 @@ export default function GalleryManager({ userId }: { userId: string }) {
         </span>
       </div>
       <p className="text-sm text-plum/60 mb-6 leading-relaxed">
-        Add more pictures of you and your dogs — walks, the dog park, the couch,
+        Add more pictures of you and your dogs. Walks, the dog park, the couch,
         whatever you like. Anyone who visits your profile can see them.
       </p>
 

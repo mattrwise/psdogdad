@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Guides, PS Dog Dad',
-  description: 'Written guides for Coachella Valley dog dads — health, desert heat, training technique, gear, and the complete Dog Dad Handbook. All printable.',
+  description: 'Written guides for Coachella Valley dog dads, covering health, desert heat, training technique, gear, and the complete Dog Dad Handbook. All printable.',
 }
 
 /**

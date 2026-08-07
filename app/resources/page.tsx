@@ -265,7 +265,7 @@ export default function ResourcesPage() {
         <div className="flex-1 min-w-0">
           <h2 className="font-extrabold text-plum">Looking for our guides?</h2>
           <p className="text-sm text-plum/60 mt-0.5">
-            Health, desert heat, training technique, gear and the Dog Dad Handbook — all printable.
+            Health, desert heat, training technique, gear and the Dog Dad Handbook, all printable.
           </p>
         </div>
         <span className="text-sm font-bold text-brand-teal whitespace-nowrap">Guides →</span>
