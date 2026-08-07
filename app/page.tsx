@@ -4,6 +4,8 @@ import HeatAlertBanner from '@/components/HeatAlertBanner'
 import SignedIn from '@/components/auth/SignedIn'
 import SignedOut from '@/components/auth/SignedOut'
 import ShelterEventCallout from '@/components/ShelterEventCallout'
+import KickoffBanner from '@/components/KickoffBanner'
+import KickoffCallout from '@/components/KickoffCallout'
 import UpcomingEventsPreview from '@/components/home/UpcomingEventsPreview'
 import LatestDiscussionsPreview from '@/components/home/LatestDiscussionsPreview'
 // Imported (not linked by URL) so Next.js serves it from /_next/static/…, 
@@ -20,17 +22,18 @@ const stats = [
   { value: '☀️', label: 'Year-Round Fun' },
 ]
 
+/**
+ * Rebuilt hourly so the date-sensitive pieces (the kickoff banner, the shelter
+ * weekend callout) can retire themselves without waiting for a deploy.
+ */
+export const revalidate = 3600
+
 export default function HomePage() {
   return (
     <div>
-      {/* Under-development notice */}
-      <div className="bg-brand-golden text-plum text-center px-4 py-3 text-sm font-semibold">
-        🚧 This site is currently under development but open for early membership, {' '}
-        <Link href="/members/join" className="underline font-bold hover:text-brand-orange">
-          feel free to sign up
-        </Link>
-        . The full site launches August 15th, 2026. 🐾
-      </div>
+      {/* A date does more work than any signup copy, so the banner is the date.
+          It retires itself the day after the meetup, see lib/kickoff.ts. */}
+      <KickoffBanner />
 
       {/* Hero */}
       <section className="bg-brand-cream">
@@ -101,9 +104,18 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Launch weekend, the shelter's adoption drive. Sits high on the page
-          because it is time-sensitive, and against cream rather than the plum
-          Training band so two dark blocks don't stack. */}
+      {/* The first meetup. Sits directly under the stats because it is the one
+          thing on this page a visitor can actually act on, and it carries its
+          own RSVP so nobody has to navigate to commit. */}
+      <section className="bg-brand-cream pb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <KickoffCallout />
+        </div>
+      </section>
+
+      {/* The shelter's adoption drive. Sits high on the page because it is
+          time-sensitive, and against cream rather than the plum Training band
+          so two dark blocks don't stack. Retires itself after the weekend. */}
       <section className="bg-brand-cream pb-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ShelterEventCallout />
