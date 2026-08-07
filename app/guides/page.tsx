@@ -102,7 +102,7 @@ export default function GuidesPage() {
       <div className="mt-10 bg-white rounded-2xl shadow-sm p-5 sm:p-6">
         <h2 className="font-extrabold text-plum mb-1">Looking for training courses?</h2>
         <p className="text-sm text-plum/60 leading-relaxed mb-4">
-          Step-by-step programmes like the 4-week leash reactivity course live in
+          Step-by-step programs like the 4-week leash reactivity course live in
           their own section, separate from these reference guides.
         </p>
         <Link href="/training" className="btn-secondary text-sm px-5 py-2.5">

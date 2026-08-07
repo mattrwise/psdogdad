@@ -157,7 +157,9 @@ export default function MemberProfilePage() {
                     alt={photo.caption ?? 'Member photo'}
                     loading="lazy"
                     decoding="async"
-                    className="w-full h-56 object-cover bg-plum/5"
+                    // Whole photo, letterboxed, rather than a crop that cuts
+                    // heads off. Matches the dog cards above it.
+                    className="w-full h-64 object-contain bg-plum/5"
                   />
                   {photo.caption && (
                     <figcaption className="px-4 py-3 text-sm text-plum/60 leading-snug">

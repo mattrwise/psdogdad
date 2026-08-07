@@ -88,8 +88,8 @@ export default function GalleryManager({ userId }: { userId: string }) {
         </span>
       </div>
       <p className="text-sm text-plum/60 mb-6 leading-relaxed">
-        Extra photos for your profile — you and your dogs, favourite walks, the lot.
-        These show on your public profile under your dogs.
+        Add more pictures of you and your dogs — walks, the dog park, the couch,
+        whatever you like. Anyone who visits your profile can see them.
       </p>
 
       {error && (
@@ -120,7 +120,10 @@ export default function GalleryManager({ userId }: { userId: string }) {
                       alt={photo.caption ?? 'Profile photo'}
                       loading="lazy"
                       decoding="async"
-                      className="w-full h-52 object-cover"
+                      // contain, not cover: a phone photo is portrait and the box
+                      // is landscape, so cover was slicing the top and bottom off
+                      // — exactly what the profile photos were fixed for earlier.
+                      className="w-full h-60 object-contain bg-plum/10"
                     />
                     <div className="p-3">
                       <label htmlFor={`caption-${photo.id}`} className="sr-only">
