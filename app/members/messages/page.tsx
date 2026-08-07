@@ -46,7 +46,7 @@ export default function MessagesInboxPage() {
     // RLS already limits this to messages you're part of, so no filter needed.
     const { data, error } = await supabase
       .from('messages')
-      .select('id, sender_id, recipient_id, body, photo_path, created_at, read_at')
+      .select('id, sender_id, recipient_id, body, photo_path, created_at, read_at, edited_at')
       .order('created_at', { ascending: false })
     if (error) { console.error('Could not load messages:', error.message); setLoading(false); return }
 

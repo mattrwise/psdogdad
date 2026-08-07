@@ -11,7 +11,12 @@ export type Message = {
   photo_path: string | null
   created_at: string
   read_at: string | null
+  edited_at: string | null
 }
+
+/** The columns every message query pulls back. */
+const MESSAGE_COLUMNS =
+  'id, sender_id, recipient_id, body, photo_path, created_at, read_at, edited_at'
 
 export const MESSAGE_PHOTO_BUCKET = 'message-photos'
 const SIGNED_URL_TTL_SECONDS = 60 * 60
@@ -29,7 +34,7 @@ export function conversationFolder(a: string, b: string): string {
 export async function fetchThread(otherId: string): Promise<Message[] | null> {
   const { data, error } = await supabase
     .from('messages')
-    .select('id, sender_id, recipient_id, body, photo_path, created_at, read_at')
+    .select(MESSAGE_COLUMNS)
     // Belt and braces: RLS already limits rows to conversations you're part of,
     // but without this you'd also pull in your threads with everyone else.
     .or(`sender_id.eq.${otherId},recipient_id.eq.${otherId}`)
@@ -70,7 +75,7 @@ export async function sendMessage(
       body: body.trim() || null,
       photo_path: photoPath,
     })
-    .select('id, sender_id, recipient_id, body, photo_path, created_at, read_at')
+    .select(MESSAGE_COLUMNS)
     .single()
 
   if (error) {
@@ -88,6 +93,38 @@ export async function sendMessage(
   // must never make the send look like it failed.
   notifyByEmail(sent.id)
   return { ok: true, message: sent }
+}
+
+/**
+ * Changes the text of a message you already sent.
+ *
+ * Goes through the edit_message database function rather than a plain update:
+ * that function is the only thing allowed to change a message, and it checks
+ * that the message is yours before it touches anything. Photos aren't editable —
+ * only the words.
+ *
+ * No email goes out for an edit. The other person was already told a message
+ * arrived, and the notification never carried the text anyway.
+ */
+export async function editMessage(
+  messageId: string,
+  body: string,
+): Promise<{ ok: true; message: Message } | { ok: false; error: string }> {
+  const { data, error } = await supabase.rpc('edit_message', {
+    message_id: messageId,
+    new_body: body,
+  })
+
+  if (error) {
+    console.error('Could not edit message:', error.message)
+    // These three come from edit_message itself, already worded for a member.
+    if (error.code === '42501' || error.code === 'P0002' || error.code === '23514') {
+      return { ok: false, error: error.message }
+    }
+    return { ok: false, error: 'That change could not be saved. Please try again.' }
+  }
+
+  return { ok: true, message: data as Message }
 }
 
 async function notifyByEmail(messageId: string): Promise<void> {
