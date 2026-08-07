@@ -45,7 +45,9 @@ export const posts: Post[] = [
       'Where to go at 2am, what each place actually covers, and the three things to do before you need any of it.',
     category: 'Emergency',
     minutes: 6,
-    publishedOn: '2026-08-07',
+    // Live immediately rather than at the next midnight, because the Resources
+    // page links straight at this post and that link must not 404.
+    publishedOn: '2026-08-06',
     body: [
       { type: 'p', text: 'The worst time to work out where the emergency vet is, is while your dog is in the back seat and you are trying to read a map. This is the post to skim now, once, on a normal day, so that the answer is already in your head.' },
       { type: 'callout', tone: 'urgent', title: 'The short version', text: 'VEG ER for Pets in Palm Desert, (760) 249-2279, is open 24 hours a day, every day. If it is the middle of the night and you are not sure, that is the number. Put it in your phone now.' },

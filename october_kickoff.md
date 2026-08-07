@@ -69,7 +69,7 @@ summer. Content lives in `lib/posts.ts`, renders at `/blog`.
 
 | Live | Post | Notes |
 |---|---|---|
-| Aug 7 | Emergency and after-hours vets in the Coachella Valley | Also the Resources page fix |
+| Aug 6 | Emergency and after-hours vets in the Coachella Valley | Also the Resources page fix. Live on merge, because Resources links straight at it |
 | Aug 15 | Clear the Shelters is this weekend | Links only, no meetup, fixed date |
 | Aug 21 | The seven-second pavement test | |
 | Aug 28 | Heat stroke: the signs, and the car ride | |
