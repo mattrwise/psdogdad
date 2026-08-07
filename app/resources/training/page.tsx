@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import PrintButton from '@/components/PrintButton'
 
 const principles = [
   { icon: '📅', title: 'Consistency is Key', text: 'Same cues, same rules, same rewards, from everyone in the house. Dogs learn fastest when the answer never changes.' },
@@ -56,11 +57,14 @@ const proTips = [
 export default function TrainingResourcesPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-10">
-        <h1 className="section-title">Professional Training Techniques</h1>
-        <p className="text-plum/60 mt-2 max-w-2xl">
-          The methods professional trainers actually use, broken down for everyday dog dads.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+        <div>
+          <h1 className="section-title">Professional Training Techniques</h1>
+          <p className="text-plum/60 mt-2 max-w-2xl">
+            The methods professional trainers actually use, broken down for everyday dog dads.
+          </p>
+        </div>
+        <PrintButton />
       </div>
 
       {/* Core principles */}

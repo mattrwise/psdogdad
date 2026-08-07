@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import PrintButton from '@/components/PrintButton'
 
 export const metadata: Metadata = {
   title: 'High Heat Guide, PS Dog Dad',
@@ -36,11 +37,14 @@ export default function HeatGuidePage() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
 
         {/* Header, matches the main nav pages */}
-        <div>
-          <h1 className="section-title">High Heat Guide</h1>
-          <p className="text-plum/60 mt-2 max-w-2xl">
-            Desert summers are no joke. Here&apos;s how to keep your dog safe when the Coachella Valley turns up the heat.
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="section-title">High Heat Guide</h1>
+            <p className="text-plum/60 mt-2 max-w-2xl">
+              Desert summers are no joke. Here&apos;s how to keep your dog safe when the Coachella Valley turns up the heat.
+            </p>
+          </div>
+          <PrintButton />
         </div>
 
 

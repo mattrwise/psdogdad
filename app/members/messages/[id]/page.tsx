@@ -9,6 +9,8 @@ import {
   type Message,
   fetchThread,
   sendMessage,
+  editMessage,
+  deleteMessage,
   signPhotoUrls,
   markThreadRead,
   isBlocked,
@@ -51,6 +53,15 @@ export default function ConversationPage() {
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editBody, setEditBody] = useState('')
+  const [savingEdit, setSavingEdit] = useState(false)
+  const [editError, setEditError] = useState<string | null>(null)
+
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
 
   const [blocked, setBlocked] = useState(false)
   const [confirmBlock, setConfirmBlock] = useState(false)
@@ -141,6 +152,45 @@ export default function ConversationPage() {
       const signed = await signPhotoUrls([newPath])
       setPhotoUrls(prev => ({ ...prev, ...signed }))
     }
+  }
+
+  function startEdit(m: Message) {
+    setEditingId(m.id)
+    setEditBody(m.body ?? '')
+    setEditError(null)
+  }
+
+  function cancelEdit() {
+    setEditingId(null)
+    setEditBody('')
+    setEditError(null)
+  }
+
+  async function saveEdit(m: Message) {
+    if (savingEdit) return
+    setSavingEdit(true)
+    setEditError(null)
+    const result = await editMessage(m.id, editBody)
+    setSavingEdit(false)
+
+    if (!result.ok) { setEditError(result.error); return }
+
+    setMessages(prev => prev.map(x => (x.id === result.message.id ? result.message : x)))
+    cancelEdit()
+  }
+
+  async function handleDelete(m: Message) {
+    if (deletingId) return
+    setDeletingId(m.id)
+    setDeleteError(null)
+    const result = await deleteMessage(m.id)
+    setDeletingId(null)
+
+    if (!result.ok) { setDeleteError(result.error); return }
+
+    setMessages(prev => prev.map(x => (x.id === result.message.id ? result.message : x)))
+    setConfirmDeleteId(null)
+    if (editingId === m.id) cancelEdit()
   }
 
   async function toggleBlock() {
@@ -241,9 +291,12 @@ export default function ConversationPage() {
           <div className="space-y-4">
             {messages.map(m => {
               const mine = m.sender_id === user?.id
+              const editing = editingId === m.id
               return (
                 <div key={m.id} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                  <div className={`rounded-2xl px-4 py-3 ${
+                    editing ? 'w-full max-w-[92%]' : 'max-w-[80%]'
+                  } ${
                     mine ? 'bg-plum text-white' : 'bg-plum/5 text-plum'
                   }`}>
                     {m.photo_path && (
@@ -259,10 +312,117 @@ export default function ConversationPage() {
                         </div>
                       )
                     )}
-                    {m.body && <p className="text-sm leading-relaxed whitespace-pre-wrap">{m.body}</p>}
-                    <p className={`text-[11px] mt-1.5 ${mine ? 'text-white/40' : 'text-plum/35'}`}>
-                      {timeStamp(m.created_at)}
-                    </p>
+                    {m.deleted_at ? (
+                      <>
+                        <p className={`text-sm italic ${mine ? 'text-white/55' : 'text-plum/45'}`}>
+                          This message was deleted
+                        </p>
+                        <p className={`text-[11px] mt-1.5 ${mine ? 'text-white/40' : 'text-plum/35'}`}>
+                          {timeStamp(m.created_at)}
+                        </p>
+                      </>
+                    ) : editing ? (
+                      <div>
+                        <textarea
+                          value={editBody}
+                          onChange={e => { setEditBody(e.target.value); setEditError(null) }}
+                          rows={3}
+                          autoFocus
+                          aria-label="Edit your message"
+                          className="w-full rounded-xl bg-white border border-plum/20 px-3 py-2 text-sm text-plum focus:outline-none focus:ring-2 focus:ring-brand-teal/40 resize-none"
+                        />
+
+                        {editError && (
+                          <p className="mt-2 bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-xs text-red-700">
+                            {editError}
+                          </p>
+                        )}
+
+                        <div className="flex items-center gap-4 mt-2.5">
+                          <button
+                            type="button"
+                            onClick={() => saveEdit(m)}
+                            disabled={savingEdit}
+                            className="text-sm font-bold bg-white text-plum rounded-full px-5 py-2 disabled:opacity-50"
+                          >
+                            {savingEdit ? 'Saving…' : 'Save changes'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={cancelEdit}
+                            className="text-sm font-semibold text-white/70 hover:text-white"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        {m.body && <p className="text-sm leading-relaxed whitespace-pre-wrap">{m.body}</p>}
+                        <div className={`flex items-center gap-2 mt-1.5 text-[11px] ${
+                          mine ? 'text-white/40' : 'text-plum/35'
+                        }`}>
+                          <span>{timeStamp(m.created_at)}</span>
+                          {m.edited_at && <span>· edited</span>}
+                          {mine && (
+                            <span className="ml-auto flex items-center gap-1">
+                              {/* Blocked hides the composer, so it hides Edit too —
+                                  the database refuses either way. Delete stays:
+                                  taking your own words back is always allowed. */}
+                              {!blocked && (
+                                <button
+                                  type="button"
+                                  onClick={() => startEdit(m)}
+                                  aria-label={`Edit your message from ${timeStamp(m.created_at)}`}
+                                  className="-my-1 px-2 py-1 text-xs font-semibold text-white/60 hover:text-white underline underline-offset-2"
+                                >
+                                  Edit
+                                </button>
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => { setConfirmDeleteId(m.id); setDeleteError(null) }}
+                                aria-label={`Delete your message from ${timeStamp(m.created_at)}`}
+                                className="-my-1 -mr-1 px-2 py-1 text-xs font-semibold text-white/60 hover:text-white underline underline-offset-2"
+                              >
+                                Delete
+                              </button>
+                            </span>
+                          )}
+                        </div>
+
+                        {confirmDeleteId === m.id && (
+                          <div className="mt-2.5 pt-2.5 border-t border-white/15">
+                            <p className="text-xs text-white/75 mb-2.5">
+                              Delete this message? {name} will see that you deleted
+                              something, but not what it said. This can&rsquo;t be undone.
+                            </p>
+                            {deleteError && (
+                              <p className="mb-2.5 bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-xs text-red-700">
+                                {deleteError}
+                              </p>
+                            )}
+                            <div className="flex items-center gap-4">
+                              <button
+                                type="button"
+                                onClick={() => handleDelete(m)}
+                                disabled={deletingId === m.id}
+                                className="text-sm font-bold bg-white text-red-700 rounded-full px-5 py-2 disabled:opacity-50"
+                              >
+                                {deletingId === m.id ? 'Deleting…' : 'Delete'}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => { setConfirmDeleteId(null); setDeleteError(null) }}
+                                className="text-sm font-semibold text-white/70 hover:text-white"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
               )

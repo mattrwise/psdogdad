@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase/client'
 import { dogSlot, uploadPhoto } from '@/lib/photos'
 import { Dog, DOG_BREEDS, EMPTY_DOG, dogsFromMetadata } from '@/lib/dogs'
 import { ACCEPTED_TYPES, preparePhoto } from '@/lib/images'
+import GalleryManager from '@/components/GalleryManager'
 import type { User } from '@supabase/supabase-js'
 
 // ─── constants ────────────────────────────────────────────────────────────────
@@ -618,6 +619,11 @@ export default function ProfilePage() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Everything beyond the avatar and one photo per dog */}
+            <div className="mb-6">
+              <GalleryManager userId={user.id} />
             </div>
 
             {/* Notification preference */}

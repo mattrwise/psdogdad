@@ -246,21 +246,6 @@ export default function ResourcesPage() {
         </SuggestResourceButton>
       </div>
 
-      {/* New member roadmap */}
-      <Link
-        href="/resources/roadmap"
-        className="flex flex-col sm:flex-row sm:items-center gap-4 bg-plum rounded-2xl p-5 sm:p-6 mb-8 text-white hover:-translate-y-0.5 transition-transform"
-      >
-        <div className="text-4xl flex-shrink-0">🗺️</div>
-        <div className="flex-1">
-          <h2 className="font-extrabold text-lg">New to PS Dog Dad?</h2>
-          <p className="text-white/70 text-sm mt-0.5">Get your printable roadmap, a step-by-step guide to everything worth exploring first.</p>
-        </div>
-        <span className="text-sm font-bold text-brand-golden whitespace-nowrap self-start sm:self-auto">
-          View Roadmap →
-        </span>
-      </Link>
-
       {/* The one thing on this page worth reading before you need it. Sits above
           the jump links deliberately: nobody scrolls to the emergency section
           on a good day, which is the only day it is any use to read it. */}
@@ -294,22 +279,21 @@ export default function ResourcesPage() {
         ))}
       </div>
 
-      {/* Dog Dad Guides */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-        {[
-          { href: '/resources/health-wellness', icon: '🩺', title: 'Health & Wellness', text: 'Keeping your best friend healthy, plus a filterable valley-wide vet finder.', color: 'border-brand-teal' },
-          { href: '/resources/training', icon: '🎓', title: 'Training Techniques', text: 'Professional methods, common mistakes, and pro tips from the pack.', color: 'border-brand-orange' },
-          { href: '/resources/handbook', icon: '📖', title: 'Dog Dad Handbook', text: 'The complete 5-chapter guide, from bringing them home to senior years.', color: 'border-plum' },
-          { href: '/resources/products', icon: '🛒', title: 'Product Guide', text: 'The gear worth owning, and smart shopping tips.', color: 'border-brand-golden' },
-        ].map(guide => (
-          <Link key={guide.href} href={guide.href} className={`card p-5 border-t-4 ${guide.color} hover:-translate-y-0.5 block`}>
-            <div className="text-3xl mb-2">{guide.icon}</div>
-            <h2 className="font-extrabold text-plum text-base mb-1">{guide.title}</h2>
-            <p className="text-sm text-plum/60 leading-relaxed">{guide.text}</p>
-            <p className="text-sm font-semibold text-brand-teal mt-3">Read the guide →</p>
-          </Link>
-        ))}
-      </div>
+      {/* The guides moved to their own page. One line pointing at them beats
+          six cards competing with the directory for the same screen. */}
+      <Link
+        href="/guides"
+        className="flex items-center gap-4 bg-white rounded-2xl shadow-sm p-4 sm:p-5 mb-8 hover:-translate-y-0.5 transition-transform"
+      >
+        <div className="text-3xl flex-shrink-0">📚</div>
+        <div className="flex-1 min-w-0">
+          <h2 className="font-extrabold text-plum">Looking for our guides?</h2>
+          <p className="text-sm text-plum/60 mt-0.5">
+            Health, desert heat, training technique, gear and the Dog Dad Handbook, all printable.
+          </p>
+        </div>
+        <span className="text-sm font-bold text-brand-teal whitespace-nowrap">Guides →</span>
+      </Link>
 
       {/* Quick disclaimer */}
       <div className="bg-brand-golden/10 border border-brand-golden/30 rounded-xl p-4 mb-10 text-sm text-plum/70">

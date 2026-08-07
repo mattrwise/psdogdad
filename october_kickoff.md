@@ -37,7 +37,7 @@ moves, change both.**
 
 Run `supabase/kickoff-event.sql` once in the Supabase SQL editor. It requires
 `events-setup.sql` and `events-add-host.sql` to have been run already, and it is
-safe to run more than once — it matches on the title and updates in place, so a
+safe to run more than once, it matches on the title and updates in place, so a
 re-run never duplicates the event or orphans existing RSVPs.
 
 Until it runs, the callout renders nothing at all rather than advertising a
@@ -51,10 +51,10 @@ an audience that will have forgotten by the time it matters.
 
 Two weeks out, which is **Saturday 3 October**, post to:
 
-- [ ] Palm Springs Animal Shelter — ask if they will share it
+- [ ] Palm Springs Animal Shelter, ask if they will share it
 - [ ] Other valley shelters and rescues
 - [ ] Local Facebook groups (Palm Springs community groups, Coachella Valley dog
-      groups, neighbourhood groups)
+      groups, neighborhood groups)
 - [ ] Nextdoor
 - [ ] The dog-friendly businesses already on the Resources page, the ones with a
       counter and a noticeboard

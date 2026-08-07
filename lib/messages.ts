@@ -11,7 +11,13 @@ export type Message = {
   photo_path: string | null
   created_at: string
   read_at: string | null
+  edited_at: string | null
+  deleted_at: string | null
 }
+
+/** The columns every message query pulls back. */
+const MESSAGE_COLUMNS =
+  'id, sender_id, recipient_id, body, photo_path, created_at, read_at, edited_at, deleted_at'
 
 export const MESSAGE_PHOTO_BUCKET = 'message-photos'
 const SIGNED_URL_TTL_SECONDS = 60 * 60
@@ -25,15 +31,72 @@ export function conversationFolder(a: string, b: string): string {
   return [a, b].sort().join('_')
 }
 
-/** Every message between two members, oldest first. RLS does the filtering. */
-export async function fetchThread(otherId: string): Promise<Message[] | null> {
+/**
+ * When you last drew a line under a conversation, or null if you never have.
+ * See clearConversation below.
+ */
+export async function clearedAt(otherId: string): Promise<string | null> {
   const { data, error } = await supabase
+    .from('conversation_clears')
+    .select('cleared_at')
+    .eq('other_id', otherId)
+    .maybeSingle()
+  if (error) { console.error('Could not check cleared conversations:', error.message); return null }
+  return (data?.cleared_at as string | undefined) ?? null
+}
+
+/** Everyone whose conversation you've cleared, as other_id → when. */
+export async function fetchClears(): Promise<Record<string, string>> {
+  const { data, error } = await supabase
+    .from('conversation_clears')
+    .select('other_id, cleared_at')
+  if (error) { console.error('Could not load cleared conversations:', error.message); return {} }
+  const map: Record<string, string> = {}
+  for (const row of (data ?? []) as Array<{ other_id: string; cleared_at: string }>) {
+    map[row.other_id] = row.cleared_at
+  }
+  return map
+}
+
+/**
+ * Removes a conversation from YOUR Messages page. The other person keeps
+ * theirs — see the reasoning in 05-conversations-and-gallery.sql.
+ *
+ * Marks the conversation read on the way out, so a conversation you've put away
+ * can't go on driving the unread badge for messages you can no longer see.
+ */
+export async function clearConversation(otherId: string): Promise<boolean> {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return false
+  await markThreadRead(otherId)
+  const { error } = await supabase
+    .from('conversation_clears')
+    .upsert(
+      { user_id: user.id, other_id: otherId, cleared_at: new Date().toISOString() },
+      { onConflict: 'user_id,other_id' },
+    )
+  if (error) { console.error('Could not clear conversation:', error.message); return false }
+  return true
+}
+
+/**
+ * Every message between two members, oldest first, minus anything from before
+ * you cleared this conversation. RLS does the rest of the filtering.
+ */
+export async function fetchThread(otherId: string): Promise<Message[] | null> {
+  const since = await clearedAt(otherId)
+
+  let query = supabase
     .from('messages')
-    .select('id, sender_id, recipient_id, body, photo_path, created_at, read_at')
+    .select(MESSAGE_COLUMNS)
     // Belt and braces: RLS already limits rows to conversations you're part of,
     // but without this you'd also pull in your threads with everyone else.
     .or(`sender_id.eq.${otherId},recipient_id.eq.${otherId}`)
-    .order('created_at', { ascending: true })
+  // Applied here as well as on the inbox list, so a conversation you've put
+  // away doesn't come back in full just because you opened it from a profile.
+  if (since) query = query.gt('created_at', since)
+
+  const { data, error } = await query.order('created_at', { ascending: true })
   if (error) { console.error('Could not load messages:', error.message); return null }
   return (data as Message[]) ?? []
 }
@@ -70,7 +133,7 @@ export async function sendMessage(
       body: body.trim() || null,
       photo_path: photoPath,
     })
-    .select('id, sender_id, recipient_id, body, photo_path, created_at, read_at')
+    .select(MESSAGE_COLUMNS)
     .single()
 
   if (error) {
@@ -88,6 +151,64 @@ export async function sendMessage(
   // must never make the send look like it failed.
   notifyByEmail(sent.id)
   return { ok: true, message: sent }
+}
+
+/**
+ * Changes the text of a message you already sent.
+ *
+ * Goes through the edit_message database function rather than a plain update:
+ * that function is the only thing allowed to change a message, and it checks
+ * that the message is yours before it touches anything. Photos aren't editable —
+ * only the words.
+ *
+ * No email goes out for an edit. The other person was already told a message
+ * arrived, and the notification never carried the text anyway.
+ */
+export async function editMessage(
+  messageId: string,
+  body: string,
+): Promise<{ ok: true; message: Message } | { ok: false; error: string }> {
+  const { data, error } = await supabase.rpc('edit_message', {
+    message_id: messageId,
+    new_body: body,
+  })
+
+  if (error) {
+    console.error('Could not edit message:', error.message)
+    // These three come from edit_message itself, already worded for a member.
+    if (error.code === '42501' || error.code === 'P0002' || error.code === '23514') {
+      return { ok: false, error: error.message }
+    }
+    return { ok: false, error: 'That change could not be saved. Please try again.' }
+  }
+
+  return { ok: true, message: data as Message }
+}
+
+/**
+ * Takes back a message you sent.
+ *
+ * The row stays so the conversation doesn't quietly lose a turn — both people
+ * see "This message was deleted" — but the text and any photo are genuinely
+ * cleared, not merely hidden by the site. Deleting is allowed even in a blocked
+ * conversation: removing your own words is different from adding new ones.
+ */
+export async function deleteMessage(
+  messageId: string,
+): Promise<{ ok: true; message: Message } | { ok: false; error: string }> {
+  const { data, error } = await supabase.rpc('delete_message', {
+    message_id: messageId,
+  })
+
+  if (error) {
+    console.error('Could not delete message:', error.message)
+    if (error.code === '42501' || error.code === 'P0002') {
+      return { ok: false, error: error.message }
+    }
+    return { ok: false, error: 'That message could not be deleted. Please try again.' }
+  }
+
+  return { ok: true, message: data as Message }
 }
 
 async function notifyByEmail(messageId: string): Promise<void> {
@@ -138,13 +259,20 @@ export async function markThreadRead(otherId: string): Promise<void> {
 }
 
 export async function unreadCount(): Promise<number> {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return 0
+
+  // recipient_id has to be pinned down explicitly. RLS shows you every message
+  // in your conversations — including the ones you SENT, which carry no read_at
+  // until the other person opens them. Counting on RLS alone made the nav badge
+  // tally your own outgoing messages alongside your actual unread ones.
   const { count, error } = await supabase
     .from('messages')
     .select('id', { count: 'exact', head: true })
+    .eq('recipient_id', user.id)
     .is('read_at', null)
+    .is('deleted_at', null)
   if (error) { console.error('Could not count unread:', error.message); return 0 }
-  // RLS limits this to messages you can see; you never have unread messages you
-  // sent yourself, so this is your inbox count.
   return count ?? 0
 }
 

@@ -16,6 +16,7 @@ const staticPaths = [
   '/members',
   '/events',
   '/resources',
+  '/guides',
   '/resources/roadmap',
   '/resources/handbook',
   '/resources/health-wellness',

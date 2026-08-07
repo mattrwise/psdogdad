@@ -1,3 +1,5 @@
+import PrintButton from '@/components/PrintButton'
+
 const shoppingTips = [
   { icon: '📏', title: 'Measure first', text: 'Harnesses, crates, and beds are sized by girth and length, not "small/medium/large" vibes. Two minutes with a tape measure saves two returns.' },
   { icon: '⭐', title: 'Read the 3-star reviews', text: 'Five-star reviews are love letters, one-star are rage. The 3-star reviews tell you the honest trade-offs.' },
@@ -91,11 +93,14 @@ const shopUrl = (product: string) =>
 export default function ProductsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-6">
-        <h1 className="section-title">Dog Gear Basics</h1>
-        <p className="text-plum/60 mt-2 max-w-2xl">
-          The gear worth owning, and what to look for before you buy.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h1 className="section-title">Dog Gear Basics</h1>
+          <p className="text-plum/60 mt-2 max-w-2xl">
+            The gear worth owning, and what to look for before you buy.
+          </p>
+        </div>
+        <PrintButton />
       </div>
 
       {/* Disclaimer */}

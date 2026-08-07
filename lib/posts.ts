@@ -58,7 +58,7 @@ export const posts: Post[] = [
 
       { type: 'h2', text: 'Long hours, but not overnight' },
       { type: 'p', text: 'Veterinary Urgent Care of the Desert, 36955 Cook St Ste 14A, Palm Desert, (760) 851-0668. This is the middle tier: the thing that is clearly wrong but probably not life-threatening. A limp that appeared out of nowhere, a torn nail, an ear that has gone from itchy to miserable, vomiting that will not stop.' },
-      { type: 'p', text: 'Their hours run roughly 7am to 10pm Monday through Thursday and 7am to 8pm Friday through Sunday, but hours are exactly the sort of thing that changes without anyone updating a website. Ring before you drive.' },
+      { type: 'p', text: 'Their hours run roughly 7am to 10pm Monday through Thursday and 7am to 8pm Friday through Sunday, but hours are exactly the sort of thing that changes without anyone updating a website. Call before you drive.' },
 
       { type: 'h2', text: 'Poison, any hour' },
       { type: 'p', text: 'If your dog has eaten something and you do not know how bad it is, these two lines exist for that question specifically, and they take it 24 hours a day. Both charge a consultation fee, and both are worth it, because the vet you end up at will want the case number.' },
@@ -66,7 +66,7 @@ export const posts: Post[] = [
         'ASPCA Animal Poison Control, (888) 426-4435',
         'Pet Poison Helpline, (855) 764-7661',
       ] },
-      { type: 'p', text: 'Desert-specific things that land dogs on this call: rat bait from a neighbour\'s garage, oleander clippings in green waste, sago palm (the seeds are the worst part), grapes and raisins, xylitol in sugar-free gum, and the cannabis edibles that turn up in Palm Springs vacation rentals more often than anyone likes to admit. Bring the packaging if there is any.' },
+      { type: 'p', text: 'Desert-specific things that land dogs on this call: rat bait from a neighbor\'s garage, oleander clippings in green waste, sago palm (the seeds are the worst part), grapes and raisins, xylitol in sugar-free gum, and the cannabis edibles that turn up in Palm Springs vacation rentals more often than anyone likes to admit. Bring the packaging if there is any.' },
 
       { type: 'h2', text: 'What to do before you need any of this' },
       { type: 'p', text: 'Three things, fifteen minutes total, and you will never have to think about it again.' },
@@ -77,7 +77,7 @@ export const posts: Post[] = [
       ] },
 
       { type: 'h2', text: 'When in doubt, go' },
-      { type: 'p', text: 'Dog people talk themselves out of the ER constantly, usually at 1am, usually with the phrase "let\'s see how they are in the morning". Some things genuinely cannot wait until morning: heatstroke, bloat in a deep-chested dog, a snake bite, laboured breathing, pale or white gums, a seizure that will not stop, collapse, or a dog that has been hit by anything.' },
+      { type: 'p', text: 'Dog people talk themselves out of the ER constantly, usually at 1am, usually with the phrase "let\'s see how they are in the morning". Some things genuinely cannot wait until morning: heatstroke, bloat in a deep-chested dog, a snake bite, labored breathing, pale or white gums, a seizure that will not stop, collapse, or a dog that has been hit by anything.' },
       { type: 'p', text: 'An unnecessary trip costs you an exam fee and some sleep. The other mistake costs more than that.' },
 
       { type: 'callout', tone: 'info', title: 'Save this page', text: 'Every number here is also on the Resources page, tappable, with map links. Add it to your home screen and you have the whole list one press away.' },
@@ -105,7 +105,7 @@ export const posts: Post[] = [
       { type: 'links', items: [
         { label: 'Palm Springs Animal Shelter', href: 'https://psanimalshelter.org/', note: 'Adoptable dogs, fees, hours and requirements, straight from the source' },
         { label: 'Clear the Shelters', href: 'https://www.cleartheshelters.com/', note: 'The national campaign and its participating shelters' },
-        { label: 'Shelter phone: (760) 416-5718', href: 'tel:+17604165718', note: 'Ring ahead if you are driving in from out of the valley' },
+        { label: 'Shelter phone: (760) 416-5718', href: 'tel:+17604165718', note: 'Call ahead if you are driving in from out of the valley' },
       ] },
       { type: 'p', text: 'Two practical notes, and then we will get out of the way. Adoption events get busy and hot, so if you are bringing your current dog to meet a candidate, go early and take water for both. And if you are not adopting this weekend, shelters need fosters and supplies in August more than in any other month, which is worth ten minutes of your time on their site.' },
       { type: 'links', items: [
@@ -170,7 +170,7 @@ export const posts: Post[] = [
     publishedOn: '2026-08-28',
     body: [
       { type: 'p', text: 'Heat stroke kills dogs in the Coachella Valley every summer, and it moves faster than almost anyone expects. It is not a wait-and-see condition. The window between "he seems off" and organ damage can be under half an hour.' },
-      { type: 'p', text: 'This post is in two halves: recognising it, and the drive. The drive matters because cooling that starts in the car, rather than in the exam room, measurably improves how these cases end.' },
+      { type: 'p', text: 'This post is in two halves: recognizing it, and the drive. The drive matters because cooling that starts in the car, rather than in the exam room, measurably improves how these cases end.' },
 
       { type: 'h2', text: 'Panting versus trouble' },
       { type: 'p', text: 'Every dog pants in August. Normal panting settles within a few minutes once your dog stops moving and gets into shade or air conditioning, and the dog stays interested in things. Heat stroke does not settle.' },
@@ -178,8 +178,8 @@ export const posts: Post[] = [
       { type: 'ul', items: [
         'Frantic, non-stop panting that does not ease off with rest',
         'Thick, ropey drool, or suddenly much more saliva than usual',
-        'Gums that are bright brick red early on, then pale, grey or blue-ish later, which is much worse',
-        'Vomiting or diarrhoea, sometimes with blood in it',
+        'Gums that are bright brick red early on, then pale, gray or blue-ish later, which is much worse',
+        'Vomiting or diarrhea, sometimes with blood in it',
         'Wobbling, a drunk-looking gait, bumping into things',
         'Glassy staring, not responding to their name, confusion',
         'Collapse, tremors, or a seizure',
@@ -207,7 +207,7 @@ export const posts: Post[] = [
         'Wet, wrung-out towels under the armpits and between the back legs. Swap them out as they warm up rather than leaving them in place.',
         'Stop cooling once they seem to be recovering and the panting eases. Dogs cooled aggressively all the way to the clinic can overshoot into hypothermia, which brings its own problems.',
         'Do not give any medication. Human fever reducers are toxic to dogs.',
-        'Ring ahead if you have not already, so a team is waiting at the door instead of finding out when you walk in.',
+        'Call ahead if you have not already, so a team is waiting at the door instead of finding out when you walk in.',
       ] },
 
       { type: 'h2', text: 'Go even if they perk up' },
@@ -255,7 +255,7 @@ export const posts: Post[] = [
       ] },
 
       { type: 'h2', text: 'When electrolytes are actually the answer' },
-      { type: 'p', text: 'There is a real place for them, it is just narrower than the marketing suggests. Genuine electrolyte loss follows sustained heavy exertion in heat, or fluid lost through prolonged vomiting or diarrhoea. A long hike at altitude, a working dog on a hot day, a dog recovering from a bad gut episode.' },
+      { type: 'p', text: 'There is a real place for them, it is just narrower than the marketing suggests. Genuine electrolyte loss follows sustained heavy exertion in heat, or fluid lost through prolonged vomiting or diarrhea. A long hike at altitude, a working dog on a hot day, a dog recovering from a bad gut episode.' },
       { type: 'p', text: 'If you are in that territory, ask your vet what to use and in what amount for your dog\'s weight, rather than reaching for the human sports drink in the fridge. Those are formulated for a 180-pound person and are usually loaded with sugar, and the sugar-free versions may contain xylitol, which is seriously toxic to dogs. Never give a sugar-free anything to a dog without checking the label for xylitol.' },
       { type: 'p', text: 'For everyday desert life, with a normal healthy dog eating normal food: plain water, more of it, more often.' },
 
@@ -361,7 +361,7 @@ export const posts: Post[] = [
       { type: 'p', text: 'Treat it as a training session rather than shopping. Fifteen minutes of loose-leash work down a quiet aisle, some sits with distractions, a treat from a member of staff if they offer. Go on a weekday morning, not a Saturday afternoon, and give other dogs room, an aisle is a narrow space to pass a reactive dog in.' },
 
       { type: 'h2', text: 'Indoor daycare, for the days it is genuinely unbearable' },
-      { type: 'p', text: 'Not somewhere you hang out, but the honest answer for a high-energy dog in a 115° week: a few hours of indoor play with other dogs. Palm Springs has several, all on the Resources page with addresses and numbers, and all will want vaccination records and a temperament assessment before a first visit, so ring ahead rather than turning up.' },
+      { type: 'p', text: 'Not somewhere you hang out, but the honest answer for a high-energy dog in a 115° week: a few hours of indoor play with other dogs. Palm Springs has several, all on the Resources page with addresses and numbers, and all will want vaccination records and a temperament assessment before a first visit, so call ahead rather than just turning up.' },
       { type: 'ul', items: [
         "Doggie's Day Out, 740 Vella Rd Ste 770, Palm Springs, (760) 422-6259",
         'Dogs R Dope, 888 E Research Dr, Palm Springs, (760) 778-3647',
@@ -371,7 +371,7 @@ export const posts: Post[] = [
 
       { type: 'h2', text: 'Independent shops, with a phone call first' },
       { type: 'p', text: 'A good number of the independent retailers along Palm Canyon Drive will happily have a well-behaved dog in the shop, particularly in low season when the town is quiet. Home goods, clothing, galleries, bookshops. There is no reliable published list of which, because it is a decision each owner makes and it changes.' },
-      { type: 'p', text: 'So the method is: ring, or read the door. We have deliberately not published a list of specific boutiques here, because we have not verified them, and a list of shops that turn you away at the door is worse than no list. If you find one that welcomes dogs, tell us and it goes on the Resources page with an address attached.' },
+      { type: 'p', text: 'So the method is: call, or read the door. We have deliberately not published a list of specific boutiques here, because we have not verified them, and a list of shops that turn you away at the door is worse than no list. If you find one that welcomes dogs, tell us and it goes on the Resources page with an address attached.' },
 
       { type: 'h2', text: 'Patios, which come back in October' },
       { type: 'p', text: 'Worth saying plainly, because it is the answer for most of the year: Palm Springs patio culture is excellent and genuinely dog-friendly, and from mid-October it is the best thing about the place. Bootlegger Tiki, Eight4Nine, Cheeky\'s and Workshop are all on the Resources page. Right now they are a heat-safety problem. In six weeks they are the plan.' },
