@@ -36,6 +36,16 @@ const tel = (phone: string) => '+1' + phone.replace(/\D/g, '')
 const mapsUrl = (query: string) =>
   `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`
 
+// Every entry here is a real business with an address or a phone number we can
+// point at, or a national hotline. Six entries used to have neither, which is
+// the signature of mockup filler rather than a researched listing, and they have
+// been removed: Desert Veterinary Clinic, The Pampered Pup PS, Desert Doggy Spa,
+// Fetch Pet Resort, Palm Springs Feed Company, The Dog Bar. Sending a member to
+// a groomer that may not exist is worse than a shorter list. If any of them turn
+// out to be real, they come back with an address and a number attached.
+//
+// The address-less entries that remain are legitimate: two national poison
+// hotlines, three trailheads, and a generic Airbnb/VRBO pointer.
 const resourceSections: Section[] = [
   {
     slug: 'emergency',
@@ -44,9 +54,9 @@ const resourceSections: Section[] = [
     color: 'border-red-400',
     titleColor: 'text-red-600',
     resources: [
-      { name: 'VEG ER for Pets', detail: 'Open 24 hours', address: '73495 Hwy 111, Palm Desert', phone: '(760) 249-2279', map: 'VEG ER for Pets, 73495 Hwy 111, Palm Desert, CA', badge: 'Emergency 24/7', badgeColor: 'bg-red-100 text-red-600', stars: 5, note: 'Only true 24/7 ER in the valley' },
-      { name: 'Veterinary Urgent Care of the Desert', detail: '', address: '36955 Cook St, Ste 14A, Palm Desert', phone: '(760) 851-0668', map: 'Veterinary Urgent Care of the Desert, Palm Desert, CA', badge: 'Urgent Care', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
-      { name: 'Rancho Mirage Animal and Emergency Hospital', detail: '', address: '71950 Hwy 111, Rancho Mirage', phone: '(442) 228-6857', map: 'Rancho Mirage Animal and Emergency Hospital, Rancho Mirage, CA', badge: 'Emergency', badgeColor: 'bg-red-100 text-red-600', stars: null, note: null },
+      { name: 'VEG ER for Pets', detail: 'Palm Desert · Open 24 hours, 7 days', address: '73495 Hwy 111, Palm Desert', phone: '(760) 249-2279', map: 'VEG ER for Pets, 73495 Hwy 111, Palm Desert, CA', badge: 'Emergency 24/7', badgeColor: 'bg-red-100 text-red-600', stars: 5, note: 'No appointment needed. You speak to the vet directly and can stay with your dog.' },
+      { name: 'Rancho Mirage Animal and Emergency Hospital', detail: 'Rancho Mirage · Emergency, advertises 24/7', address: '71950 Hwy 111, Rancho Mirage', phone: '(442) 228-6857', map: 'Rancho Mirage Animal and Emergency Hospital, Rancho Mirage, CA', badge: 'Emergency', badgeColor: 'bg-red-100 text-red-600', stars: null, note: 'Second ER option, and closer if you are mid-valley. Call as you set off.' },
+      { name: 'Veterinary Urgent Care of the Desert', detail: 'Palm Desert · Urgent care, not overnight', address: '36955 Cook St, Ste 14A, Palm Desert', phone: '(760) 851-0668', map: 'Veterinary Urgent Care of the Desert, Palm Desert, CA', badge: 'Urgent Care', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: 'Roughly 7am to 10pm Mon–Thu, 7am to 8pm Fri–Sun. Closes overnight, so ring first.' },
     ],
     subsections: [
       {
@@ -67,7 +77,6 @@ const resourceSections: Section[] = [
     resources: [
       { name: 'VCA Desert Animal Hospital', detail: 'Full Service', address: '4299 E Ramon Rd, Palm Springs', phone: '(760) 778-9999', map: 'VCA Desert Animal Hospital, 4299 E Ramon Rd, Palm Springs, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: 'Mon, Fri 7am, 6pm, Sat 7:30am, 5pm · Member favorite' },
       { name: 'Palm Springs Animal Hospital', detail: 'Full Service', address: '4500 E Palm Canyon Dr, Palm Springs', phone: '(760) 324-0450', map: 'Palm Springs Animal Hospital, 4500 E Palm Canyon Dr, Palm Springs, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: null },
-      { name: 'Desert Veterinary Clinic', detail: 'Cathedral City · Low-cost options available', address: null, phone: null, map: 'Desert Veterinary Clinic, Cathedral City, CA', badge: 'Budget-Friendly', badgeColor: 'bg-brand-golden/20 text-plum', stars: 4, note: null },
       { name: 'Pet Lux', detail: '', address: '1801 E Tahquitz Canyon Way, Ste 102, Palm Springs', phone: '(760) 297-7747', map: 'Pet Lux, Palm Springs, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
       { name: 'Animal Samaritans', detail: '', address: '72120 Pet Land Pl, Thousand Palms', phone: '(760) 343-3477', map: 'Animal Samaritans, Thousand Palms, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
       { name: 'El Paseo Animal Hospital', detail: '', address: '72608 El Paseo, Ste 4, Palm Desert', phone: '(760) 491-1008', map: 'El Paseo Animal Hospital, Palm Desert, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
@@ -83,9 +92,6 @@ const resourceSections: Section[] = [
     titleColor: 'text-brand-orange',
     resources: [
       { name: 'The Wizard of Paws', detail: 'Nail trims & full grooming', address: '400 El Cielo Rd, Palm Springs', phone: '(760) 620-5098', map: 'The Wizard of Paws, 400 El Cielo Rd, Palm Springs, CA', badge: 'Member Favorite', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 5, note: "Lucy's go-to for nail trims 🐾 · Cage-free, quiet environment" },
-      { name: 'The Pampered Pup PS', detail: 'Uptown Palm Springs · Full Grooming', address: null, phone: null, map: 'The Pampered Pup, Palm Springs, CA', badge: 'Recommended', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 5, note: 'Book 2 weeks ahead in season' },
-      { name: 'Desert Doggy Spa', detail: 'Palm Desert · Mobile grooming available', address: null, phone: null, map: 'Desert Doggy Spa, Palm Desert, CA', badge: 'Mobile Option', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 4, note: null },
-      { name: 'Fetch Pet Resort', detail: 'Palm Springs · Grooming + Boarding', address: null, phone: null, map: 'Fetch Pet Resort, Palm Springs, CA', badge: 'Full Service', badgeColor: 'bg-plum/10 text-plum', stars: 4, note: 'Great for multi-day stays' },
       { name: 'Barking Beauties', detail: '', address: '1717 E Vista Chino, Ste J3, Palm Springs', phone: '(760) 766-6169', map: 'Barking Beauties, Palm Springs, CA', badge: 'Grooming', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
       { name: 'The Grooming Plug', detail: '', address: '4565 E Camino Parocela, Palm Springs', phone: '(760) 620-3189', map: 'The Grooming Plug, Palm Springs, CA', badge: 'Grooming', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
       { name: "Miriam's Poochella", detail: '', address: '1504 S Palm Canyon Dr, Palm Springs', phone: '(760) 832-6913', map: 'Miriam\'s Poochella, Palm Springs, CA', badge: 'Grooming', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
@@ -167,8 +173,6 @@ const resourceSections: Section[] = [
     titleColor: 'text-brand-orange',
     resources: [
       { name: 'Petco Palm Desert', detail: 'Full-service store', address: '72453 Hwy 111, Palm Desert', phone: null, map: 'Petco, Palm Desert, CA', badge: 'Full Service', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 3, note: null },
-      { name: 'Palm Springs Feed Company', detail: 'Local feed & pet supply', address: null, phone: null, map: 'Palm Springs Feed Company, Palm Springs, CA', badge: 'Local', badgeColor: 'bg-brand-golden/20 text-plum', stars: 4, note: 'Great raw food selection' },
-      { name: 'The Dog Bar', detail: 'N Palm Canyon Dr · Boutique pet shop', address: null, phone: null, map: 'The Dog Bar, Palm Springs, CA', badge: 'Boutique', badgeColor: 'bg-plum/10 text-plum', stars: 5, note: 'Locally owned. Best collar selection in PS.' },
     ],
   },
 ]
@@ -254,6 +258,26 @@ export default function ResourcesPage() {
         </div>
         <span className="text-sm font-bold text-brand-golden whitespace-nowrap self-start sm:self-auto">
           View Roadmap →
+        </span>
+      </Link>
+
+      {/* The one thing on this page worth reading before you need it. Sits above
+          the jump links deliberately: nobody scrolls to the emergency section
+          on a good day, which is the only day it is any use to read it. */}
+      <Link
+        href="/blog/emergency-and-after-hours-vets"
+        className="flex flex-col sm:flex-row sm:items-center gap-4 bg-red-50 border-l-4 border-red-400 rounded-2xl p-5 sm:p-6 mb-8 hover:-translate-y-0.5 transition-transform"
+      >
+        <div className="text-4xl flex-shrink-0">🚨</div>
+        <div className="flex-1">
+          <h2 className="font-extrabold text-red-700 text-lg">Read this before you need it</h2>
+          <p className="text-plum/70 text-sm mt-0.5">
+            Which valley vets are open at 2am, which close overnight, and the three
+            things to sort out now so you are not reading a map at the worst moment.
+          </p>
+        </div>
+        <span className="text-sm font-bold text-red-600 whitespace-nowrap self-start sm:self-auto">
+          Emergency guide →
         </span>
       </Link>
 
