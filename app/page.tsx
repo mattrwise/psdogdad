@@ -4,7 +4,8 @@ import HeatAlertBanner from '@/components/HeatAlertBanner'
 import SignedIn from '@/components/auth/SignedIn'
 import SignedOut from '@/components/auth/SignedOut'
 import ShelterEventCallout from '@/components/ShelterEventCallout'
-import ClubLaunchCallout from '@/components/ClubLaunchCallout'
+import KickoffBanner from '@/components/KickoffBanner'
+import KickoffCallout from '@/components/KickoffCallout'
 import UpcomingEventsPreview from '@/components/home/UpcomingEventsPreview'
 import LatestDiscussionsPreview from '@/components/home/LatestDiscussionsPreview'
 // Imported (not linked by URL) so Next.js serves it from /_next/static/…, 
@@ -21,17 +22,18 @@ const stats = [
   { value: '☀️', label: 'Year-Round Fun' },
 ]
 
+/**
+ * Rebuilt hourly so the date-sensitive pieces (the kickoff banner, the shelter
+ * weekend callout) can retire themselves without waiting for a deploy.
+ */
+export const revalidate = 3600
+
 export default function HomePage() {
   return (
     <div>
-      {/* Under-development notice */}
-      <div className="bg-brand-golden text-plum text-center px-4 py-3 text-sm font-semibold">
-        🚧 This site is currently under development but open for early membership, {' '}
-        <Link href="/members/join" className="underline font-bold hover:text-brand-orange">
-          feel free to sign up
-        </Link>
-        . The club officially starts with a group walk on October 17th at 8am. 🐾
-      </div>
+      {/* A date does more work than any signup copy, so the banner is the date
+          and nothing else. It retires itself the day after, see lib/kickoff.ts. */}
+      <KickoffBanner />
 
       {/* Hero */}
       <section className="bg-brand-cream">
@@ -102,16 +104,18 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* The club's official start. Sits above the shelter drive because it's
-          the thing a first-time visitor most needs to leave with. */}
+      {/* The first meetup. Sits above the shelter drive because it's the thing a
+          first-time visitor most needs to leave with, and it carries its own
+          RSVP so nobody has to navigate in order to commit. */}
       <section className="bg-brand-cream pt-4 pb-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ClubLaunchCallout />
+          <KickoffCallout />
         </div>
       </section>
 
       {/* The shelter's adoption drive. Time-sensitive, and against cream rather
-          than the plum Training band so two dark blocks don't stack. */}
+          than the plum Training band so two dark blocks don't stack. Retires
+          itself after the weekend. */}
       <section className="bg-brand-cream pb-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ShelterEventCallout />

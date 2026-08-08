@@ -2,14 +2,32 @@ import Link from 'next/link'
 
 /**
  * Points members at the Palm Springs Animal Shelter's adoption weekend. The club's
- * own start is the October 17th group walk, see ClubLaunchCallout, so this no
+ * own start is the October 17th group walk, see KickoffCallout, so this no
  * longer claims the two are the same date. Deliberately built from our own type and colours,
  * the shelter's own artwork carries NBC/Univision/sponsor logos and a trademark,
  * so none of it is reused here. Dates, times and venue are plain facts.
  *
  * We are not a partner or sponsor, and the copy is written so as not to imply it.
+ *
+ * Renders nothing once the weekend has passed in Pacific time. The pages that
+ * use it carry a `revalidate`, so this is re-evaluated rather than frozen at
+ * build time, and the homepage stops advertising a weekend that is over.
  */
+const LAST_DAY = '2026-08-16'
+
+function weekendIsOver(now: Date = new Date()): boolean {
+  const pacificToday = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Los_Angeles',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(now)
+  return pacificToday > LAST_DAY
+}
+
 export default function ShelterEventCallout() {
+  if (weekendIsOver()) return null
+
   return (
     <section className="bg-plum rounded-3xl overflow-hidden relative">
       <div

@@ -4,20 +4,22 @@ import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import ProposeEventModal from '@/components/events/ProposeEventModal'
 import ShelterEventCallout from '@/components/ShelterEventCallout'
+import KickoffCallout from '@/components/KickoffCallout'
 import { supabase } from '@/lib/supabase/client'
 import { useUser } from '@/lib/useUser'
+import {
+  EMPTY_RSVP,
+  EVENT_COLUMNS,
+  loadRsvps,
+  toggleRsvp,
+  type EventRow,
+  type RsvpState,
+} from '@/lib/events'
+import { KICKOFF_TITLE } from '@/lib/kickoff'
 
 const ADMIN_EMAIL = 'psmattreid@gmail.com'
 
-type RealEvent = {
-  id: string
-  title: string
-  event_date: string
-  event_time: string
-  location: string
-  description: string
-  host: string | null
-}
+type RealEvent = EventRow
 
 const realEventColors = [
   'border-brand-teal bg-brand-teal/5',
@@ -170,7 +172,7 @@ export default function EventsPage() {
   const [realEvents, setRealEvents] = useState<RealEvent[]>([])
   const [loadingReal, setLoadingReal] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
-  const [realRsvps, setRealRsvps] = useState<Record<string, { count: number; mine: boolean }>>({})
+  const [realRsvps, setRealRsvps] = useState<Record<string, RsvpState>>({})
   const [signInTitle, setSignInTitle] = useState<string | null>(null)
 
   const loadReal = useCallback(async () => {
@@ -178,7 +180,7 @@ export default function EventsPage() {
     const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
     const { data, error } = await supabase
       .from('events')
-      .select('id, title, event_date, event_time, location, description, host')
+      .select(EVENT_COLUMNS)
       .gte('event_date', todayIso)
       .order('event_date', { ascending: true })
     if (error) {
@@ -192,46 +194,19 @@ export default function EventsPage() {
     setLoadError(null)
     setLoadingReal(false)
 
-    if (events.length > 0) {
-      const { data: rsvpData, error: rsvpError } = await supabase
-        .from('event_rsvps')
-        .select('event_id, user_id')
-        .in('event_id', events.map(e => e.id))
-      if (rsvpError) { console.error('Could not load RSVPs:', rsvpError.message); return }
-      const grouped: Record<string, { count: number; mine: boolean }> = {}
-      for (const row of (rsvpData as { event_id: string; user_id: string }[]) ?? []) {
-        const entry = (grouped[row.event_id] ??= { count: 0, mine: false })
-        entry.count += 1
-        if (user && row.user_id === user.id) entry.mine = true
-      }
-      setRealRsvps(grouped)
-    }
+    setRealRsvps(await loadRsvps(events.map(e => e.id), user))
   }, [user])
 
   useEffect(() => { loadReal() }, [loadReal])
 
+  // The kickoff has its own callout above, with its own RSVP button.
+  const otherEvents = realEvents.filter(e => e.title !== KICKOFF_TITLE)
+
   async function handleRealRsvp(event: RealEvent) {
     if (!user) { setSignInTitle(event.title); return }
-    const current = realRsvps[event.id] ?? { count: 0, mine: false }
-
-    if (current.mine) {
-      const { error } = await supabase
-        .from('event_rsvps')
-        .delete()
-        .eq('event_id', event.id)
-        .eq('user_id', user.id)
-      if (error) { console.error('Could not cancel RSVP:', error.message); return }
-      setRealRsvps(prev => ({ ...prev, [event.id]: { count: Math.max(0, current.count - 1), mine: false } }))
-    } else {
-      const meta = user.user_metadata ?? {}
-      const dogName = Array.isArray(meta.dogs) && meta.dogs[0]?.name ? meta.dogs[0].name : meta.dog_name
-      const memberName = [meta.name, dogName].filter(Boolean).join(' & ') || 'A Dog Dad'
-      const { error } = await supabase
-        .from('event_rsvps')
-        .insert({ event_id: event.id, user_id: user.id, member_name: memberName })
-      if (error) { console.error('Could not RSVP:', error.message); return }
-      setRealRsvps(prev => ({ ...prev, [event.id]: { count: current.count + 1, mine: true } }))
-    }
+    const current = realRsvps[event.id] ?? EMPTY_RSVP
+    const next = await toggleRsvp(event.id, user, current)
+    if (next) setRealRsvps(prev => ({ ...prev, [event.id]: next }))
   }
 
   return (
@@ -251,6 +226,12 @@ export default function EventsPage() {
       {/* Admin: create events (visible to admin only) */}
       {user?.email === ADMIN_EMAIL && <AdminEventForm onCreated={() => loadReal()} />}
 
+      {/* The first meetup leads, with its own RSVP. It is filtered out of the
+          list below so the same event does not appear twice on one page. */}
+      <section className="mb-14">
+        <KickoffCallout />
+      </section>
+
       {/* The homepage leads with this and its button points here, so landing on
           an empty calendar made the site look like it had lost the event. */}
       <section className="mb-14">
@@ -261,8 +242,8 @@ export default function EventsPage() {
       <section className="mb-14">
         <h2 className="font-extrabold text-plum text-xl mb-5">Upcoming Events</h2>
         <div className="space-y-5">
-          {realEvents.map((event, i) => {
-            const rsvp = realRsvps[event.id] ?? { count: 0, mine: false }
+          {otherEvents.map((event, i) => {
+            const rsvp = realRsvps[event.id] ?? EMPTY_RSVP
             const badge = dateBadge(event.event_date)
             return (
               <div key={event.id} className={`card border-l-4 ${realEventColors[i % realEventColors.length]} p-6 hover:-translate-y-0.5`}>
@@ -335,7 +316,7 @@ export default function EventsPage() {
             </div>
           )}
 
-          {!loadingReal && !loadError && realEvents.length === 0 && (
+          {!loadingReal && !loadError && otherEvents.length === 0 && (
             <div className="card p-10 text-center">
               <div className="text-5xl mb-4">🌴</div>
               <h3 className="font-extrabold text-plum text-xl mb-2">This calendar is yours to build</h3>

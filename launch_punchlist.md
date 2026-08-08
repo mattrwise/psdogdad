@@ -1,8 +1,13 @@
 # PS Dog Dad launch punch list
 
 Audit run 2026-08-01 against live www.psdogdad.com and `main` at the current commit.
-Nothing in this list has been fixed. Findings are grouped by how much they matter
-before the August 15 launch.
+Findings are grouped by how much they matter before the August 15 launch.
+
+**Fixed since the audit** (October kickoff branch, 2026-08-07): item 2, the six
+mockup resource entries are gone and the emergency listings now say which places
+close overnight. Item 8 is partly addressed, the events table is no longer empty
+once `supabase/kickoff-event.sql` is run, though the Clear the Shelters row still
+has to be created by hand. Everything else below stands.
 
 Answers to the five things you asked about are marked **[Q1]** to **[Q5]**.
 
@@ -26,7 +31,7 @@ This is the same class of thing that was cleared off the events page and the hom
 before launch, and it is the largest remaining contradiction of the no invented content
 rule. A visitor who clicks a thread finds it is not real.
 
-### 2. Six resource entries look like mockup leftovers **[Q3]**
+### 2. Six resource entries look like mockup leftovers **[Q3]** — FIXED
 `app/resources/page.tsx`
 
 The page carries **48 entries with phone numbers** and most look genuinely researched:
@@ -45,6 +50,12 @@ filler rather than a researched listing:
 
 These were flagged as suspicious in a previous session and are still present. Sending a
 member to a groomer that does not exist is worse than a shorter list.
+
+All six have now been removed, with a comment at the top of `resourceSections`
+recording which ones and why. The emergency listings were also corrected: VEG is
+the confirmed 24-hour option, Rancho Mirage Animal and Emergency is a second ER,
+and Veterinary Urgent Care of the Desert is now labelled as closing overnight
+rather than reading like a third emergency room.
 
 Six other address-less entries are legitimate and should stay: two national poison
 helplines, three trails, and a generic "Various Airbnb / VRBO" entry.
