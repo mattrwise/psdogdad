@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getGuide, guides, relatedGuides } from '@/lib/guides'
 import GuideBody from '@/components/training/GuideBody'
+import PrintButton from '@/components/PrintButton'
 
 export function generateStaticParams() {
   return guides.map(g => ({ slug: g.slug }))
@@ -32,7 +33,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
   return (
     <div className="bg-brand-cream min-h-screen py-12 px-4">
       <div className="max-w-2xl mx-auto">
-        <Link href="/training" className="text-brand-orange font-bold text-sm hover:underline">
+        <Link href="/training" className="text-brand-orange font-bold text-sm hover:underline no-print">
           ← All guides
         </Link>
 
@@ -43,17 +44,22 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
             <span className={`badge ${badge.className}`}>{badge.label}</span>
             <span className="text-xs text-plum/40">📖 {guide.minutes} min read</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-plum leading-tight mb-2">
-            {guide.emoji} {guide.title}
-          </h1>
-          <p className="text-sm text-plum/50">By PS Dog Dad</p>
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-plum leading-tight mb-2">
+                {guide.emoji} {guide.title}
+              </h1>
+              <p className="text-sm text-plum/50">By PS Dog Dad</p>
+            </div>
+            <PrintButton className="btn-secondary self-start whitespace-nowrap flex-shrink-0" />
+          </div>
         </div>
 
         {/* Body, client component handles auth gate */}
         <GuideBody guide={guide} />
 
-        {/* Related guides */}
-        <div className="mt-10">
+        {/* Related guides. Navigation, so it stays off the paper. */}
+        <div className="mt-10 no-print">
           <h3 className="font-extrabold text-plum mb-4">More guides</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {relatedGuides(guide.slug).map(related => (

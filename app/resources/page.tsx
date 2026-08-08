@@ -44,6 +44,12 @@ const mapsUrl = (query: string) =>
 // a groomer that may not exist is worse than a shorter list. If any of them turn
 // out to be real, they come back with an address and a number attached.
 //
+// Removing two of those left Pet Supplies as a single Petco, which is its own
+// kind of wrong: the valley has plenty of stores, we just had the invented ones
+// listed instead of the real ones. That section was researched properly and now
+// carries the independents (Bones-N-Scones, Cold Nose Warm Heart) alongside the
+// chains, all with an address and a number.
+//
 // The address-less entries that remain are legitimate: two national poison
 // hotlines, three trailheads, and a generic Airbnb/VRBO pointer.
 const resourceSections: Section[] = [
@@ -172,7 +178,14 @@ const resourceSections: Section[] = [
     color: 'border-brand-orange',
     titleColor: 'text-brand-orange',
     resources: [
+      { name: 'Bones-N-Scones', detail: 'South Palm Springs · Locally owned', address: '633 S Palm Canyon Dr, Ste 26, Palm Springs', phone: '(760) 864-1133', map: 'Bones-N-Scones, 633 S Palm Canyon Dr, Palm Springs, CA', badge: 'Local', badgeColor: 'bg-brand-golden/20 text-plum', stars: null, note: 'Independent pet food and supplies. Two valley locations.' },
+      { name: 'Bones-N-Scones North Palm Springs', detail: 'Vista Chino · Locally owned', address: '1717 E Vista Chino, Ste B-3, Palm Springs', phone: '(760) 832-9010', map: 'Bones-N-Scones, 1717 E Vista Chino, Palm Springs, CA', badge: 'Local', badgeColor: 'bg-brand-golden/20 text-plum', stars: null, note: null },
+      { name: 'Cold Nose Warm Heart', detail: 'Downtown Palm Springs · Locally owned', address: '453 E Tahquitz Canyon Way, Palm Springs', phone: '(562) 508-8199', map: 'Cold Nose Warm Heart, 453 E Tahquitz Canyon Way, Palm Springs, CA', badge: 'Boutique', badgeColor: 'bg-plum/10 text-plum', stars: null, note: 'Treats, toys, collars and clothing. Closed some weekdays, so call first.' },
+      { name: 'Petco Palm Springs', detail: 'Full-service store', address: '2465 E Palm Canyon Dr, Palm Springs', phone: '(760) 864-1393', map: 'Petco, 2465 E Palm Canyon Dr, Palm Springs, CA', badge: 'Full Service', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
       { name: 'Petco Palm Desert', detail: 'Full-service store', address: '72453 Hwy 111, Palm Desert', phone: null, map: 'Petco, Palm Desert, CA', badge: 'Full Service', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 3, note: null },
+      { name: 'PetSmart Palm Springs', detail: 'Full-service store', address: '5601 E Ramon Rd, Palm Springs', phone: '(760) 325-9711', map: 'PetSmart, 5601 E Ramon Rd, Palm Springs, CA', badge: 'Full Service', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
+      { name: 'PetSmart Palm Desert (Monterey)', detail: 'Full-service store', address: '34900 Monterey Ave, Palm Desert', phone: '(760) 324-3059', map: 'PetSmart, 34900 Monterey Ave, Palm Desert, CA', badge: 'Full Service', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
+      { name: 'PetSmart Palm Desert (Town Center)', detail: 'Full-service store', address: '44425 Town Center Way, Ste A, Palm Desert', phone: '(760) 469-5320', map: 'PetSmart, 44425 Town Center Way, Palm Desert, CA', badge: 'Full Service', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
     ],
   },
 ]
@@ -245,26 +258,6 @@ export default function ResourcesPage() {
           + Suggest a Resource
         </SuggestResourceButton>
       </div>
-
-      {/* The one thing on this page worth reading before you need it. Sits above
-          the jump links deliberately: nobody scrolls to the emergency section
-          on a good day, which is the only day it is any use to read it. */}
-      <Link
-        href="/blog/emergency-and-after-hours-vets"
-        className="flex flex-col sm:flex-row sm:items-center gap-4 bg-red-50 border-l-4 border-red-400 rounded-2xl p-5 sm:p-6 mb-8 hover:-translate-y-0.5 transition-transform"
-      >
-        <div className="text-4xl flex-shrink-0">🚨</div>
-        <div className="flex-1">
-          <h2 className="font-extrabold text-red-700 text-lg">Read this before you need it</h2>
-          <p className="text-plum/70 text-sm mt-0.5">
-            Which valley vets are open at 2am, which close overnight, and the three
-            things to sort out now so you are not reading a map at the worst moment.
-          </p>
-        </div>
-        <span className="text-sm font-bold text-red-600 whitespace-nowrap self-start sm:self-auto">
-          Emergency guide →
-        </span>
-      </Link>
 
       {/* Jump links */}
       <div className="flex flex-wrap gap-2 mb-6">

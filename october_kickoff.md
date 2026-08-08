@@ -59,37 +59,24 @@ Two weeks out, which is **Saturday 3 October**, post to:
 - [ ] The dog-friendly businesses already on the Resources page, the ones with a
       counter and a noticeboard
 
-The late-September post (`/blog/almost-there`, live 25 September) is the thing to
-link to. It carries the date, the reasoning and the RSVP in one place.
+Link to the homepage. The banner carries the date and the callout below it has
+the RSVP button.
 
-## Summer content, August through September
+## Summer content
 
-One post a week, eight total, all evergreen so it keeps earning after this
-summer. Content lives in `lib/posts.ts`, renders at `/blog`.
+Eight posts were written for an August-to-September run (pavement test, heat
+stroke, emergency vets, hydration, indoor enrichment, indoor spots, Clear the
+Shelters, and a late-September countdown), living at `/blog` with a schedule
+that published them one a week.
 
-| Live | Post | Notes |
-|---|---|---|
-| Aug 6 | Emergency and after-hours vets in the Coachella Valley | Also the Resources page fix. Live on merge, because Resources links straight at it |
-| Aug 15 | Clear the Shelters is this weekend | Links only, no meetup, fixed date |
-| Aug 21 | The seven-second pavement test | |
-| Aug 28 | Heat stroke: the signs, and the car ride | |
-| Sep 4 | Hydration and electrolytes: what actually helps | |
-| Sep 11 | Indoor enrichment: snuffle mats, frozen Kongs, scent games | |
-| Sep 18 | Dog-friendly indoor spots in Palm Springs | |
-| Sep 25 | We are almost there | Carries the October date, use this for promotion |
+**Removed on 8 August.** The site already had Training, Guides and Resources,
+and a fourth reading section made the place confusing to land on. The writing is
+not lost, it is in git history on the `claude/october-kickoff-planning-gjg7el`
+branch if it is ever wanted.
 
-Posts publish themselves on their date. The index and the sitemap only show what
-has reached it, unpublished slugs return 404, and the pages revalidate hourly so
-nothing needs a deploy on the morning. Adding a post is one entry in
-`lib/posts.ts`.
-
-### The rule these were written under
-
-Same as the rest of the site: no invented businesses, no invented numbers. Every
-place named is one already verified on the Resources page, and anything
-time-sensitive is written so the reader is told to check rather than trust us.
-The indoor-spots post says outright that we are not publishing a boutique list we
-have not checked. That makes it a shorter post and a true one.
+What survived the removal, because it was the point of the exercise: the
+Resources page emergency section is correct, and the pet supply listings are
+real ones rather than invented ones.
 
 ## After 17 October
 
@@ -99,4 +86,3 @@ does need a decision:
 
 - [ ] Create the next event, so the calendar is not empty the morning after
 - [ ] Decide whether the banner comes back with the next date or goes away
-- [ ] The eight posts stay up. That was the point of writing them evergreen.
