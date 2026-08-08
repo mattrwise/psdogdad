@@ -45,8 +45,6 @@ export const posts: Post[] = [
       'Where to go at 2am, what each place actually covers, and the three things to do before you need any of it.',
     category: 'Emergency',
     minutes: 6,
-    // Live immediately rather than at the next midnight, because the Resources
-    // page links straight at this post and that link must not 404.
     publishedOn: '2026-08-06',
     body: [
       { type: 'p', text: 'The worst time to work out where the emergency vet is, is while your dog is in the back seat and you are trying to read a map. This is the post to skim now, once, on a normal day, so that the answer is already in your head.' },
