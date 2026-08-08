@@ -11,7 +11,6 @@ import { unreadCount } from '@/lib/messages'
 const links = [
   { href: '/', label: 'Home' },
   { href: '/training', label: 'Training' },
-  { href: '/blog', label: 'Posts' },
   { href: '/forums', label: 'Forums' },
   { href: '/members', label: 'Members' },
   { href: '/events', label: 'Events' },
