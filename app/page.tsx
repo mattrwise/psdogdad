@@ -4,7 +4,6 @@ import HeatAlertBanner from '@/components/HeatAlertBanner'
 import SignedIn from '@/components/auth/SignedIn'
 import SignedOut from '@/components/auth/SignedOut'
 import ShelterEventCallout from '@/components/ShelterEventCallout'
-import KickoffBanner from '@/components/KickoffBanner'
 import KickoffCallout from '@/components/KickoffCallout'
 import UpcomingEventsPreview from '@/components/home/UpcomingEventsPreview'
 import LatestDiscussionsPreview from '@/components/home/LatestDiscussionsPreview'
@@ -23,7 +22,7 @@ const stats = [
 ]
 
 /**
- * Rebuilt hourly so the date-sensitive pieces (the kickoff banner, the shelter
+ * Rebuilt hourly so the date-sensitive pieces (the kickoff callout, the shelter
  * weekend callout) can retire themselves without waiting for a deploy.
  */
 export const revalidate = 3600
@@ -31,9 +30,14 @@ export const revalidate = 3600
 export default function HomePage() {
   return (
     <div>
-      {/* A date does more work than any signup copy, so the banner is the date
-          and nothing else. It retires itself the day after, see lib/kickoff.ts. */}
-      <KickoffBanner />
+      {/* Under-development notice */}
+      <div className="bg-brand-golden text-plum text-center px-4 py-3 text-sm font-semibold">
+        🚧 This site is currently under development but open for early membership, {' '}
+        <Link href="/members/join" className="underline font-bold hover:text-brand-orange">
+          feel free to sign up
+        </Link>
+        . The club officially starts with a group walk on October 17th at 8am. 🐾
+      </div>
 
       {/* Hero */}
       <section className="bg-brand-cream">
