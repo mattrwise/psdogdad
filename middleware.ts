@@ -161,8 +161,7 @@ const HOLDING_PAGE = `<!doctype html>
     <img class="logo" src="/logo-nav.png" alt="PS Dog Dad" width="400" height="169">
     <h1>We&rsquo;re building something good.</h1>
     <p>
-      PS Dog Dad is a community for Coachella Valley dog dads, and it is under
-      construction right now while we finish writing the guides.
+      PS Dog Dad is a community for Coachella Valley dog dads.
     </p>
     <p>
       The club officially starts with a group walk on
