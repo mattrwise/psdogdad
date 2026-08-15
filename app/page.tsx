@@ -7,9 +7,9 @@ import ShelterEventCallout from '@/components/ShelterEventCallout'
 import KickoffCallout from '@/components/KickoffCallout'
 import UpcomingEventsPreview from '@/components/home/UpcomingEventsPreview'
 import LatestDiscussionsPreview from '@/components/home/LatestDiscussionsPreview'
-// Imported (not linked by URL) so Next.js serves it from /_next/static/…, 
-// while middleware.ts is in place it redirects every other path back to '/',
-// including plain files under /public, so a src="/…png" string would 404-loop.
+// Imported (not linked by URL) so Next.js serves it from /_next/static/… and
+// fingerprints it. This originally worked around the under construction gate,
+// which intercepted plain /public files; it is the right default anyway.
 import heroArt from '@/public/psdogdadbullprint_transparent.png'
 
 // Deliberately not member/event counts. Those would either be invented or, this
