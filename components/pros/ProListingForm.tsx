@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase/client'
-import { notifyNewListing } from '@/lib/proListings'
+import { notifyNewListing, saveDraft } from '@/lib/proListings'
 import { uploadPhoto } from '@/lib/photos'
 import { ACCEPTED_TYPES, preparePhoto } from '@/lib/images'
 import { SERVICES, VALLEY_CITIES, type ProListing } from '@/lib/pros'
@@ -117,18 +117,25 @@ function PhotoField({
 }
 
 interface Props {
-  user: User
+  /**
+   * Null when nobody has identified themselves yet, which is the ordinary way
+   * this form is first seen. An advertiser fills the whole thing in before we
+   * ask who they are — being stopped at the door is the friction, not the email.
+   */
+  user: User | null
   /** The provider's current listing, or null when they are creating their first. */
   existing: ProListing | null
   onSaved: (listing: ProListing) => void
+  /** Called once the confirmation link is on its way to a new advertiser. */
+  onAwaitingEmail: (email: string) => void
 }
 
-export default function ProListingForm({ user, existing, onSaved }: Props) {
+export default function ProListingForm({ user, existing, onSaved, onAwaitingEmail }: Props) {
   const router = useRouter()
 
   const [businessName, setBusinessName] = useState(existing?.business_name ?? '')
   const [contactName, setContactName] = useState(
-    existing?.contact_name ?? (user.user_metadata?.name as string | undefined) ?? '',
+    existing?.contact_name ?? (user?.user_metadata?.name as string | undefined) ?? '',
   )
   const [headline, setHeadline] = useState(existing?.headline ?? '')
   const [about, setAbout] = useState(existing?.about ?? '')
@@ -143,7 +150,7 @@ export default function ProListingForm({ user, existing, onSaved }: Props) {
   const [credentials, setCredentials] = useState(existing?.credentials ?? '')
   const [insured, setInsured] = useState(existing?.insured ?? false)
   const [phone, setPhone] = useState(existing?.phone ?? '')
-  const [email, setEmail] = useState(existing?.email ?? user.email ?? '')
+  const [email, setEmail] = useState(existing?.email ?? user?.email ?? '')
   const [website, setWebsite] = useState(existing?.website ?? '')
   const [instagram, setInstagram] = useState(existing?.instagram ?? '')
 
@@ -170,6 +177,9 @@ export default function ProListingForm({ user, existing, onSaved }: Props) {
   if (services.length === 0) missing.push('at least one service')
   if (cities.length === 0) missing.push('at least one town')
   if (!hasContact) missing.push('at least one way to reach you')
+  // The one extra thing a first-time advertiser has to give us. Everything else
+  // above they would want on the listing anyway.
+  if (!user && email.trim() === '') missing.push('an email address, so we can send you the link back')
 
   const canSubmit = missing.length === 0 && !saving
 
@@ -179,22 +189,8 @@ export default function ProListingForm({ user, existing, onSaved }: Props) {
     setError(null)
     setSaving(true)
 
-    // Upload first: a listing row pointing at a photo that failed to store is
-    // worse than a save that stopped and said so.
-    let photoUrl = photoCleared ? null : existing?.photo_url ?? null
-    if (photoBlob) {
-      const uploaded = await uploadPhoto(user.id, 'pro', photoBlob)
-      if (!uploaded) {
-        setSaving(false)
-        setError('We could not save that photo. Try a different one, or save without it for now.')
-        return
-      }
-      photoUrl = uploaded
-    }
-
     const parsedYears = parseInt(years, 10)
-    const row = {
-      user_id: user.id,
+    const details = {
       business_name: businessName.trim(),
       contact_name: contactName.trim(),
       headline: headline.trim(),
@@ -209,8 +205,52 @@ export default function ProListingForm({ user, existing, onSaved }: Props) {
       email: email.trim() || null,
       website: website.trim() || null,
       instagram: instagram.trim() || null,
-      photo_url: photoUrl,
     }
+
+    // ── Nobody has identified themselves yet ────────────────────────────────
+    // Keep what they typed, send them a link, and let them go. No password to
+    // invent, no profile to fill in, and the words "join" and "member" never
+    // come into it — they are buying a listing, not joining a community.
+    if (!user) {
+      saveDraft(details)
+
+      const { error: otpError } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: {
+          emailRedirectTo: `${window.location.origin}/pros/list`,
+          // What keeps them out of the member directory. The profiles trigger
+          // reads this and creates nothing — see supabase/pro-accounts.sql.
+          data: { account_type: 'business' },
+        },
+      })
+
+      setSaving(false)
+      if (otpError) {
+        setError(
+          `We could not send the confirmation link: ${otpError.message}. Your answers are saved on this device, so nothing is lost — try again in a moment.`,
+        )
+        return
+      }
+
+      onAwaitingEmail(email.trim())
+      return
+    }
+
+    // ── Signed in ───────────────────────────────────────────────────────────
+    // Upload first: a listing row pointing at a photo that failed to store is
+    // worse than a save that stopped and said so.
+    let photoUrl = photoCleared ? null : existing?.photo_url ?? null
+    if (photoBlob) {
+      const uploaded = await uploadPhoto(user.id, 'pro', photoBlob)
+      if (!uploaded) {
+        setSaving(false)
+        setError('We could not save that photo. Try a different one, or save without it for now.')
+        return
+      }
+      photoUrl = uploaded
+    }
+
+    const row = { ...details, user_id: user.id, photo_url: photoUrl }
 
     // `status` is deliberately absent from `row`. The database ignores it from a
     // signed-in member anyway (see supabase/pro-listings.sql), and leaving it
@@ -326,19 +366,33 @@ export default function ProListingForm({ user, existing, onSaved }: Props) {
           />
         </div>
 
-        <PhotoField
-          preview={photoPreview}
-          onPicked={(blob, previewUrl) => {
-            setPhotoBlob(blob)
-            setPhotoPreview(previewUrl)
-            setPhotoCleared(false)
-          }}
-          onCleared={() => {
-            setPhotoBlob(null)
-            setPhotoPreview(null)
-            setPhotoCleared(true)
-          }}
-        />
+        {/* A photo needs somewhere to be filed, and that does not exist until
+            the advertiser has confirmed their email. Rather than block the
+            whole form on that, it is asked for on the way back in. */}
+        {user ? (
+          <PhotoField
+            preview={photoPreview}
+            onPicked={(blob, previewUrl) => {
+              setPhotoBlob(blob)
+              setPhotoPreview(previewUrl)
+              setPhotoCleared(false)
+            }}
+            onCleared={() => {
+              setPhotoBlob(null)
+              setPhotoPreview(null)
+              setPhotoCleared(true)
+            }}
+          />
+        ) : (
+          <div className="rounded-2xl border-2 border-dashed border-plum/15 p-5 text-center">
+            <span className="text-2xl">📷</span>
+            <p className="text-sm font-semibold text-plum mt-1">Photo comes next</p>
+            <p className="text-xs text-plum/50 mt-1 leading-relaxed">
+              You can add one as soon as you have confirmed your email. A picture of you at work
+              beats a logo, so it is worth coming back for.
+            </p>
+          </div>
+        )}
       </section>
 
       {/* ── What you do ─────────────────────────────────────────────────── */}
@@ -554,12 +608,26 @@ export default function ProListingForm({ user, existing, onSaved }: Props) {
           className={`btn-primary ${!canSubmit ? 'opacity-40 cursor-not-allowed' : ''}`}
         >
           {saving
-            ? 'Saving…'
+            ? user
+              ? 'Saving…'
+              : 'Sending…'
             : existing
               ? 'Save changes'
               : 'Submit my listing'}
         </button>
       </div>
+
+      {/* Said here, at the button, rather than at the top of the page. Somebody
+          who has filled all this in deserves to know what happens next;
+          somebody who has not read it yet does not need a warning. */}
+      {!user && (
+        <p className="text-xs text-plum/50 leading-relaxed">
+          We will email <strong className="text-plum/70">{email.trim() || 'you'}</strong> a link to
+          confirm it is really you, and that link brings you back to this listing. There is no
+          password to make up and no account to fill in — you are placing an ad, not joining
+          anything. Nothing is charged unless we accept your listing.
+        </p>
+      )}
     </form>
   )
 }

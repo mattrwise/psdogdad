@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import ProListingForm from '@/components/pros/ProListingForm'
 import { useUser } from '@/lib/useUser'
-import { loadMyListing } from '@/lib/proListings'
+import { loadMyListing, readDraft, submitDraft } from '@/lib/proListings'
 import {
   PRO_DIRECTORY,
   type ProListing,
@@ -52,6 +52,10 @@ export default function ListYourServicesPage() {
   const [listing, setListing] = useState<ProListing | null | undefined>(undefined)
   const [loadFailed, setLoadFailed] = useState(false)
   const [justSaved, setJustSaved] = useState(false)
+  /** Set once a confirmation link has gone out, so the page can stop and say so. */
+  const [awaitingEmail, setAwaitingEmail] = useState<string | null>(null)
+  /** A draft survived the round trip but would not save. */
+  const [draftFailed, setDraftFailed] = useState(false)
 
   /**
    * Nothing is decided until auth has resolved. Answering "no listing" while
@@ -67,13 +71,32 @@ export default function ListYourServicesPage() {
       return
     }
     setListing(undefined)
-    loadMyListing(user.id).then(result => {
+    loadMyListing(user.id).then(async result => {
       if (result === undefined) {
         setLoadFailed(true)
         setListing(null)
         return
       }
-      setListing(result)
+      if (result) {
+        setListing(result)
+        return
+      }
+
+      // No listing on this account. If they got here by following the
+      // confirmation link, what they typed before they had an account is
+      // sitting in this browser waiting to be written up.
+      const draft = readDraft()
+      if (draft) {
+        const created = await submitDraft(user.id, draft)
+        if (created) {
+          setListing(created)
+          return
+        }
+        // The draft is deliberately left in place, so a refresh tries again
+        // rather than quietly binning twenty minutes of somebody's typing.
+        setDraftFailed(true)
+      }
+      setListing(null)
     })
   }, [user, authLoading])
 
@@ -101,40 +124,41 @@ export default function ListYourServicesPage() {
     )
   }
 
-  // ── Signed out ──────────────────────────────────────────────────────────────
-  if (!user) {
+  // ── The link is on its way ──────────────────────────────────────────────────
+  if (awaitingEmail) {
     return (
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {header}
-        <Pitch />
-
-        <div className="card p-8 text-center mt-8">
-          <div className="text-4xl mb-3">🐾</div>
-          <h2 className="font-extrabold text-plum text-xl mb-2">Sign in to write your listing</h2>
-          <p className="text-plum/60 text-sm max-w-md mx-auto mb-6 leading-relaxed">
-            A listing hangs off a free member account, which is what lets you edit it yourself
-            later and how we know a real person is behind it. It takes a minute.
+        <div className="card p-8 sm:p-12 text-center">
+          <div className="text-5xl mb-4">📬</div>
+          <h2 className="font-extrabold text-plum text-2xl mb-3">Check your email</h2>
+          <p className="text-plum/70 text-sm max-w-md mx-auto mb-4 leading-relaxed">
+            We have sent a link to <strong className="text-plum">{awaitingEmail}</strong>. Click
+            it and your listing is submitted — that is the whole of it. No password, nothing else
+            to fill in.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/members/join" className="btn-primary">
-              Join Free
-            </Link>
-            <Link href="/members/login" className="btn-secondary">
-              Sign In
-            </Link>
-          </div>
-        </div>
-
-        <div className="mt-6 text-center">
-          <Link href="/pros/rate-card" className="text-sm font-bold text-brand-orange hover:underline">
-            See the rate card first →
-          </Link>
+          <p className="text-plum/50 text-xs max-w-md mx-auto leading-relaxed">
+            Everything you typed is saved in this browser, so open the link on this device if you
+            can. If it has not arrived in a few minutes, check your spam folder, or email{' '}
+            <a
+              href={`mailto:${PRO_DIRECTORY.contactEmail}`}
+              className="font-semibold text-brand-orange hover:underline"
+            >
+              {PRO_DIRECTORY.contactEmail}
+            </a>{' '}
+            and a person will sort it out.
+          </p>
         </div>
       </div>
     )
   }
 
-  // ── Signed in ───────────────────────────────────────────────────────────────
+  // ── The form ────────────────────────────────────────────────────────────────
+  // Shown to everybody, signed in or not. Being stopped at the door before you
+  // have seen what you are signing up for is the friction worth removing; the
+  // one email at the end is not. Somebody placing an ad is doing business with
+  // us, not joining a community, and nothing on this path should suggest
+  // otherwise.
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {header}
@@ -143,6 +167,18 @@ export default function ListYourServicesPage() {
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-sm text-red-700">
           We could not check whether you already have a listing. Please refresh before filling
           this in, so you do not end up writing it twice.
+        </div>
+      )}
+
+      {draftFailed && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-sm text-red-700 leading-relaxed">
+          Your email is confirmed, but we could not save the listing you wrote. Nothing is lost —
+          it is still held in this browser, so refreshing this page will try again. If it keeps
+          failing, email{' '}
+          <a href={`mailto:${PRO_DIRECTORY.contactEmail}`} className="font-bold underline">
+            {PRO_DIRECTORY.contactEmail}
+          </a>{' '}
+          and we will put it up by hand.
         </div>
       )}
 
@@ -276,7 +312,8 @@ export default function ListYourServicesPage() {
       <ProListingForm
         key={listing?.id ?? 'new'}
         user={user}
-        existing={listing}
+        existing={listing ?? null}
+        onAwaitingEmail={setAwaitingEmail}
         onSaved={saved => {
           setListing(saved)
           setJustSaved(true)
