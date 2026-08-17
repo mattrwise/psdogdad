@@ -237,11 +237,9 @@ export default function ProListingForm({ user, existing, onSaved }: Props) {
 
     const saved = data as ProListing
 
-    // A brand new listing is waiting on somebody reading it, so say so. Not on
-    // an edit: those go live by themselves and a typo fix is not news. Not
-    // awaited either — the listing is saved, and the provider should not be kept
-    // watching a spinner for an email that is none of their business.
-    if (!existing) void notifyNewListing(saved.id)
+    // Only a listing that has just arrived is news. Somebody correcting their
+    // own phone number should not land in your inbox as a new applicant.
+    if (!existing) notifyNewListing(saved.id)
 
     onSaved(saved)
     router.refresh()

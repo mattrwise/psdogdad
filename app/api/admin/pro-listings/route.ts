@@ -35,7 +35,7 @@ const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
 const RESEND_API_KEY = process.env.RESEND_API_KEY
 const FROM = 'PS Dog Dad <noreply@psdogdad.com>'
 
-const STATUSES: ProStatus[] = ['pending', 'published', 'hidden']
+const STATUSES: ProStatus[] = ['pending', 'approved', 'published', 'hidden']
 
 /**
  * Confirms the caller is you, and hands back a service-role client if so.
@@ -168,32 +168,43 @@ export async function PATCH(request: Request) {
     return Response.json({ ok: false, reason: error.message }, { status: 500 })
   }
 
+  // Two moves are worth telling somebody about, and only on the way in. Going
+  // backwards — un-publishing, hiding — is never an email: it is deliberate,
+  // the reason is different every time, and a form letter is the wrong way to
+  // say any of them.
+  const nowAccepted = status === 'approved' && before.status !== 'approved'
   const nowLive = status === 'published' && before.status !== 'published'
-  if (nowLive) {
-    await tellThemTheyAreLive(gate.admin, data as ProListing)
+  if (nowAccepted || nowLive) {
+    await tellThem(gate.admin, data as ProListing, nowLive ? 'live' : 'accepted')
   }
 
   const [listing] = await withAccountEmails(gate.admin, [data as ProListing])
-  return Response.json({ ok: true, listing, emailed: nowLive }, { status: 200 })
+  return Response.json(
+    { ok: true, listing, emailed: nowAccepted || nowLive },
+    { status: 200 },
+  )
 }
 
 /**
- * Emails a provider that their listing is up.
+ * Emails a provider that they have been accepted, or that they are live.
  *
- * Only on the way to published. Hiding one is deliberate and the reason varies
- * every time — sometimes it is a favour to them, sometimes it is not — so that
- * stays a note you write yourself rather than a form letter from the site.
+ * The accepted email deliberately carries no payment link. A payment form that
+ * arrives by email is indistinguishable from a phishing attempt, and asking
+ * somebody to trust one is a poor way to start taking their money — so this
+ * says "you are in, sign in", and the Stripe button lives behind their own
+ * login on /pros/list where they arrive at an address they typed. That is the
+ * arrangement /pros/list was built around and this email does not undercut it.
  *
- * Never throws: an approval that worked must not report failure because an
- * email did not go, and the status change has already been written by the time
- * this runs.
+ * Never throws: a status change that worked must not report failure because an
+ * email did not go, and it has already been written by the time this runs.
  */
-async function tellThemTheyAreLive(
+async function tellThem(
   admin: SupabaseClient,
   listing: ProListing,
+  what: 'accepted' | 'live',
 ): Promise<void> {
   if (!RESEND_API_KEY) {
-    console.error('admin/pro-listings: no Resend key, cannot tell them they are live')
+    console.error('admin/pro-listings: no Resend key, cannot tell them they are', what)
     return
   }
 
@@ -201,9 +212,40 @@ async function tellThemTheyAreLive(
     const { data, error } = await admin.auth.admin.getUserById(listing.user_id)
     const to = (error ? null : data?.user?.email) ?? listing.email
     if (!to) {
-      console.warn('admin/pro-listings: no address to tell', listing.id, 'they are live')
+      console.warn('admin/pro-listings: no address to tell', listing.id, 'they are', what)
       return
     }
+
+    const accepted = {
+      subject: `You're in — ${listing.business_name} on PS Dog Dad`,
+      text:
+        `We have read your listing and we would like you in the directory.\n\n` +
+        `There is one step left. Sign in and you will find it waiting on your ` +
+        `listing page:\n${SITE_URL}/pros/list\n\n` +
+        `We have deliberately not put a payment button in this email — one that ` +
+        `arrives by email looks exactly like a scam, and you should not have to ` +
+        `tell the difference. Go to the address above yourself and it will be ` +
+        `there behind your own sign-in.\n\n` +
+        `Your listing goes live once the first payment lands, usually the same ` +
+        `day. Nothing is charged before that, and you can preview or change ` +
+        `anything in the meantime:\n${SITE_URL}/pros/${listing.id}\n\n` +
+        `Any questions, just reply to this.\n`,
+    }
+
+    const live = {
+      subject: `${listing.business_name} is live on PS Dog Dad`,
+      text:
+        `You are in the directory — that is everything done.\n\n` +
+        `Your page: ${SITE_URL}/pros/${listing.id}\n` +
+        `The directory: ${SITE_URL}/pros\n\n` +
+        `You can change your rates, towns, photo or anything else whenever you ` +
+        `like, and it goes up straight away:\n${SITE_URL}/pros/list\n\n` +
+        `Members contact you directly, so anything that comes in is yours — we ` +
+        `do not sit in the middle of it and we take nothing from the work.\n\n` +
+        `If anything on the page is wrong, just reply to this.\n`,
+    }
+
+    const { subject, text } = what === 'live' ? live : accepted
 
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -211,31 +253,17 @@ async function tellThemTheyAreLive(
         Authorization: `Bearer ${RESEND_API_KEY}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        from: FROM,
-        to,
-        subject: `${listing.business_name} is live on PS Dog Dad`,
-        text:
-          `Good news — we have read your listing and it is now in the directory.\n\n` +
-          `Your page: ${SITE_URL}/pros/${listing.id}\n` +
-          `The directory: ${SITE_URL}/pros\n\n` +
-          `You can change your rates, towns, photo or anything else whenever you ` +
-          `like, and it goes up straight away:\n${SITE_URL}/pros/list\n\n` +
-          `We will be in touch separately about the listing fee.\n\n` +
-          `Members contact you directly, so anything that comes in is yours — we ` +
-          `do not sit in the middle of it and we take nothing from the work.\n\n` +
-          `If anything on the page is wrong, just reply to this.\n`,
-      }),
+      body: JSON.stringify({ from: FROM, to, subject, text }),
     })
 
     if (!res.ok) {
       console.error(
-        'admin/pro-listings: Resend rejected the go-live email:',
+        `admin/pro-listings: Resend rejected the ${what} email:`,
         res.status,
         await res.text(),
       )
     }
   } catch (e) {
-    console.error('admin/pro-listings: could not send the go-live email:', e)
+    console.error(`admin/pro-listings: could not send the ${what} email:`, e)
   }
 }

@@ -53,13 +53,13 @@ export async function loadMyListing(
 }
 
 /**
- * Lets you know a listing has arrived and is waiting to be read.
+ * Tells you a listing has arrived and is waiting to be read.
  *
- * Called only when a listing is first created, never on an edit. Deliberately
- * never throws and never reports back: the listing itself has already saved by
- * the time this runs, and a provider who filled the form in correctly should not
- * be shown an error because an email did not go. If it fails, it fails into the
- * console and you find the listing the old way.
+ * Best-effort and deliberately quiet, the same arrangement messages use: the
+ * listing is already saved by the time this runs, so a failure here is not the
+ * applicant's problem and is not worth showing them. It does mean a listing can
+ * sit unnoticed if the email fails, which is why the pro's own page tells them
+ * it is waiting rather than relying on you having been told.
  */
 export async function notifyNewListing(listingId: string): Promise<void> {
   try {
@@ -81,8 +81,8 @@ export async function notifyNewListing(listingId: string): Promise<void> {
 // ─── Reviewing listings ───────────────────────────────────────────────────────
 //
 // These two go through /api/admin/pro-listings rather than Supabase directly,
-// because a listing waiting to be read is invisible to the browser client and
-// `status` cannot be written from it. Both are explained at length in that
+// because a listing that is not published yet is invisible to the browser client
+// and `status` cannot be written from it. Both are explained at length in that
 // route. Everybody except the site owner gets a 404 from it.
 
 /** Every listing at every status, newest first, or null if the read failed. */
@@ -103,9 +103,9 @@ export async function loadListingsForReview(): Promise<ReviewListing[] | null> {
 }
 
 /**
- * Publishes, hides or un-publishes a listing, and returns the row as it now
- * stands so the page can redraw from what was actually stored rather than from
- * what it hoped would happen.
+ * Moves a listing along: accepted, paid and live, or taken down. Returns the row
+ * as it now stands so the page can redraw from what was actually stored rather
+ * than from what it hoped would happen.
  */
 export async function setListingStatus(
   id: string,

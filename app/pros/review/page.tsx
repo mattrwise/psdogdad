@@ -31,12 +31,14 @@ const THUMB_WIDTH = 320
 
 const statusStyles: Record<ProStatus, string> = {
   pending: 'bg-brand-golden/15 border-brand-golden/40 text-plum',
+  approved: 'bg-brand-orange/10 border-brand-orange/30 text-brand-orange',
   published: 'bg-brand-teal/10 border-brand-teal/30 text-brand-teal',
   hidden: 'bg-plum/5 border-plum/20 text-plum/60',
 }
 
 const statusLabels: Record<ProStatus, string> = {
   pending: 'Waiting to be read',
+  approved: 'Accepted, waiting on payment',
   published: 'Live',
   hidden: 'Hidden',
 }
@@ -173,14 +175,38 @@ function ReviewCard({
             )}
           </details>
 
+          {/*
+            The two steps are separate buttons on purpose. Accepting somebody
+            and taking their money are different decisions made at different
+            times — the whole reason `approved` exists — and one button doing
+            both would quietly collapse them back together.
+          */}
           <div className="flex flex-wrap items-center gap-3 mt-4 pt-4 border-t border-plum/10">
-            {listing.status !== 'published' && (
+            {listing.status === 'pending' && (
+              <button
+                onClick={() => onSetStatus('approved')}
+                disabled={busy}
+                className={`btn-primary text-sm ${busy ? 'opacity-40 cursor-not-allowed' : ''}`}
+              >
+                {busy ? 'Saving…' : 'Accept them'}
+              </button>
+            )}
+            {listing.status === 'approved' && (
               <button
                 onClick={() => onSetStatus('published')}
                 disabled={busy}
                 className={`btn-primary text-sm ${busy ? 'opacity-40 cursor-not-allowed' : ''}`}
               >
-                {busy ? 'Saving…' : listing.status === 'pending' ? 'Approve' : 'Put back up'}
+                {busy ? 'Saving…' : 'Paid — put them live'}
+              </button>
+            )}
+            {listing.status === 'hidden' && (
+              <button
+                onClick={() => onSetStatus('published')}
+                disabled={busy}
+                className={`btn-primary text-sm ${busy ? 'opacity-40 cursor-not-allowed' : ''}`}
+              >
+                {busy ? 'Saving…' : 'Put back up'}
               </button>
             )}
             {listing.status !== 'hidden' && (
@@ -202,7 +228,14 @@ function ReviewCard({
 
           {listing.status === 'pending' && (
             <p className="text-xs text-plum/40 mt-2">
-              Approving emails them to say they are live.
+              Accepting emails them to sign in and set up payment. It does not charge them and it
+              does not put them in the directory.
+            </p>
+          )}
+          {listing.status === 'approved' && (
+            <p className="text-xs text-plum/40 mt-2">
+              Waiting on their Stripe payment. Press this once the receipt lands — it puts them in
+              the directory and emails them to say so.
             </p>
           )}
         </div>
@@ -278,14 +311,20 @@ export default function ProReviewPage() {
 
   const all = listings ?? []
   const pending = all.filter(l => l.status === 'pending')
+  const approved = all.filter(l => l.status === 'approved')
   const published = all.filter(l => l.status === 'published')
   const hidden = all.filter(l => l.status === 'hidden')
 
   const sections: { title: string; note: string; rows: ReviewListing[] }[] = [
     {
-      title: `Waiting to be read${pending.length > 0 ? ` (${pending.length})` : ''}`,
-      note: 'Only the pro can see these. Approving puts them in the directory and emails them.',
+      title: `Waiting to be read (${pending.length})`,
+      note: 'Nobody can see these but the pro. Read one, then accept them or hide it.',
       rows: pending,
+    },
+    {
+      title: `Accepted, waiting on payment (${approved.length})`,
+      note: 'Told they are in, and shown the Stripe button when they sign in. Still not public — put them live once the receipt arrives.',
+      rows: approved,
     },
     { title: `Live (${published.length})`, note: 'In the directory now.', rows: published },
     {
@@ -304,9 +343,16 @@ export default function ProReviewPage() {
           </Link>
           <h1 className="section-title mt-3">Review Listings</h1>
           <p className="text-plum/60 mt-2 max-w-2xl leading-relaxed">
-            {pending.length === 0
-              ? 'Nothing waiting. Everything below is already settled.'
-              : `${pending.length} listing${pending.length === 1 ? '' : 's'} waiting to be read.`}
+            {[
+              pending.length > 0
+                ? `${pending.length} to read`
+                : null,
+              approved.length > 0
+                ? `${approved.length} waiting on payment`
+                : null,
+            ]
+              .filter(Boolean)
+              .join(', ') || 'Nothing needs you. Everything below is already settled.'}
           </p>
         </div>
         <button onClick={load} className="btn-secondary text-sm self-start whitespace-nowrap">
