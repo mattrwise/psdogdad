@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import { unreadCount } from '@/lib/messages'
+import { DIRECTORY_IS_PUBLIC } from '@/lib/pros'
 
 const links = [
   { href: '/', label: 'Home' },
@@ -25,7 +26,10 @@ const links = [
   // "Pros" rather than "Dog Pros" because this is the eighth item and every
   // other one is a single word. Spelled out it was wide enough to wrap the
   // whole row, which broke "Sign In" and "Join Now" across two lines each.
-  { href: '/pros', label: 'Pros' },
+  //
+  // Absent entirely until there are listings behind it — see DIRECTORY_IS_PUBLIC
+  // in lib/pros.ts. A tab leading to an empty directory reads as a dead site.
+  ...(DIRECTORY_IS_PUBLIC ? [{ href: '/pros', label: 'Pros' }] : []),
 ]
 
 function Avatar({ user }: { user: User }) {

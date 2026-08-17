@@ -52,19 +52,6 @@ export default function ProsPage() {
         </Link>
       </div>
 
-      {/*
-        What the site does and does not stand behind. It matters more here than
-        on /resources: these are people who will be alone with a member's dog in
-        a member's house, and a listing is paid for, which could easily be read
-        as an endorsement. It is not one, and saying so is cheap.
-      */}
-      <div className="bg-brand-golden/10 border border-brand-golden/30 rounded-xl p-4 mb-8 text-sm text-plum/70 leading-relaxed">
-        <strong className="text-plum">Worth knowing:</strong> everyone here pays the same flat
-        fee to be listed, and that is all it buys. We read each listing before it goes up, but we
-        do not employ these people, check their references or verify their insurance. Ask for
-        credentials, meet them before you book, and trust your gut.
-      </div>
-
       {/* Filters. Both dropdowns are built from the pros who are actually here,
           so an option can never find nobody. */}
       {pros.length > 0 && (
@@ -148,18 +135,35 @@ export default function ProsPage() {
         </div>
       )}
 
-      {/* Genuinely nobody yet. An invitation, not an apology. */}
+      {/*
+        Nobody has listed yet.
+
+        While DIRECTORY_IS_PUBLIC is false the only people who reach this page
+        are providers we sent here, so it is written to them rather than to a
+        member who found a dead end. It is a pitch, not an apology: "first" is
+        the offer, not the embarrassment.
+      */}
       {listings && listings.length === 0 && (
-        <div className="card p-10 text-center">
-          <div className="text-5xl mb-4">🐾</div>
-          <h3 className="font-extrabold text-plum text-xl mb-2">No pros listed yet</h3>
-          <p className="text-plum/60 text-sm max-w-md mx-auto mb-6 leading-relaxed">
-            This is brand new and nobody has listed yet. If you train, walk, sit for or groom dogs
-            in the valley, you would be the first one members see.
+        <div className="card p-8 sm:p-12 text-center">
+          <div className="text-5xl mb-4">🦮</div>
+          <h3 className="font-extrabold text-plum text-2xl mb-3">Be the first name here</h3>
+          <p className="text-plum/70 text-sm max-w-lg mx-auto mb-4 leading-relaxed">
+            This directory is new and it is opening with a handful of pros rather than a crowd.
+            If you train, walk, sit for or groom dogs in the Coachella Valley, that is the good
+            news: the dog owners who come looking will find a short list, and you will be on it.
           </p>
-          <Link href="/pros/list" className="btn-primary">
-            List Your Services
-          </Link>
+          <p className="text-plum/70 text-sm max-w-lg mx-auto mb-8 leading-relaxed">
+            You set your own rates and keep every dollar of them. One flat fee to be listed, the
+            same for everybody, and nothing you can buy that moves you up the page.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/pros/list" className="btn-primary">
+              List Your Services
+            </Link>
+            <Link href="/pros/rate-card" className="btn-secondary">
+              See the Rate Card
+            </Link>
+          </div>
         </div>
       )}
 
@@ -172,7 +176,10 @@ export default function ProsPage() {
         </div>
       )}
 
-      {/* Pitch to providers */}
+      {/* Pitch to providers. Hidden while the directory is empty, where the
+          empty state above is already making this exact case and two pitches
+          in a row on one short page reads as desperation. */}
+      {listings && listings.length > 0 && (
       <div className="mt-16 bg-plum rounded-3xl p-6 sm:p-10 text-center text-white">
         <div className="text-4xl mb-4">🦮</div>
         <h2 className="text-2xl font-extrabold mb-3">Work with dogs for a living?</h2>
@@ -193,6 +200,7 @@ export default function ProsPage() {
           </Link>
         </div>
       </div>
+      )}
     </div>
   )
 }
