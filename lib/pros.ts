@@ -16,12 +16,12 @@
  * The flat fee a provider pays to be listed. One price for everybody: no tiers,
  * no commission on their work, and nothing that buys a better position.
  *
- * IT IS BLANK ON PURPOSE. Until you set it, the rate card shows `PRICE_TBD`
- * where the number goes rather than an invented figure, and no payment button
- * appears. Put your real price in — '$25/month', '$200/year', whatever you
- * settle on, period included — and every page starts saying it.
+ * Write the period into the string — this is printed as-is wherever the price
+ * appears, so '$25/month' reads correctly and '25' would not. Setting it back
+ * to '' returns every page to showing `PRICE_TBD` instead of a number, which is
+ * the right move if the price is ever under review rather than settled.
  */
-const LISTING_FEE = ''
+const LISTING_FEE = '$25/month'
 
 /** Shown wherever the price goes while `LISTING_FEE` is still blank. */
 const PRICE_TBD = 'Price not set yet'
