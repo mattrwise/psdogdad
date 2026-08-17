@@ -136,36 +136,11 @@ export default function ProsPage() {
       )}
 
       {/*
-        Nobody has listed yet.
-
-        While DIRECTORY_IS_PUBLIC is false the only people who reach this page
-        are providers we sent here, so it is written to them rather than to a
-        member who found a dead end. It is a pitch, not an apology: "first" is
-        the offer, not the embarrassment.
+        There is deliberately no "nobody has listed yet" card. An empty grid
+        followed by the purple block below says the same thing without an
+        apology in the middle of the page, and the block is the only thing on
+        here aimed at somebody who could fix it.
       */}
-      {listings && listings.length === 0 && (
-        <div className="card p-8 sm:p-12 text-center">
-          <div className="text-5xl mb-4">🦮</div>
-          <h3 className="font-extrabold text-plum text-2xl mb-3">Be the first name here</h3>
-          <p className="text-plum/70 text-sm max-w-lg mx-auto mb-4 leading-relaxed">
-            This directory is new and it is opening with a handful of pros rather than a crowd.
-            If you train, walk, sit for or groom dogs in the Coachella Valley, that is the good
-            news: the dog owners who come looking will find a short list, and you will be on it.
-          </p>
-          <p className="text-plum/70 text-sm max-w-lg mx-auto mb-8 leading-relaxed">
-            You set your own rates and keep every dollar of them. One flat fee to be listed, the
-            same for everybody, and nothing you can buy that moves you up the page.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/pros/list" className="btn-primary">
-              List Your Services
-            </Link>
-            <Link href="/pros/rate-card" className="btn-secondary">
-              See the Rate Card
-            </Link>
-          </div>
-        </div>
-      )}
 
       {listings === null && (
         <div className="card p-8 text-center">
@@ -176,10 +151,9 @@ export default function ProsPage() {
         </div>
       )}
 
-      {/* Pitch to providers. Hidden while the directory is empty, where the
-          empty state above is already making this exact case and two pitches
-          in a row on one short page reads as desperation. */}
-      {listings && listings.length > 0 && (
+      {/* The way in for providers, and the last thing on the page whether the
+          directory is full or empty. It is the only part of /pros written to
+          somebody who works with dogs rather than owns one. */}
       <div className="mt-16 bg-plum rounded-3xl p-6 sm:p-10 text-center text-white">
         <div className="text-4xl mb-4">🦮</div>
         <h2 className="text-2xl font-extrabold mb-3">Work with dogs for a living?</h2>
