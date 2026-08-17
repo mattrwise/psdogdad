@@ -45,3 +45,29 @@ export async function loadMyListing(
   }
   return (data as ProListing) ?? null
 }
+
+/**
+ * Tells you a listing has arrived and is waiting to be read.
+ *
+ * Best-effort and deliberately quiet, the same arrangement messages use: the
+ * listing is already saved by the time this runs, so a failure here is not the
+ * applicant's problem and is not worth showing them. It does mean a listing can
+ * sit unnoticed if the email fails, which is why the pro's own page tells them
+ * it is waiting rather than relying on you having been told.
+ */
+export async function notifyNewListing(listingId: string): Promise<void> {
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) return
+    await fetch('/api/notify-pro-listing', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ listingId }),
+    })
+  } catch (e) {
+    console.error('Could not trigger the new-listing email:', e)
+  }
+}

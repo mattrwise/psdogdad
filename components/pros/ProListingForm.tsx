@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase/client'
+import { notifyNewListing } from '@/lib/proListings'
 import { uploadPhoto } from '@/lib/photos'
 import { ACCEPTED_TYPES, preparePhoto } from '@/lib/images'
 import { SERVICES, VALLEY_CITIES, type ProListing } from '@/lib/pros'
@@ -234,7 +235,13 @@ export default function ProListingForm({ user, existing, onSaved }: Props) {
       return
     }
 
-    onSaved(data as ProListing)
+    const saved = data as ProListing
+
+    // Only a listing that has just arrived is news. Somebody correcting their
+    // own phone number should not land in your inbox as a new applicant.
+    if (!existing) notifyNewListing(saved.id)
+
+    onSaved(saved)
     router.refresh()
   }
 

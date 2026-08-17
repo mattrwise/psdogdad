@@ -77,15 +77,26 @@ export default function ProListingPage() {
       {/* The owner's own view of a listing that is not live yet, so submitting
           it does not feel like it vanished. */}
       {isMine && pro.status !== 'published' && (
-        <div className="mt-4 bg-brand-golden/15 border border-brand-golden/40 rounded-xl p-4 text-sm text-plum/80">
+        <div
+          className={`mt-4 rounded-xl p-4 text-sm text-plum/80 border ${
+            pro.status === 'approved'
+              ? 'bg-brand-teal/10 border-brand-teal/30'
+              : 'bg-brand-golden/15 border-brand-golden/40'
+          }`}
+        >
           <strong className="text-plum">
-            {pro.status === 'pending' ? 'Waiting to be reviewed.' : 'Currently hidden.'}
+            {pro.status === 'pending' && 'Waiting to be reviewed.'}
+            {pro.status === 'approved' && 'Accepted — one step to go.'}
+            {pro.status === 'hidden' && 'Currently hidden.'}
           </strong>{' '}
-          {pro.status === 'pending'
-            ? 'Only you can see this page until we have read it through. You will hear from us at the email on your account.'
-            : 'This listing is not showing in the directory. Email us if that is a surprise.'}{' '}
+          {pro.status === 'pending' &&
+            'Only you can see this page until we have read it through. We will email the address on your account once we have.'}
+          {pro.status === 'approved' &&
+            'You are in. This page goes public as soon as your payment is set up.'}
+          {pro.status === 'hidden' &&
+            'This listing is not showing in the directory. Email us if that is a surprise.'}{' '}
           <Link href="/pros/list" className="font-bold text-brand-orange hover:underline">
-            Edit it
+            {pro.status === 'approved' ? 'Set up payment' : 'Edit it'}
           </Link>
         </div>
       )}
