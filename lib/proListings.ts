@@ -53,6 +53,76 @@ export async function loadMyListing(
 }
 
 /**
+ * Everything a listing is made of, before it belongs to anybody.
+ *
+ * An advertiser fills the form in before they have identified themselves at
+ * all, so the answers have to survive the round trip out to their email and
+ * back. `photo_url` is absent on purpose: a photo cannot be uploaded until
+ * there is an account to file it under, so it is asked for afterwards.
+ */
+export type ProListingDraft = Omit<
+  ProListing,
+  'id' | 'user_id' | 'status' | 'created_at' | 'photo_url'
+>
+
+const DRAFT_KEY = 'psdogdad_pro_listing_draft'
+
+export function saveDraft(draft: ProListingDraft): void {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
+  } catch {
+    /* Private browsing, a full quota. The confirmation email still arrives and
+       they can fill the form in again — worse, but not broken. */
+  }
+}
+
+export function readDraft(): ProListingDraft | null {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY)
+    return raw ? (JSON.parse(raw) as ProListingDraft) : null
+  } catch {
+    return null
+  }
+}
+
+export function clearDraft(): void {
+  try {
+    localStorage.removeItem(DRAFT_KEY)
+  } catch {
+    /* ignore */
+  }
+}
+
+/**
+ * Writes a draft up as a real listing, once the advertiser has confirmed their
+ * email and there is finally a user to attach it to.
+ *
+ * The draft is cleared only on success. A failure here leaves it in place so
+ * refreshing the page tries again rather than silently losing twenty minutes
+ * of somebody's typing.
+ */
+export async function submitDraft(
+  userId: string,
+  draft: ProListingDraft,
+): Promise<ProListing | null> {
+  const { data, error } = await supabase
+    .from('pro_listings')
+    .insert({ ...draft, user_id: userId })
+    .select()
+    .single()
+
+  if (error) {
+    console.error('Could not save your listing:', error.message)
+    return null
+  }
+
+  clearDraft()
+  const listing = data as ProListing
+  notifyNewListing(listing.id)
+  return listing
+}
+
+/**
  * Tells you a listing has arrived and is waiting to be read.
  *
  * Best-effort and deliberately quiet, the same arrangement messages use: the

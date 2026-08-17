@@ -21,7 +21,7 @@ export default function RateCardPage() {
     {
       n: '1',
       title: 'Write your listing',
-      body: 'Make a free member account and fill in the form. Ten minutes, and you can change any of it later.',
+      body: 'Fill in the form at psdogdad.com/pros/list. Ten minutes, no account to make and no password to invent — we email you a link to confirm it is you, and that link is also how you get back in to change anything later.',
     },
     {
       n: '2',
@@ -189,6 +189,10 @@ export default function RateCardPage() {
             {
               q: 'Can I pay to be at the top?',
               a: 'No. Listings run in alphabetical order and there is nothing for sale that changes it.',
+            },
+            {
+              q: 'Do I have to join the community to advertise?',
+              a: 'No. PS Dog Dad is a community for dog owners, and placing an ad is a business arrangement with us — those are different things and we do not mix them up. You will not appear in the member directory, you are not signed up to anything, and the only email you get from us is about your listing.',
             },
             {
               q: 'How do I actually pay?',
