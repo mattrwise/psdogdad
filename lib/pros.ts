@@ -66,7 +66,7 @@ export const PRO_DIRECTORY = {
    * touch instead, because a payment button that goes nowhere is worse than an
    * honest gap.
    */
-  stripeLink: '',
+  stripeLink: 'https://buy.stripe.com/dRmdRaerTe8B8uE81Gd7q01',
 } as const
 
 /**
