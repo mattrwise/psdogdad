@@ -174,7 +174,6 @@ export default function ProsPage() {
           </Link>
         </div>
       </div>
-      )}
     </div>
   )
 }
