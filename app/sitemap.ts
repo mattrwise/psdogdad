@@ -15,6 +15,14 @@ const staticPaths = [
   '/events',
   '/resources',
   '/guides',
+  // The pro directory and the two pages a provider needs before they list.
+  // Individual listings are not here, unlike everything else in the directory
+  // sense: they live in Supabase and this file is a static list, so adding them
+  // means a server-side read at build time. Worth doing — a provider is paying
+  // to be found — but it is a change to how this file works, not a line in it.
+  '/pros',
+  '/pros/list',
+  '/pros/rate-card',
   '/resources/roadmap',
   '/resources/handbook',
   '/resources/health-wellness',

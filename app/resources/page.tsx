@@ -288,6 +288,24 @@ export default function ResourcesPage() {
         <span className="text-sm font-bold text-brand-teal whitespace-nowrap">Guides →</span>
       </Link>
 
+      {/* The two directories answer different questions — an address you drive
+          to, versus a person who comes to you — and somebody scrolling the
+          groomers here is exactly who is looking for the other one. */}
+      <Link
+        href="/pros"
+        className="flex items-center gap-4 bg-white rounded-2xl shadow-sm p-4 sm:p-5 mb-8 hover:-translate-y-0.5 transition-transform"
+      >
+        <div className="text-3xl flex-shrink-0">🦮</div>
+        <div className="flex-1 min-w-0">
+          <h2 className="font-extrabold text-plum">Looking for a trainer or a walker?</h2>
+          <p className="text-sm text-plum/60 mt-0.5">
+            Independent trainers, walkers, sitters and mobile groomers who come to you, listed
+            separately from the businesses on this page.
+          </p>
+        </div>
+        <span className="text-sm font-bold text-brand-teal whitespace-nowrap">Dog Pros →</span>
+      </Link>
+
       {/* Quick disclaimer */}
       <div className="bg-brand-golden/10 border border-brand-golden/30 rounded-xl p-4 mb-10 text-sm text-plum/70">
         <strong className="text-plum">Worth checking:</strong> Always call ahead to confirm hours, pricing, and pet policies. Things change, and we can&rsquo;t promise this list is current.

@@ -18,6 +18,14 @@ const links = [
   // one written by us and one a directory of other people's businesses.
   { href: '/guides', label: 'Guides' },
   { href: '/resources', label: 'Resources' },
+  // Last because it is the newest and the only one anybody pays to be in.
+  // Resources are places you look up; these are people you hire, and keeping
+  // them apart in the nav is the same distinction the two pages make in words.
+  //
+  // "Pros" rather than "Dog Pros" because this is the eighth item and every
+  // other one is a single word. Spelled out it was wide enough to wrap the
+  // whole row, which broke "Sign In" and "Join Now" across two lines each.
+  { href: '/pros', label: 'Pros' },
 ]
 
 function Avatar({ user }: { user: User }) {
@@ -117,7 +125,7 @@ export default function Nav() {
               <Link
                 key={href}
                 href={href}
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 ${
                   pathname === href
                     ? 'bg-brand-orange text-white'
                     : 'text-plum/70 hover:text-plum hover:bg-plum/5'
@@ -182,10 +190,13 @@ export default function Nav() {
               </div>
             ) : (
               <>
-                <Link href="/members/login" className="ml-3 btn-secondary text-sm px-5 py-2">
+                {/* nowrap because the row is one item wider than it used to be:
+                    without it these two break as "Sign / In" and "Join / Now"
+                    on a narrow laptop. */}
+                <Link href="/members/login" className="ml-3 btn-secondary text-sm px-5 py-2 whitespace-nowrap">
                   Sign In
                 </Link>
-                <Link href="/members/join" className="ml-2 btn-primary text-sm px-5 py-2">
+                <Link href="/members/join" className="ml-2 btn-primary text-sm px-5 py-2 whitespace-nowrap">
                   Join Now
                 </Link>
               </>
