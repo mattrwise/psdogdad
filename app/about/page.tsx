@@ -46,7 +46,6 @@ export default function AboutPage() {
           <ul className="space-y-3">
             {[
               ['No tracking', 'No analytics, no pixels, no third party scripts watching what you do. Even the fonts are served from this site rather than from Google, so nobody else sees you visit.'],
-              ['No advertising', 'Nothing is for sale here and nobody is paying to reach you.'],
               ['No algorithm', 'Posts and events appear in plain order. Nothing is ranked, boosted or arranged to keep you scrolling.'],
               ['No scores', 'No likes, no upvotes, no ratings on people or their dogs. This is a neighbourhood, not a leaderboard.'],
             ].map(([title, text]) => (

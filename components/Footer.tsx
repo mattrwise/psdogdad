@@ -22,7 +22,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold mb-3 text-sm uppercase tracking-wider">Community</h4>
             <ul className="space-y-2 text-sm">
-              {[['Training', '/training'], ['Forums', '/forums'], ['Members', '/members'], ['Events', '/events'], ['Guides', '/guides'], ['Resources', '/resources']].map(([label, href]) => (
+              {[['Training', '/training'], ['Forums', '/forums'], ['Members', '/members'], ['Events', '/events'], ['Guides', '/guides'], ['Resources', '/resources'], ['Dog Pros', '/pros']].map(([label, href]) => (
                 <li key={href}>
                   <Link href={href} className="hover:text-brand-orange transition-colors">{label}</Link>
                 </li>
@@ -33,7 +33,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold mb-3 text-sm uppercase tracking-wider">About</h4>
             <ul className="space-y-2 text-sm">
-              {[['About Us', '/about'], ['Code of Conduct', '/conduct'], ['Privacy Policy', '/privacy'], ['Contact', '/contact']].map(([label, href]) => (
+              {[['About Us', '/about'], ['Code of Conduct', '/conduct'], ['List Your Services', '/pros/list'], ['Privacy Policy', '/privacy'], ['Contact', '/contact']].map(([label, href]) => (
                 <li key={href}>
                   <Link href={href} className="hover:text-brand-orange transition-colors">{label}</Link>
                 </li>
