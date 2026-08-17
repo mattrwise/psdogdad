@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { guides } from '@/lib/guides'
 import { SITE_URL } from '@/lib/site'
+import { DIRECTORY_IS_PUBLIC } from '@/lib/pros'
 
 /**
  * Listed by hand rather than crawled, so a page only appears here once it is
@@ -16,13 +17,15 @@ const staticPaths = [
   '/resources',
   '/guides',
   // The pro directory and the two pages a provider needs before they list.
-  // Individual listings are not here, unlike everything else in the directory
-  // sense: they live in Supabase and this file is a static list, so adding them
-  // means a server-side read at build time. Worth doing — a provider is paying
-  // to be found — but it is a change to how this file works, not a line in it.
-  '/pros',
-  '/pros/list',
-  '/pros/rate-card',
+  // Left out entirely until DIRECTORY_IS_PUBLIC, so search engines are not sent
+  // to an empty directory either.
+  //
+  // Individual listings are not here even then, unlike everything else in the
+  // directory sense: they live in Supabase and this file is a static list, so
+  // adding them means a server-side read at build time. Worth doing — a
+  // provider is paying to be found — but it is a change to how this file works,
+  // not a line in it.
+  ...(DIRECTORY_IS_PUBLIC ? ['/pros', '/pros/list', '/pros/rate-card'] : []),
   '/resources/roadmap',
   '/resources/handbook',
   '/resources/health-wellness',

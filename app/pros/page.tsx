@@ -52,19 +52,6 @@ export default function ProsPage() {
         </Link>
       </div>
 
-      {/*
-        What the site does and does not stand behind. It matters more here than
-        on /resources: these are people who will be alone with a member's dog in
-        a member's house, and a listing is paid for, which could easily be read
-        as an endorsement. It is not one, and saying so is cheap.
-      */}
-      <div className="bg-brand-golden/10 border border-brand-golden/30 rounded-xl p-4 mb-8 text-sm text-plum/70 leading-relaxed">
-        <strong className="text-plum">Worth knowing:</strong> everyone here pays the same flat
-        fee to be listed, and that is all it buys. We read each listing before it goes up, but we
-        do not employ these people, check their references or verify their insurance. Ask for
-        credentials, meet them before you book, and trust your gut.
-      </div>
-
       {/* Filters. Both dropdowns are built from the pros who are actually here,
           so an option can never find nobody. */}
       {pros.length > 0 && (
@@ -148,20 +135,12 @@ export default function ProsPage() {
         </div>
       )}
 
-      {/* Genuinely nobody yet. An invitation, not an apology. */}
-      {listings && listings.length === 0 && (
-        <div className="card p-10 text-center">
-          <div className="text-5xl mb-4">🐾</div>
-          <h3 className="font-extrabold text-plum text-xl mb-2">No pros listed yet</h3>
-          <p className="text-plum/60 text-sm max-w-md mx-auto mb-6 leading-relaxed">
-            This is brand new and nobody has listed yet. If you train, walk, sit for or groom dogs
-            in the valley, you would be the first one members see.
-          </p>
-          <Link href="/pros/list" className="btn-primary">
-            List Your Services
-          </Link>
-        </div>
-      )}
+      {/*
+        There is deliberately no "nobody has listed yet" card. An empty grid
+        followed by the purple block below says the same thing without an
+        apology in the middle of the page, and the block is the only thing on
+        here aimed at somebody who could fix it.
+      */}
 
       {listings === null && (
         <div className="card p-8 text-center">
@@ -172,7 +151,9 @@ export default function ProsPage() {
         </div>
       )}
 
-      {/* Pitch to providers */}
+      {/* The way in for providers, and the last thing on the page whether the
+          directory is full or empty. It is the only part of /pros written to
+          somebody who works with dogs rather than owns one. */}
       <div className="mt-16 bg-plum rounded-3xl p-6 sm:p-10 text-center text-white">
         <div className="text-4xl mb-4">🦮</div>
         <h2 className="text-2xl font-extrabold mb-3">Work with dogs for a living?</h2>

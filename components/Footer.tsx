@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { DIRECTORY_IS_PUBLIC } from '@/lib/pros'
 
 export default function Footer() {
   return (
@@ -22,7 +23,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold mb-3 text-sm uppercase tracking-wider">Community</h4>
             <ul className="space-y-2 text-sm">
-              {[['Training', '/training'], ['Forums', '/forums'], ['Members', '/members'], ['Events', '/events'], ['Guides', '/guides'], ['Resources', '/resources'], ['Dog Pros', '/pros']].map(([label, href]) => (
+              {[['Training', '/training'], ['Forums', '/forums'], ['Members', '/members'], ['Events', '/events'], ['Guides', '/guides'], ['Resources', '/resources'], ...(DIRECTORY_IS_PUBLIC ? [['Dog Pros', '/pros']] : [])].map(([label, href]) => (
                 <li key={href}>
                   <Link href={href} className="hover:text-brand-orange transition-colors">{label}</Link>
                 </li>

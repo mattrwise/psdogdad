@@ -10,6 +10,32 @@
  * The reads live in lib/proListings.ts, next door.
  */
 
+// ─── Whether members are pointed at it yet ────────────────────────────────────
+
+/**
+ * Whether the directory is advertised to members.
+ *
+ * While this is false the pages all work exactly as they do now — you can send
+ * a provider straight to /pros/list or /pros/rate-card and they will find a
+ * finished thing — but "Pros" is absent from the nav, the footer, the sitemap
+ * and the pointer on /resources. Members are not invited into an empty room.
+ *
+ * The same rule the October kickoff callout follows: render nothing rather than
+ * advertise a meetup nobody can RSVP to. An empty directory behind a nav tab
+ * reads as a site nobody uses, and it is a poor thing to show a trainer you are
+ * trying to sign up.
+ *
+ * Turn it on once there are three or four real listings. One line, and every
+ * entrance appears at once.
+ *
+ * Filling it with invented pros to make it look busy is the other way to solve
+ * this and it is not an option. Six made-up businesses were stripped out of
+ * /resources for exactly that reason, and techbud keeps its example listings
+ * behind a red warning banner so they can never ship. A directory of people who
+ * do not exist is the fastest way to lose the trust the rest of the site runs on.
+ */
+export const DIRECTORY_IS_PUBLIC = false
+
 // ─── What a listing costs ─────────────────────────────────────────────────────
 
 /**
