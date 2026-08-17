@@ -10,6 +10,7 @@ import {
   type ProListing,
   hasListingFee,
   listingFeeLabel,
+  listingPaymentLink,
 } from '@/lib/pros'
 
 /** The short version of the pitch, shown above the form and to signed-out visitors. */
@@ -145,10 +146,73 @@ export default function ListYourServicesPage() {
         </div>
       )}
 
+      {/*
+        Accepted, waiting on payment. This gets a card of its own rather than a
+        line in the banner below, because it is the one moment in the whole flow
+        where the provider has something to do and nothing else on the page
+        matters as much.
+
+        The payment step lives here, behind their own sign-in, and never in an
+        email. A payment form that arrives by email is indistinguishable from a
+        phishing attempt, and asking somebody to trust one is a poor way to
+        start taking their money. The email we send says "you are in, sign in" —
+        they arrive here under their own steam, at an address they typed.
+      */}
+      {listing?.status === 'approved' && (
+        <div className="card border-2 border-brand-teal/40 p-6 sm:p-8 mb-8 text-center">
+          <div className="text-4xl mb-3">🎉</div>
+          <h2 className="font-extrabold text-plum text-2xl mb-2">You&rsquo;re in.</h2>
+          <p className="text-plum/70 text-sm leading-relaxed max-w-md mx-auto mb-6">
+            We have read your listing and we would like you in the directory. There is one step
+            left: set up payment, and your listing goes live for the dog owners of the valley.
+          </p>
+
+          {listingPaymentLink() ? (
+            <>
+              <a
+                href={listingPaymentLink()!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary"
+              >
+                Set up payment · {listingFeeLabel()}
+              </a>
+              <p className="text-xs text-plum/50 mt-4 leading-relaxed max-w-sm mx-auto">
+                Handled by Stripe. Your card details go to them, never to us. Your listing goes
+                live once the first payment lands, usually the same day.
+              </p>
+            </>
+          ) : (
+            /* No link set yet. Say so honestly and give them a person, rather
+               than a button that goes nowhere. */
+            <div className="bg-brand-golden/15 border border-brand-golden/40 rounded-xl p-4 text-sm text-plum/80 leading-relaxed max-w-md mx-auto">
+              We are still setting up card payments. Email{' '}
+              <a
+                href={`mailto:${PRO_DIRECTORY.contactEmail}?subject=${encodeURIComponent(`Payment for ${listing.business_name}`)}`}
+                className="font-bold text-brand-orange hover:underline"
+              >
+                {PRO_DIRECTORY.contactEmail}
+              </a>{' '}
+              and we will sort it out with you directly. Your listing goes live as soon as it is
+              done — you are already accepted, so nothing else is riding on it.
+            </div>
+          )}
+
+          <p className="text-xs text-plum/40 mt-5">
+            You can still{' '}
+            <Link href={`/pros/${listing.id}`} className="font-semibold hover:underline">
+              preview your listing
+            </Link>{' '}
+            or change anything below.
+          </p>
+        </div>
+      )}
+
       {/* Where the listing stands. A provider who has just submitted needs to
           know it arrived and is not live yet; one who is live needs to know
-          edits go up straight away. */}
-      {listing ? (
+          edits go up straight away. The accepted-and-unpaid case is handled by
+          the card above, so it is deliberately absent here. */}
+      {listing && listing.status !== 'approved' ? (
         <div
           className={`rounded-xl p-4 mb-8 text-sm leading-relaxed border ${
             listing.status === 'published'
@@ -167,10 +231,10 @@ export default function ListYourServicesPage() {
           )}
           {listing.status === 'pending' && (
             <>
-              <strong className="text-plum">Waiting to be reviewed.</strong> We have got it, and
-              we read every listing before it goes up. You will hear from us at the email on your
-              account, and we will sort the fee out then — nothing is charged before you are
-              listed.{' '}
+              <strong className="text-plum">Waiting to be reviewed.</strong> We have got it, and a
+              person reads every listing before it goes up. We will email the address on your
+              account once we have — payment comes after that, and nothing is charged before you
+              are accepted.{' '}
               <Link href={`/pros/${listing.id}`} className="font-bold text-brand-orange hover:underline">
                 Preview it
               </Link>
@@ -190,7 +254,11 @@ export default function ListYourServicesPage() {
             </>
           )}
         </div>
-      ) : (
+      ) : null}
+
+      {/* The pitch is for somebody who has not written a listing yet. Anybody
+          who has — accepted or not — is past being sold to. */}
+      {!listing && (
         <div className="mb-8">
           <Pitch />
         </div>

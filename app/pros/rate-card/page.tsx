@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import PrintButton from '@/components/PrintButton'
 import { SITE_URL } from '@/lib/site'
-import { PRO_DIRECTORY, SERVICES, hasListingFee, listingFeeLabel, listingPaymentLink } from '@/lib/pros'
+import { PRO_DIRECTORY, SERVICES, hasListingFee, listingFeeLabel } from '@/lib/pros'
 
 export const metadata: Metadata = {
   title: 'Rate Card, PS Dog Dad',
@@ -17,8 +17,6 @@ export const metadata: Metadata = {
  * the footer and the shadows, so "Print" gives you the handout.
  */
 export default function RateCardPage() {
-  const paymentLink = listingPaymentLink()
-
   const steps = [
     {
       n: '1',
@@ -28,12 +26,17 @@ export default function RateCardPage() {
     {
       n: '2',
       title: 'We read it',
-      body: 'Every listing is read by a person before it goes up. We are checking it is a real working pro and the listing says what it means, not judging how you train.',
+      body: 'Every listing is read by a person before it goes up. We are checking it is a real working pro and that the listing says what it means, not judging how you train.',
     },
     {
       n: '3',
+      title: 'We say yes, then you pay',
+      body: 'You get an email telling you that you are in. Sign in to the site and the payment step is waiting on your own listing page. Nothing is charged before you are accepted, and you are never asked to pay anything before that email.',
+    },
+    {
+      n: '4',
       title: 'You go live',
-      body: 'We sort the fee out and your listing appears in the directory. Nothing is charged before you are listed.',
+      body: 'Your listing appears in the directory as soon as the first payment lands, usually the same day.',
     },
   ]
 
@@ -188,6 +191,10 @@ export default function RateCardPage() {
               a: 'No. Listings run in alphabetical order and there is nothing for sale that changes it.',
             },
             {
+              q: 'How do I actually pay?',
+              a: 'On the site, signed in to your own account, after we have accepted you. We will never email you a payment form, a card link, or an invoice to click. If something claiming to be us does, it is not us — sign in at psdogdad.com yourself and check. Payment is handled by Stripe and your card details never reach us.',
+            },
+            {
               q: 'Can I take my listing down?',
               a: 'Any time, yourself, from the same page you wrote it on.',
             },
@@ -219,27 +226,22 @@ export default function RateCardPage() {
           <Link href="/pros/list" className="btn-primary">
             List My Services
           </Link>
-          {/* A tier only becomes payable once it has both a price and a link,
-              so a half-finished setup can never charge somebody an amount that
-              has not been settled on. */}
-          {paymentLink && (
-            <a
-              href={paymentLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-teal"
-            >
-              Pay {listingFeeLabel()}
-            </a>
-          )}
         </div>
 
-        {!paymentLink && (
-          <p className="text-xs text-plum/40 mt-4 leading-relaxed">
-            We will send you a way to pay once your listing has been read and you are ready to go
-            live. Nothing is charged before that.
-          </p>
-        )}
+        {/*
+          There is deliberately no "pay now" button on this page, whether or not
+          a payment link is configured. This sheet is public and gets handed to
+          people we have not accepted yet, and two lines above it promises that
+          nothing is charged before acceptance. A button here would let somebody
+          pay first and be turned down after, which is the one way to turn this
+          into a page that lies. Payment lives on the applicant's own listing
+          page, behind their sign-in, once they are in.
+        */}
+        <p className="text-xs text-plum/40 mt-4 leading-relaxed">
+          There is nothing to pay yet, and nothing on this page to pay with. Once we have read
+          your listing and said yes, the payment step appears on your own listing page when you
+          sign in. Nothing is charged before that.
+        </p>
       </section>
 
       <footer className="mt-10 pt-6 border-t border-plum/10 text-xs text-plum/40 leading-relaxed">

@@ -10,10 +10,25 @@
 -- their front door key. So nothing goes public until it has been read: a new
 -- listing starts at 'pending' and only you, from the dashboard, move it on.
 --
--- To approve one:
+-- A listing walks through four states, and the middle one is what keeps two
+-- promises true at once — that nobody is charged before they are accepted, and
+-- that a listing goes live once they have paid:
+--
+--   pending    Submitted. You have not read it yet. Not public.
+--   approved   You said yes. Waiting for them to pay. Still not public.
+--   published  Paid. Live in the directory.
+--   hidden     Taken down, without throwing the record away.
+--
+-- To accept an applicant:
+--   update public.pro_listings set status = 'approved' where id = '…';
+-- Once their payment lands, put them live:
 --   update public.pro_listings set status = 'published' where id = '…';
 -- To take one down without deleting the record:
 --   update public.pro_listings set status = 'hidden' where id = '…';
+--
+-- Stripe cannot tell this database anything, so that middle step is yours to
+-- make when the Stripe receipt arrives. Nothing about it is automatic, and the
+-- site never claims otherwise.
 
 create table if not exists public.pro_listings (
   id               uuid primary key default gen_random_uuid(),
@@ -52,18 +67,15 @@ create table if not exists public.pro_listings (
 create unique index if not exists pro_listings_user_id_key
   on public.pro_listings (user_id);
 
--- Postgres has no "add constraint if not exists", so this is guarded instead,
--- which is what keeps the file re-runnable.
-do $$
-begin
-  if not exists (
-    select 1 from pg_constraint where conname = 'pro_listings_status_check'
-  ) then
-    alter table public.pro_listings
-      add constraint pro_listings_status_check
-      check (status in ('pending', 'published', 'hidden'));
-  end if;
-end $$;
+-- Dropped and re-added rather than guarded with "if not exists", so that
+-- re-running this file on a database that already has the table actually
+-- updates the allowed states. Guarding it meant 'approved' could never be
+-- added to an existing install without editing by hand. Dropping a check
+-- constraint touches no data.
+alter table public.pro_listings drop constraint if exists pro_listings_status_check;
+alter table public.pro_listings
+  add constraint pro_listings_status_check
+  check (status in ('pending', 'approved', 'published', 'hidden'));
 
 -- --- Who may see and change what ---------------------------------------------
 

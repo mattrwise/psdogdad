@@ -156,7 +156,19 @@ export const VALLEY_CITIES = [
 
 // ─── The listing itself ───────────────────────────────────────────────────────
 
-export type ProStatus = 'pending' | 'published' | 'hidden'
+/**
+ * Where a listing is up to.
+ *
+ *   pending    Submitted, not read yet. Not public.
+ *   approved   Accepted, waiting on payment. Still not public.
+ *   published  Paid, live in the directory.
+ *   hidden     Taken down, record kept.
+ *
+ * `approved` is what lets the site promise both that nobody is charged before
+ * they are accepted and that a listing goes live once they have paid. Without
+ * it those two are the same moment and one of them has to give.
+ */
+export type ProStatus = 'pending' | 'approved' | 'published' | 'hidden'
 
 export type ProListing = {
   id: string
