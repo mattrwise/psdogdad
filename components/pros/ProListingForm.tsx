@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase/client'
+import { notifyNewListing } from '@/lib/proListings'
 import { uploadPhoto } from '@/lib/photos'
 import { ACCEPTED_TYPES, preparePhoto } from '@/lib/images'
 import { SERVICES, VALLEY_CITIES, type ProListing } from '@/lib/pros'
@@ -234,7 +235,15 @@ export default function ProListingForm({ user, existing, onSaved }: Props) {
       return
     }
 
-    onSaved(data as ProListing)
+    const saved = data as ProListing
+
+    // A brand new listing is waiting on somebody reading it, so say so. Not on
+    // an edit: those go live by themselves and a typo fix is not news. Not
+    // awaited either — the listing is saved, and the provider should not be kept
+    // watching a spinner for an email that is none of their business.
+    if (!existing) void notifyNewListing(saved.id)
+
+    onSaved(saved)
     router.refresh()
   }
 
