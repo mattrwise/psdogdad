@@ -50,7 +50,7 @@ function PhotoField({
     <div>
       <div className="flex items-center justify-between mb-1.5">
         <label htmlFor="pro-photo" className="block text-sm font-bold text-plum">
-          Photo
+          Photo (optional)
         </label>
         {preview && (
           <button
@@ -294,9 +294,9 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
         </div>
       )}
 
-      {/* ── Who you are ─────────────────────────────────────────────────── */}
+      {/* ── Listing form ─────────────────────────────────────────────────── */}
       <section className="card p-6 space-y-5">
-        <h2 className="font-extrabold text-plum text-lg">Who you are</h2>
+        <h2 className="font-extrabold text-plum text-lg">Listing Form</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -386,7 +386,7 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
         ) : (
           <div className="rounded-2xl border-2 border-dashed border-plum/15 p-5 text-center">
             <span className="text-2xl">📷</span>
-            <p className="text-sm font-semibold text-plum mt-1">Photo comes next</p>
+            <p className="text-sm font-semibold text-plum mt-1">Photo (optional)</p>
             <p className="text-xs text-plum/50 mt-1 leading-relaxed">
               You can add one as soon as you have confirmed your email. A picture of you at work
               beats a logo, so it is worth coming back for.
@@ -455,7 +455,7 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
             })}
           </div>
           <p className="text-xs text-plum/50 mt-2">
-            Only pick the ones you will actually drive to. Members filter by town.
+            Members filter by town.
           </p>
         </div>
 
@@ -472,9 +472,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
               placeholder="e.g. From $85 a session"
               className={inputClass}
             />
-            <p className="text-xs text-plum/50 mt-1">
-              You set these and you keep all of it. We take nothing from your work.
-            </p>
           </div>
 
           <div>

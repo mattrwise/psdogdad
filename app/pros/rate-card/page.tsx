@@ -21,7 +21,7 @@ export default function RateCardPage() {
     {
       n: '1',
       title: 'Write your listing',
-      body: 'Fill in the form at psdogdad.com/pros/list. Ten minutes, no account to make and no password to invent — we email you a link to confirm it is you, and that link is also how you get back in to change anything later.',
+      body: 'Fill in the form at psdogdad.com/pros/list. Ten minutes, no account to make and no password to invent. We email you a link to confirm it is you, and that link is how you sign back in later.',
     },
     {
       n: '2',
@@ -70,60 +70,73 @@ export default function RateCardPage() {
       </header>
 
       {/* ── The price ───────────────────────────────────────────────────── */}
-      <section className="bg-plum rounded-3xl p-6 sm:p-8 text-white mb-8">
+      <section className="bg-plum rounded-3xl p-6 sm:p-8 text-white mb-6">
         <div className="text-sm font-bold uppercase tracking-wider text-brand-golden mb-2">
-          One listing, one flat fee
+          One flat fee
         </div>
-        <div className="text-4xl sm:text-5xl font-extrabold leading-none">
-          {listingFeeLabel()}
-        </div>
-        {!hasListingFee() && (
-          <p className="text-white/60 text-sm mt-3 leading-relaxed">
-            The price is still being settled. Ask us and we will tell you what it is before you
-            write a word of your listing.
+
+        {/* The number is printed once, by listingFeeLabel(), so lib/pros.ts stays
+            the only place the price lives. With no price set yet that label reads
+            "Price not set yet", which cannot be dropped into a sentence, so the
+            unpriced state keeps the bare figure and says why. */}
+        {hasListingFee() ? (
+          <p className="text-3xl sm:text-4xl font-extrabold leading-tight">
+            Just <span className="text-brand-golden">{listingFeeLabel()}</span> to be listed.
           </p>
+        ) : (
+          <>
+            <div className="text-4xl sm:text-5xl font-extrabold leading-none">
+              {listingFeeLabel()}
+            </div>
+            <p className="text-white/60 text-sm mt-3 leading-relaxed">
+              The price is still being settled. Ask us and we will tell you what it is before you
+              write a word of your listing.
+            </p>
+          </>
         )}
+
         <p className="text-white/80 text-sm mt-4 leading-relaxed">
-          The same for everybody. There are no tiers, no commission on your work, and nothing
-          you can buy that moves you up the page — the directory is in plain alphabetical order
-          and stays that way.
+          The same for everybody. No tiers, no commission on your work, and nothing you can buy
+          that moves you up the page. The directory is in plain alphabetical order and stays
+          that way.
         </p>
       </section>
 
-      {/* ── You set your own rates ──────────────────────────────────────── */}
-      <section className="bg-brand-golden/10 border border-brand-golden/30 rounded-2xl p-5 mb-8">
-        <h2 className="font-extrabold text-plum text-lg mb-1">You price your own work</h2>
+      {/* ── You set your rates ──────────────────────────────────────────── */}
+      <section className="bg-brand-golden/10 border border-brand-golden/30 rounded-2xl p-5 mb-6">
+        <h2 className="font-extrabold text-plum text-lg mb-1">You set your rates</h2>
         <p className="text-plum/70 text-sm leading-relaxed">
-          Your rates are yours. You publish them on your listing, you quote them, and you keep
-          every dollar of them — we never take a cut of a booking, and we are not in the middle of
-          the payment. The flat fee above is the only money that comes to us.
+          You publish your own rates, you work out payment with the client directly, and you keep
+          every dollar of it. No commission, ever. The flat fee above is the only money that comes
+          to us.
         </p>
       </section>
 
-      {/* ── What the fee buys ───────────────────────────────────────────── */}
+      {/* ── What the fee buys, and what you can list under ───────────────
+          One section rather than three stacked ones. The list runs in two
+          columns from sm up so five promises take three rows instead of five,
+          and the categories sit under it as a strip rather than earning their
+          own heading — they are breadth at a glance, not an argument. */}
       <section className="mb-8">
         <h2 className="text-xl font-extrabold text-plum mb-4">What it gets you</h2>
-        <ul className="space-y-2.5">
+        <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2.5 mb-6">
           {PRO_DIRECTORY.includes.map(line => (
-            <li key={line} className="flex gap-3 items-start">
+            <li key={line} className="flex gap-2.5 items-start">
               <span className="text-brand-teal font-bold flex-shrink-0 mt-0.5">✓</span>
               <span className="text-plum/70 text-sm leading-relaxed">{line}</span>
             </li>
           ))}
         </ul>
-      </section>
 
-      {/* ── Categories ──────────────────────────────────────────────────── */}
-      <section className="mb-8">
-        <h2 className="text-xl font-extrabold text-plum mb-1">What you can list under</h2>
-        <p className="text-plum/50 text-sm mb-4">
-          Pick as many as apply. Members filter the directory by these and by town.
+        <p className="text-plum/50 text-sm mb-2.5">
+          <span className="font-semibold text-plum/70">List under as many as apply.</span>{' '}
+          Members filter the directory by these and by town.
         </p>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5">
           {SERVICES.map(({ id, icon, label }) => (
             <span
               key={id}
-              className="inline-flex items-center gap-1.5 bg-white border border-plum/15 rounded-full px-3 py-1.5 text-sm font-semibold text-plum"
+              className="inline-flex items-center gap-1 bg-white border border-plum/15 rounded-full px-2.5 py-1 text-xs font-semibold text-plum"
             >
               {icon} {label}
             </span>

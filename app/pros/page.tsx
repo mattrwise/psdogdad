@@ -159,8 +159,7 @@ export default function ProsPage() {
         <h2 className="text-2xl font-extrabold mb-3">Work with dogs for a living?</h2>
         <p className="text-white/70 mb-6 max-w-lg mx-auto leading-relaxed">
           One flat fee puts you in front of the dog owners of the Coachella Valley. You set your
-          own rates, you keep every dollar of what you charge, and you can edit your listing
-          whenever you like.
+          own rates and you keep every dollar of what you charge.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link href="/pros/list" className="btn-primary">

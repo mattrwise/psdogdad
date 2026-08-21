@@ -68,7 +68,6 @@ export const PRO_DIRECTORY = {
     'Your own page to link to from anywhere — your card, your van, your Instagram',
     'A photo, your certifications and how many years you have been doing this',
     'A phone number, email and website that members can tap straight through to',
-    'Edit it yourself, whenever you like, without going through us',
   ],
 
   /**
