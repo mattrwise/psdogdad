@@ -71,15 +71,21 @@ export const PRO_DIRECTORY = {
   ],
 
   /**
-   * What a provider is agreeing to. Short, and all of it enforceable by simply
-   * taking the listing down.
+   * The standards a listing is held to, written to somebody trying to win more
+   * clients rather than somebody suspected of lying about themselves.
+   *
+   * Every line is a thing that demonstrably works, with the reason it works
+   * attached. The earlier version was five "You are..." and "You will..."
+   * clauses, which read as a probation agreement to the one audience it was
+   * addressed to: a working pro deciding whether to spend money here. Nobody
+   * paying to advertise needs telling not to cheat.
    */
   expectations: [
-    'You are a real, working dog professional and the listing describes what you actually do',
-    'You quote your own rates and you honour them',
-    'You reply to members who contact you, even if the answer is no',
-    'You carry your own insurance, or you say plainly that you do not',
-    'You follow the Code of Conduct, the same as every other member',
+    'Describe the work you actually do, in your own words. Owners can tell the difference.',
+    'Put your rates up and stand behind them. The pros who post a price get called more than the ones who make people ask.',
+    'Answer everyone who gets in touch, even when the answer is no. A quick no still earns the referral.',
+    'Say whether you are insured. The owners who ask are usually the ones about to book.',
+    'The Code of Conduct applies to advertisers too.',
   ],
 
   /**

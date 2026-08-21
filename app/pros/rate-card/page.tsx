@@ -26,7 +26,7 @@ export default function RateCardPage() {
     {
       n: '2',
       title: 'We read it',
-      body: 'Every listing is read by a person before it goes up. We are checking it is a real working pro and that the listing says what it means, not judging how you train.',
+      body: 'A person reads every listing before it goes up, to be sure it will read clearly to a dog owner. We are not judging how you work.',
     },
     {
       n: '3',
@@ -162,11 +162,16 @@ export default function RateCardPage() {
         </div>
       </section>
 
-      {/* ── What we ask ─────────────────────────────────────────────────── */}
+      {/* ── What works here ─────────────────────────────────────────────
+          Was "What we ask of you", opening on the line about all of it being
+          enforceable by taking the listing down. That is a threat delivered to
+          somebody who has not even applied yet. The rule is unchanged and still
+          stated below, but it is at the end now and it is framed as what it
+          actually does: protect the pros who are doing this properly. */}
       <section className="mb-8">
-        <h2 className="text-xl font-extrabold text-plum mb-1">What we ask of you</h2>
+        <h2 className="text-xl font-extrabold text-plum mb-1">What works here</h2>
         <p className="text-plum/50 text-sm mb-4">
-          All of it enforceable the only way we can: by taking the listing down.
+          The listings that get calls all do the same few things.
         </p>
         <ul className="space-y-2.5">
           {PRO_DIRECTORY.expectations.map(line => (
@@ -176,6 +181,10 @@ export default function RateCardPage() {
             </li>
           ))}
         </ul>
+        <p className="text-plum/50 text-sm mt-4 leading-relaxed">
+          If a listing stops matching the work, we take it down. That is the whole of it, and it
+          is there to protect the pros who are doing this properly.
+        </p>
       </section>
 
       {/* ── Straight answers ────────────────────────────────────────────── */}

@@ -31,9 +31,9 @@ function Pitch() {
             : 'The same flat fee for everybody, with no tiers and nothing that buys a better position. The price is still being worked out.',
         },
         {
-          icon: '✍️',
-          title: 'Yours to edit',
-          body: 'Change your rates, your towns or your photo whenever you like. You do not have to come through us.',
+          icon: '📞',
+          title: 'They contact you',
+          body: 'Owners call, email or message you straight from your listing. We are never in the middle of the job or the money.',
         },
       ].map(({ icon, title, body }) => (
         <div key={title} className="bg-white rounded-2xl shadow-sm p-5">

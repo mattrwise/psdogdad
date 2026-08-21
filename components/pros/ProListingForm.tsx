@@ -361,7 +361,7 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
             rows={6}
             value={about}
             onChange={e => setAbout(e.target.value)}
-            placeholder="How you work, who you are a good fit for, and what a first session looks like. Plain language beats a sales pitch — the people reading this are choosing who to trust with their dog."
+            placeholder="How you work, who you are a good fit for, and what a first session looks like. Plain language beats a sales pitch. Owners pick the pro who sounds like a person."
             className={`${inputClass} resize-none`}
           />
         </div>
