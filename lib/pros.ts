@@ -16,8 +16,7 @@
  * Whether the directory is advertised to members.
  *
  * While this is false the pages all work exactly as they do now — you can send
- * a provider straight to /pros/list or /pros/rate-card and they will find a
- * finished thing — but "Pros" is absent from the nav, the footer, the sitemap
+ * a provider straight to /pros/list and they will find a finished thing — but "Pros" is absent from the nav, the footer, the sitemap
  * and the pointer on /resources. Members are not invited into an empty room.
  *
  * The same rule the October kickoff callout follows: render nothing rather than

@@ -3,45 +3,230 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import ProListingForm from '@/components/pros/ProListingForm'
+import PrintButton from '@/components/PrintButton'
 import { useUser } from '@/lib/useUser'
 import { loadMyListing, readDraft, submitDraft } from '@/lib/proListings'
 import {
   PRO_DIRECTORY,
+  SERVICES,
   type ProListing,
   hasListingFee,
   listingFeeLabel,
   listingPaymentLink,
 } from '@/lib/pros'
 
-/** The short version of the pitch, shown above the form and to signed-out visitors. */
+/**
+ * What it costs and what it buys, above the form.
+ *
+ * This was a separate page, /pros/rate-card, which meant a provider had to
+ * read one page and then go and find another to act on it. The two are one
+ * page now: the pitch, then the form, then what happens after you send it.
+ * /pros/rate-card redirects here so anything already printed or emailed still
+ * lands somewhere true.
+ */
 function Pitch() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      {[
-        {
-          icon: '💵',
-          title: 'You set your rates',
-          body: 'You publish your own prices and you keep every dollar of them. We take nothing from the work itself.',
-        },
-        {
-          icon: '📄',
-          title: 'One flat fee',
-          body: hasListingFee()
-            ? `${listingFeeLabel()} to be listed. The same for everybody, with no tiers and nothing that buys a better position.`
-            : 'The same flat fee for everybody, with no tiers and nothing that buys a better position. The price is still being worked out.',
-        },
-        {
-          icon: '📞',
-          title: 'They contact you',
-          body: 'Owners call, email or message you straight from your listing. We are never in the middle of the job or the money.',
-        },
-      ].map(({ icon, title, body }) => (
-        <div key={title} className="bg-white rounded-2xl shadow-sm p-5">
-          <div className="text-2xl mb-2">{icon}</div>
-          <h3 className="font-extrabold text-plum text-sm">{title}</h3>
-          <p className="text-xs text-plum/60 mt-1 leading-relaxed">{body}</p>
+    <>
+      {/* ── The price ─────────────────────────────────────────────────── */}
+      <section className="bg-plum rounded-3xl p-6 sm:p-8 text-white mb-6">
+        <div className="text-sm font-bold uppercase tracking-wider text-brand-golden mb-2">
+          One flat fee
         </div>
-      ))}
+
+        {/* The number is printed once, by listingFeeLabel(), so lib/pros.ts stays
+            the only place the price lives. With no price set yet that label reads
+            "Price not set yet", which cannot be dropped into a sentence, so the
+            unpriced state keeps the bare figure and says why. */}
+        {hasListingFee() ? (
+          <p className="text-3xl sm:text-4xl font-extrabold leading-tight">
+            Just <span className="text-brand-golden">{listingFeeLabel()}</span> to be listed.
+          </p>
+        ) : (
+          <>
+            <div className="text-4xl sm:text-5xl font-extrabold leading-none">
+              {listingFeeLabel()}
+            </div>
+            <p className="text-white/60 text-sm mt-3 leading-relaxed">
+              The price is still being settled. Ask us and we will tell you what it is before you
+              write a word of your listing.
+            </p>
+          </>
+        )}
+
+        <p className="text-white/80 text-sm mt-4 leading-relaxed">
+          The same for everybody. No tiers, no commission on your work, and nothing you can buy
+          that moves you up the page. The directory is in plain alphabetical order and stays
+          that way.
+        </p>
+      </section>
+
+      {/* ── You set your rates ────────────────────────────────────────── */}
+      <section className="bg-brand-golden/10 border border-brand-golden/30 rounded-2xl p-5 mb-6">
+        <h2 className="font-extrabold text-plum text-lg mb-1">You set your rates</h2>
+        <p className="text-plum/70 text-sm leading-relaxed">
+          You publish your own rates, you work out payment with the client directly, and you keep
+          every dollar of it. No commission, ever. The flat fee above is the only money that comes
+          to us.
+        </p>
+      </section>
+
+      {/* ── What the fee buys, and what you can list under ─────────────── */}
+      <section className="mb-8">
+        <h2 className="text-xl font-extrabold text-plum mb-4">What it gets you</h2>
+        <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2.5 mb-6">
+          {PRO_DIRECTORY.includes.map(line => (
+            <li key={line} className="flex gap-2.5 items-start">
+              <span className="text-brand-teal font-bold flex-shrink-0 mt-0.5">✓</span>
+              <span className="text-plum/70 text-sm leading-relaxed">{line}</span>
+            </li>
+          ))}
+        </ul>
+
+        <p className="text-plum/50 text-sm mb-2.5">
+          <span className="font-semibold text-plum/70">List under as many as apply.</span>{' '}
+          Members filter the directory by these and by town.
+        </p>
+        <div className="flex flex-wrap gap-1.5">
+          {SERVICES.map(({ id, icon, label }) => (
+            <span
+              key={id}
+              className="inline-flex items-center gap-1 bg-white border border-plum/15 rounded-full px-2.5 py-1 text-xs font-semibold text-plum"
+            >
+              {icon} {label}
+            </span>
+          ))}
+        </div>
+      </section>
+    </>
+  )
+}
+
+/** What happens once the form above is sent. Everything here used to sit on the
+ *  rate card; it reads better after the form than before it, because it is all
+ *  about what we do next rather than what they have to do now. */
+function AfterTheForm() {
+  const steps = [
+    {
+      n: '1',
+      title: 'We read it',
+      body: 'A person reads every listing before it goes up, to be sure it will read clearly to a dog owner. We are not judging how you work.',
+    },
+    {
+      n: '2',
+      title: 'We say yes, then you pay',
+      body: 'You get an email telling you that you are in. Sign in and the payment step is waiting on your own listing page. Nothing is charged before you are accepted.',
+    },
+    {
+      n: '3',
+      title: 'You go live',
+      body: 'Your listing appears in the directory as soon as the first payment lands, usually the same day.',
+    },
+  ]
+
+  const faqs = [
+    {
+      q: 'How many people will see it?',
+      // Never invent a number here. The site is new and says so on every other
+      // page; quoting a reach it cannot evidence is the one thing that would
+      // make the rest of this worthless.
+      a: 'We will tell you honestly where the community is at when you ask, rather than print a number that goes out of date. PS Dog Dad is young and local. If you need a big audience today, this is not that yet.',
+    },
+    {
+      q: 'Do you take a cut of my bookings?',
+      a: 'No. Owners contact you directly by phone, email or your own website. We never see the job or the money.',
+    },
+    {
+      q: 'Do you vouch for me to members?',
+      a: 'No, and the directory says so plainly. We read your listing before it goes up, but we do not check references or verify insurance, and we tell members to ask you for both.',
+    },
+    {
+      q: 'Can I pay to be at the top?',
+      a: 'No. Listings run in alphabetical order and there is nothing for sale that changes it.',
+    },
+    {
+      q: 'Do I have to join the community to advertise?',
+      a: 'No. PS Dog Dad is a community for dog owners, and placing an ad is a business arrangement with us. Those are different things and we do not mix them up. You will not appear in the member directory, and the only email you get from us is about your listing.',
+    },
+    {
+      q: 'How do I actually pay?',
+      a: 'On the site, signed in to your own account, after we have accepted you. We will never email you a payment form, a card link, or an invoice to click. If something claiming to be us does, it is not us. Sign in at psdogdad.com yourself and check. Payment is handled by Stripe and your card details never reach us.',
+    },
+    {
+      q: 'Can I take my listing down?',
+      a: 'Any time, yourself, from this page.',
+    },
+  ]
+
+  return (
+    <div className="mt-12 border-t-2 border-plum/10 pt-8">
+      <section className="mb-8">
+        <h2 className="text-xl font-extrabold text-plum mb-4">What happens next</h2>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {steps.map(({ n, title, body }) => (
+            <div key={n} className="card p-5">
+              <div className="w-9 h-9 rounded-full bg-brand-orange text-white font-extrabold flex items-center justify-center mb-3">
+                {n}
+              </div>
+              <h3 className="font-extrabold text-plum text-sm">{title}</h3>
+              <p className="text-plum/60 text-sm mt-1 leading-relaxed">{body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Was "What we ask of you", opening on a line about all of it being
+          enforceable by taking the listing down. That is a threat delivered to
+          somebody who has not applied yet. The rule is unchanged and still
+          stated, but at the end, framed as what it actually does. */}
+      <section className="mb-8">
+        <h2 className="text-xl font-extrabold text-plum mb-1">What works here</h2>
+        <p className="text-plum/50 text-sm mb-4">
+          The listings that get calls all do the same few things.
+        </p>
+        <ul className="space-y-2.5">
+          {PRO_DIRECTORY.expectations.map(line => (
+            <li key={line} className="flex gap-3 items-start">
+              <span className="text-brand-orange font-bold flex-shrink-0 mt-0.5">·</span>
+              <span className="text-plum/70 text-sm leading-relaxed">{line}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="text-plum/50 text-sm mt-4 leading-relaxed">
+          If a listing stops matching the work, we take it down. That is the whole of it, and it
+          is there to protect the pros who are doing this properly.
+        </p>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-xl font-extrabold text-plum mb-4">Before you ask</h2>
+        <div className="space-y-4">
+          {faqs.map(({ q, a }) => (
+            <div key={q}>
+              <h3 className="font-bold text-plum text-sm">{q}</h3>
+              <p className="text-plum/60 text-sm mt-1 leading-relaxed">{a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/*
+        There is deliberately no "pay now" control anywhere on this page. It is
+        public and gets read by people we have not accepted yet, and the steps
+        above promise nothing is charged before acceptance. A button here would
+        let somebody pay first and be turned down after, which is the one way to
+        turn this into a page that lies. Payment lives on the applicant's own
+        listing page, behind their sign-in, once they are in.
+      */}
+      <p className="text-sm text-plum/60 leading-relaxed">
+        Would rather ask a person first? Email{' '}
+        <a
+          href={`mailto:${PRO_DIRECTORY.contactEmail}?subject=${encodeURIComponent('Listing my services')}`}
+          className="font-semibold text-brand-orange hover:underline"
+        >
+          {PRO_DIRECTORY.contactEmail}
+        </a>{' '}
+        and somebody will write back.
+      </p>
     </div>
   )
 }
@@ -102,9 +287,16 @@ export default function ListYourServicesPage() {
 
   const header = (
     <div className="mb-8">
-      <Link href="/pros" className="text-sm font-semibold text-plum/50 hover:text-plum">
-        ← All dog pros
-      </Link>
+      <div className="flex items-center justify-between gap-4 no-print">
+        <Link href="/pros" className="text-sm font-semibold text-plum/50 hover:text-plum">
+          ← All dog pros
+        </Link>
+        {/* The rate card was a page you could hand somebody on paper, and the
+            print stylesheet in globals.css already drops the nav, the footer
+            and the shadows. Folding it in here would have quietly lost that, so
+            the form is marked no-print and Print still gives you the handout. */}
+        <PrintButton label="Print This Page" />
+      </div>
       <h1 className="section-title mt-3">List Your Services</h1>
       <p className="text-plum/60 mt-2 max-w-2xl leading-relaxed">
         For trainers, walkers, sitters, groomers and anyone else around the valley who works with
@@ -309,23 +501,23 @@ export default function ListYourServicesPage() {
       {/* Keyed so the form is rebuilt if the listing behind it ever changes
           identity. Its fields are React state seeded from these props, and
           state seeded from a prop does not follow that prop when it moves. */}
-      <ProListingForm
-        key={listing?.id ?? 'new'}
-        user={user}
-        existing={listing ?? null}
-        onAwaitingEmail={setAwaitingEmail}
-        onSaved={saved => {
-          setListing(saved)
-          setJustSaved(true)
-          window.scrollTo({ top: 0, behavior: 'smooth' })
-        }}
-      />
-
-      <div className="mt-8 text-center">
-        <Link href="/pros/rate-card" className="text-sm font-bold text-brand-orange hover:underline">
-          What it costs →
-        </Link>
+      <div className="no-print">
+        <ProListingForm
+          key={listing?.id ?? 'new'}
+          user={user}
+          existing={listing ?? null}
+          onAwaitingEmail={setAwaitingEmail}
+          onSaved={saved => {
+            setListing(saved)
+            setJustSaved(true)
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          }}
+        />
       </div>
+
+      {/* Same rule as the pitch above: somebody who already has a listing is
+          past being told what happens when they send one. */}
+      {!listing && <AfterTheForm />}
     </div>
   )
 }
