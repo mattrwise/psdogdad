@@ -65,7 +65,7 @@ export const PRO_DIRECTORY = {
    */
   includes: [
     'A listing in the directory with your services, the towns you cover and your own rates',
-    'Your own page to link to from anywhere: your card, your van, your Instagram',
+    'Your own page to link to from anywhere: your card, your van, your flyers',
     'A photo, your certifications and how many years you have been doing this',
     'A phone number, email and website that members can tap straight through to',
   ],
@@ -216,7 +216,6 @@ export type ProListing = {
   phone: string | null
   email: string | null
   website: string | null
-  instagram: string | null
   rate_note: string | null
   years_experience: number | null
   credentials: string | null
@@ -231,7 +230,7 @@ export type ProListing = {
  * you pass to .select() to work out the row type, and a value built by joining
  * pieces together is just `string` to TypeScript, which loses it entirely.
  */
-export const PRO_COLUMNS = 'id, user_id, business_name, contact_name, headline, about, services, cities, phone, email, website, instagram, rate_note, years_experience, credentials, insured, photo_url, status, created_at'
+export const PRO_COLUMNS = 'id, user_id, business_name, contact_name, headline, about, services, cities, phone, email, website, rate_note, years_experience, credentials, insured, photo_url, status, created_at'
 
 /**
  * The order the directory is shown in.
@@ -267,18 +266,6 @@ export function websiteLabel(website: string): string {
   return website.replace(/^https?:\/\//i, '').replace(/\/$/, '')
 }
 
-/** Instagram handles arrive as "@name", "name" or a full profile URL. */
-export function instagramHandle(instagram: string): string {
-  return instagram
-    .trim()
-    .replace(/^https?:\/\/(www\.)?instagram\.com\//i, '')
-    .replace(/\/$/, '')
-    .replace(/^@/, '')
-}
-
-export function instagramHref(instagram: string): string {
-  return `https://instagram.com/${instagramHandle(instagram)}`
-}
 
 /** "Palm Springs, Palm Desert and La Quinta" */
 export function cityLabel(cities: string[]): string {

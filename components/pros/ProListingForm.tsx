@@ -152,7 +152,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
   const [phone, setPhone] = useState(existing?.phone ?? '')
   const [email, setEmail] = useState(existing?.email ?? user?.email ?? '')
   const [website, setWebsite] = useState(existing?.website ?? '')
-  const [instagram, setInstagram] = useState(existing?.instagram ?? '')
 
   const [photoBlob, setPhotoBlob] = useState<Blob | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(existing?.photo_url ?? null)
@@ -167,7 +166,7 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
 
   // A listing nobody can act on is worth nothing to the provider and worse than
   // nothing to the member who finds it, so at least one way through is required.
-  const hasContact = [phone, email, website, instagram].some(v => v.trim() !== '')
+  const hasContact = [phone, email, website].some(v => v.trim() !== '')
 
   const missing: string[] = []
   if (businessName.trim() === '') missing.push('a business name')
@@ -204,7 +203,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
       phone: phone.trim() || null,
       email: email.trim() || null,
       website: website.trim() || null,
-      instagram: instagram.trim() || null,
     }
 
     // ── Nobody has identified themselves yet ────────────────────────────────
@@ -569,19 +567,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
               value={website}
               onChange={e => setWebsite(e.target.value)}
               placeholder="desertpaws.com"
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="instagram" className="block text-sm font-bold text-plum mb-1">
-              Instagram
-            </label>
-            <input
-              id="instagram"
-              type="text"
-              value={instagram}
-              onChange={e => setInstagram(e.target.value)}
-              placeholder="@desertpaws"
               className={inputClass}
             />
           </div>
