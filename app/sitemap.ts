@@ -25,7 +25,7 @@ const staticPaths = [
   // adding them means a server-side read at build time. Worth doing — a
   // provider is paying to be found — but it is a change to how this file works,
   // not a line in it.
-  ...(DIRECTORY_IS_PUBLIC ? ['/pros', '/pros/list', '/pros/rate-card'] : []),
+  ...(DIRECTORY_IS_PUBLIC ? ['/pros', '/pros/list'] : []),
   '/resources/roadmap',
   '/resources/handbook',
   '/resources/health-wellness',

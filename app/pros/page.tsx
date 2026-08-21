@@ -159,18 +159,13 @@ export default function ProsPage() {
         <h2 className="text-2xl font-extrabold mb-3">Work with dogs for a living?</h2>
         <p className="text-white/70 mb-6 max-w-lg mx-auto leading-relaxed">
           One flat fee puts you in front of the dog owners of the Coachella Valley. You set your
-          own rates, you keep every dollar of what you charge, and you can edit your listing
-          whenever you like.
+          own rates and you keep every dollar of what you charge.
         </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        {/* One button, since the rate card folded into /pros/list. Two that go
+            to the same page is a choice that is not a choice. */}
+        <div className="flex justify-center">
           <Link href="/pros/list" className="btn-primary">
             List Your Services
-          </Link>
-          <Link
-            href="/pros/rate-card"
-            className="btn-secondary border-white/40 text-white hover:bg-white hover:text-plum"
-          >
-            See the Rate Card
           </Link>
         </div>
       </div>

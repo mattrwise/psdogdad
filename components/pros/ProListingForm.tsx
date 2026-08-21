@@ -50,7 +50,7 @@ function PhotoField({
     <div>
       <div className="flex items-center justify-between mb-1.5">
         <label htmlFor="pro-photo" className="block text-sm font-bold text-plum">
-          Photo
+          Photo (optional)
         </label>
         {preview && (
           <button
@@ -294,9 +294,9 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
         </div>
       )}
 
-      {/* ── Who you are ─────────────────────────────────────────────────── */}
+      {/* ── Listing form ─────────────────────────────────────────────────── */}
       <section className="card p-6 space-y-5">
-        <h2 className="font-extrabold text-plum text-lg">Who you are</h2>
+        <h2 className="font-extrabold text-plum text-lg">Listing Form</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -361,7 +361,7 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
             rows={6}
             value={about}
             onChange={e => setAbout(e.target.value)}
-            placeholder="How you work, who you are a good fit for, and what a first session looks like. Plain language beats a sales pitch — the people reading this are choosing who to trust with their dog."
+            placeholder="How you work, who you are a good fit for, and what a first session looks like. Plain language beats a sales pitch. Owners pick the pro who sounds like a person."
             className={`${inputClass} resize-none`}
           />
         </div>
@@ -386,7 +386,7 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
         ) : (
           <div className="rounded-2xl border-2 border-dashed border-plum/15 p-5 text-center">
             <span className="text-2xl">📷</span>
-            <p className="text-sm font-semibold text-plum mt-1">Photo comes next</p>
+            <p className="text-sm font-semibold text-plum mt-1">Photo (optional)</p>
             <p className="text-xs text-plum/50 mt-1 leading-relaxed">
               You can add one as soon as you have confirmed your email. A picture of you at work
               beats a logo, so it is worth coming back for.
@@ -455,7 +455,7 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
             })}
           </div>
           <p className="text-xs text-plum/50 mt-2">
-            Only pick the ones you will actually drive to. Members filter by town.
+            Members filter by town.
           </p>
         </div>
 
@@ -472,9 +472,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
               placeholder="e.g. From $85 a session"
               className={inputClass}
             />
-            <p className="text-xs text-plum/50 mt-1">
-              You set these and you keep all of it. We take nothing from your work.
-            </p>
           </div>
 
           <div>
@@ -619,13 +616,15 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
 
       {/* Said here, at the button, rather than at the top of the page. Somebody
           who has filled all this in deserves to know what happens next;
-          somebody who has not read it yet does not need a warning. */}
+          somebody who has not read it yet does not need a warning.
+
+          Kept to two facts. The second one is a promise about money made at the
+          moment somebody commits, so it stays even though everything else here
+          was cut. */}
       {!user && (
         <p className="text-xs text-plum/50 leading-relaxed">
-          We will email <strong className="text-plum/70">{email.trim() || 'you'}</strong> a link to
-          confirm it is really you, and that link brings you back to this listing. There is no
-          password to make up and no account to fill in — you are placing an ad, not joining
-          anything. Nothing is charged unless we accept your listing.
+          We will email <strong className="text-plum/70">{email.trim() || 'you'}</strong> a link
+          for confirmation. Nothing is charged unless we accept your listing.
         </p>
       )}
     </form>
