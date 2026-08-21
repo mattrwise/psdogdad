@@ -10,7 +10,6 @@ import {
   type ProStatus,
   type ReviewListing,
   cityLabel,
-  instagramHandle,
   serviceIcon,
   serviceLabel,
   telHref,
@@ -67,7 +66,6 @@ function ReviewCard({
     listing.phone ? { label: listing.phone, href: telHref(listing.phone) } : null,
     listing.email ? { label: listing.email, href: `mailto:${listing.email}` } : null,
     listing.website ? { label: websiteLabel(listing.website), href: null } : null,
-    listing.instagram ? { label: `@${instagramHandle(listing.instagram)}`, href: null } : null,
   ].filter(Boolean) as { label: string; href: string | null }[]
 
   return (
