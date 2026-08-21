@@ -26,7 +26,7 @@ export default function AboutPage() {
           <p className="text-plum/70 leading-relaxed mb-4">
             Most places you might gather online are built to hold your attention. They watch what you
             look at, sell what they learn to advertisers, and arrange what you see to keep you coming
-            back. That is a strange way to run a neighbourhood.
+            back. That is a strange way to run a neighborhood.
           </p>
           <p className="text-plum/70 leading-relaxed mb-4">
             PS Dog Dad is deliberately none of that. It is a small, independent community for people
@@ -47,7 +47,7 @@ export default function AboutPage() {
             {[
               ['No tracking', 'No analytics, no pixels, no third party scripts watching what you do. Even the fonts are served from this site rather than from Google, so nobody else sees you visit.'],
               ['No algorithm', 'Posts and events appear in plain order. Nothing is ranked, boosted or arranged to keep you scrolling.'],
-              ['No scores', 'No likes, no upvotes, no ratings on people or their dogs. This is a neighbourhood, not a leaderboard.'],
+              ['No scores', 'No likes, no upvotes, no ratings on people or their dogs. This is a neighborhood, not a leaderboard.'],
             ].map(([title, text]) => (
               <li key={title} className="flex gap-3 items-start">
                 <span className="text-brand-teal font-bold flex-shrink-0 mt-0.5">✓</span>

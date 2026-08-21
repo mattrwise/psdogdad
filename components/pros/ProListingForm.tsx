@@ -152,7 +152,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
   const [phone, setPhone] = useState(existing?.phone ?? '')
   const [email, setEmail] = useState(existing?.email ?? user?.email ?? '')
   const [website, setWebsite] = useState(existing?.website ?? '')
-  const [instagram, setInstagram] = useState(existing?.instagram ?? '')
 
   const [photoBlob, setPhotoBlob] = useState<Blob | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(existing?.photo_url ?? null)
@@ -167,7 +166,7 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
 
   // A listing nobody can act on is worth nothing to the provider and worse than
   // nothing to the member who finds it, so at least one way through is required.
-  const hasContact = [phone, email, website, instagram].some(v => v.trim() !== '')
+  const hasContact = [phone, email, website].some(v => v.trim() !== '')
 
   const missing: string[] = []
   if (businessName.trim() === '') missing.push('a business name')
@@ -204,7 +203,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
       phone: phone.trim() || null,
       email: email.trim() || null,
       website: website.trim() || null,
-      instagram: instagram.trim() || null,
     }
 
     // ── Nobody has identified themselves yet ────────────────────────────────
@@ -287,6 +285,8 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      <h2 className="font-extrabold text-plum text-xl">Listing Form</h2>
+
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700 flex gap-3 items-start">
           <span className="text-lg flex-shrink-0">⚠️</span>
@@ -294,9 +294,12 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
         </div>
       )}
 
-      {/* ── Listing form ─────────────────────────────────────────────────── */}
+      {/* No heading on this first block. "Listing Form" above titles the whole
+          form, and repeating it here left three headings reading Listing Form,
+          What you do, How members reach you, where the first looked like a
+          title and the other two like sections under something that had
+          already ended. */}
       <section className="card p-6 space-y-5">
-        <h2 className="font-extrabold text-plum text-lg">Listing Form</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -503,9 +506,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
             placeholder="e.g. CPDT-KA, Fear Free Certified, pet first aid"
             className={`${inputClass} resize-none`}
           />
-          <p className="text-xs text-plum/50 mt-1">
-            Shown as yours, not as ours — the page says plainly that we have not checked it.
-          </p>
         </div>
 
         <label className="flex items-start gap-3 cursor-pointer">
@@ -517,10 +517,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
           />
           <span className="text-sm text-plum">
             <strong className="font-bold">I carry my own liability insurance.</strong>
-            <span className="block text-xs text-plum/50 mt-0.5">
-              Leave this unticked if you do not. The listing says &ldquo;not stated&rdquo; rather
-              than pretending either way.
-            </span>
           </span>
         </label>
       </section>
@@ -571,19 +567,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
               value={website}
               onChange={e => setWebsite(e.target.value)}
               placeholder="desertpaws.com"
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="instagram" className="block text-sm font-bold text-plum mb-1">
-              Instagram
-            </label>
-            <input
-              id="instagram"
-              type="text"
-              value={instagram}
-              onChange={e => setInstagram(e.target.value)}
-              placeholder="@desertpaws"
               className={inputClass}
             />
           </div>

@@ -10,8 +10,6 @@ import {
   PRO_COLUMNS,
   PRO_DIRECTORY,
   type ProListing,
-  instagramHandle,
-  instagramHref,
   serviceIcon,
   serviceLabel,
   telHref,
@@ -226,19 +224,9 @@ export default function ProListingPage() {
                 🔗 {websiteLabel(pro.website)}
               </a>
             )}
-            {pro.instagram && (
-              <a
-                href={instagramHref(pro.instagram)}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="btn-secondary"
-              >
-                📷 @{instagramHandle(pro.instagram)}
-              </a>
-            )}
           </div>
 
-          {!pro.phone && !pro.email && !pro.website && !pro.instagram && (
+          {!pro.phone && !pro.email && !pro.website && (
             <p className="text-sm text-plum/50">
               This pro has not added a way to contact them yet.
             </p>

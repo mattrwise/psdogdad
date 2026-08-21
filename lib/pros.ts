@@ -15,9 +15,10 @@
 /**
  * Whether the directory is advertised to members.
  *
- * While this is false the pages all work exactly as they do now — you can send
- * a provider straight to /pros/list and they will find a finished thing — but "Pros" is absent from the nav, the footer, the sitemap
- * and the pointer on /resources. Members are not invited into an empty room.
+ * While this is false the pages all work exactly as they do now, you can send
+ * a provider straight to /pros/list and they will find a finished thing, but
+ * "Pros" is absent from the nav, the footer, the sitemap and the pointer on
+ * /resources. Members are not invited into an empty room.
  *
  * The same rule the October kickoff callout follows: render nothing rather than
  * advertise a meetup nobody can RSVP to. An empty directory behind a nav tab
@@ -64,27 +65,30 @@ export const PRO_DIRECTORY = {
    */
   includes: [
     'A listing in the directory with your services, the towns you cover and your own rates',
-    'Your own page to link to from anywhere — your card, your van, your Instagram',
+    'Your own page to link to from anywhere: your card, your van, your flyers',
     'A photo, your certifications and how many years you have been doing this',
     'A phone number, email and website that members can tap straight through to',
   ],
 
   /**
-   * The standards a listing is held to, written to somebody trying to win more
-   * clients rather than somebody suspected of lying about themselves.
+   * What we commit to, in our words, addressed to the person paying us.
    *
-   * Every line is a thing that demonstrably works, with the reason it works
-   * attached. The earlier version was five "You are..." and "You will..."
-   * clauses, which read as a probation agreement to the one audience it was
-   * addressed to: a working pro deciding whether to spend money here. Nobody
-   * paying to advertise needs telling not to cheat.
+   * This used to be `expectations`: five things the advertiser had to promise,
+   * under a heading that opened by naming how we would enforce them. Rewriting
+   * the five clauses to be friendlier did not fix it, because the problem was
+   * never the wording. A page that recites obligations at a working trainer
+   * reads as an institution talking down to them, however warmly it is phrased,
+   * and the last version even managed "to protect the pros who are doing this
+   * properly", which quietly suggests the reader might not be one.
+   *
+   * They are the customer. The Code of Conduct carries the conduct rules, for
+   * advertisers the same as everybody, and it is one link away.
    */
-  expectations: [
-    'Describe the work you actually do, in your own words. Owners can tell the difference.',
-    'Put your rates up and stand behind them. The pros who post a price get called more than the ones who make people ask.',
-    'Answer everyone who gets in touch, even when the answer is no. A quick no still earns the referral.',
-    'Say whether you are insured. The owners who ask are usually the ones about to book.',
-    'The Code of Conduct applies to advertisers too.',
+  promises: [
+    'Your words. We read your listing, we do not rewrite it.',
+    'Your rates, your money. We never take a cut of a booking.',
+    'Alphabetical order, always. There is nothing for sale that moves you up.',
+    'Your call. Take the listing down whenever you want.',
   ],
 
   /**
@@ -212,7 +216,6 @@ export type ProListing = {
   phone: string | null
   email: string | null
   website: string | null
-  instagram: string | null
   rate_note: string | null
   years_experience: number | null
   credentials: string | null
@@ -227,7 +230,7 @@ export type ProListing = {
  * you pass to .select() to work out the row type, and a value built by joining
  * pieces together is just `string` to TypeScript, which loses it entirely.
  */
-export const PRO_COLUMNS = 'id, user_id, business_name, contact_name, headline, about, services, cities, phone, email, website, instagram, rate_note, years_experience, credentials, insured, photo_url, status, created_at'
+export const PRO_COLUMNS = 'id, user_id, business_name, contact_name, headline, about, services, cities, phone, email, website, rate_note, years_experience, credentials, insured, photo_url, status, created_at'
 
 /**
  * The order the directory is shown in.
@@ -263,18 +266,6 @@ export function websiteLabel(website: string): string {
   return website.replace(/^https?:\/\//i, '').replace(/\/$/, '')
 }
 
-/** Instagram handles arrive as "@name", "name" or a full profile URL. */
-export function instagramHandle(instagram: string): string {
-  return instagram
-    .trim()
-    .replace(/^https?:\/\/(www\.)?instagram\.com\//i, '')
-    .replace(/\/$/, '')
-    .replace(/^@/, '')
-}
-
-export function instagramHref(instagram: string): string {
-  return `https://instagram.com/${instagramHandle(instagram)}`
-}
 
 /** "Palm Springs, Palm Desert and La Quinta" */
 export function cityLabel(cities: string[]): string {
