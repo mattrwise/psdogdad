@@ -15,10 +15,10 @@
 /**
  * Whether the directory is advertised to members.
  *
- * While this is false the pages all work exactly as they do now — you can send
- * a provider straight to /pros/list or /pros/rate-card and they will find a
- * finished thing — but "Pros" is absent from the nav, the footer, the sitemap
- * and the pointer on /resources. Members are not invited into an empty room.
+ * While this is false the pages all work exactly as they do now, you can send
+ * a provider straight to /pros/list and they will find a finished thing, but
+ * "Pros" is absent from the nav, the footer, the sitemap and the pointer on
+ * /resources. Members are not invited into an empty room.
  *
  * The same rule the October kickoff callout follows: render nothing rather than
  * advertise a meetup nobody can RSVP to. An empty directory behind a nav tab
@@ -65,22 +65,30 @@ export const PRO_DIRECTORY = {
    */
   includes: [
     'A listing in the directory with your services, the towns you cover and your own rates',
-    'Your own page to link to from anywhere — your card, your van, your Instagram',
+    'Your own page to link to from anywhere: your card, your van, your flyers',
     'A photo, your certifications and how many years you have been doing this',
     'A phone number, email and website that members can tap straight through to',
-    'Edit it yourself, whenever you like, without going through us',
   ],
 
   /**
-   * What a provider is agreeing to. Short, and all of it enforceable by simply
-   * taking the listing down.
+   * What we commit to, in our words, addressed to the person paying us.
+   *
+   * This used to be `expectations`: five things the advertiser had to promise,
+   * under a heading that opened by naming how we would enforce them. Rewriting
+   * the five clauses to be friendlier did not fix it, because the problem was
+   * never the wording. A page that recites obligations at a working trainer
+   * reads as an institution talking down to them, however warmly it is phrased,
+   * and the last version even managed "to protect the pros who are doing this
+   * properly", which quietly suggests the reader might not be one.
+   *
+   * They are the customer. The Code of Conduct carries the conduct rules, for
+   * advertisers the same as everybody, and it is one link away.
    */
-  expectations: [
-    'You are a real, working dog professional and the listing describes what you actually do',
-    'You quote your own rates and you honour them',
-    'You reply to members who contact you, even if the answer is no',
-    'You carry your own insurance, or you say plainly that you do not',
-    'You follow the Code of Conduct, the same as every other member',
+  promises: [
+    'Your words. We read your listing, we do not rewrite it.',
+    'Your rates, your money. We never take a cut of a booking.',
+    'Alphabetical order, always. There is nothing for sale that moves you up.',
+    'Your call. Take the listing down whenever you want.',
   ],
 
   /**
@@ -208,7 +216,6 @@ export type ProListing = {
   phone: string | null
   email: string | null
   website: string | null
-  instagram: string | null
   rate_note: string | null
   years_experience: number | null
   credentials: string | null
@@ -232,7 +239,7 @@ export type ReviewListing = ProListing & { account_email: string | null }
  * you pass to .select() to work out the row type, and a value built by joining
  * pieces together is just `string` to TypeScript, which loses it entirely.
  */
-export const PRO_COLUMNS = 'id, user_id, business_name, contact_name, headline, about, services, cities, phone, email, website, instagram, rate_note, years_experience, credentials, insured, photo_url, status, created_at'
+export const PRO_COLUMNS = 'id, user_id, business_name, contact_name, headline, about, services, cities, phone, email, website, rate_note, years_experience, credentials, insured, photo_url, status, created_at'
 
 /**
  * The order the directory is shown in.
@@ -268,18 +275,6 @@ export function websiteLabel(website: string): string {
   return website.replace(/^https?:\/\//i, '').replace(/\/$/, '')
 }
 
-/** Instagram handles arrive as "@name", "name" or a full profile URL. */
-export function instagramHandle(instagram: string): string {
-  return instagram
-    .trim()
-    .replace(/^https?:\/\/(www\.)?instagram\.com\//i, '')
-    .replace(/\/$/, '')
-    .replace(/^@/, '')
-}
-
-export function instagramHref(instagram: string): string {
-  return `https://instagram.com/${instagramHandle(instagram)}`
-}
 
 /** "Palm Springs, Palm Desert and La Quinta" */
 export function cityLabel(cities: string[]): string {

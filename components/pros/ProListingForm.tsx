@@ -50,7 +50,7 @@ function PhotoField({
     <div>
       <div className="flex items-center justify-between mb-1.5">
         <label htmlFor="pro-photo" className="block text-sm font-bold text-plum">
-          Photo
+          Photo (optional)
         </label>
         {preview && (
           <button
@@ -152,7 +152,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
   const [phone, setPhone] = useState(existing?.phone ?? '')
   const [email, setEmail] = useState(existing?.email ?? user?.email ?? '')
   const [website, setWebsite] = useState(existing?.website ?? '')
-  const [instagram, setInstagram] = useState(existing?.instagram ?? '')
 
   const [photoBlob, setPhotoBlob] = useState<Blob | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(existing?.photo_url ?? null)
@@ -167,7 +166,7 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
 
   // A listing nobody can act on is worth nothing to the provider and worse than
   // nothing to the member who finds it, so at least one way through is required.
-  const hasContact = [phone, email, website, instagram].some(v => v.trim() !== '')
+  const hasContact = [phone, email, website].some(v => v.trim() !== '')
 
   const missing: string[] = []
   if (businessName.trim() === '') missing.push('a business name')
@@ -204,7 +203,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
       phone: phone.trim() || null,
       email: email.trim() || null,
       website: website.trim() || null,
-      instagram: instagram.trim() || null,
     }
 
     // ── Nobody has identified themselves yet ────────────────────────────────
@@ -287,6 +285,8 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      <h2 className="font-extrabold text-plum text-xl">Listing Form</h2>
+
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700 flex gap-3 items-start">
           <span className="text-lg flex-shrink-0">⚠️</span>
@@ -294,9 +294,12 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
         </div>
       )}
 
-      {/* ── Who you are ─────────────────────────────────────────────────── */}
+      {/* No heading on this first block. "Listing Form" above titles the whole
+          form, and repeating it here left three headings reading Listing Form,
+          What you do, How members reach you, where the first looked like a
+          title and the other two like sections under something that had
+          already ended. */}
       <section className="card p-6 space-y-5">
-        <h2 className="font-extrabold text-plum text-lg">Who you are</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -361,7 +364,7 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
             rows={6}
             value={about}
             onChange={e => setAbout(e.target.value)}
-            placeholder="How you work, who you are a good fit for, and what a first session looks like. Plain language beats a sales pitch — the people reading this are choosing who to trust with their dog."
+            placeholder="How you work, who you are a good fit for, and what a first session looks like. Plain language beats a sales pitch. Owners pick the pro who sounds like a person."
             className={`${inputClass} resize-none`}
           />
         </div>
@@ -386,7 +389,7 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
         ) : (
           <div className="rounded-2xl border-2 border-dashed border-plum/15 p-5 text-center">
             <span className="text-2xl">📷</span>
-            <p className="text-sm font-semibold text-plum mt-1">Photo comes next</p>
+            <p className="text-sm font-semibold text-plum mt-1">Photo (optional)</p>
             <p className="text-xs text-plum/50 mt-1 leading-relaxed">
               You can add one as soon as you have confirmed your email. A picture of you at work
               beats a logo, so it is worth coming back for.
@@ -455,7 +458,7 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
             })}
           </div>
           <p className="text-xs text-plum/50 mt-2">
-            Only pick the ones you will actually drive to. Members filter by town.
+            Members filter by town.
           </p>
         </div>
 
@@ -472,9 +475,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
               placeholder="e.g. From $85 a session"
               className={inputClass}
             />
-            <p className="text-xs text-plum/50 mt-1">
-              You set these and you keep all of it. We take nothing from your work.
-            </p>
           </div>
 
           <div>
@@ -506,9 +506,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
             placeholder="e.g. CPDT-KA, Fear Free Certified, pet first aid"
             className={`${inputClass} resize-none`}
           />
-          <p className="text-xs text-plum/50 mt-1">
-            Shown as yours, not as ours — the page says plainly that we have not checked it.
-          </p>
         </div>
 
         <label className="flex items-start gap-3 cursor-pointer">
@@ -520,10 +517,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
           />
           <span className="text-sm text-plum">
             <strong className="font-bold">I carry my own liability insurance.</strong>
-            <span className="block text-xs text-plum/50 mt-0.5">
-              Leave this unticked if you do not. The listing says &ldquo;not stated&rdquo; rather
-              than pretending either way.
-            </span>
           </span>
         </label>
       </section>
@@ -577,19 +570,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
               className={inputClass}
             />
           </div>
-          <div>
-            <label htmlFor="instagram" className="block text-sm font-bold text-plum mb-1">
-              Instagram
-            </label>
-            <input
-              id="instagram"
-              type="text"
-              value={instagram}
-              onChange={e => setInstagram(e.target.value)}
-              placeholder="@desertpaws"
-              className={inputClass}
-            />
-          </div>
         </div>
       </section>
 
@@ -619,13 +599,15 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
 
       {/* Said here, at the button, rather than at the top of the page. Somebody
           who has filled all this in deserves to know what happens next;
-          somebody who has not read it yet does not need a warning. */}
+          somebody who has not read it yet does not need a warning.
+
+          Kept to two facts. The second one is a promise about money made at the
+          moment somebody commits, so it stays even though everything else here
+          was cut. */}
       {!user && (
         <p className="text-xs text-plum/50 leading-relaxed">
-          We will email <strong className="text-plum/70">{email.trim() || 'you'}</strong> a link to
-          confirm it is really you, and that link brings you back to this listing. There is no
-          password to make up and no account to fill in — you are placing an ad, not joining
-          anything. Nothing is charged unless we accept your listing.
+          We will email <strong className="text-plum/70">{email.trim() || 'you'}</strong> a link
+          for confirmation. Nothing is charged unless we accept your listing.
         </p>
       )}
     </form>
