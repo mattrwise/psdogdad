@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { ADMIN_EMAIL, SITE_URL } from '@/lib/site'
 
 /**
  * Emails you when somebody submits a listing for the pro directory.
@@ -18,14 +19,6 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
 const RESEND_API_KEY = process.env.RESEND_API_KEY
 const FROM = 'PS Dog Dad <noreply@psdogdad.com>'
-const SITE = 'https://www.psdogdad.com'
-
-/**
- * Where new-applicant notifications land. The same address the events page
- * treats as the admin. Change it here if you ever want these going somewhere
- * else — it is the only copy.
- */
-const NOTIFY = 'psmattreid@gmail.com'
 
 export async function POST(request: Request) {
   if (!SUPABASE_URL || !SERVICE_ROLE_KEY || !RESEND_API_KEY) {
@@ -77,16 +70,13 @@ export async function POST(request: Request) {
     `Towns:     ${(listing.cities as string[]).join(', ') || '(none)'}`,
     `Their email: ${caller.user.email ?? '(unknown)'}`,
     '',
-    `Read it through: ${SITE}/pros/${listing.id}`,
+    `Read it through: ${SITE_URL}/pros/${listing.id}`,
     '',
-    'It is not public and will not be until you move it on. When you have read it:',
+    'It is not public and will not be until you move it on. Both steps are',
+    'buttons now, on the review page — accept them, then mark them paid once the',
+    'Stripe receipt arrives:',
     '',
-    `  update public.pro_listings set status = 'approved' where id = '${listing.id}';`,
-    '',
-    'That tells them they are in and shows them the payment step next time they',
-    'sign in. Once their payment lands:',
-    '',
-    `  update public.pro_listings set status = 'published' where id = '${listing.id}';`,
+    `  ${SITE_URL}/pros/review`,
     '',
   ]
 
@@ -98,7 +88,7 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       from: FROM,
-      to: NOTIFY,
+      to: ADMIN_EMAIL,
       reply_to: caller.user.email ?? undefined,
       subject: `New pro listing: ${listing.business_name}`,
       text: lines.join('\n'),
