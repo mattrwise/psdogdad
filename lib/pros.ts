@@ -15,9 +15,10 @@
 /**
  * Whether the directory is advertised to members.
  *
- * While this is false the pages all work exactly as they do now — you can send
- * a provider straight to /pros/list and they will find a finished thing — but "Pros" is absent from the nav, the footer, the sitemap
- * and the pointer on /resources. Members are not invited into an empty room.
+ * While this is false the pages all work exactly as they do now, you can send
+ * a provider straight to /pros/list and they will find a finished thing, but
+ * "Pros" is absent from the nav, the footer, the sitemap and the pointer on
+ * /resources. Members are not invited into an empty room.
  *
  * The same rule the October kickoff callout follows: render nothing rather than
  * advertise a meetup nobody can RSVP to. An empty directory behind a nav tab
@@ -64,7 +65,7 @@ export const PRO_DIRECTORY = {
    */
   includes: [
     'A listing in the directory with your services, the towns you cover and your own rates',
-    'Your own page to link to from anywhere — your card, your van, your Instagram',
+    'Your own page to link to from anywhere: your card, your van, your Instagram',
     'A photo, your certifications and how many years you have been doing this',
     'A phone number, email and website that members can tap straight through to',
   ],

@@ -287,6 +287,8 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      <h2 className="font-extrabold text-plum text-xl">Listing Form</h2>
+
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700 flex gap-3 items-start">
           <span className="text-lg flex-shrink-0">⚠️</span>
@@ -294,9 +296,12 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
         </div>
       )}
 
-      {/* ── Listing form ─────────────────────────────────────────────────── */}
+      {/* No heading on this first block. "Listing Form" above titles the whole
+          form, and repeating it here left three headings reading Listing Form,
+          What you do, How members reach you, where the first looked like a
+          title and the other two like sections under something that had
+          already ended. */}
       <section className="card p-6 space-y-5">
-        <h2 className="font-extrabold text-plum text-lg">Listing Form</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
