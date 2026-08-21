@@ -508,9 +508,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
             placeholder="e.g. CPDT-KA, Fear Free Certified, pet first aid"
             className={`${inputClass} resize-none`}
           />
-          <p className="text-xs text-plum/50 mt-1">
-            Shown as yours, not as ours — the page says plainly that we have not checked it.
-          </p>
         </div>
 
         <label className="flex items-start gap-3 cursor-pointer">
@@ -522,10 +519,6 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
           />
           <span className="text-sm text-plum">
             <strong className="font-bold">I carry my own liability insurance.</strong>
-            <span className="block text-xs text-plum/50 mt-0.5">
-              Leave this unticked if you do not. The listing says &ldquo;not stated&rdquo; rather
-              than pretending either way.
-            </span>
           </span>
         </label>
       </section>
