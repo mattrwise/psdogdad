@@ -64,8 +64,8 @@ export default function RateCardPage() {
           Rates for dog professionals
         </h1>
         <p className="text-plum/60 mt-2 leading-relaxed">
-          Trainers, walkers, sitters, mobile groomers and everybody else who works with dogs on
-          their own account, across the Coachella Valley.
+          Trainers, walkers, sitters, mobile groomers and anyone else across the Coachella Valley
+          who works with dogs and works for themselves.
         </p>
       </header>
 

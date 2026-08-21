@@ -107,8 +107,8 @@ export default function ListYourServicesPage() {
       </Link>
       <h1 className="section-title mt-3">List Your Services</h1>
       <p className="text-plum/60 mt-2 max-w-2xl leading-relaxed">
-        For the trainers, walkers, sitters, groomers and everybody else who works with dogs on
-        their own around the valley. One listing, one flat fee, and the dog owners here find you.
+        For trainers, walkers, sitters, groomers and anyone else around the valley who works with
+        dogs and works for themselves. One listing, one flat fee, and the dog owners here find you.
       </p>
     </div>
   )
