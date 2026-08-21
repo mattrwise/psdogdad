@@ -21,7 +21,7 @@ export default function RateCardPage() {
     {
       n: '1',
       title: 'Write your listing',
-      body: 'Fill in the form at psdogdad.com/pros/list. Ten minutes, no account to make and no password to invent. We email you a link to confirm it is you, and that link is how you sign back in later.',
+      body: 'Fill in the form at psdogdad.com/pros/list. Ten minutes, no account to make and no password to invent. We will email you a link for confirmation.',
     },
     {
       n: '2',

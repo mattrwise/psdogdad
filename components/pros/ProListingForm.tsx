@@ -616,13 +616,15 @@ export default function ProListingForm({ user, existing, onSaved, onAwaitingEmai
 
       {/* Said here, at the button, rather than at the top of the page. Somebody
           who has filled all this in deserves to know what happens next;
-          somebody who has not read it yet does not need a warning. */}
+          somebody who has not read it yet does not need a warning.
+
+          Kept to two facts. The second one is a promise about money made at the
+          moment somebody commits, so it stays even though everything else here
+          was cut. */}
       {!user && (
         <p className="text-xs text-plum/50 leading-relaxed">
-          We will email <strong className="text-plum/70">{email.trim() || 'you'}</strong> a link to
-          confirm it is really you, and that link brings you back to this listing. There is no
-          password to make up and no account to fill in — you are placing an ad, not joining
-          anything. Nothing is charged unless we accept your listing.
+          We will email <strong className="text-plum/70">{email.trim() || 'you'}</strong> a link
+          for confirmation. Nothing is charged unless we accept your listing.
         </p>
       )}
     </form>
