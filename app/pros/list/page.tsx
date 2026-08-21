@@ -53,11 +53,6 @@ function Pitch() {
           </>
         )}
 
-        <p className="text-white/80 text-sm mt-4 leading-relaxed">
-          The same for everybody. No tiers, no commission on your work, and nothing you can buy
-          that moves you up the page. The directory is in plain alphabetical order and stays
-          that way.
-        </p>
       </section>
 
       {/* ── You set your rates ────────────────────────────────────────── */}
@@ -109,53 +104,20 @@ function AfterTheForm() {
     {
       n: '1',
       title: 'We read it',
-      body: 'A person reads every listing before it goes up, to be sure it will read clearly to a dog owner. We are not judging how you work.',
+      body: 'A real person, usually the same day. You hear back by email either way.',
     },
     {
       n: '2',
-      title: 'We say yes, then you pay',
-      body: 'You get an email telling you that you are in. Sign in and the payment step is waiting on your own listing page. Nothing is charged before you are accepted.',
+      title: "You're in, then you pay",
+      body: 'Sign in and the payment step is waiting on your own listing page. Nothing is charged before that, and we never email you a payment link.',
     },
     {
       n: '3',
-      title: 'You go live',
-      body: 'Your listing appears in the directory as soon as the first payment lands, usually the same day.',
+      title: "You're live",
+      body: 'Your listing goes up as soon as the first payment lands, usually the same day.',
     },
   ]
 
-  const faqs = [
-    {
-      q: 'How many people will see it?',
-      // Never invent a number here. The site is new and says so on every other
-      // page; quoting a reach it cannot evidence is the one thing that would
-      // make the rest of this worthless.
-      a: 'We will tell you honestly where the community is at when you ask, rather than print a number that goes out of date. PS Dog Dad is young and local. If you need a big audience today, this is not that yet.',
-    },
-    {
-      q: 'Do you take a cut of my bookings?',
-      a: 'No. Owners contact you directly by phone, email or your own website. We never see the job or the money.',
-    },
-    {
-      q: 'Do you vouch for me to members?',
-      a: 'No, and the directory says so plainly. We read your listing before it goes up, but we do not check references or verify insurance, and we tell members to ask you for both.',
-    },
-    {
-      q: 'Can I pay to be at the top?',
-      a: 'No. Listings run in alphabetical order and there is nothing for sale that changes it.',
-    },
-    {
-      q: 'Do I have to join the community to advertise?',
-      a: 'No. PS Dog Dad is a community for dog owners, and placing an ad is a business arrangement with us. Those are different things and we do not mix them up. You will not appear in the member directory, and the only email you get from us is about your listing.',
-    },
-    {
-      q: 'How do I actually pay?',
-      a: 'On the site, signed in to your own account, after we have accepted you. We will never email you a payment form, a card link, or an invoice to click. If something claiming to be us does, it is not us. Sign in at psdogdad.com yourself and check. Payment is handled by Stripe and your card details never reach us.',
-    },
-    {
-      q: 'Can I take my listing down?',
-      a: 'Any time, yourself, from this page.',
-    },
-  ]
 
   return (
     <div className="mt-12 border-t-2 border-plum/10 pt-8">
@@ -174,40 +136,34 @@ function AfterTheForm() {
         </div>
       </section>
 
-      {/* Was "What we ask of you", opening on a line about all of it being
-          enforceable by taking the listing down. That is a threat delivered to
-          somebody who has not applied yet. The rule is unchanged and still
-          stated, but at the end, framed as what it actually does. */}
+      {/* Was "What we ask of you", then "What works here". Both were lists of
+          instructions aimed at somebody who has been walking dogs for a living
+          longer than this site has existed, and the second one closed on a
+          takedown rule dressed up as protecting the pros doing it properly,
+          which is the same sentence wearing a nicer coat.
+
+          This is the same section from our side of it instead. The conduct
+          rules did not disappear, they live on /conduct where they always did,
+          for advertisers the same as everybody. */}
       <section className="mb-8">
-        <h2 className="text-xl font-extrabold text-plum mb-1">What works here</h2>
-        <p className="text-plum/50 text-sm mb-4">
-          The listings that get calls all do the same few things.
-        </p>
+        <h2 className="text-xl font-extrabold text-plum mb-4">What you get from us</h2>
         <ul className="space-y-2.5">
-          {PRO_DIRECTORY.expectations.map(line => (
+          {PRO_DIRECTORY.promises.map(line => (
             <li key={line} className="flex gap-3 items-start">
-              <span className="text-brand-orange font-bold flex-shrink-0 mt-0.5">·</span>
+              <span className="text-brand-teal font-bold flex-shrink-0 mt-0.5">✓</span>
               <span className="text-plum/70 text-sm leading-relaxed">{line}</span>
             </li>
           ))}
         </ul>
         <p className="text-plum/50 text-sm mt-4 leading-relaxed">
-          If a listing stops matching the work, we take it down. That is the whole of it, and it
-          is there to protect the pros who are doing this properly.
+          The{' '}
+          <Link href="/conduct" className="font-semibold text-brand-orange hover:underline">
+            Code of Conduct
+          </Link>{' '}
+          covers the rest, and it is short.
         </p>
       </section>
 
-      <section className="mb-8">
-        <h2 className="text-xl font-extrabold text-plum mb-4">Before you ask</h2>
-        <div className="space-y-4">
-          {faqs.map(({ q, a }) => (
-            <div key={q}>
-              <h3 className="font-bold text-plum text-sm">{q}</h3>
-              <p className="text-plum/60 text-sm mt-1 leading-relaxed">{a}</p>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/*
         There is deliberately no "pay now" control anywhere on this page. It is
