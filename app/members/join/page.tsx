@@ -159,7 +159,7 @@ export default function JoinPage() {
   const [success, setSuccess] = useState(false)
   const [photosPending, setPhotosPending] = useState(false)
   const [photoUploadWarning, setPhotoUploadWarning] = useState<string | null>(null)
-  const [serverError, setServerError] = useState<string | null>(null)
+  const [formError, setFormError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
 
   // Already a member? No need to join again.
@@ -256,12 +256,44 @@ export default function JoinPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setServerError(null)
+    setFormError(null)
     const validation = validate()
     const dogValidation = validateDogs()
     if (Object.keys(validation).length > 0 || dogValidation.some(e => e.name || e.breed)) {
       setErrors(validation)
       setDogErrors(dogValidation)
+
+      // The profile form got this on 30 July and this one never did. The bad
+      // field is marked in red either way, but on a form this long, about you,
+      // then a row per dog, then photos, then account details, it is usually
+      // off-screen, and Submit reads as a dead button.
+      //
+      // The order below is the order the fields appear on the page, not the
+      // order validate() happens to fill them in, so a member with two problems
+      // is always taken to the higher one.
+      const badDog = dogValidation.findIndex(e => e.name || e.breed)
+      const firstProblem =
+        validation.name ? { id: 'name', msg: validation.name }
+        : validation.city ? { id: 'city', msg: validation.city }
+        : badDog !== -1
+          ? dogValidation[badDog].name
+            ? { id: `dogName-${badDog}`, msg: dogValidation[badDog].name! }
+            : { id: `dogBreed-${badDog}`, msg: dogValidation[badDog].breed! }
+        : validation.email ? { id: 'email', msg: validation.email }
+        : validation.password ? { id: 'password', msg: validation.password }
+        : validation.confirmPassword ? { id: 'confirmPassword', msg: validation.confirmPassword }
+        : null
+
+      if (firstProblem) {
+        setFormError(firstProblem.msg)
+        // After the render that paints the errors, or the element may not be
+        // laid out where we are about to scroll to.
+        requestAnimationFrame(() => {
+          const el = document.getElementById(firstProblem.id)
+          el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          ;(el as HTMLElement | null)?.focus({ preventScroll: true })
+        })
+      }
       return
     }
 
@@ -291,7 +323,7 @@ export default function JoinPage() {
       },
     })
 
-    if (error) { setServerError(error.message); setLoading(false); return }
+    if (error) { setFormError(error.message); setLoading(false); return }
 
     // While confirmation emails are disabled, accounts are auto-confirmed at
     // signup but no session is returned, so sign in right away. If email
@@ -420,10 +452,10 @@ export default function JoinPage() {
         {/* Card */}
         <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8">
 
-          {serverError && (
+          {formError && (
             <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700 flex gap-3 items-start">
               <span className="text-lg flex-shrink-0">⚠️</span>
-              <span>{serverError}</span>
+              <span>{formError}</span>
             </div>
           )}
 
@@ -542,7 +574,7 @@ export default function JoinPage() {
                       value={form.password} onChange={handleChange} placeholder="At least 8 characters"
                       className={`w-full rounded-xl border px-4 py-3 pr-12 text-sm text-plum placeholder-plum/30 focus:outline-none focus:ring-2 transition min-h-[44px] ${errors.password ? 'border-red-400 focus:ring-red-200 bg-red-50' : 'border-plum/20 focus:ring-brand-teal/30 bg-white'}`} />
                     <button type="button" onClick={() => setShowPassword(v => !v)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-plum/40 hover:text-plum transition text-lg p-1"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center text-plum/40 hover:text-plum transition text-lg"
                       aria-label={showPassword ? 'Hide password' : 'Show password'}>
                       {showPassword ? '🙈' : '👁️'}
                     </button>

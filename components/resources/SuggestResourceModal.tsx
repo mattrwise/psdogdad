@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useModal } from '@/lib/useModal'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
 import { useUser } from '@/lib/useUser'
@@ -21,6 +22,7 @@ interface Props {
 }
 
 export default function SuggestResourceModal({ onClose }: Props) {
+  const panelRef = useModal<HTMLDivElement>(onClose)
   const { user, loading: authLoading } = useUser()
   const [resourceName, setResourceName] = useState('')
   const [type, setType] = useState('')
@@ -58,7 +60,14 @@ export default function SuggestResourceModal({ onClose }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-start justify-center p-4 overflow-y-auto">
+    <div
+      ref={panelRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Suggest a resource"
+      tabIndex={-1}
+      className="fixed inset-0 z-50 bg-black/50 flex items-start justify-center p-4 overflow-y-auto"
+    >
       <div className="bg-white rounded-2xl w-full max-w-xl my-8 shadow-2xl">
 
         {submitted ? (

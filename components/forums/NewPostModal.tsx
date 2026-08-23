@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useModal } from '@/lib/useModal'
 import { supabase } from '@/lib/supabase/client'
 import { useUser } from '@/lib/useUser'
 
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export default function NewPostModal({ category, categoryTitle, onClose, onPosted }: Props) {
+  const panelRef = useModal<HTMLDivElement>(onClose)
   const { user } = useUser()
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
@@ -49,7 +51,14 @@ export default function NewPostModal({ category, categoryTitle, onClose, onPoste
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-start justify-center p-4 overflow-y-auto">
+    <div
+      ref={panelRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label="New post"
+      tabIndex={-1}
+      className="fixed inset-0 z-50 bg-black/50 flex items-start justify-center p-4 overflow-y-auto"
+    >
       <div className="bg-white rounded-2xl w-full max-w-xl my-8 shadow-2xl">
 
         {/* Header */}

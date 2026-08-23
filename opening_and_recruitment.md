@@ -74,13 +74,33 @@ banner carry the page on its own, or cut it back to the date.
 
 ### Before the October push, but not before the first invite
 
-**6. Read the `Authentication-Results` header on one password reset email.** Five
-minutes, and it settles a ten dollar a month question. DKIM, SPF and DMARC are
-all published and verified, so the likely cause of the Gmail warning is that the
-button points at `spjeepflyxdnztxposoi.supabase.co` instead of your domain, which
-is the shape of a phishing message. If the header confirms authentication is
-passing, the fix is a Supabase custom domain so auth links live on a psdogdad.com
-subdomain. Worth paying for before strangers sign up, not worth guessing at now.
+**6. The Gmail warning: answered, and it is not an authentication problem.**
+Read off the headers of the 30 July reset email. Authentication passes on every
+count:
+
+    dkim=pass   header.i=@psdogdad.com  header.s=resend
+    dkim=pass   header.i=@amazonses.com
+    spf=pass    smtp.mailfrom=...@send.psdogdad.com
+    dmarc=pass  (p=NONE sp=NONE) header.from=psdogdad.com
+
+So the punch list's guess was right. Nothing is wrong with the sending. The
+button in that email goes to
+`spjeepflyxdnztxposoi.supabase.co/auth/v1/verify?token=...`, and an email from
+your domain whose one link points at an unrelated domain with a long random
+token is the exact shape of a phishing message, which is what Gmail is reacting
+to. The fix really is the Supabase custom domain, about ten dollars a month, so
+that link sits on a psdogdad.com subdomain.
+
+Two things fell out of reading it that are worth having:
+
+- **`p=NONE` is the weakest DMARC policy there is.** It publishes the record and
+  then asks nobody to act on it. Alignment is already passing, so moving it to
+  `p=quarantine` is a DNS edit that costs nothing and tells Gmail you mean it.
+  Do this one first, it may be enough on its own.
+- **These emails already go out through Resend**, on a verified psdogdad.com
+  signing key, via Amazon SES. So the Resend account and the domain
+  verification are done. Item 4 above is copying an existing key into Vercel,
+  not setting up a new service.
 
 **7. Decide the auto-confirm stopgap.** `supabase/auto-confirm-stopgap.sql` is
 still installed, so every signup is confirmed automatically and nobody has to
@@ -89,19 +109,21 @@ unreliable and everybody signing up was you. Once step 4 gives you working email
 drop the trigger and let confirmation do its job. The file documents its own
 removal.
 
-**8. Make the signup form scroll to its validation error.** The profile form got
-this on 30 July, the signup form never did. It is a long form, about you, then a
-row per dog, then photos, then account details, and an error above or below the
-fold makes Submit look like a dead button. This is the one code item worth doing
-before a recruitment push, because it fails people at the exact moment they are
-joining, and the profile page already has the pattern to copy.
+**8. Signup form scroll-to-error. Done, 23 August.** It now names the problem at
+the top of the card, scrolls to the offending field and focuses it, the same way
+the profile form has since 30 July. The order it picks the first problem in is
+the order the fields appear on the page, so somebody with two mistakes is taken
+to the higher one.
 
 ### Can wait, and should
 
-- No modal sets `role="dialog"`, traps focus or closes on Escape. Propose an
-  Event, Suggest a Resource, New Post.
-- Footer and mobile nav links are 17px tall against a recommended 44px. Cheapest
-  usability win on the list, and your members read on a phone in bright sun.
+- ~~No modal sets `role="dialog"`, traps focus or closes on Escape.~~ Done,
+  23 August. All three (Propose an Event, Suggest a Resource, New Post) share
+  `lib/useModal.ts`: Escape closes, Tab stays inside, focus moves in on open and
+  returns to the button that opened it on close.
+- ~~Footer and mobile nav links are 17px tall against a recommended 44px.~~ Done,
+  23 August. Footer rows, mobile menu rows, the hamburger and the password eye on
+  all three password forms are now 44px.
 - `/welcome` is the last page still wearing the old gradient hero.
 - Housekeeping: `diag-0731` and `diag-test-token` in `member-photos/_pending/`,
   the dead `profiles.notify_on_message` column, the merged `launch-prep` and
@@ -168,16 +190,22 @@ same job, and the asking needs lead time. Split them.
 - **Print one small card that says one thing.** Saturday October 17, 8am, Ruth
   Hardy Park, psdogdad.com. No feature list, no explanation of what the community
   is. A card that says one thing gets read.
-- **Join the Facebook groups and Nextdoor now, and be a person in them for six
-  weeks.** Answer a heat question, recommend a vet, post about your own dog.
-  Local dog groups delete posts from accounts that turn up once to advertise, and
-  the moderators can smell it coming. Six weeks of being a member first is what
-  buys the October post.
+- **Nextdoor, and be a person on it for six weeks before you post the walk.**
+  Answer a heat question, recommend a vet, mention your own dog. Neighbourhood
+  feeds bury an account that turns up once to advertise, and six weeks of being
+  a neighbour first is what buys the October post.
+
+  **No Facebook.** A lot of valley dog talk does happen in Facebook groups, and
+  the plan does not use them, because you are not joining Facebook to run a dog
+  club and that is a reasonable place to draw a line. What replaces it is the
+  shelter's own audience, which is bigger than any of those groups and reaches
+  the same people, plus Nextdoor, the noticeboards, and the park. If a member
+  turns up later who is already in those groups, they can post it in a way that
+  reads better coming from them anyway.
 
 **Saturday 3 October, two weeks out, the push:**
 
 - The shelters and rescues who already said yes.
-- Palm Springs and Coachella Valley dog groups, and the neighbourhood groups.
 - Nextdoor.
 - Back around the businesses to refresh the cards.
 

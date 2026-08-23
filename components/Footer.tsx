@@ -22,10 +22,12 @@ export default function Footer() {
 
           <div>
             <h4 className="text-white font-bold mb-3 text-sm uppercase tracking-wider">Community</h4>
-            <ul className="space-y-2 text-sm">
+            {/* No space-y: each row is a 44px tap target and carries its own
+                height. Stacked gaps on top of that just spread the footer out. */}
+            <ul className="text-sm">
               {[['Training', '/training'], ['Forums', '/forums'], ['Members', '/members'], ['Events', '/events'], ['Guides', '/guides'], ['Resources', '/resources'], ...(DIRECTORY_IS_PUBLIC ? [['Dog Pros', '/pros']] : [])].map(([label, href]) => (
                 <li key={href}>
-                  <Link href={href} className="hover:text-brand-orange transition-colors">{label}</Link>
+                  <Link href={href} className="flex items-center min-h-[44px] hover:text-brand-orange transition-colors">{label}</Link>
                 </li>
               ))}
             </ul>
@@ -33,10 +35,12 @@ export default function Footer() {
 
           <div>
             <h4 className="text-white font-bold mb-3 text-sm uppercase tracking-wider">About</h4>
-            <ul className="space-y-2 text-sm">
+            {/* No space-y: each row is a 44px tap target and carries its own
+                height. Stacked gaps on top of that just spread the footer out. */}
+            <ul className="text-sm">
               {[['About Us', '/about'], ['Code of Conduct', '/conduct'], ['List Your Services', '/pros/list'], ['Privacy Policy', '/privacy'], ['Contact', '/contact']].map(([label, href]) => (
                 <li key={href}>
-                  <Link href={href} className="hover:text-brand-orange transition-colors">{label}</Link>
+                  <Link href={href} className="flex items-center min-h-[44px] hover:text-brand-orange transition-colors">{label}</Link>
                 </li>
               ))}
             </ul>
