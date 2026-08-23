@@ -117,7 +117,7 @@ export default function HeatGuidePage() {
             If you suspect heatstroke, call ahead so they&apos;re ready when you arrive.
             Our Resources page lists member-recommended vets, including 24/7 emergency options.
           </p>
-          <Link href="/resources" className="btn-primary">Browse Vet Listings</Link>
+          <Link href="/local" className="btn-primary">Browse Vet Listings</Link>
         </section>
 
       </div>

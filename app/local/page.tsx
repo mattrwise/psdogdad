@@ -1,10 +1,10 @@
-import Link from 'next/link'
 import type { Metadata } from 'next'
 import SuggestResourceButton from '@/components/resources/SuggestResourceButton'
-import { DIRECTORY_IS_PUBLIC } from '@/lib/pros'
+import SectionTabs from '@/components/SectionTabs'
+import { localTabs } from '@/lib/sections'
 
 export const metadata: Metadata = {
-  title: 'Local Resources, PS Dog Dad',
+  title: 'Local, PS Dog Dad',
   description: 'Vets, emergency clinics, groomers, daycare, dog parks and pet-friendly spots across the Coachella Valley.',
 }
 
@@ -244,13 +244,13 @@ function ResourceCard({ resource }: { resource: Resource }) {
   )
 }
 
-export default function ResourcesPage() {
+export default function LocalPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-4">
         <div>
-          <h1 className="section-title">Local Resources</h1>
+          <h1 className="section-title">Local</h1>
           <p className="text-plum/60 mt-2">
             Pet services, parks, and dog-friendly spots around the Coachella Valley.
           </p>
@@ -259,6 +259,8 @@ export default function ResourcesPage() {
           + Suggest a Resource
         </SuggestResourceButton>
       </div>
+
+      <SectionTabs tabs={localTabs} />
 
       {/* Jump links */}
       <div className="flex flex-wrap gap-2 mb-6">
@@ -272,44 +274,6 @@ export default function ResourcesPage() {
           </a>
         ))}
       </div>
-
-      {/* The guides moved to their own page. One line pointing at them beats
-          six cards competing with the directory for the same screen. */}
-      <Link
-        href="/guides"
-        className="flex items-center gap-4 bg-white rounded-2xl shadow-sm p-4 sm:p-5 mb-8 hover:-translate-y-0.5 transition-transform"
-      >
-        <div className="text-3xl flex-shrink-0">📚</div>
-        <div className="flex-1 min-w-0">
-          <h2 className="font-extrabold text-plum">Looking for our guides?</h2>
-          <p className="text-sm text-plum/60 mt-0.5">
-            Health, desert heat, training technique, gear and the Dog Dad Handbook, all printable.
-          </p>
-        </div>
-        <span className="text-sm font-bold text-brand-teal whitespace-nowrap">Guides →</span>
-      </Link>
-
-      {/* The two directories answer different questions — an address you drive
-          to, versus a person who comes to you — and somebody scrolling the
-          groomers here is exactly who is looking for the other one.
-
-          Hidden until there are pros to find, like every other entrance. */}
-      {DIRECTORY_IS_PUBLIC && (
-        <Link
-          href="/pros"
-          className="flex items-center gap-4 bg-white rounded-2xl shadow-sm p-4 sm:p-5 mb-8 hover:-translate-y-0.5 transition-transform"
-        >
-          <div className="text-3xl flex-shrink-0">🦮</div>
-          <div className="flex-1 min-w-0">
-            <h2 className="font-extrabold text-plum">Looking for a trainer or a walker?</h2>
-            <p className="text-sm text-plum/60 mt-0.5">
-              Independent trainers, walkers, sitters and mobile groomers who come to you, listed
-              separately from the businesses on this page.
-            </p>
-          </div>
-          <span className="text-sm font-bold text-brand-teal whitespace-nowrap">Dog Pros →</span>
-        </Link>
-      )}
 
       {/* Quick disclaimer */}
       <div className="bg-brand-golden/10 border border-brand-golden/30 rounded-xl p-4 mb-10 text-sm text-plum/70">

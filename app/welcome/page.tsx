@@ -173,7 +173,7 @@ function WelcomeContent() {
 
         {/* Roadmap link */}
         <div className="text-center mb-10">
-          <Link href="/resources/roadmap" className="text-sm font-semibold text-brand-teal hover:underline">
+          <Link href="/learn/roadmap" className="text-sm font-semibold text-brand-teal hover:underline">
             🗺️ Want a printable roadmap of it all? View your Getting Started Roadmap →
           </Link>
         </div>

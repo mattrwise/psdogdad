@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import ProCard from '@/components/pros/ProCard'
+import SectionTabs from '@/components/SectionTabs'
+import { localTabs } from '@/lib/sections'
 import { loadPublishedListings } from '@/lib/proListings'
 import {
   type ProListing,
@@ -51,6 +53,8 @@ export default function ProsPage() {
           List Your Services
         </Link>
       </div>
+
+      <SectionTabs tabs={localTabs} />
 
       {/* Filters. Both dropdowns are built from the pros who are actually here,
           so an option can never find nobody. */}

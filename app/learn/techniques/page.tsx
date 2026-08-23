@@ -102,7 +102,7 @@ export default function TrainingResourcesPage() {
                 </li>
               ))}
             </ul>
-            <Link href="/training" className="text-sm font-semibold text-brand-teal hover:underline">
+            <Link href="/learn" className="text-sm font-semibold text-brand-teal hover:underline">
               Learn More →
             </Link>
           </div>
@@ -148,7 +148,7 @@ export default function TrainingResourcesPage() {
         <p className="text-white/70 mb-6 max-w-lg mx-auto">
           Our Training section has full written guides, from loose-leash walking to desert heat safety.
         </p>
-        <Link href="/training" className="btn-primary text-base px-8">Browse Training Guides</Link>
+        <Link href="/learn" className="btn-primary text-base px-8">Back to Learn</Link>
       </div>
     </div>
   )
