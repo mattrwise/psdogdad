@@ -262,6 +262,30 @@ export default function JoinPage() {
     if (Object.keys(validation).length > 0 || dogValidation.some(e => e.name || e.breed)) {
       setErrors(validation)
       setDogErrors(dogValidation)
+
+      // Without this, Submit looks like a dead button: the bad field is marked
+      // red, but on a form this long it is usually off-screen, so nothing
+      // appears to happen at all. Same handling the profile form was given.
+      // Checked in the order the fields appear on the page, so the member is
+      // taken to the first problem rather than an arbitrary one.
+      const badDog = dogValidation.findIndex(err => err.name || err.breed)
+      const firstProblemId =
+        validation.name ? 'name'
+        : validation.city ? 'city'
+        : badDog !== -1
+          ? (dogValidation[badDog].name ? `dogName-${badDog}` : `dogBreed-${badDog}`)
+          : validation.email ? 'email'
+          : validation.password ? 'password'
+          : validation.confirmPassword ? 'confirmPassword'
+          : null
+
+      if (firstProblemId) {
+        requestAnimationFrame(() => {
+          const el = document.getElementById(firstProblemId)
+          el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          ;(el as HTMLElement | null)?.focus({ preventScroll: true })
+        })
+      }
       return
     }
 
