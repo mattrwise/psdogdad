@@ -162,12 +162,36 @@ export default function JoinPage() {
   const [serverError, setServerError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
 
+  /**
+   * The id of the field a failed submit should jump to, or null. Set by
+   * handleSubmit and consumed by the effect below, which is what makes the jump
+   * happen after React has painted the red borders rather than before.
+   */
+  const [focusField, setFocusField] = useState<string | null>(null)
+
   // Already a member? No need to join again.
   useEffect(() => {
     if (!authLoading && currentUser && !success && !loading) {
       router.replace('/members/profile')
     }
   }, [authLoading, currentUser, success, loading, router])
+
+  // Take the member to the first thing that is wrong. Without this, Join reads
+  // as a dead button: the bad field is marked red, but on a form this long,
+  // About You then a row per dog then the account details, it is usually well
+  // off-screen, so submitting appears to do nothing at all.
+  //
+  // This runs as an effect rather than from inside the submit handler because
+  // the errors have to be on the page before we scroll to one. The profile form
+  // does the same job with requestAnimationFrame, which is fine when the tab is
+  // in front but never fires while the page is hidden. An effect always runs.
+  useEffect(() => {
+    if (!focusField) return
+    const el = document.getElementById(focusField)
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    ;(el as HTMLElement | null)?.focus({ preventScroll: true })
+    setFocusField(null)
+  }, [focusField])
 
   // photos, one for the member, one per dog (parallel to `dogs`). These hold the
   // already-shrunk bytes from preparePhoto, not the originals off the camera.
@@ -259,9 +283,24 @@ export default function JoinPage() {
     setServerError(null)
     const validation = validate()
     const dogValidation = validateDogs()
-    if (Object.keys(validation).length > 0 || dogValidation.some(e => e.name || e.breed)) {
+    if (Object.keys(validation).length > 0 || dogValidation.some(err => err.name || err.breed)) {
       setErrors(validation)
       setDogErrors(dogValidation)
+
+      // Order follows the page, so the member lands on the first problem they
+      // would meet reading down. The jump itself is the effect above.
+      const badDog = dogValidation.findIndex(err => err.name || err.breed)
+      const firstProblem =
+        validation.name ? 'name'
+        : validation.city ? 'city'
+        : badDog !== -1
+          ? dogValidation[badDog].name ? `dogName-${badDog}` : `dogBreed-${badDog}`
+        : validation.email ? 'email'
+        : validation.password ? 'password'
+        : validation.confirmPassword ? 'confirmPassword'
+        : null
+
+      setFocusField(firstProblem)
       return
     }
 
