@@ -107,3 +107,7 @@ end $$;
 
 alter table public.profiles
   add column if not exists notify_on_message boolean not null default true;
+-- NOTE: this column is dropped again by 06-drop-dead-notify-column.sql. Nothing
+-- ever read it; the preference lives in auth metadata instead. Left in place
+-- here so this file still matches what was actually run at the time.
+
