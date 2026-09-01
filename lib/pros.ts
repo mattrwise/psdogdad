@@ -226,6 +226,15 @@ export type ProListing = {
 }
 
 /**
+ * A listing plus the email on the account behind it, which is not a column on
+ * any table — it comes from auth.users and only the service role key can read
+ * it. Used by the review queue, and defined here rather than beside either half
+ * of that feature because both halves need it: the API route that assembles it
+ * and the page that draws it. This file is the one both can import.
+ */
+export type ReviewListing = ProListing & { account_email: string | null }
+
+/**
  * One unbroken string on purpose: supabase-js reads the literal type of what
  * you pass to .select() to work out the row type, and a value built by joining
  * pieces together is just `string` to TypeScript, which loses it entirely.
