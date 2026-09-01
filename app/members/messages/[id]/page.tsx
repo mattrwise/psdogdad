@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
 import { useUser } from '@/lib/useUser'
+import { ACCEPTED_TYPES, preparePhoto } from '@/lib/images'
 import {
   type Message,
   fetchThread,
@@ -18,8 +19,6 @@ import {
   unblockMember,
 } from '@/lib/messages'
 
-const MAX_PHOTO_SIZE = 8 * 1024 * 1024
-const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
 const POLL_MS = 15000
 
 type OtherMember = { id: string; name: string | null; avatar_url: string | null }
@@ -49,7 +48,7 @@ export default function ConversationPage() {
   const [loading, setLoading] = useState(true)
 
   const [body, setBody] = useState('')
-  const [photo, setPhoto] = useState<File | null>(null)
+  const [photo, setPhoto] = useState<Blob | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -111,19 +110,17 @@ export default function ConversationPage() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [messages.length])
 
-  function choosePhoto(file: File) {
-    if (!ACCEPTED_TYPES.includes(file.type)) {
-      setError('That file type isn’t supported. Please use a JPG, PNG, WebP or HEIC image.')
-      return
-    }
-    if (file.size > MAX_PHOTO_SIZE) {
-      setError(`That photo is ${(file.size / 1024 / 1024).toFixed(1)} MB, please use one under 8 MB.`)
-      return
-    }
+  // Goes through preparePhoto for the same reason every other upload on the
+  // site does: it shrinks the photo, and it refuses a HEIC this browser cannot
+  // decode. Attaching one anyway would upload bytes that Chrome, Firefox and
+  // Edge all render as a broken image, to a recipient with nothing to explain why.
+  async function choosePhoto(file: File) {
     setError(null)
+    const prepared = await preparePhoto(file)
+    if (!prepared.ok) { setError(prepared.message); return }
     if (photoPreview) URL.revokeObjectURL(photoPreview)
-    setPhoto(file)
-    setPhotoPreview(URL.createObjectURL(file))
+    setPhoto(prepared.blob)
+    setPhotoPreview(prepared.previewUrl)
   }
 
   function clearPhoto() {
