@@ -16,8 +16,7 @@ import {
   type RsvpState,
 } from '@/lib/events'
 import { KICKOFF_TITLE } from '@/lib/kickoff'
-
-const ADMIN_EMAIL = 'psmattreid@gmail.com'
+import { ADMIN_EMAIL } from '@/lib/site'
 
 type RealEvent = EventRow
 
