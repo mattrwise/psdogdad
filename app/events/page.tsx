@@ -7,6 +7,7 @@ import ShelterEventCallout from '@/components/ShelterEventCallout'
 import KickoffCallout from '@/components/KickoffCallout'
 import { supabase } from '@/lib/supabase/client'
 import { useUser } from '@/lib/useUser'
+import Modal from '@/components/Modal'
 import {
   EMPTY_RSVP,
   EVENT_COLUMNS,
@@ -39,20 +40,23 @@ function dateBadge(isoDate: string) {
 // ── Sign-in Prompt ─────────────────────────────────────────────────────────────
 function SignInPrompt({ eventTitle, onClose }: { eventTitle: string; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-6 text-center">
-        <div className="text-4xl mb-3">🐾</div>
-        <h2 className="font-extrabold text-plum text-lg mb-2">Sign in to RSVP</h2>
-        <p className="text-plum/60 text-sm mb-6 leading-relaxed">
-          Create a free account to RSVP for <strong>{eventTitle}</strong> and stay connected with the community.
-        </p>
-        <div className="flex flex-col gap-3">
-          <Link href="/members/join" className="btn-primary w-full text-center">Join Free</Link>
-          <Link href="/members/login" className="btn-secondary w-full text-center">Sign In</Link>
-          <button onClick={onClose} className="text-sm text-plum/40 hover:text-plum mt-1">Maybe later</button>
-        </div>
+    <Modal
+      label="Sign in to RSVP"
+      onClose={onClose}
+      align="center"
+      panelClassName="w-full max-w-sm p-6 text-center"
+    >
+      <div className="text-4xl mb-3">🐾</div>
+      <h2 className="font-extrabold text-plum text-lg mb-2">Sign in to RSVP</h2>
+      <p className="text-plum/60 text-sm mb-6 leading-relaxed">
+        Create a free account to RSVP for <strong>{eventTitle}</strong> and stay connected with the community.
+      </p>
+      <div className="flex flex-col gap-3">
+        <Link href="/members/join" className="btn-primary w-full text-center">Join Free</Link>
+        <Link href="/members/login" className="btn-secondary w-full text-center">Sign In</Link>
+        <button onClick={onClose} className="text-sm text-plum/40 hover:text-plum mt-1">Maybe later</button>
       </div>
-    </div>
+    </Modal>
   )
 }
 
