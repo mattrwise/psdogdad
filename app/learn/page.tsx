@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { freeGuides, memberGuides, premiumGuides, type Guide } from '@/lib/guides'
+import { freeGuides, memberGuides, type Guide } from '@/lib/guides'
 
 export const metadata: Metadata = {
   title: 'Learn, PS Dog Dad',
@@ -19,9 +19,17 @@ export const metadata: Metadata = {
  * describe the difference.
  *
  * The difference is real, so it is drawn here instead of explained: courses are
- * programmes you work through in order, guides are references you look things
+ * programs you work through in order, guides are references you look things
  * up in. Two headings on one page say that better than two tabs and a paragraph
  * of apology ever did.
+ *
+ * The premium tier is deliberately not shown. It advertised two courses behind a
+ * "Coming soon" lock that were never for sale, and the monetization question it
+ * was waiting on got answered elsewhere, by the $25/month pro directory. A band
+ * promoting a product that does not exist is the fake content this site does not
+ * do. Both courses are still in lib/guides.ts and both URLs still resolve, so
+ * nothing anybody has linked to breaks; they are simply not listed or sitemapped
+ * until there is something to sell.
  */
 
 // The long-form reference pages. These live at /learn/<name> and each one has a
@@ -65,16 +73,12 @@ const referenceGuides = [
   },
 ]
 
-function CourseCard({ guide, tier }: { guide: Guide; tier: 'free' | 'members' | 'premium' }) {
+function CourseCard({ guide, tier }: { guide: Guide; tier: 'free' | 'members' }) {
   const style = {
     free: { wrap: '', badge: null },
     members: {
       wrap: 'border-2 border-plum/20',
       badge: <div className="absolute top-4 right-4 badge bg-plum text-white text-xs">🔐 Members</div>,
-    },
-    premium: {
-      wrap: 'border-2 border-brand-golden/40',
-      badge: <div className="absolute top-4 right-4 badge bg-brand-golden text-plum text-xs">★ Premium</div>,
     },
   }[tier]
 
@@ -91,9 +95,7 @@ function CourseCard({ guide, tier }: { guide: Guide; tier: 'free' | 'members' | 
       <p className="text-plum/60 text-sm leading-relaxed mb-4">{guide.description}</p>
       <div className="flex items-center justify-between">
         <span className="text-xs text-plum/40">📖 {guide.minutes} min read</span>
-        <span className={`font-bold text-sm ${tier === 'premium' ? 'text-plum/40' : 'text-brand-orange'}`}>
-          {tier === 'premium' ? 'Preview →' : 'Read guide →'}
-        </span>
+        <span className="font-bold text-sm text-brand-orange">Read guide →</span>
       </div>
     </Link>
   )
@@ -160,7 +162,7 @@ export default function LearnPage() {
         <span className="badge bg-brand-orange/10 text-brand-orange">Work through in order</span>
       </div>
       <p className="text-plum/60 text-sm mb-8 max-w-2xl">
-        Step-by-step programmes, like the four-week leash reactivity course. Start
+        Step-by-step programs, like the four-week leash reactivity course. Start
         at the beginning and follow them through.
       </p>
 
@@ -177,24 +179,12 @@ export default function LearnPage() {
         <span className="badge bg-plum/10 text-plum">🔐 Free account required</span>
       </h3>
       <p className="text-plum/60 text-sm mb-4 max-w-2xl">
-        More in-depth programmes on training, local life, and making the most of the community.{' '}
+        More in-depth programs on training, local life, and making the most of the community.{' '}
         <Link href="/members/join" className="text-brand-orange font-semibold hover:underline">Join free</Link>{' '}
         to unlock them all.
       </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
-        {memberGuides.map(guide => <CourseCard key={guide.slug} guide={guide} tier="members" />)}
-      </div>
-
-      <h3 className="font-extrabold text-plum text-lg mb-2 flex items-center gap-3 flex-wrap">
-        Premium
-        <span className="badge bg-brand-golden/20 text-plum">★ Coming soon</span>
-      </h3>
-      <p className="text-plum/60 text-sm mb-4 max-w-2xl">
-        Our most structured, in-depth programmes. The premium tier isn&apos;t open yet,
-        join free and we&apos;ll email you when it launches.
-      </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-14">
-        {premiumGuides.map(guide => <CourseCard key={guide.slug} guide={guide} tier="premium" />)}
+        {memberGuides.map(guide => <CourseCard key={guide.slug} guide={guide} tier="members" />)}
       </div>
 
       {/* Contribute CTA */}

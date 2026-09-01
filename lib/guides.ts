@@ -1,5 +1,6 @@
-// Training guide content, recovered from the live site (www.psdogdad.com/training)
-// after the original source was lost. Each guide renders at /training/<slug>.
+// Course content, recovered from the live site after the original source was
+// lost. Each one renders at /learn/<slug>. The premium entries are kept here on
+// purpose but are not listed on /learn or in the sitemap; see app/learn/page.tsx.
 
 export type GuideBlock =
   | { type: 'p'; text: string }

@@ -52,11 +52,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       priority: path === '/' ? 1 : 0.7,
     })),
-    ...guides.map(g => ({
-      url: `${SITE_URL}/learn/${g.slug}`,
-      lastModified,
-      priority: 0.6,
-    })),
+    // Premium courses are left out for the same reason the pro directory is:
+    // the tier is not open, so a searcher landing on one finds a paywall with
+    // nothing behind it. The pages still resolve for anyone holding a link.
+    ...guides
+      .filter(g => g.tier !== 'premium')
+      .map(g => ({
+        url: `${SITE_URL}/learn/${g.slug}`,
+        lastModified,
+        priority: 0.6,
+      })),
     ...forumCategories.map(slug => ({
       url: `${SITE_URL}/forums/${slug}`,
       lastModified,

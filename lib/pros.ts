@@ -18,7 +18,7 @@
  * While this is false the pages all work exactly as they do now, you can send
  * a provider straight to /pros/list and they will find a finished thing, but
  * "Pros" is absent from the nav, the footer, the sitemap and the pointer on
- * /resources. Members are not invited into an empty room.
+ * /local. Members are not invited into an empty room.
  *
  * The same rule the October kickoff callout follows: render nothing rather than
  * advertise a meetup nobody can RSVP to. An empty directory behind a nav tab
@@ -30,7 +30,7 @@
  *
  * Filling it with invented pros to make it look busy is the other way to solve
  * this and it is not an option. Six made-up businesses were stripped out of
- * /resources for exactly that reason, and techbud keeps its example listings
+ * /local for exactly that reason, and techbud keeps its example listings
  * behind a red warning banner so they can never ship. A directory of people who
  * do not exist is the fastest way to lose the trust the rest of the site runs on.
  */
@@ -137,7 +137,7 @@ export function listingPaymentLink(): string | null {
 
 /**
  * The kinds of work the directory covers. Solo people, not businesses with
- * premises — a boarding kennel or a grooming salon belongs on /resources with
+ * premises — a boarding kennel or a grooming salon belongs on /local with
  * the other addresses you can drive to.
  */
 export const SERVICES = [
