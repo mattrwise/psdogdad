@@ -20,6 +20,13 @@
 const moved = [
   ['/guides', '/learn'],
   ['/training', '/learn'],
+  // The desert heat guide was folded into /learn/heat, which already covered
+  // the same ground. Both of its old addresses land there in one hop, so this
+  // pair has to sit above the general /training/:slug rule below — Next takes
+  // the first match, and the general rule would otherwise send the old course
+  // URL to /learn/desert-heat-safety and make the browser ask twice.
+  ['/training/desert-heat-safety', '/learn/heat'],
+  ['/learn/desert-heat-safety', '/learn/heat'],
   ['/training/:slug', '/learn/:slug'],
   ['/resources', '/local'],
   ['/resources/roadmap', '/learn/roadmap'],

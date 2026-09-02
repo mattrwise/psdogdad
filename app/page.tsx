@@ -135,7 +135,7 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: '🎓', title: 'Learn', desc: 'Courses and printable guides: heat safety, leash skills, recall, the Handbook.', href: '/learn', color: 'from-plum to-plum-light' },
+              { icon: '🎓', title: 'Learn', desc: 'Printable guides: heat safety, health, leash skills, recall, the Handbook.', href: '/learn', color: 'from-plum to-plum-light' },
               { icon: '📋', title: 'Local', desc: 'Vets, groomers, parks and dog-friendly patios, plus the pros who come to you.', href: '/local', color: 'from-brand-golden to-brand-golden-light' },
               { icon: '💬', title: 'Community', desc: 'The forums and the member directory. Ask anything, meet the pack.', href: '/forums', color: 'from-brand-teal to-brand-teal-light' },
               { icon: '📅', title: 'Events', desc: 'Dog walks, yappy hours, pool parties, and community meetups.', href: '/events', color: 'from-brand-orange to-brand-orange-light' },
@@ -169,18 +169,18 @@ export default function HomePage() {
                 Learn to raise a great dog, <span className="text-brand-golden">in the desert</span>
               </h2>
               <p className="text-white/70 leading-relaxed mb-6">
-                Courses you work through and guides you look things up in, on heat safety, leash
-                skills, recall, reactivity and desert valley living. The free ones are open to
-                everyone, the rest unlock with a free account.
+                Written guides on heat safety, health, leash skills, recall, gear and desert
+                valley living, plus the Dog Dad Handbook. Every one of them prints. Most are
+                open to everyone, a couple unlock with a free account.
               </p>
               <Link href="/learn" className="btn-primary">Go to Learn</Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
-                { href: '/learn/desert-heat-safety', icon: '☀️', label: 'Desert Heat Safety', tier: 'Free' },
+                { href: '/learn/heat', icon: '🔥', label: 'High Heat Guide', tier: 'Free' },
                 { href: '/learn/loose-leash-walking', icon: '🦮', label: 'Loose-Leash Walking', tier: 'Free' },
                 { href: '/learn/reliable-recall', icon: '📣', label: 'Reliable Recall', tier: 'Members' },
-                { href: '/learn/reactivity-program', icon: '🧠', label: 'Reactivity Program', tier: '★ Premium' },
+                { href: '/learn/handbook', icon: '📖', label: 'The Dog Dad Handbook', tier: 'Free' },
               ].map(({ href, icon, label, tier }) => (
                 <Link key={label} href={href} className="bg-white/10 hover:bg-white/20 rounded-2xl p-5 transition-colors block">
                   <div className="text-3xl mb-2">{icon}</div>

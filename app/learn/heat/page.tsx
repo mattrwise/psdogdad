@@ -14,20 +14,34 @@ const walkTimes = [
   { badge: 'Tip', badgeColor: 'bg-plum/10 text-plum', text: 'Stick to grass, dirt trails, or shaded sidewalks when possible' },
 ]
 
+// "Panting that doesn't settle" and pale gums matter more than the blunter
+// versions they replace: a dog panting hard after a walk is normal, and pale
+// gums mean shock rather than simple overheating. Both came off the old
+// /learn/desert-heat-safety guide when it was folded in here.
 const heatstrokeSigns = [
-  'Heavy panting or drooling',
-  'Bright red gums or tongue',
+  'Heavy panting that does not settle when they rest',
+  'Thick, ropey drool',
+  'Gums that are bright red — or pale, which is worse',
   'Stumbling, weakness, or confusion',
   'Vomiting or diarrhea',
   'Collapse',
 ]
 
 const everydayRules = [
-  { icon: '🚗', text: 'Never leave your dog in a parked car, not even for a minute, not even with windows cracked. Car interiors can pass 120°F in 10 minutes here.' },
-  { icon: '💧', text: 'Bring water on every walk, even short ones' },
-  { icon: '🐶', text: 'Flat-faced breeds (bulldogs, pugs, frenchies), seniors, puppies, and overweight dogs overheat much faster, shorten everything' },
+  { icon: '🚗', text: 'Never leave your dog in a parked car, not even for a minute, not even with the windows cracked. At 85°F outside, a car interior passes 120°F in minutes, and it is far hotter than that here most of the summer.' },
+  { icon: '💧', text: 'Bring water on every walk, even short ones. A collapsible bowl in the car and a second one in your bag costs almost nothing.' },
+  { icon: '🐶', text: 'Flat-faced breeds (bulldogs, pugs, frenchies), seniors, puppies, and overweight dogs overheat much faster. Cut every time on this page in half for them.' },
   { icon: '🥾', text: 'Booties or paw wax help if you must walk on pavement' },
-  { icon: '🏊', text: 'Give your dog a way to cool off at home: AC, cooling mats, or a kiddie pool in the shade' },
+  { icon: '🏊', text: 'Give your dog a way to cool off at home: AC, cooling mats, or a kiddie pool in the shade, which is the cheapest cooling tool in the desert.' },
+]
+
+// Where to actually take a dog between May and September. This was the one
+// section the folded-in guide had that this page had no equivalent of, and it
+// is the part people ask for: not "stay inside" but "go here instead".
+const summerSpots = [
+  { icon: '🌅', text: 'Early-morning walks at Ruth Hardy Park, before the pavement has come up' },
+  { icon: '🌳', text: 'The shaded stretches of Tahquitz Creek Trail' },
+  { icon: '🏠', text: 'Indoor play. A puzzle feeder and ten minutes of nose work tires a dog out more than a hot mile does.' },
 ]
 
 export default function HeatGuidePage() {
@@ -41,7 +55,8 @@ export default function HeatGuidePage() {
           <div>
             <h1 className="section-title">High Heat Guide</h1>
             <p className="text-plum/60 mt-2 max-w-2xl">
-              Desert summers are no joke. Here&apos;s how to keep your dog safe when the Coachella Valley turns up the heat.
+              From May through September the valley regularly passes 105°F, and the pavement
+              gets far hotter than the air. Here&apos;s how to keep your dog safe through it.
             </p>
           </div>
           <PrintButton />
@@ -109,13 +124,35 @@ export default function HeatGuidePage() {
           </ul>
         </section>
 
+        {/* Where to Go in Summer */}
+        <section className="bg-white rounded-3xl shadow-md p-6 sm:p-10">
+          <div className="text-3xl mb-3">🌵</div>
+          <h2 className="text-2xl font-extrabold text-plum mb-5">Where to Go in Summer</h2>
+          <ul className="space-y-4 mb-6">
+            {summerSpots.map(({ icon, text }) => (
+              <li key={text} className="flex items-start gap-3">
+                <span className="text-2xl flex-shrink-0">{icon}</span>
+                <p className="text-plum/70 text-sm leading-relaxed pt-1">{text}</p>
+              </li>
+            ))}
+          </ul>
+          <p className="text-plum/60 text-sm leading-relaxed">
+            Plenty of members move to a sunrise schedule from June through September and walk
+            together.{' '}
+            <Link href="/events" className="text-brand-teal font-semibold hover:underline">
+              Check Events
+            </Link>{' '}
+            and join a morning walk.
+          </p>
+        </section>
+
         {/* Emergency Vet Info */}
         <section className="bg-plum rounded-3xl p-6 sm:p-10 text-white">
           <div className="text-3xl mb-3">🏥</div>
           <h2 className="text-2xl font-extrabold mb-4">Emergency Vet Info</h2>
           <p className="text-white/70 leading-relaxed mb-6">
             If you suspect heatstroke, call ahead so they&apos;re ready when you arrive.
-            Our Resources page lists member-recommended vets, including 24/7 emergency options.
+            Local lists member-recommended vets, including 24/7 emergency options.
           </p>
           <Link href="/local" className="btn-primary">Browse Vet Listings</Link>
         </section>
