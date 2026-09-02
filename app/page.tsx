@@ -30,13 +30,14 @@ export const revalidate = 3600
 export default function HomePage() {
   return (
     <div>
-      {/* Under-development notice */}
+      {/* Kickoff notice */}
       <div className="bg-brand-golden text-plum text-center px-4 py-3 text-sm font-semibold">
-        🚧 This site is currently under development but open for early membership, {' '}
+        🐾 The club officially starts with a group walk on October 17th at 8am,
+        Ruth Hardy Park. Everyone is welcome, {' '}
         <Link href="/members/join" className="underline font-bold hover:text-brand-orange">
-          feel free to sign up
+          sign up and come along
         </Link>
-        . The club officially starts with a group walk on October 17th at 8am. 🐾
+        .
       </div>
 
       {/* Hero */}
