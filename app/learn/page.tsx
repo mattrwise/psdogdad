@@ -5,7 +5,7 @@ import { freeGuides, memberGuides, type Guide } from '@/lib/guides'
 export const metadata: Metadata = {
   title: 'Learn, PS Dog Dad',
   description:
-    'Everything we have written down for Coachella Valley dog dads: step-by-step courses, and reference guides on health, desert heat, training technique and gear. All printable.',
+    'Everything we have written down for Coachella Valley dog dads: health, desert heat, training technique, gear, and the Dog Dad Handbook. All printable.',
 }
 
 /**
@@ -15,27 +15,41 @@ export const metadata: Metadata = {
  * more than it bought. The Training page was titled "Training & Guides" and
  * held three kinds of guide; the Guides page carried a panel explaining that
  * courses were somewhere else; the homepage button reading "Browse the Guides"
- * pointed at /training. Nobody could keep them apart because the names did not
- * describe the difference.
+ * pointed at /training.
  *
- * The difference is real, so it is drawn here instead of explained: courses are
- * programs you work through in order, guides are references you look things
- * up in. Two headings on one page say that better than two tabs and a paragraph
- * of apology ever did.
+ * The first pass at fixing that kept a Guides/Courses split, on the theory that
+ * courses are programs you work through in order and guides are references you
+ * look things up in. That distinction was real when it was written, but it did
+ * not survive dropping the premium tier: the only two things on this site that
+ * were ever programs — the four-week reactivity course and the summer routine
+ * blueprint — were both premium. What was left under "Courses" was four
+ * articles of five to eight minutes, under a heading promising step-by-step
+ * programs, beside a blurb citing a four-week course the reader could no longer
+ * see.
  *
- * The premium tier is deliberately not shown. It advertised two courses behind a
- * "Coming soon" lock that were never for sale, and the monetization question it
- * was waiting on got answered elsewhere, by the $25/month pro directory. A band
- * promoting a product that does not exist is the fake content this site does not
- * do. Both courses are still in lib/guides.ts and both URLs still resolve, so
- * nothing anybody has linked to breaks; they are simply not listed or sitemapped
- * until there is something to sell.
+ * So there is one heading now. They are all guides, because that is what they
+ * all are. When there is a real program to sell, it earns its own heading back.
+ *
+ * The premium tier stays unlisted: it advertised two courses behind a "Coming
+ * soon" lock that were never for sale, and the monetization question it was
+ * waiting on got answered elsewhere, by the $25/month pro directory. Both
+ * remain in lib/guides.ts and both URLs still resolve.
  */
 
-// The long-form reference pages. These live at /learn/<name> and each one has a
-// print button, which is most of why they exist — a guide on the fridge or in a
-// dog sitter's hand is worth more than one on a screen.
-const referenceGuides = [
+type Card = {
+  href: string
+  icon: string
+  title: string
+  text: string
+  color: string
+  minutes?: number
+  members?: boolean
+}
+
+// The long-form pages, hand-built and each with a print button — which is most
+// of why they exist. A guide on the fridge or in a dog sitter's hand is worth
+// more than one on a screen.
+const longGuides: Card[] = [
   {
     href: '/learn/health-wellness',
     icon: '🩺',
@@ -47,7 +61,7 @@ const referenceGuides = [
     href: '/learn/heat',
     icon: '🔥',
     title: 'High Heat Guide',
-    text: 'The pavement test, the warning signs, and how to run a dog’s day when it’s 110°.',
+    text: 'The pavement test, the warning signs, where to walk in July, and how to run a dog’s day when it’s 110°.',
     color: 'border-red-400',
   },
   {
@@ -73,29 +87,41 @@ const referenceGuides = [
   },
 ]
 
-function CourseCard({ guide, tier }: { guide: Guide; tier: 'free' | 'members' }) {
-  const style = {
-    free: { wrap: '', badge: null },
-    members: {
-      wrap: 'border-2 border-plum/20',
-      badge: <div className="absolute top-4 right-4 badge bg-plum text-white text-xs">🔐 Members</div>,
-    },
-  }[tier]
+/** The shorter written guides, read out of lib/guides.ts so they stay in step. */
+function fromLib(guide: Guide, members: boolean): Card {
+  return {
+    href: `/learn/${guide.slug}`,
+    icon: guide.emoji,
+    title: guide.title,
+    text: guide.description,
+    color: members ? 'border-plum/40' : 'border-brand-teal/50',
+    minutes: guide.minutes,
+    members,
+  }
+}
 
+const shortGuides: Card[] = [
+  ...freeGuides.map(g => fromLib(g, false)),
+  ...memberGuides.map(g => fromLib(g, true)),
+]
+
+function GuideCard({ card }: { card: Card }) {
   return (
-    <Link href={`/learn/${guide.slug}`} className={`card p-6 hover:-translate-y-1 block relative ${style.wrap}`}>
-      {style.badge}
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <span className="text-3xl">{guide.emoji}</span>
-        {tier === 'free' && <span className="badge bg-plum/10 text-plum">{guide.category}</span>}
-      </div>
-      <h3 className={`font-extrabold text-plum text-lg leading-snug mb-2 ${tier === 'free' ? '' : 'pr-24'}`}>
-        {guide.title}
+    <Link
+      href={card.href}
+      className={`card p-6 border-t-4 ${card.color} hover:-translate-y-0.5 block relative`}
+    >
+      {card.members && (
+        <div className="absolute top-4 right-4 badge bg-plum text-white text-xs">🔐 Members</div>
+      )}
+      <div className="text-3xl mb-2">{card.icon}</div>
+      <h3 className={`font-extrabold text-plum text-lg mb-1 ${card.members ? 'pr-24' : ''}`}>
+        {card.title}
       </h3>
-      <p className="text-plum/60 text-sm leading-relaxed mb-4">{guide.description}</p>
-      <div className="flex items-center justify-between">
-        <span className="text-xs text-plum/40">📖 {guide.minutes} min read</span>
-        <span className="font-bold text-sm text-brand-orange">Read guide →</span>
+      <p className="text-sm text-plum/60 leading-relaxed">{card.text}</p>
+      <div className="flex items-center justify-between mt-3">
+        <span className="text-sm font-semibold text-brand-teal">Read the guide →</span>
+        {card.minutes && <span className="text-xs text-plum/40">📖 {card.minutes} min</span>}
       </div>
     </Link>
   )
@@ -108,9 +134,9 @@ export default function LearnPage() {
       <div className="mb-8">
         <h1 className="section-title">Learn</h1>
         <p className="text-plum/60 mt-2 max-w-2xl">
-          Everything we&rsquo;ve written down for desert dog dads, in one place. Courses
-          you work through in order, and guides you look things up in. Every one of
-          them prints, so you can put it on the fridge or hand it to a dog sitter.
+          Everything we&rsquo;ve written down for desert dog dads, in one place. Every one of
+          them prints, so you can put it on the fridge or hand it to a dog sitter. A couple
+          need a free account.
         </p>
       </div>
 
@@ -133,58 +159,22 @@ export default function LearnPage() {
         </span>
       </Link>
 
-      {/* ── Guides ── */}
       <div className="flex items-center gap-3 mb-2 flex-wrap">
         <h2 className="text-2xl font-extrabold text-plum">Guides</h2>
-        <span className="badge bg-brand-teal/10 text-brand-teal">Look things up</span>
+        <span className="badge bg-brand-teal/10 text-brand-teal">All printable</span>
       </div>
       <p className="text-plum/60 text-sm mb-6 max-w-2xl">
-        Reference material you dip into when you need it. Open to everyone.
+        The long ones first, then the shorter reads.{' '}
+        <Link href="/members/join" className="text-brand-orange font-semibold hover:underline">
+          Join free
+        </Link>{' '}
+        to unlock the two marked Members.
       </p>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-14">
-        {referenceGuides.map(guide => (
-          <Link
-            key={guide.href}
-            href={guide.href}
-            className={`card p-6 border-t-4 ${guide.color} hover:-translate-y-0.5 block`}
-          >
-            <div className="text-3xl mb-2">{guide.icon}</div>
-            <h3 className="font-extrabold text-plum text-lg mb-1">{guide.title}</h3>
-            <p className="text-sm text-plum/60 leading-relaxed">{guide.text}</p>
-            <p className="text-sm font-semibold text-brand-teal mt-3">Read the guide →</p>
-          </Link>
+        {[...longGuides, ...shortGuides].map(card => (
+          <GuideCard key={card.href} card={card} />
         ))}
-      </div>
-
-      {/* ── Courses ── */}
-      <div className="flex items-center gap-3 mb-2 flex-wrap">
-        <h2 className="text-2xl font-extrabold text-plum">Courses</h2>
-        <span className="badge bg-brand-orange/10 text-brand-orange">Work through in order</span>
-      </div>
-      <p className="text-plum/60 text-sm mb-8 max-w-2xl">
-        Step-by-step programs, like the four-week leash reactivity course. Start
-        at the beginning and follow them through.
-      </p>
-
-      <h3 className="font-extrabold text-plum text-lg mb-4 flex items-center gap-3 flex-wrap">
-        Free
-        <span className="badge bg-brand-teal/10 text-brand-teal">Open to everyone</span>
-      </h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
-        {freeGuides.map(guide => <CourseCard key={guide.slug} guide={guide} tier="free" />)}
-      </div>
-
-      <h3 className="font-extrabold text-plum text-lg mb-2 flex items-center gap-3 flex-wrap">
-        Members
-        <span className="badge bg-plum/10 text-plum">🔐 Free account required</span>
-      </h3>
-      <p className="text-plum/60 text-sm mb-4 max-w-2xl">
-        More in-depth programs on training, local life, and making the most of the community.{' '}
-        <Link href="/members/join" className="text-brand-orange font-semibold hover:underline">Join free</Link>{' '}
-        to unlock them all.
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-14">
-        {memberGuides.map(guide => <CourseCard key={guide.slug} guide={guide} tier="members" />)}
       </div>
 
       {/* Contribute CTA */}

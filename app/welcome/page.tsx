@@ -160,7 +160,7 @@ function WelcomeContent() {
             {[
               { icon: '👋', text: 'Post an introduction in the Forums, tell us about yourself and your dog.' },
               { icon: '📅', text: 'RSVP for an upcoming event, our morning walks at Ruth Hardy Park are a great way to meet people.' },
-              { icon: '🌴', text: 'Check the Resources page for our curated guide to PS vets, groomers, and dog-friendly spots.' },
+              { icon: '🌴', text: 'Check Local for our curated guide to PS vets, groomers, and dog-friendly spots.' },
               { icon: '🐶', text: 'Browse the Member Directory and connect with dog dads near your neighborhood.' },
             ].map(({ icon, text }) => (
               <li key={text} className="flex items-start gap-3">
