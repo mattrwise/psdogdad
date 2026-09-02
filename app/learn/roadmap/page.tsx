@@ -6,19 +6,19 @@ const steps = [
   {
     number: 1,
     icon: '🌴',
-    title: 'Browse Local Resources',
+    title: 'Browse the Local directory',
     color: 'bg-brand-teal',
     text: 'Our full guide to vets, groomers, parks, trails, and dog-friendly spots across the Coachella Valley, everything local in one place.',
-    href: '/resources',
+    href: '/local',
     linkLabel: 'Browse Resources',
   },
   {
     number: 2,
     icon: '🎓',
-    title: 'Explore the Training Library',
+    title: 'Explore the courses and guides',
     color: 'bg-brand-orange',
     text: 'Real, practical guides on everything from loose-leash walking to desert heat safety.',
-    href: '/training',
+    href: '/learn',
     linkLabel: 'See Training Guides',
   },
   {
@@ -27,7 +27,7 @@ const steps = [
     title: 'Read the Dog Dad Handbook',
     color: 'bg-plum',
     text: 'The complete guide, from bringing your dog home through their senior years. Five chapters, read start to finish or jump to what you need.',
-    href: '/resources/handbook',
+    href: '/learn/handbook',
     linkLabel: 'Open the Handbook',
   },
   {
@@ -46,19 +46,19 @@ const exploreAnytime = [
     icon: '🩺',
     title: 'Health & Wellness',
     text: 'Vet tips and a filterable directory across the whole valley.',
-    href: '/resources/health-wellness',
+    href: '/learn/health-wellness',
   },
   {
     icon: '💪',
     title: 'Training Techniques',
     text: 'Core principles, common mistakes, and pro tips from other dog dads.',
-    href: '/resources/training',
+    href: '/learn/techniques',
   },
   {
     icon: '🛒',
     title: 'Product Guide',
     text: 'Community-tested gear, with smart shopping tips.',
-    href: '/resources/products',
+    href: '/learn/gear',
   },
 ]
 

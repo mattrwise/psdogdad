@@ -48,7 +48,7 @@ export default function HeatAlertBanner() {
             : 'Walk early, check the pavement, and keep water handy.'}
         </p>
         <Link
-          href="/resources/heat"
+          href="/learn/heat"
           className={`inline-block rounded-full px-5 py-2 text-sm font-extrabold shadow-lg hover:scale-105 transition-transform ${
             extreme ? 'bg-black text-white' : 'bg-black text-[#f7ff00]'
           }`}

@@ -33,7 +33,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
   return (
     <div className="bg-brand-cream min-h-screen py-12 px-4">
       <div className="max-w-2xl mx-auto">
-        <Link href="/training" className="text-brand-orange font-bold text-sm hover:underline no-print">
+        <Link href="/learn" className="text-brand-orange font-bold text-sm hover:underline no-print">
           ← All guides
         </Link>
 
@@ -63,7 +63,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
           <h3 className="font-extrabold text-plum mb-4">More guides</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {relatedGuides(guide.slug).map(related => (
-              <Link key={related.slug} href={`/training/${related.slug}`} className="card p-5 hover:-translate-y-0.5 block">
+              <Link key={related.slug} href={`/learn/${related.slug}`} className="card p-5 hover:-translate-y-0.5 block">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xl">{related.emoji}</span>
                   <span className={`badge text-xs ${tierBadge[related.tier].className}`}>{tierBadge[related.tier].label}</span>

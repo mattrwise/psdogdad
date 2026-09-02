@@ -21,9 +21,13 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-bold mb-3 text-sm uppercase tracking-wider">Community</h4>
+            {/* "Explore" rather than "Community", which is now the name of one
+                of the sections listed underneath it. The list matches the nav,
+                in the same order, because a footer that files the site
+                differently from the header is its own small confusion. */}
+            <h4 className="text-white font-bold mb-3 text-sm uppercase tracking-wider">Explore</h4>
             <ul className="space-y-2 text-sm">
-              {[['Training', '/training'], ['Forums', '/forums'], ['Members', '/members'], ['Events', '/events'], ['Guides', '/guides'], ['Resources', '/resources'], ...(DIRECTORY_IS_PUBLIC ? [['Dog Pros', '/pros']] : [])].map(([label, href]) => (
+              {[['Start Here', '/learn/roadmap'], ['Learn', '/learn'], ['Local', '/local'], ...(DIRECTORY_IS_PUBLIC ? [['Dog Pros', '/pros']] : []), ['Community', '/forums'], ['Events', '/events']].map(([label, href]) => (
                 <li key={href}>
                   <Link href={href} className="hover:text-brand-orange transition-colors">{label}</Link>
                 </li>

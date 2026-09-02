@@ -7,29 +7,29 @@ import { useEffect, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import { unreadCount } from '@/lib/messages'
-import { DIRECTORY_IS_PUBLIC } from '@/lib/pros'
 
+/**
+ * Five items, and each one is a place rather than a page.
+ *
+ * This row used to carry eight, and the comments that lived here were the tell:
+ * each new tab arrived with a paragraph explaining how it differed from the one
+ * beside it — Training next to Guides, Guides next to Resources, Pros held back
+ * from Resources. When a nav needs footnotes, the sections are wrong, not the
+ * labels. Training and Guides are now one Learn section; Resources and Dog Pros
+ * are two views of one Local directory; Forums and Members are two views of
+ * Community.
+ *
+ * `match` is what a label covers, which is not the same as where it points.
+ * Local is the businesses page but stays lit on a pro's listing; Community is
+ * the forums but stays lit in the member directory. Without that, following a
+ * tab makes the tab you followed go dark.
+ */
 const links = [
-  { href: '/', label: 'Home' },
-  { href: '/training', label: 'Training' },
-  { href: '/forums', label: 'Forums' },
-  { href: '/members', label: 'Members' },
-  { href: '/events', label: 'Events' },
-  // Next to Resources on purpose: the two are the reference half of the site,
-  // one written by us and one a directory of other people's businesses.
-  { href: '/guides', label: 'Guides' },
-  { href: '/resources', label: 'Resources' },
-  // Last because it is the newest and the only one anybody pays to be in.
-  // Resources are places you look up; these are people you hire, and keeping
-  // them apart in the nav is the same distinction the two pages make in words.
-  //
-  // "Pros" rather than "Dog Pros" because this is the eighth item and every
-  // other one is a single word. Spelled out it was wide enough to wrap the
-  // whole row, which broke "Sign In" and "Join Now" across two lines each.
-  //
-  // Absent entirely until there are listings behind it — see DIRECTORY_IS_PUBLIC
-  // in lib/pros.ts. A tab leading to an empty directory reads as a dead site.
-  ...(DIRECTORY_IS_PUBLIC ? [{ href: '/pros', label: 'Pros' }] : []),
+  { href: '/', label: 'Home', match: ['/'] },
+  { href: '/learn', label: 'Learn', match: ['/learn'] },
+  { href: '/local', label: 'Local', match: ['/local', '/pros'] },
+  { href: '/forums', label: 'Community', match: ['/forums', '/members'] },
+  { href: '/events', label: 'Events', match: ['/events'] },
 ]
 
 function Avatar({ user }: { user: User }) {
@@ -107,6 +107,11 @@ export default function Nav() {
   const name = user?.user_metadata?.name as string | undefined
   const firstName = name?.split(' ')[0]
 
+  // Exact match for '/', prefix match for everything else, so a section stays
+  // lit on its own sub-pages.
+  const isActive = (match: string[]) =>
+    match.some(m => (m === '/' ? pathname === '/' : pathname === m || pathname.startsWith(m + '/')))
+
   return (
     <header className="bg-brand-cream shadow-sm border-b border-plum/10 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -125,12 +130,12 @@ export default function Nav() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-1">
-            {links.map(({ href, label }) => (
+            {links.map(({ href, label, match }) => (
               <Link
                 key={href}
                 href={href}
                 className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 ${
-                  pathname === href
+                  isActive(match)
                     ? 'bg-brand-orange text-white'
                     : 'text-plum/70 hover:text-plum hover:bg-plum/5'
                 }`}
@@ -239,13 +244,13 @@ export default function Nav() {
       {/* Mobile menu */}
       {open && (
         <div className="md:hidden bg-white border-t border-plum/10 px-4 py-4 flex flex-col gap-2">
-          {links.map(({ href, label }) => (
+          {links.map(({ href, label, match }) => (
             <Link
               key={href}
               href={href}
               onClick={() => setOpen(false)}
               className={`px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${
-                pathname === href
+                isActive(match)
                   ? 'bg-brand-orange text-white'
                   : 'text-plum/70 hover:bg-plum/5 hover:text-plum'
               }`}
