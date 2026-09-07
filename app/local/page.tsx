@@ -126,6 +126,7 @@ const resourceSections: Section[] = [
     titleColor: 'text-brand-teal',
     resources: [
       { name: 'Palm Springs Animal Shelter', detail: '', address: '4575 E Mesquite Ave, Palm Springs', phone: '(760) 416-5718', map: 'Palm Springs Animal Shelter, Palm Springs, CA', badge: 'Adopt', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
+      { name: 'Loving All Animals', detail: 'Rescue and foster network', address: '83496 Avenue 51, Coachella', phone: '(760) 834-7000', map: 'Loving All Animals, Coachella, CA', badge: 'Adopt', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
       { name: 'Desert Hot Springs Animal Care and Control', detail: '', address: '65810 Hacienda Ave, Desert Hot Springs', phone: '(760) 329-0203', map: 'Desert Hot Springs Animal Care and Control, Desert Hot Springs, CA', badge: 'Shelter', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
     ],
   },
