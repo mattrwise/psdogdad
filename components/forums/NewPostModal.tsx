@@ -50,7 +50,11 @@ export default function NewPostModal({ category, categoryTitle, onClose, onPoste
   }
 
   return (
-    <Modal label={`New post in ${categoryTitle}`} onClose={onClose}>
+    <Modal
+      label="New Post"
+      onClose={onClose}
+      panelClassName="w-full max-w-xl my-8"
+    >
 
       {/* Header */}
       <div className="flex items-center justify-between p-6 border-b border-gray-100">

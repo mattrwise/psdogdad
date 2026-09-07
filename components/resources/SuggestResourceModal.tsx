@@ -59,7 +59,11 @@ export default function SuggestResourceModal({ onClose }: Props) {
   }
 
   return (
-    <Modal label="Suggest a resource" onClose={onClose}>
+    <Modal
+      label={submitted ? 'Thanks for the tip' : !user ? 'Sign in to suggest a resource' : 'Suggest a Resource'}
+      onClose={onClose}
+      panelClassName="w-full max-w-xl my-8"
+    >
 
       {submitted ? (
         /* ── Thank-you confirmation ─────────────────────────────── */

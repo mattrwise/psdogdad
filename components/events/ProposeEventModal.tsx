@@ -76,7 +76,11 @@ export default function ProposeEventModal({ onClose }: Props) {
   }
 
   return (
-    <Modal label="Propose an event" onClose={onClose}>
+    <Modal
+      label={submitted ? 'Proposal submitted' : !user ? 'Sign in to propose an event' : 'Propose an Event'}
+      onClose={onClose}
+      panelClassName="w-full max-w-xl my-8"
+    >
 
       {submitted ? (
         <div className="p-8 text-center">

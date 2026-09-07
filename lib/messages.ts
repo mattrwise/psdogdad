@@ -1,7 +1,6 @@
 'use client'
 
 import { supabase } from '@/lib/supabase/client'
-import { downscaleImage } from '@/lib/images'
 
 export type Message = {
   id: string
@@ -101,23 +100,28 @@ export async function fetchThread(otherId: string): Promise<Message[] | null> {
   return (data as Message[]) ?? []
 }
 
+/**
+ * `photo` is already-prepared bytes, not the raw File off the picker: the
+ * caller runs preparePhoto() so a HEIC no browser but Safari can decode gets
+ * refused while the member can still choose another one. Shrinking happens
+ * there too, so there is deliberately no downscale pass here.
+ */
 export async function sendMessage(
   recipientId: string,
   body: string,
-  photo: File | null,
+  photo: Blob | null,
 ): Promise<{ ok: true; message: Message } | { ok: false; error: string }> {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { ok: false, error: 'You need to be signed in to send a message.' }
 
   let photoPath: string | null = null
   if (photo) {
-    const image = await downscaleImage(photo)
-    const type = image === photo ? (photo.type || 'image/jpeg') : image.type
+    const type = photo.type || 'image/jpeg'
     const ext = (type.split('/')[1] ?? 'jpg').replace('jpeg', 'jpg')
     const path = `${conversationFolder(user.id, recipientId)}/${crypto.randomUUID()}.${ext}`
     const { error: uploadError } = await supabase.storage
       .from(MESSAGE_PHOTO_BUCKET)
-      .upload(path, image, { contentType: type })
+      .upload(path, photo, { contentType: type })
     if (uploadError) {
       console.error('Message photo upload failed:', uploadError.message)
       return { ok: false, error: 'That photo could not be uploaded. Please try again.' }

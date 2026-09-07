@@ -2,6 +2,32 @@
 
 import { useEffect, useRef } from 'react'
 
+/**
+ * The dialog shell every modal on the site sits in.
+ *
+ * It exists because four modals had grown the same hand-rolled markup — a
+ * fixed backdrop, a white panel — and none of them told a screen reader they
+ * were a dialog, trapped the keyboard, or closed on Escape. Somebody reading
+ * the page with a screen reader was dropped into a form with no way to know
+ * where they were, and somebody on a keyboard could tab straight out of the
+ * modal into the page behind it while the backdrop still covered it.
+ *
+ * Deliberately does NOT close on a backdrop click. These panels hold
+ * half-finished forms, and a stray click outside throwing that away is a worse
+ * bug than the one this file fixes.
+ */
+
+interface Props {
+  /** Announced as the dialog's name. Match the heading the eye sees. */
+  label: string
+  onClose: () => void
+  /** Panel classes, so each caller keeps its own width. */
+  panelClassName?: string
+  /** Tall forms scroll from the top; short prompts sit centred. */
+  align?: 'start' | 'center'
+  children: React.ReactNode
+}
+
 const FOCUSABLE = [
   'a[href]',
   'button:not([disabled])',
@@ -9,96 +35,65 @@ const FOCUSABLE = [
   'select:not([disabled])',
   'textarea:not([disabled])',
   '[tabindex]:not([tabindex="-1"])',
-].join(', ')
+].join(',')
 
-/**
- * The shell every dialog on the site shares: the dimmed backdrop, the white
- * panel, and the keyboard behaviour a dialog is supposed to have.
- *
- * None of that behaviour was here before. An open modal was a plain div, so a
- * screen reader never announced it as a dialog, Escape did nothing, and Tab
- * walked straight out of the panel into the page behind, where a member could
- * be typing into a form they cannot see.
- *
- * Deliberately not closing on a backdrop click: all three of these hold a form
- * somebody has been typing into, and a stray click outside should not throw it
- * away. Escape and the two Cancel buttons are the ways out.
- */
-export default function Modal({
-  label,
-  onClose,
-  children,
-}: {
-  /** Announced when the dialog opens. Name what it is for, e.g. "Propose an event". */
-  label: string
-  onClose: () => void
-  children: React.ReactNode
-}) {
+export default function Modal({ label, onClose, panelClassName = '', align = 'start', children }: Props) {
   const panelRef = useRef<HTMLDivElement>(null)
-
-  // Every caller passes an inline arrow, so onClose is a fresh function on each
-  // render. Kept in a ref, the effect below runs once when the dialog opens
-  // rather than on every keystroke, which would yank focus out of the field
-  // being typed in.
-  const closeRef = useRef(onClose)
-  useEffect(() => { closeRef.current = onClose })
+  // Read once on mount: by the time we restore, focus has already moved.
+  const returnTo = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
-    const panel = panelRef.current
-    const opener = document.activeElement as HTMLElement | null
+    returnTo.current = document.activeElement as HTMLElement | null
 
-    // The panel itself rather than its first field, so a screen reader reads
-    // the dialog and its name before the member starts filling anything in.
-    panel?.focus()
+    // Focus the first control, or the panel itself when there isn't one, so
+    // the next Tab starts inside the dialog rather than back at the page top.
+    const first = panelRef.current?.querySelector<HTMLElement>(FOCUSABLE)
+    ;(first ?? panelRef.current)?.focus()
 
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
-        e.preventDefault()
-        closeRef.current()
-        return
-      }
-      if (e.key !== 'Tab' || !panel) return
-
-      const items = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE))
-        .filter(el => el.offsetWidth > 0 || el.offsetHeight > 0)
-      if (items.length === 0) {
-        e.preventDefault()
-        panel.focus()
-        return
-      }
-
-      const first = items[0]
-      const last = items[items.length - 1]
-      const active = document.activeElement
-
-      // Wrap around at both ends, and pull focus back in if it has got out.
-      if (e.shiftKey && (active === first || active === panel || !panel.contains(active))) {
-        e.preventDefault()
-        last.focus()
-      } else if (!e.shiftKey && (active === last || !panel.contains(active))) {
-        e.preventDefault()
-        first.focus()
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      // Back to whatever opened the dialog, rather than dumping the member at
-      // the top of the page with no idea where they are.
-      opener?.focus?.()
-    }
+    return () => returnTo.current?.focus?.()
   }, [])
 
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Escape') {
+      e.stopPropagation()
+      onClose()
+      return
+    }
+    if (e.key !== 'Tab') return
+
+    // Re-read every time: these panels swap between sign-in, form and success
+    // states, so a list captured on mount would go stale.
+    const items = Array.from(panelRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? [])
+      .filter(el => el.offsetParent !== null)
+    if (items.length === 0) return
+
+    const first = items[0]
+    const last = items[items.length - 1]
+    const active = document.activeElement
+
+    if (e.shiftKey && (active === first || active === panelRef.current)) {
+      e.preventDefault()
+      last.focus()
+    } else if (!e.shiftKey && active === last) {
+      e.preventDefault()
+      first.focus()
+    }
+  }
+
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-start justify-center p-4 overflow-y-auto">
+    <div
+      className={`fixed inset-0 z-50 bg-black/50 flex ${
+        align === 'center' ? 'items-center' : 'items-start'
+      } justify-center p-4 overflow-y-auto`}
+      onKeyDown={handleKeyDown}
+    >
       <div
         ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-label={label}
         tabIndex={-1}
-        className="bg-white rounded-2xl w-full max-w-xl my-8 shadow-2xl focus:outline-none"
+        className={`bg-white rounded-2xl shadow-2xl focus:outline-none ${panelClassName}`}
       >
         {children}
       </div>
