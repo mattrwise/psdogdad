@@ -315,7 +315,25 @@ export default function JoinPage() {
       },
     })
 
-    if (error) { setServerError(error.message); setLoading(false); return }
+    if (error) {
+      setServerError(
+        /already registered|already exists/i.test(error.message)
+          ? 'An account with that email already exists. Try signing in instead.'
+          : error.message
+      )
+      setLoading(false)
+      return
+    }
+
+    // Supabase avoids leaking which emails are registered: signing up with an
+    // email that already exists returns no error and a fabricated user with
+    // an empty `identities` array, instead of a real account. Treat that the
+    // same as a failed signup rather than showing the confirmation screen.
+    if (data.user && data.user.identities && data.user.identities.length === 0) {
+      setServerError('An account with that email already exists. Try signing in instead.')
+      setLoading(false)
+      return
+    }
 
     // While confirmation emails are disabled, accounts are auto-confirmed at
     // signup but no session is returned, so sign in right away. If email

@@ -1,5 +1,11 @@
 import { supabase } from '@/lib/supabase/client'
-import { PRO_COLUMNS, type ProListing, byBusinessName } from '@/lib/pros'
+import {
+  PRO_COLUMNS,
+  type ProListing,
+  type ProStatus,
+  type ReviewListing,
+  byBusinessName,
+} from '@/lib/pros'
 
 /**
  * Reading pro listings out of Supabase.
@@ -139,5 +145,59 @@ export async function notifyNewListing(listingId: string): Promise<void> {
     })
   } catch (e) {
     console.error('Could not trigger the new-listing email:', e)
+  }
+}
+
+// ─── Reviewing listings ───────────────────────────────────────────────────────
+//
+// These two go through /api/admin/pro-listings rather than Supabase directly,
+// because a listing that is not published yet is invisible to the browser client
+// and `status` cannot be written from it. Both are explained at length in that
+// route. Everybody except the site owner gets a 404 from it.
+
+/** Every listing at every status, newest first, or null if the read failed. */
+export async function loadListingsForReview(): Promise<ReviewListing[] | null> {
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) return null
+    const res = await fetch('/api/admin/pro-listings', {
+      headers: { Authorization: `Bearer ${session.access_token}` },
+    })
+    if (!res.ok) return null
+    const body = await res.json()
+    return (body?.listings as ReviewListing[]) ?? null
+  } catch (e) {
+    console.error('Could not load listings for review:', e)
+    return null
+  }
+}
+
+/**
+ * Moves a listing along: accepted, paid and live, or taken down. Returns the row
+ * as it now stands so the page can redraw from what was actually stored rather
+ * than from what it hoped would happen.
+ */
+export async function setListingStatus(
+  id: string,
+  status: ProStatus,
+): Promise<{ ok: true; listing: ReviewListing } | { ok: false; error: string }> {
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) return { ok: false, error: 'You are not signed in.' }
+    const res = await fetch('/api/admin/pro-listings', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ id, status }),
+    })
+    if (!res.ok) {
+      return { ok: false, error: `That did not save (${res.status}). Try again.` }
+    }
+    const body = await res.json()
+    return { ok: true, listing: body.listing as ReviewListing }
+  } catch {
+    return { ok: false, error: 'That did not save. Check your connection and try again.' }
   }
 }

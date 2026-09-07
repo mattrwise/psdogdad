@@ -75,7 +75,7 @@ export default function ShelterEventCallout() {
               <Link href="/members/join" className="btn-primary">
                 Join the Pack 🐾
               </Link>
-              <Link href="/resources/health-wellness" className="btn-secondary bg-white/10 text-white border-white/25 hover:bg-white/20">
+              <Link href="/learn/health-wellness" className="btn-secondary bg-white/10 text-white border-white/25 hover:bg-white/20">
                 New Dog Dad? Start Here
               </Link>
             </div>

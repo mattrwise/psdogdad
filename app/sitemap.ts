@@ -10,12 +10,11 @@ import { DIRECTORY_IS_PUBLIC } from '@/lib/pros'
  */
 const staticPaths = [
   '/',
-  '/training',
+  '/learn',
   '/forums',
   '/members',
   '/events',
-  '/resources',
-  '/guides',
+  '/local',
   // The pro directory and the two pages a provider needs before they list.
   // Left out entirely until DIRECTORY_IS_PUBLIC, so search engines are not sent
   // to an empty directory either.
@@ -26,12 +25,12 @@ const staticPaths = [
   // provider is paying to be found — but it is a change to how this file works,
   // not a line in it.
   ...(DIRECTORY_IS_PUBLIC ? ['/pros', '/pros/list'] : []),
-  '/resources/roadmap',
-  '/resources/handbook',
-  '/resources/health-wellness',
-  '/resources/training',
-  '/resources/products',
-  '/resources/heat',
+  '/learn/roadmap',
+  '/learn/handbook',
+  '/learn/health-wellness',
+  '/learn/techniques',
+  '/learn/gear',
+  '/learn/heat',
   '/about',
   '/conduct',
   '/privacy',
@@ -53,11 +52,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       priority: path === '/' ? 1 : 0.7,
     })),
-    ...guides.map(g => ({
-      url: `${SITE_URL}/training/${g.slug}`,
-      lastModified,
-      priority: 0.6,
-    })),
+    // Premium courses are left out for the same reason the pro directory is:
+    // the tier is not open, so a searcher landing on one finds a paywall with
+    // nothing behind it. The pages still resolve for anyone holding a link.
+    ...guides
+      .filter(g => g.tier !== 'premium')
+      .map(g => ({
+        url: `${SITE_URL}/learn/${g.slug}`,
+        lastModified,
+        priority: 0.6,
+      })),
     ...forumCategories.map(slug => ({
       url: `${SITE_URL}/forums/${slug}`,
       lastModified,

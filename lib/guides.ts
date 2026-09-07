@@ -1,5 +1,6 @@
-// Training guide content, recovered from the live site (www.psdogdad.com/training)
-// after the original source was lost. Each guide renders at /training/<slug>.
+// Course content, recovered from the live site after the original source was
+// lost. Each one renders at /learn/<slug>. The premium entries are kept here on
+// purpose but are not listed on /learn or in the sitemap; see app/learn/page.tsx.
 
 export type GuideBlock =
   | { type: 'p'; text: string }
@@ -20,40 +21,6 @@ export type Guide = {
 }
 
 export const guides: Guide[] = [
-  {
-    slug: 'desert-heat-safety',
-    emoji: '☀️',
-    title: 'Keeping Your Dog Safe in Desert Heat',
-    shortTitle: 'Desert Heat Safety',
-    category: 'Health & Safety',
-    minutes: 6,
-    tier: 'free',
-    description:
-      "Palm Springs summers are no joke. How to exercise, hydrate, and protect your dog when it's 110° outside.",
-    body: [
-      { type: 'p', text: "Palm Springs heat is a different animal. From May through September, daytime temperatures regularly pass 105°F, and pavement gets far hotter than the air. A dog's paw pads can burn in under a minute on asphalt that's been baking all afternoon." },
-      { type: 'h2', text: 'The 7-second rule' },
-      { type: 'p', text: "Before any walk, press the back of your hand against the pavement for 7 seconds. If you can't hold it there comfortably, it's too hot for paws. In summer that usually means walks happen before 8 AM or after 8 PM. No exceptions." },
-      { type: 'h2', text: 'Signs of overheating' },
-      { type: 'ul', items: [
-        "Heavy panting that doesn't settle when resting",
-        'Thick, ropey drool',
-        'Bright red or pale gums',
-        'Stumbling, weakness, or confusion',
-        'Vomiting or diarrhea',
-      ] },
-      { type: 'p', text: "If you see these, get your dog into shade or AC immediately, offer small amounts of cool (not ice-cold) water, wet their belly and paws, and call your vet. Heatstroke moves fast in dogs, it's an emergency, not a wait-and-see." },
-      { type: 'h2', text: 'Everyday habits that help' },
-      { type: 'ul', items: [
-        'Carry water on every outing, even short ones. Collapsible bowls live in your car and your bag.',
-        'Flat-faced breeds (Frenchies, bulldogs, pugs) overheat much faster, cut all times in half for them.',
-        'A kiddie pool in the shade is the cheapest cooling tool in the desert.',
-        'Never leave a dog in a parked car here. Even at 85° outside, a car interior passes 120° in minutes.',
-      ] },
-      { type: 'h2', text: 'Best summer exercise options' },
-      { type: 'p', text: 'Early-morning walks at Ruth Hardy Park, the shaded stretches of Tahquitz Creek Trail, and indoor play. Many of our members shift to a "sunrise club" schedule June through September, check the Events page and join a morning walk.' },
-    ],
-  },
   {
     slug: 'loose-leash-walking',
     emoji: '🦮',

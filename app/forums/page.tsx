@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import SignedOut from '@/components/auth/SignedOut'
+import SectionTabs from '@/components/SectionTabs'
+import { communityTabs } from '@/lib/sections'
 import { supabase } from '@/lib/supabase/client'
 
 const categories = [
@@ -126,6 +128,8 @@ export default function ForumsPage() {
         <h1 className="section-title">Community Forums</h1>
         <p className="text-plum/60 mt-2">Ask questions, share tips, and connect with dog dads across the Coachella Valley.</p>
       </div>
+
+      <SectionTabs tabs={communityTabs} />
 
       {/* Join CTA, visitors only */}
       <SignedOut>

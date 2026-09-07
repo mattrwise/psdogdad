@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
 import SignedIn from '@/components/auth/SignedIn'
 import SignedOut from '@/components/auth/SignedOut'
+import SectionTabs from '@/components/SectionTabs'
+import { communityTabs } from '@/lib/sections'
 import { Dog } from '@/lib/dogs'
 import { thumbUrl } from '@/lib/images'
 
@@ -152,6 +154,8 @@ export default function MembersPage() {
           <Link href="/members/profile" className="btn-secondary self-start">My Profile</Link>
         </SignedIn>
       </div>
+
+      <SectionTabs tabs={communityTabs} />
 
       {/* Search/Filter Bar */}
       <div className="bg-white rounded-2xl shadow-sm p-4 mb-8 flex flex-col gap-3">

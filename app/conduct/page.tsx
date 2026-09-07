@@ -86,7 +86,7 @@ export default function ConductPage() {
           <p>
             The forums and events are for community conversation, not marketing. Don&apos;t post ads, affiliate links,
             or solicitations without prior approval from the moderators. If you&apos;re a local business owner and want
-            to be listed in our Resources guide, email us instead.
+            to be listed in our Local directory, email us instead.
           </p>
         </Section>
 

@@ -108,8 +108,8 @@ function AfterTheForm() {
     },
     {
       n: '2',
-      title: "You're in, then you pay",
-      body: 'Sign in and the payment step is waiting on your own listing page. Nothing is charged before that, and we never email you a payment link.',
+      title: "Welcome aboard",
+      body: 'Sign in and the payment step will be waiting on your listing page. Nothing is charged until you get there, and we never send a payment link by email.',
     },
     {
       n: '3',

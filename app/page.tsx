@@ -30,13 +30,14 @@ export const revalidate = 3600
 export default function HomePage() {
   return (
     <div>
-      {/* Under-development notice */}
+      {/* Kickoff notice */}
       <div className="bg-brand-golden text-plum text-center px-4 py-3 text-sm font-semibold">
-        🚧 This site is currently under development but open for early membership, {' '}
+        🐾 The club officially starts with a group walk on October 17th at 8am,
+        Ruth Hardy Park. Everyone is welcome, {' '}
         <Link href="/members/join" className="underline font-bold hover:text-brand-orange">
-          feel free to sign up
+          sign up and come along
         </Link>
-        . The club officially starts with a group walk on October 17th at 8am. 🐾
+        .
       </div>
 
       {/* Hero */}
@@ -135,10 +136,10 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: '💬', title: 'Forums', desc: 'Discuss health, training, local spots, and more with fellow dog dads.', href: '/forums', color: 'from-plum to-plum-light' },
-              { icon: '👤', title: 'Members', desc: 'Browse member profiles, meet new friends, and show off your pup.', href: '/members', color: 'from-brand-teal to-brand-teal-light' },
+              { icon: '🎓', title: 'Learn', desc: 'Printable guides: heat safety, health, leash skills, recall, the Handbook.', href: '/learn', color: 'from-plum to-plum-light' },
+              { icon: '📋', title: 'Local', desc: 'Vets, groomers, parks and dog-friendly patios, plus the pros who come to you.', href: '/local', color: 'from-brand-golden to-brand-golden-light' },
+              { icon: '💬', title: 'Community', desc: 'The forums and the member directory. Ask anything, meet the pack.', href: '/forums', color: 'from-brand-teal to-brand-teal-light' },
               { icon: '📅', title: 'Events', desc: 'Dog walks, yappy hours, pool parties, and community meetups.', href: '/events', color: 'from-brand-orange to-brand-orange-light' },
-              { icon: '📋', title: 'Resources', desc: 'Curated local guide: vets, groomers, parks, pet-friendly spots.', href: '/resources', color: 'from-brand-golden to-brand-golden-light' },
             ].map(({ icon, title, desc, href, color }) => (
               <Link key={title} href={href} className="card group p-6 hover:-translate-y-1">
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center text-2xl mb-4 shadow-md`}>
@@ -155,7 +156,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Training & Guides */}
+      {/* Learn */}
       <section className="py-16 bg-plum text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10"
           style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, #F5B82A 0%, transparent 50%)' }} />
@@ -163,23 +164,24 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div>
               <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-2 text-sm font-semibold mb-5">
-                🎓 Training &amp; Guides
+                🎓 Learn
               </div>
               <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
                 Learn to raise a great dog, <span className="text-brand-golden">in the desert</span>
               </h2>
               <p className="text-white/70 leading-relaxed mb-6">
-                Written guides on heat safety, leash skills, recall, reactivity, and desert valley living.
-                Two free guides for everyone, the rest unlock with a free account.
+                Written guides on heat safety, health, leash skills, recall, gear and desert
+                valley living, plus the Dog Dad Handbook. Every one of them prints. Most are
+                open to everyone, a couple unlock with a free account.
               </p>
-              <Link href="/training" className="btn-primary">Browse the Guides</Link>
+              <Link href="/learn" className="btn-primary">Go to Learn</Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
-                { href: '/training/desert-heat-safety', icon: '☀️', label: 'Desert Heat Safety', tier: 'Free' },
-                { href: '/training/loose-leash-walking', icon: '🦮', label: 'Loose-Leash Walking', tier: 'Free' },
-                { href: '/training/reliable-recall', icon: '📣', label: 'Reliable Recall', tier: 'Members' },
-                { href: '/training/reactivity-program', icon: '🧠', label: 'Reactivity Program', tier: '★ Premium' },
+                { href: '/learn/heat', icon: '🔥', label: 'High Heat Guide', tier: 'Free' },
+                { href: '/learn/loose-leash-walking', icon: '🦮', label: 'Loose-Leash Walking', tier: 'Free' },
+                { href: '/learn/reliable-recall', icon: '📣', label: 'Reliable Recall', tier: 'Members' },
+                { href: '/learn/handbook', icon: '📖', label: 'The Dog Dad Handbook', tier: 'Free' },
               ].map(({ href, icon, label, tier }) => (
                 <Link key={label} href={href} className="bg-white/10 hover:bg-white/20 rounded-2xl p-5 transition-colors block">
                   <div className="text-3xl mb-2">{icon}</div>
