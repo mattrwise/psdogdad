@@ -48,8 +48,9 @@ has passed, so the row that matters now is the **17 October kickoff**, and the
 homepage callout renders nothing at all until that SQL is run. That is six
 weeks out as of this re-audit, so it is the one with a real deadline on it.
 
-Items 14, 15 and 16 are housekeeping and block nothing. Item 17 is still an open
-decision, not a defect.
+Items 14 and 16 are housekeeping and block nothing. Item 15 now has a migration
+waiting in `supabase/` for whenever you next open the SQL editor. Item 17 is still an
+open decision, not a defect.
 
 The order that unblocks the most: **7, then 3, then 4.** Notifications on means a
 real message reaches somebody, and lights up the pro review page at the same
@@ -124,6 +125,11 @@ because testing needs two signed-in accounts.
 The riskiest part is **photo attachments**. They upload to a private storage bucket
 and display through short-lived signed links, and neither has ever run with real
 traffic. If signing fails, photos will sit on "Loading photo..." forever.
+
+One thing that made this worse is now fixed: a message photo is shrunk before it is
+sent, the same way every other upload on the site already was. Sending a photo straight
+off a phone camera used to push the full-size file through. That removes a likely cause
+of failure but does not replace the test — the signing path is still unexercised.
 
 Everything else in the flow is unverified too: send, receive, unread badge clearing,
 block and unblock.
@@ -279,11 +285,13 @@ diagnostic checks. Harmless, invisible to members, but worth clearing.
 
 ### 15. An unused column on profiles
 
-**STILL OPEN, and yours.** Blocks nothing.
+**DONE, but you have to run it.** `supabase/06-drop-dead-notify-column.sql` drops the
+column. It is a migration, so like every other file in `supabase/` it does nothing until
+you run it in the SQL editor. Harmless to leave; it is tidiness, not a blocker.
 
 `profiles.notify_on_message` was added, then the preference was stored in auth metadata
 instead, because members have no write access to profiles and profiles is publicly
-readable. The column is now dead. No harm, just untidy.
+readable. The column has been dead ever since.
 
 ### 16. Merged branches still on the remote
 
