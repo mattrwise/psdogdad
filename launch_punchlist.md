@@ -1,21 +1,75 @@
 # PS Dog Dad launch punch list
 
 Audit run 2026-08-01 against live www.psdogdad.com and `main` at the current commit.
-Findings are grouped by how much they matter before the August 15 launch.
-
-**Fixed since the audit** (October kickoff branch, 2026-08-07): item 2, the six
-mockup resource entries are gone and the emergency listings now say which places
-close overnight. Item 8 is partly addressed, the events table is no longer empty
-once `supabase/kickoff-event.sql` is run, though the Clear the Shelters row still
-has to be created by hand. Everything else below stands.
+Findings are grouped by how much they matter before launch.
 
 Answers to the five things you asked about are marked **[Q1]** to **[Q5]**.
+
+---
+
+## Where this stands, re-audited 2026-09-07
+
+Every item below was re-checked against `main` as it is now. Most had already
+been fixed in the work since the audit and the list had simply gone stale.
+**Every remaining code fix is now done.**
+
+Items 9 and 12 were closed on this branch: the signup form now scrolls to and
+focuses the first bad field, and all three modals sit on a shared
+`components/Modal.tsx` that gives them `role="dialog"`, an accessible name,
+Escape to close, a focus trap and focus restored to whatever opened them.
+Verified in a real browser, 13 checks, all passing.
+
+`main` has moved on since the 27 August pass, and none of it reopens anything
+here. The Learn restructure landed, so `/resources` is now `/local` and the
+guide pages sit under `/learn` (the old paths 308 to the new ones). Signup now
+tells you when an email is already registered instead of claiming success.
+Security headers were added across all routes. And the pro listing review was
+automated: there is a `/pros/review` page and an `/api/admin/pro-listings`
+route where before you read submissions by hand.
+
+That last one changes the weight of item 7 rather than closing it. The same two
+Vercel environment variables now gate three things instead of one, so setting
+them is the single highest-value job left.
+
+**Nothing in the code is holding the site shut.** What is left is six things
+only you can do, because they are account, data and hosting jobs rather than
+code:
+
+| # | What | Where |
+|---|---|---|
+| 3 | Test messaging end to end, photo attachments especially | Two signed-in accounts |
+| 4 | Delete the Dan Tanner test account | Supabase, after item 3 |
+| 6 | Gmail flags the password reset email | Supabase custom domain, ~$10/mo |
+| 7 | Notification emails **and** the pro review page are both off | Two env vars in Vercel, then redeploy |
+| 8 | The events calendar is empty | Run `supabase/kickoff-event.sql` |
+| 18 | Every signup is auto-confirmed, so nobody proves their address | Drop one trigger, **after** item 7 |
+
+Item 8 has moved on since the audit: the August 15 Clear the Shelters weekend
+has passed, so the row that matters now is the **17 October kickoff**, and the
+homepage callout renders nothing at all until that SQL is run. That is six
+weeks out as of this re-audit, so it is the one with a real deadline on it.
+
+Items 14 and 16 are housekeeping and block nothing. Item 15 now has a migration
+waiting in `supabase/` for whenever you next open the SQL editor. Item 17 is still an
+open decision, not a defect.
+
+The order that unblocks the most: **7, then 18, then 3, then 4.** Notifications on means a
+real message reaches somebody, and lights up the pro review page at the same
+time; that makes testing messaging worth doing; and once messaging is proven the
+test account can go and the directory is honest on day one.
 
 ---
 
 ## Blocker
 
 ### 1. The forums show invented activity, live, right now **[Q5]**
+
+**DONE.** The index reads its counts from `forum_posts` and a category with nothing
+in it says so. Category pages render real posts through `ForumPostList`; where a
+category is empty it shows starter prompts that carry no author, timestamp or
+reply count, so nothing can be mistaken for a real thread. Verified live: no
+invented threads or authors are served.
+
 `app/forums/page.tsx`, `app/forums/[category]/page.tsx`
 
 The forums index advertises **87 threads and 412 posts** in one category, 134 and 891
@@ -32,7 +86,7 @@ before launch, and it is the largest remaining contradiction of the no invented 
 rule. A visitor who clicks a thread finds it is not real.
 
 ### 2. Six resource entries look like mockup leftovers **[Q3]** — FIXED
-`app/resources/page.tsx`
+`app/local/page.tsx` (was `app/resources/page.tsx`)
 
 The page carries **48 entries with phone numbers** and most look genuinely researched:
 verified Palm Springs and Coachella Valley addresses, real numbers. So the page as a
@@ -61,6 +115,9 @@ Six other address-less entries are legitimate and should stay: two national pois
 helplines, three trails, and a generic "Various Airbnb / VRBO" entry.
 
 ### 3. Messaging has never been tested end to end
+
+**STILL OPEN, and yours.** Needs two signed-in accounts; no code change can close it.
+
 `app/members/messages/`, `lib/messages.ts`
 
 Built, deployed, typechecked, and reachable. Never once exercised by a real send,
@@ -70,10 +127,18 @@ The riskiest part is **photo attachments**. They upload to a private storage buc
 and display through short-lived signed links, and neither has ever run with real
 traffic. If signing fails, photos will sit on "Loading photo..." forever.
 
+One thing that made this worse is now fixed: a message photo is shrunk before it is
+sent, the same way every other upload on the site already was. Sending a photo straight
+off a phone camera used to push the full-size file through. That removes a likely cause
+of failure but does not replace the test — the signing path is still unexercised.
+
 Everything else in the flow is unverified too: send, receive, unread badge clearing,
 block and unblock.
 
 ### 4. A test account is in the public member directory
+
+**STILL OPEN, and yours.** Data, not code. Delete it once item 3 is done.
+
 The directory shows two members: Matt, and **Dan Tanner**, which is your own second
 account created for testing. It is publicly visible at /members.
 
@@ -85,6 +150,12 @@ Should be deleted before anyone real is invited, so the directory is honest on d
 ## Should Fix
 
 ### 5. Member directory search and filters do nothing **[Q5]**
+
+**DONE.** Search, neighbourhood and breed all filter. Both dropdowns are built from
+the members actually present rather than a fixed list, there is a match count and
+a Clear filters control, and "nothing matched" is worded differently from
+"nobody has joined yet".
+
 `app/members/page.tsx`
 
 The "Search members or dog names" box and both dropdowns (Neighbourhood, Breed) have
@@ -94,33 +165,67 @@ This is the item most likely to read as *broken* rather than unfinished, and wit
 members arriving somebody will try it within minutes.
 
 ### 6. Password reset emails are flagged by Gmail as suspicious
-Confirmed by you: the email arrives inside a large red warning block with "report spam"
-highlighted.
 
-Authentication is not the problem. DKIM, SPF and DMARC are all correctly published and
-verified. The likely cause is that the reset link points at
-`spjeepflyxdnztxposoi.supabase.co`, not psdogdad.com. An email claiming to be from your
-domain, whose button goes to an unrelated domain with a long random token, matches the
-shape of a phishing message.
+**STILL OPEN, and yours — but now diagnosed, and there is a free thing to try first.**
 
-Not yet proven. The decisive evidence is the `Authentication-Results` header on the
-email itself, which has not been read.
+The headers were read off the 30 July reset email. Authentication passes on every count:
 
-If confirmed, the real fix is a Supabase custom domain, roughly ten dollars a month, so
-auth links live on a psdogdad.com subdomain. This is a warning shown to members at
-signup and password recovery, which is the worst possible moment to look untrustworthy.
+    dkim=pass   header.i=@psdogdad.com  header.s=resend
+    dkim=pass   header.i=@amazonses.com
+    spf=pass    smtp.mailfrom=...@send.psdogdad.com
+    dmarc=pass  (p=NONE sp=NONE) header.from=psdogdad.com
+
+So nothing is wrong with the sending, and the earlier guess was right. The button in
+that email goes to `spjeepflyxdnztxposoi.supabase.co/auth/v1/verify?token=...`, and an
+email from your domain whose one link points at an unrelated domain carrying a long
+random token is the exact shape of a phishing message. That is what Gmail is reacting to.
+
+Two things fell out of reading those headers:
+
+- **`p=NONE` is the weakest DMARC policy there is.** It publishes the record and then
+  asks nobody to act on it. Alignment already passes, so moving to `p=quarantine` is a
+  DNS edit that costs nothing. **Try this first** — it may be enough on its own.
+- **These emails already go out through Resend**, on a verified psdogdad.com signing key,
+  via Amazon SES. See item 7: it is smaller than it looks.
+
+If the DMARC change is not enough, the real fix is still the Supabase custom domain,
+roughly ten dollars a month, so auth links sit on a psdogdad.com subdomain. This is a
+warning shown to members at signup and password recovery, which is the worst possible
+moment to look untrustworthy.
 
 ### 7. Message notification emails are not switched on
-`app/api/notify-message/route.ts`
 
-The route exists and is deployed. It does nothing because `RESEND_API_KEY` and
+**STILL OPEN, and yours, the most valuable of the five, and smaller than it looks.**
+Two env vars in Vercel and a redeploy.
+
+Reading the reset email headers settled something: the emails already leave through
+Resend on a verified psdogdad.com signing key. **The Resend account and the domain
+verification are done.** This is copying an existing key into Vercel, not standing up
+a new service.
+
+`app/api/notify-message/route.ts`, `app/api/notify-pro-listing/route.ts`,
+`app/api/admin/pro-listings/route.ts`, `app/pros/review/page.tsx`
+
+The routes exist and are deployed. They do nothing because `RESEND_API_KEY` and
 `SUPABASE_SERVICE_ROLE_KEY` are not set in Vercel, and a redeploy is needed after adding
-them.
+them. `.env.local.example` documents both.
 
-Low value while both accounts are yours. Matters as soon as real members join, because
-a message nobody is told about makes the site feel dead.
+What changed since the audit: these two variables no longer gate only message
+notifications. The pro listing review that landed on `main` needs the service role key
+to read a submission and approve it, so **`/pros/review` cannot work at all without it**,
+and no pro is told their listing went live. One setting, three features.
+
+Every route fails soft without them — a missing key logs and returns rather than
+breaking the thing that triggered it — so nothing is visibly broken today. It is
+silently doing nothing, which is worse to discover late.
 
 ### 8. The events calendar is empty on the weekend the homepage promotes
+
+**STILL OPEN, and yours.** The August 15 weekend has passed. The row that matters now
+is the 17 October kickoff: run `supabase/kickoff-event.sql` once. Until then the
+kickoff callout renders nothing rather than advertising an event nobody can RSVP
+to, which is correct but means the calendar stays empty.
+
 The homepage carries a Clear the Shelters callout for August 15 and 16, and the launch
 banner names August 15. The `events` table has **zero rows**, so the events page and the
 homepage events section both show the empty state.
@@ -129,6 +234,10 @@ The shelter event still needs creating through the admin panel on /events. Only 
 do it: the insert policy restricts event creation to your email address.
 
 ### 9. Signup form does not take you to the error **[Q4]**
+
+**DONE.** Submit now scrolls the first bad field into view and focuses it, checked in
+the order the fields appear on the page. Same handling the profile form got.
+
 `app/members/join/page.tsx`
 
 Validation errors **do render**, in red, beneath each field. Twelve error elements,
@@ -141,6 +250,9 @@ account details, an error above or below the fold means Submit looks like a dead
 Same underlying problem that was fixed on the profile page, still present here.
 
 ### 10. Footer social icons go nowhere **[Q5]**
+
+**DONE.** The icons were removed rather than pointed at accounts that do not exist.
+
 `components/Footer.tsx:22`
 
 The three social icons are `href="#"` with no accessible label. Clicking one jumps to
@@ -151,33 +263,87 @@ the top of the page. Either point them at real accounts or remove them until the
 ## Nice to Have
 
 ### 11. Google Fonts are loaded twice
+
+**DONE.** `next/font` self-hosts Inter at build time; the second request is gone.
+
 `app/layout.tsx` has a stylesheet link and `app/globals.css` has an `@import` for the
 same family. Two render blocking requests instead of one. Matters most on mobile data.
 
 ### 12. No modal is accessible
+
+**DONE.** All three modals now share `components/Modal.tsx`: `role="dialog"`,
+`aria-modal`, an accessible name, Escape to close, a focus trap over Tab and
+Shift+Tab, and focus returned to the opener on close. It deliberately does not
+close on a backdrop click, because all three hold a form somebody has been
+typing into.
+
 No modal anywhere sets `role="dialog"`, traps focus, or closes on Escape. Verified: zero
 matches across the whole codebase. Affects Propose an Event, Suggest a Resource, New Post
 and the sign-in prompts.
 
 ### 13. HEIC photos will not preview outside Safari
+
+**DONE.** `downscaleImage` re-encodes to JPEG on upload and the stored file takes its
+extension from the result, so a HEIC never lands under a `.heic` name.
+
 Uploads accept `image/heic` and preview through a plain `img` tag. Chrome and Firefox
 cannot render HEIC, so the preview breaks even though the upload succeeds. HEIC is the
 iPhone default, so this will affect a real slice of members.
 
 ### 14. Test artefacts left in storage
+
+**STILL OPEN, and yours.** Storage, not code. Blocks nothing.
+
 `member-photos/_pending/` contains `diag-0731` and `diag-test-token`, both left behind by
 diagnostic checks. Harmless, invisible to members, but worth clearing.
 
 ### 15. An unused column on profiles
+
+**DONE, but you have to run it.** `supabase/06-drop-dead-notify-column.sql` drops the
+column. It is a migration, so like every other file in `supabase/` it does nothing until
+you run it in the SQL editor. Harmless to leave; it is tidiness, not a blocker.
+
 `profiles.notify_on_message` was added, then the preference was stored in auth metadata
 instead, because members have no write access to profiles and profiles is publicly
-readable. The column is now dead. No harm, just untidy.
+readable. The column has been dead ever since.
 
 ### 16. Merged branches still on the remote
+
+**STILL OPEN, and yours.** `launch-prep`, `messaging-wip` and `dev` are all still on the
+remote, along with a growing number of finished `claude/*` branches — five more PRs
+merged in early September without their branches being cleaned up. Blocks nothing.
+
 `launch-prep` and `messaging-wip` are both fully merged into `main` and can be deleted.
-`dev` is long stale and well behind.
+`dev` is long stale and well behind, and is the one to think about rather than delete
+reflexively: it carries commits that never reached `main`.
+
+### 18. The auto-confirm stopgap is still installed
+
+**STILL OPEN, and yours, and it should not be forgotten.** Do it right after item 7.
+
+`supabase/auto-confirm-stopgap.sql`
+
+The trigger confirms every new account the moment it is created, so nobody has to prove
+they own the address they typed. That was the right call while Supabase's own email was
+unreliable and everybody signing up was you. It is the wrong call the day strangers can
+join: anyone can sign up as anyone, and a typo'd address becomes an account nobody can
+recover.
+
+The file documents its own removal:
+
+    drop trigger if exists auto_confirm_new_user_trigger on auth.users;
+
+Do not drop it before item 7 is done and confirmation email is proven to arrive, or new
+members will be locked out of accounts they just created. That ordering is the whole
+risk here, which is why it sits next to item 7 rather than at the top.
+
+Not in the 1 August audit. Found on 7 September while reading the reset email headers.
 
 ### 17. /welcome still has the old gradient hero
+
+**STILL AN OPEN DECISION.** `/welcome` is confirmed as the only page using
+`bg-hero-gradient`. Not a defect either way.
+
 Six pages were converted to the standard header. `/welcome` was deliberately left, since
 it is the one off celebration right after signup. Worth a decision either way, since it
 is now the only page that looks like that.
