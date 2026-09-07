@@ -7,17 +7,29 @@ Answers to the five things you asked about are marked **[Q1]** to **[Q5]**.
 
 ---
 
-## Where this stands, re-audited 2026-08-27
+## Where this stands, re-audited 2026-09-07
 
-Every item below was re-checked against the code as it is now. Most of them had
-already been fixed in the work since the audit and the list had simply gone
-stale. **Every remaining code fix is now done.**
+Every item below was re-checked against `main` as it is now. Most had already
+been fixed in the work since the audit and the list had simply gone stale.
+**Every remaining code fix is now done.**
 
 Items 9 and 12 were closed on this branch: the signup form now scrolls to and
 focuses the first bad field, and all three modals sit on a shared
 `components/Modal.tsx` that gives them `role="dialog"`, an accessible name,
 Escape to close, a focus trap and focus restored to whatever opened them.
 Verified in a real browser, 13 checks, all passing.
+
+`main` has moved on since the 27 August pass, and none of it reopens anything
+here. The Learn restructure landed, so `/resources` is now `/local` and the
+guide pages sit under `/learn` (the old paths 308 to the new ones). Signup now
+tells you when an email is already registered instead of claiming success.
+Security headers were added across all routes. And the pro listing review was
+automated: there is a `/pros/review` page and an `/api/admin/pro-listings`
+route where before you read submissions by hand.
+
+That last one changes the weight of item 7 rather than closing it. The same two
+Vercel environment variables now gate three things instead of one, so setting
+them is the single highest-value job left.
 
 **Nothing in the code is holding the site shut.** What is left is five things
 only you can do, because they are account, data and hosting jobs rather than
@@ -28,20 +40,21 @@ code:
 | 3 | Test messaging end to end, photo attachments especially | Two signed-in accounts |
 | 4 | Delete the Dan Tanner test account | Supabase, after item 3 |
 | 6 | Gmail flags the password reset email | Supabase custom domain, ~$10/mo |
-| 7 | Message notification emails are off | Two env vars in Vercel, then redeploy |
+| 7 | Notification emails **and** the pro review page are both off | Two env vars in Vercel, then redeploy |
 | 8 | The events calendar is empty | Run `supabase/kickoff-event.sql` |
 
 Item 8 has moved on since the audit: the August 15 Clear the Shelters weekend
 has passed, so the row that matters now is the **17 October kickoff**, and the
-homepage callout renders nothing at all until that SQL is run.
+homepage callout renders nothing at all until that SQL is run. That is six
+weeks out as of this re-audit, so it is the one with a real deadline on it.
 
 Items 14, 15 and 16 are housekeeping and block nothing. Item 17 is still an open
 decision, not a defect.
 
 The order that unblocks the most: **7, then 3, then 4.** Notifications on means a
-real message reaches somebody; that makes testing messaging worth doing; and
-once messaging is proven the test account can go and the directory is honest on
-day one.
+real message reaches somebody, and lights up the pro review page at the same
+time; that makes testing messaging worth doing; and once messaging is proven the
+test account can go and the directory is honest on day one.
 
 ---
 
@@ -71,7 +84,7 @@ before launch, and it is the largest remaining contradiction of the no invented 
 rule. A visitor who clicks a thread finds it is not real.
 
 ### 2. Six resource entries look like mockup leftovers **[Q3]** — FIXED
-`app/resources/page.tsx`
+`app/local/page.tsx` (was `app/resources/page.tsx`)
 
 The page carries **48 entries with phone numbers** and most look genuinely researched:
 verified Palm Springs and Coachella Valley addresses, real numbers. So the page as a
@@ -167,17 +180,24 @@ signup and password recovery, which is the worst possible moment to look untrust
 
 ### 7. Message notification emails are not switched on
 
-**STILL OPEN, and yours.** Two env vars in Vercel and a redeploy. The route is written
-and deployed.
+**STILL OPEN, and yours, and now the most valuable of the five.** Two env vars in
+Vercel and a redeploy.
 
-`app/api/notify-message/route.ts`
+`app/api/notify-message/route.ts`, `app/api/notify-pro-listing/route.ts`,
+`app/api/admin/pro-listings/route.ts`, `app/pros/review/page.tsx`
 
-The route exists and is deployed. It does nothing because `RESEND_API_KEY` and
+The routes exist and are deployed. They do nothing because `RESEND_API_KEY` and
 `SUPABASE_SERVICE_ROLE_KEY` are not set in Vercel, and a redeploy is needed after adding
-them.
+them. `.env.local.example` documents both.
 
-Low value while both accounts are yours. Matters as soon as real members join, because
-a message nobody is told about makes the site feel dead.
+What changed since the audit: these two variables no longer gate only message
+notifications. The pro listing review that landed on `main` needs the service role key
+to read a submission and approve it, so **`/pros/review` cannot work at all without it**,
+and no pro is told their listing went live. One setting, three features.
+
+Every route fails soft without them — a missing key logs and returns rather than
+breaking the thing that triggered it — so nothing is visibly broken today. It is
+silently doing nothing, which is worse to discover late.
 
 ### 8. The events calendar is empty on the weekend the homepage promotes
 
@@ -268,10 +288,12 @@ readable. The column is now dead. No harm, just untidy.
 ### 16. Merged branches still on the remote
 
 **STILL OPEN, and yours.** `launch-prep`, `messaging-wip` and `dev` are all still on the
-remote, along with a number of finished `claude/*` branches. Blocks nothing.
+remote, along with a growing number of finished `claude/*` branches — five more PRs
+merged in early September without their branches being cleaned up. Blocks nothing.
 
 `launch-prep` and `messaging-wip` are both fully merged into `main` and can be deleted.
-`dev` is long stale and well behind.
+`dev` is long stale and well behind, and is the one to think about rather than delete
+reflexively: it carries commits that never reached `main`.
 
 ### 17. /welcome still has the old gradient hero
 
