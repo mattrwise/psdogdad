@@ -31,7 +31,7 @@ That last one changes the weight of item 7 rather than closing it. The same two
 Vercel environment variables now gate three things instead of one, so setting
 them is the single highest-value job left.
 
-**Nothing in the code is holding the site shut.** What is left is five things
+**Nothing in the code is holding the site shut.** What is left is six things
 only you can do, because they are account, data and hosting jobs rather than
 code:
 
@@ -42,6 +42,7 @@ code:
 | 6 | Gmail flags the password reset email | Supabase custom domain, ~$10/mo |
 | 7 | Notification emails **and** the pro review page are both off | Two env vars in Vercel, then redeploy |
 | 8 | The events calendar is empty | Run `supabase/kickoff-event.sql` |
+| 18 | Every signup is auto-confirmed, so nobody proves their address | Drop one trigger, **after** item 7 |
 
 Item 8 has moved on since the audit: the August 15 Clear the Shelters weekend
 has passed, so the row that matters now is the **17 October kickoff**, and the
@@ -52,7 +53,7 @@ Items 14 and 16 are housekeeping and block nothing. Item 15 now has a migration
 waiting in `supabase/` for whenever you next open the SQL editor. Item 17 is still an
 open decision, not a defect.
 
-The order that unblocks the most: **7, then 3, then 4.** Notifications on means a
+The order that unblocks the most: **7, then 18, then 3, then 4.** Notifications on means a
 real message reaches somebody, and lights up the pro review page at the same
 time; that makes testing messaging worth doing; and once messaging is proven the
 test account can go and the directory is honest on day one.
@@ -165,29 +166,42 @@ members arriving somebody will try it within minutes.
 
 ### 6. Password reset emails are flagged by Gmail as suspicious
 
-**STILL OPEN, and yours.** Hosting, not code. The `Authentication-Results` header on
-the email is still the thing to read before spending anything.
+**STILL OPEN, and yours — but now diagnosed, and there is a free thing to try first.**
 
-Confirmed by you: the email arrives inside a large red warning block with "report spam"
-highlighted.
+The headers were read off the 30 July reset email. Authentication passes on every count:
 
-Authentication is not the problem. DKIM, SPF and DMARC are all correctly published and
-verified. The likely cause is that the reset link points at
-`spjeepflyxdnztxposoi.supabase.co`, not psdogdad.com. An email claiming to be from your
-domain, whose button goes to an unrelated domain with a long random token, matches the
-shape of a phishing message.
+    dkim=pass   header.i=@psdogdad.com  header.s=resend
+    dkim=pass   header.i=@amazonses.com
+    spf=pass    smtp.mailfrom=...@send.psdogdad.com
+    dmarc=pass  (p=NONE sp=NONE) header.from=psdogdad.com
 
-Not yet proven. The decisive evidence is the `Authentication-Results` header on the
-email itself, which has not been read.
+So nothing is wrong with the sending, and the earlier guess was right. The button in
+that email goes to `spjeepflyxdnztxposoi.supabase.co/auth/v1/verify?token=...`, and an
+email from your domain whose one link points at an unrelated domain carrying a long
+random token is the exact shape of a phishing message. That is what Gmail is reacting to.
 
-If confirmed, the real fix is a Supabase custom domain, roughly ten dollars a month, so
-auth links live on a psdogdad.com subdomain. This is a warning shown to members at
-signup and password recovery, which is the worst possible moment to look untrustworthy.
+Two things fell out of reading those headers:
+
+- **`p=NONE` is the weakest DMARC policy there is.** It publishes the record and then
+  asks nobody to act on it. Alignment already passes, so moving to `p=quarantine` is a
+  DNS edit that costs nothing. **Try this first** — it may be enough on its own.
+- **These emails already go out through Resend**, on a verified psdogdad.com signing key,
+  via Amazon SES. See item 7: it is smaller than it looks.
+
+If the DMARC change is not enough, the real fix is still the Supabase custom domain,
+roughly ten dollars a month, so auth links sit on a psdogdad.com subdomain. This is a
+warning shown to members at signup and password recovery, which is the worst possible
+moment to look untrustworthy.
 
 ### 7. Message notification emails are not switched on
 
-**STILL OPEN, and yours, and now the most valuable of the five.** Two env vars in
-Vercel and a redeploy.
+**STILL OPEN, and yours, the most valuable of the five, and smaller than it looks.**
+Two env vars in Vercel and a redeploy.
+
+Reading the reset email headers settled something: the emails already leave through
+Resend on a verified psdogdad.com signing key. **The Resend account and the domain
+verification are done.** This is copying an existing key into Vercel, not standing up
+a new service.
 
 `app/api/notify-message/route.ts`, `app/api/notify-pro-listing/route.ts`,
 `app/api/admin/pro-listings/route.ts`, `app/pros/review/page.tsx`
@@ -302,6 +316,28 @@ merged in early September without their branches being cleaned up. Blocks nothin
 `launch-prep` and `messaging-wip` are both fully merged into `main` and can be deleted.
 `dev` is long stale and well behind, and is the one to think about rather than delete
 reflexively: it carries commits that never reached `main`.
+
+### 18. The auto-confirm stopgap is still installed
+
+**STILL OPEN, and yours, and it should not be forgotten.** Do it right after item 7.
+
+`supabase/auto-confirm-stopgap.sql`
+
+The trigger confirms every new account the moment it is created, so nobody has to prove
+they own the address they typed. That was the right call while Supabase's own email was
+unreliable and everybody signing up was you. It is the wrong call the day strangers can
+join: anyone can sign up as anyone, and a typo'd address becomes an account nobody can
+recover.
+
+The file documents its own removal:
+
+    drop trigger if exists auto_confirm_new_user_trigger on auth.users;
+
+Do not drop it before item 7 is done and confirmation email is proven to arrive, or new
+members will be locked out of accounts they just created. That ordering is the whole
+risk here, which is why it sits next to item 7 rather than at the top.
+
+Not in the 1 August audit. Found on 7 September while reading the reset email headers.
 
 ### 17. /welcome still has the old gradient hero
 

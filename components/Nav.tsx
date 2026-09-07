@@ -229,9 +229,10 @@ export default function Nav() {
             )}
 
             <button
-              className="text-plum p-2"
+              className="text-plum w-11 h-11 flex flex-col items-center justify-center"
               onClick={() => setOpen(!open)}
               aria-label="Toggle menu"
+              aria-expanded={open}
             >
               <div className={`w-6 h-0.5 bg-plum mb-1.5 transition-all ${open ? 'rotate-45 translate-y-2' : ''}`} />
               <div className={`w-6 h-0.5 bg-plum mb-1.5 transition-all ${open ? 'opacity-0' : ''}`} />
@@ -249,7 +250,7 @@ export default function Nav() {
               key={href}
               href={href}
               onClick={() => setOpen(false)}
-              className={`px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${
+              className={`flex items-center min-h-[44px] px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${
                 isActive(match)
                   ? 'bg-brand-orange text-white'
                   : 'text-plum/70 hover:bg-plum/5 hover:text-plum'
@@ -268,7 +269,7 @@ export default function Nav() {
               <Link
                 href="/members/messages"
                 onClick={() => setOpen(false)}
-                className="px-4 py-3 rounded-xl text-sm font-semibold text-plum/70 hover:bg-plum/5 hover:text-plum transition-colors flex items-center gap-2"
+                className="flex items-center gap-2 min-h-[44px] px-4 py-3 rounded-xl text-sm font-semibold text-plum/70 hover:bg-plum/5 hover:text-plum transition-colors"
               >
                 💬 Messages
                 {unread > 0 && (
@@ -280,13 +281,13 @@ export default function Nav() {
               <Link
                 href="/members/profile"
                 onClick={() => setOpen(false)}
-                className="px-4 py-3 rounded-xl text-sm font-semibold text-plum/70 hover:bg-plum/5 hover:text-plum transition-colors"
+                className="flex items-center min-h-[44px] px-4 py-3 rounded-xl text-sm font-semibold text-plum/70 hover:bg-plum/5 hover:text-plum transition-colors"
               >
                 👤 My Profile
               </Link>
               <button
                 onClick={handleSignOut}
-                className="px-4 py-3 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 text-left transition-colors"
+                className="flex items-center min-h-[44px] px-4 py-3 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 text-left transition-colors"
               >
                 🚪 Sign Out
               </button>
