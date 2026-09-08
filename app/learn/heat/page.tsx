@@ -4,7 +4,7 @@ import PrintButton from '@/components/PrintButton'
 
 export const metadata: Metadata = {
   title: 'High Heat Guide, PS Dog Dad',
-  description: 'How to keep your dog safe in the Coachella Valley heat, the 7-second pavement test, walk timing, heatstroke warning signs, and everyday heat rules.',
+  description: 'How to keep your dog safe in the desert heat, the 7-second pavement test, walk timing, heatstroke warning signs, and everyday heat rules.',
 }
 
 const walkTimes = [

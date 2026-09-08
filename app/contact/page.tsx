@@ -57,7 +57,7 @@ export default function ContactPage() {
               <div className="text-3xl mb-3">📍</div>
               <h3 className="font-extrabold text-plum text-lg mb-1">Based In</h3>
               <p className="text-plum/60 text-sm leading-relaxed">
-                Coachella Valley, California
+                Palm Springs, California
               </p>
             </div>
 
@@ -117,7 +117,7 @@ export default function ContactPage() {
             <div className="text-4xl mb-3">🐾</div>
             <h2 className="text-2xl font-extrabold mb-3">Not a member yet?</h2>
             <p className="text-white/70 mb-6 max-w-md mx-auto">
-              We&apos;re just getting started in the Coachella Valley, which makes this a good moment
+              We&apos;re just getting started in Palm Springs and the surrounding cities, which makes this a good moment
               to be one of the first. It&apos;s free and always will be.
             </p>
             <Link href="/members/join" className="btn-primary text-base px-8">

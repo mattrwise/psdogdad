@@ -17,9 +17,9 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
-const TITLE = 'PS Dog Dad, Coachella Valley Dog Dads Community'
+const TITLE = 'PS Dog Dad, Palm Springs Dog Dads Community'
 const DESCRIPTION =
-  'The Coachella Valley community for gay men and their dogs. Forums, meetups, member profiles, and local resources.'
+  'The Palm Springs community for gay men and their dogs. Forums, meetups, member profiles, and local resources.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

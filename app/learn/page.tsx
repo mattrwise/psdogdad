@@ -5,7 +5,7 @@ import { freeGuides, memberGuides, type Guide } from '@/lib/guides'
 export const metadata: Metadata = {
   title: 'Learn, PS Dog Dad',
   description:
-    'Everything we have written down for Coachella Valley dog dads: health, desert heat, training technique, gear, and the Dog Dad Handbook. All printable.',
+    'Everything we have written down for Palm Springs area dog dads: health, desert heat, training technique, gear, and the Dog Dad Handbook. All printable.',
 }
 
 /**

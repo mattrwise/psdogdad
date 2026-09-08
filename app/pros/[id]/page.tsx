@@ -197,7 +197,7 @@ export default function ProListingPage() {
                 </span>
               ))
             ) : (
-              <span className="text-sm text-plum/60">Across the Coachella Valley</span>
+              <span className="text-sm text-plum/60">Across Palm Springs and the surrounding cities</span>
             )}
           </div>
 

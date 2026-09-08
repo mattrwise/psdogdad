@@ -8,7 +8,7 @@ const steps = [
     icon: '🌴',
     title: 'Browse the Local directory',
     color: 'bg-brand-teal',
-    text: 'Our full guide to vets, groomers, parks, trails, and dog-friendly spots across the Coachella Valley, everything local in one place.',
+    text: 'Our full guide to vets, groomers, parks, trails, and dog-friendly spots across Palm Springs and the surrounding cities, everything local in one place.',
     href: '/local',
     linkLabel: 'Browse Resources',
   },

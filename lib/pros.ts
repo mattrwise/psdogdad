@@ -278,7 +278,7 @@ export function websiteLabel(website: string): string {
 
 /** "Palm Springs, Palm Desert and La Quinta" */
 export function cityLabel(cities: string[]): string {
-  if (cities.length === 0) return 'The Coachella Valley'
+  if (cities.length === 0) return 'Palm Springs and the surrounding cities'
   if (cities.length === 1) return cities[0]
   return `${cities.slice(0, -1).join(', ')} and ${cities[cities.length - 1]}`
 }

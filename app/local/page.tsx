@@ -5,7 +5,7 @@ import { localTabs } from '@/lib/sections'
 
 export const metadata: Metadata = {
   title: 'Local, PS Dog Dad',
-  description: 'Vets, emergency clinics, groomers, daycare, dog parks and pet-friendly spots across the Coachella Valley.',
+  description: 'Vets, emergency clinics, groomers, daycare, dog parks and pet-friendly spots across Palm Springs and the surrounding cities.',
 }
 
 type Resource = {
@@ -253,7 +253,7 @@ export default function LocalPage() {
         <div>
           <h1 className="section-title">Local</h1>
           <p className="text-plum/60 mt-2">
-            Pet services, parks, and dog-friendly spots around the Coachella Valley.
+            Pet services, parks, and dog-friendly spots around Palm Springs and the surrounding cities.
           </p>
         </div>
         <SuggestResourceButton className="btn-secondary self-start">

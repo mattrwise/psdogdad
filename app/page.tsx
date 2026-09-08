@@ -15,7 +15,7 @@ import heroArt from '@/public/psdogdadbullprint_transparent.png'
 // Deliberately not member/event counts. Those would either be invented or, this
 // early, unflatteringly small, these read the same on day one and at 500 members.
 const stats = [
-  { value: '🌴', label: 'Coachella Valley' },
+  { value: '🌴', label: 'Palm Springs Area' },
   { value: 'Free', label: 'To Join' },
   { value: 'All Sizes', label: 'Dogs Welcome' },
   { value: '☀️', label: 'Year-Round Fun' },
@@ -48,14 +48,14 @@ export default function HomePage() {
             {/* Left: headline & CTAs */}
             <div>
               <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 text-sm font-semibold text-plum shadow-sm border border-plum/10 mb-6">
-                <span>🌴</span> Coachella Valley, CA
+                <span>🌴</span> Palm Springs, CA
               </div>
               <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6 text-plum">
                 They&apos;re Not Pets.{' '}
                 <span className="text-brand-orange">They&apos;re Our Kids.</span>
               </h1>
               <p className="text-lg md:text-xl text-plum/70 mb-8 leading-relaxed">
-                Connect with fellow dog dads in the Coachella Valley who understand the special bond. Share experiences, make friends, and celebrate the love we have for our four-legged family members.
+                Connect with fellow dog dads in Palm Springs and the surrounding cities who understand the special bond. Share experiences, make friends, and celebrate the love we have for our four-legged family members.
               </p>
               <div className="flex flex-wrap gap-4">
                 <SignedOut>
@@ -132,7 +132,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="section-title">Everything Your Pack Needs</h2>
-            <p className="text-plum/60 mt-3 max-w-xl mx-auto">One community for Coachella Valley dog dads, online and on the trail.</p>
+            <p className="text-plum/60 mt-3 max-w-xl mx-auto">One community for Palm Springs area dog dads, online and on the trail.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -206,7 +206,7 @@ export default function HomePage() {
               Ready to join the pack?
             </h2>
             <p className="text-white/70 text-lg mb-8 max-w-xl mx-auto">
-              Create your free member profile, introduce your dog, and start connecting with the Coachella Valley&apos;s best community.
+              Create your free member profile, introduce your dog, and start connecting with the area&apos;s best community.
             </p>
             <Link href="/members/join" className="btn-primary text-base sm:text-lg px-6 sm:px-10 py-3.5 sm:py-4 inline-block">
               Join PS Dog Dad, It&apos;s Free 🐾

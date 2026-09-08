@@ -78,7 +78,7 @@ function profileToCard(p: ProfileRow, index: number): MemberCard {
   return {
     id: p.id,
     name: p.name ?? 'New Member',
-    location: p.city ? tidyCity(p.city) : 'Coachella Valley',
+    location: p.city ? tidyCity(p.city) : 'Palm Springs area',
     dogs: cardDogs,
     joined: new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
     emoji: '🐾',
@@ -145,7 +145,7 @@ export default function MembersPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
         <div>
           <h1 className="section-title">Member Directory</h1>
-          <p className="text-plum/60 mt-2">Meet the dog dads of the Coachella Valley.</p>
+          <p className="text-plum/60 mt-2">Meet the dog dads of Palm Springs and the surrounding cities.</p>
         </div>
         <SignedOut>
           <Link href="/members/join" className="btn-primary self-start">Join the Pack</Link>

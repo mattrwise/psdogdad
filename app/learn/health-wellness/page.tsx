@@ -112,7 +112,7 @@ export default function HealthWellnessPage() {
         <div>
           <h1 className="section-title">Keeping Your Best Friend Healthy</h1>
           <p className="text-plum/60 mt-2 max-w-2xl">
-            The essentials of desert dog health, plus a directory of trusted veterinarians across the Coachella Valley.
+            The essentials of desert dog health, plus a directory of trusted veterinarians across Palm Springs and the surrounding cities.
           </p>
         </div>
         <PrintButton />

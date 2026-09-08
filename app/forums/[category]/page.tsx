@@ -53,7 +53,7 @@ const categories: Record<string, {
   'local-spots': {
     icon: '🌴',
     title: 'Local Spots',
-    description: 'Dog parks, hiking trails, pet-friendly patios and more in the Coachella Valley.',
+    description: 'Dog parks, hiking trails, pet-friendly patios and more in Palm Springs and the surrounding cities.',
     color: 'bg-brand-golden/10 border-brand-golden/30',
     badge: 'bg-brand-golden/10 text-plum',
     ideas: [

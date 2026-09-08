@@ -36,7 +36,7 @@ const categories = [
     slug: 'local-spots',
     icon: '🌴',
     title: 'Local Spots',
-    description: 'Dog parks, hiking trails, pet-friendly patios and more in the Coachella Valley.',
+    description: 'Dog parks, hiking trails, pet-friendly patios and more in Palm Springs and the surrounding cities.',
     color: 'bg-brand-golden/10 border-brand-golden/30',
     badge: 'bg-brand-golden/10 text-plum',
   },
@@ -126,7 +126,7 @@ export default function ForumsPage() {
       {/* Header */}
       <div className="mb-10">
         <h1 className="section-title">Community Forums</h1>
-        <p className="text-plum/60 mt-2">Ask questions, share tips, and connect with dog dads across the Coachella Valley.</p>
+        <p className="text-plum/60 mt-2">Ask questions, share tips, and connect with dog dads across Palm Springs and the surrounding cities.</p>
       </div>
 
       <SectionTabs tabs={communityTabs} />
