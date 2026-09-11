@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
+import GuestRsvpForm from '@/components/GuestRsvpForm'
 import { supabase } from '@/lib/supabase/client'
 import { useUser } from '@/lib/useUser'
 import {
@@ -103,8 +104,12 @@ export default function KickoffCallout() {
             <span>📍 {KICKOFF_LOCATION}</span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            {user ? (
+          {/* A member toggles their own RSVP. Everyone else gets the guest
+              form, because asking someone who has never met us to make an
+              account before they will come on a walk is the biggest ask on the
+              site pointed at the people who know us least. */}
+          {user ? (
+            <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={handleRsvp}
                 disabled={saving}
@@ -114,27 +119,30 @@ export default function KickoffCallout() {
                     : 'bg-brand-orange text-white hover:bg-brand-orange/90'
                 } ${saving ? 'opacity-60 cursor-wait' : ''}`}
               >
-                {rsvp.mine ? "✓ You're going" : "I'll be there 🐾"}
+                {rsvp.mine ? "\u2713 You're going" : "I'll be there \U0001F43E"}
               </button>
-            ) : (
-              <Link href="/members/join" className="btn-primary">
-                Join Free to RSVP 🐾
+
+              <Link href="/events" className="btn-secondary">
+                Event details
               </Link>
-            )}
 
-            <Link href="/events" className="btn-secondary">
-              Event details
-            </Link>
-
-            {/* Attendance is members-only in the database, so a signed-out
-                visitor genuinely cannot read it. Saying "0 going" here would
-                be both wrong and discouraging. */}
-            {user && (
+              {/* Attendance is members-only in the database, so a signed-out
+                  visitor genuinely cannot read it. Saying "0 going" to them
+                  would be both wrong and discouraging. */}
               <span className="text-sm text-plum/50">
                 {rsvp.count === 1 ? '1 dog dad is in' : `${rsvp.count} dog dads are in`}
               </span>
-            )}
-          </div>
+            </div>
+          ) : (
+            <>
+              <GuestRsvpForm eventId={event.id} />
+              <div className="mt-5">
+                <Link href="/events" className="btn-secondary">
+                  Event details
+                </Link>
+              </div>
+            </>
+          )}
 
           <p className="text-xs text-plum/40 mt-6 leading-relaxed">
             Free, no dues, no sign-up sheet at the gate. Reactive or nervous dogs

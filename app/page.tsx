@@ -16,7 +16,7 @@ import heroArt from '@/public/psdogdadbullprint_transparent.png'
 // early, unflatteringly small, these read the same on day one and at 500 members.
 const stats = [
   { value: '🌴', label: 'Palm Springs Area' },
-  { value: 'Free', label: 'To Join' },
+  { value: 'Free', label: 'Always' },
   { value: 'All Sizes', label: 'Dogs Welcome' },
   { value: '☀️', label: 'Year-Round Fun' },
 ]
@@ -32,10 +32,10 @@ export default function HomePage() {
     <div>
       {/* Kickoff notice */}
       <div className="bg-brand-golden text-plum text-center px-4 py-3 text-sm font-semibold">
-        🐾 The club officially starts with a group walk on October 17th at 8am,
-        Ruth Hardy Park. Everyone is welcome, {' '}
-        <Link href="/members/join" className="underline font-bold hover:text-brand-orange">
-          sign up and come along
+        🐾 Our first group walk is Saturday, October 17 at 8am, Ruth Hardy
+        Park. Everyone is welcome, no account needed, {' '}
+        <Link href="/#walk" className="underline font-bold hover:text-brand-orange">
+          tell us you are coming
         </Link>
         .
       </div>
@@ -55,26 +55,43 @@ export default function HomePage() {
                 <span className="text-brand-orange">They&apos;re Our Kids.</span>
               </h1>
               <p className="text-lg md:text-xl text-plum/70 mb-8 leading-relaxed">
-                Connect with fellow dog dads in Palm Springs and the surrounding cities who understand the special bond. Share experiences, make friends, and celebrate the love we have for our four-legged family members.
+                Dog dads in Palm Springs and the surrounding cities, out walking together. Come on the next morning walk and meet a few of us, and use the local guide any time you need a vet, a groomer, or the shade and water rules for a desert summer.
               </p>
+              {/* Order matters here. A visitor is asked for the smallest thing
+                  first, a morning walk, then something with no ask at all, the
+                  guide. Signing up is the quiet line underneath, offered rather
+                  than demanded. */}
               <div className="flex flex-wrap gap-4">
                 <SignedOut>
-                  <Link href="/members/join" className="btn-primary text-base">
-                    Join the Pack 🐾
+                  <Link href="/#walk" className="btn-primary text-base">
+                    Come on the Walk 🐾
                   </Link>
-                  <Link href="/members/login" className="btn-secondary text-base">
-                    Sign In
+                  <Link href="/local" className="btn-secondary text-base">
+                    The Local Dog Guide
                   </Link>
                 </SignedOut>
                 <SignedIn>
                   <Link href="/forums" className="btn-primary text-base">
                     Jump into the Forums 💬
                   </Link>
+                  <Link href="/events" className="btn-secondary text-base">
+                    See Upcoming Events
+                  </Link>
                 </SignedIn>
-                <Link href="/events" className="btn-secondary text-base">
-                  See Upcoming Events
-                </Link>
               </div>
+              <SignedOut>
+                <p className="text-sm text-plum/60 mt-5">
+                  Already a member?{' '}
+                  <Link href="/members/login" className="font-bold text-brand-teal hover:underline">
+                    Sign in
+                  </Link>
+                  . Or{' '}
+                  <Link href="/members/join" className="font-bold text-brand-teal hover:underline">
+                    create a free profile
+                  </Link>
+                  .
+                </p>
+              </SignedOut>
             </div>
 
             {/* Right: illustration */}
@@ -112,7 +129,7 @@ export default function HomePage() {
       {/* The first meetup. Sits above the shelter drive because it's the thing a
           first-time visitor most needs to leave with, and it carries its own
           RSVP so nobody has to navigate in order to commit. */}
-      <section className="bg-brand-cream pt-4 pb-4">
+      <section id="walk" className="bg-brand-cream pt-4 pb-4 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <KickoffCallout />
         </div>
@@ -203,14 +220,23 @@ export default function HomePage() {
         <section className="bg-plum py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-              Ready to join the pack?
+              Start with a walk
             </h2>
             <p className="text-white/70 text-lg mb-8 max-w-xl mx-auto">
-              Create your free member profile, introduce your dog, and start connecting with the area&apos;s best community.
+              Saturday, October 17 at 8am, Ruth Hardy Park. A name and an email
+              is all it takes to say you are coming. A profile is here whenever
+              you want one.
             </p>
-            <Link href="/members/join" className="btn-primary text-base sm:text-lg px-6 sm:px-10 py-3.5 sm:py-4 inline-block">
-              Join PS Dog Dad, It&apos;s Free 🐾
+            <Link href="/#walk" className="btn-primary text-base sm:text-lg px-6 sm:px-10 py-3.5 sm:py-4 inline-block">
+              Tell us you are coming 🐾
             </Link>
+            <p className="text-white/50 text-sm mt-6">
+              Rather set up a profile first?{' '}
+              <Link href="/members/join" className="font-bold text-brand-golden hover:underline">
+                Join PS Dog Dad, it is free
+              </Link>
+              .
+            </p>
           </div>
         </section>
       </SignedOut>
