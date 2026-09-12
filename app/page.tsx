@@ -77,7 +77,7 @@ export default function HomePage() {
                   quiet line underneath rather than the headline. */}
               <div className="flex flex-wrap gap-4">
                 <Link href="/local" className="btn-primary text-base">
-                  Find a Vet or Groomer
+                  Local Resources
                 </Link>
                 <SignedOut>
                   <Link href="/#walk" className="btn-secondary text-base">
