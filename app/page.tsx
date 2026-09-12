@@ -7,18 +7,30 @@ import ShelterEventCallout from '@/components/ShelterEventCallout'
 import KickoffCallout from '@/components/KickoffCallout'
 import UpcomingEventsPreview from '@/components/home/UpcomingEventsPreview'
 import LatestDiscussionsPreview from '@/components/home/LatestDiscussionsPreview'
+import { emergencyRoom, listingCount, resourceSections, tel, totalListings } from '@/lib/local'
 // Imported (not linked by URL) so Next.js serves it from /_next/static/… and
 // fingerprints it. This originally worked around the under construction gate,
 // which intercepted plain /public files; it is the right default anyway.
 import heroArt from '@/public/psdogdadbullprint_transparent.png'
 
-// Deliberately not member/event counts. Those would either be invented or, this
-// early, unflatteringly small, these read the same on day one and at 500 members.
+/**
+ * The homepage leads with the directory.
+ *
+ * It used to lead with Join the Pack, which is the biggest ask on the site
+ * pointed at the people who know us least. The directory asks for nothing, it
+ * is useful the first time somebody lands here, and it is the part that is
+ * genuinely finished. Membership is offered underneath it rather than demanded
+ * in front of it, and the walk is the middle step between the two.
+ */
+
+// Every number here is read off the directory itself, so none of them can drift
+// away from the truth. Deliberately still no member or event counts: those would
+// either be invented or, this early, unflatteringly small.
 const stats = [
+  { value: String(totalListings), label: 'Local Listings' },
+  { value: '24/7', label: 'Emergency Numbers' },
+  { value: 'Free', label: 'No Account Needed' },
   { value: '🌴', label: 'Palm Springs Area' },
-  { value: 'Free', label: 'Always' },
-  { value: 'All Sizes', label: 'Dogs Welcome' },
-  { value: '☀️', label: 'Year-Round Fun' },
 ]
 
 /**
@@ -55,39 +67,39 @@ export default function HomePage() {
                 <span className="text-brand-orange">They&apos;re Our Kids.</span>
               </h1>
               <p className="text-lg md:text-xl text-plum/70 mb-8 leading-relaxed">
-                Dog dads in Palm Springs and the surrounding cities, out walking together. Come on the next morning walk and meet a few of us, and use the local guide any time you need a vet, a groomer, or the shade and water rules for a desert summer.
+                Start with the directory. Vets, emergency clinics, groomers,
+                daycare, dog parks and the patios that will not mind a dog under
+                the table, across Palm Springs and the surrounding cities. Every
+                listing is a real business with an address or a phone number, and
+                there is nothing to sign up for.
               </p>
-              {/* Order matters here. A visitor is asked for the smallest thing
-                  first, a morning walk, then something with no ask at all, the
-                  guide. Signing up is the quiet line underneath, offered rather
-                  than demanded. */}
+              {/* The smallest ask first. The directory costs a visitor nothing,
+                  the walk costs them a Saturday morning, and a profile is the
+                  quiet line underneath rather than the headline. */}
               <div className="flex flex-wrap gap-4">
+                <Link href="/local" className="btn-primary text-base">
+                  Find a Vet or Groomer
+                </Link>
                 <SignedOut>
-                  <Link href="/#walk" className="btn-primary text-base">
+                  <Link href="/#walk" className="btn-secondary text-base">
                     Come on the Walk 🐾
-                  </Link>
-                  <Link href="/local" className="btn-secondary text-base">
-                    The Local Dog Guide
                   </Link>
                 </SignedOut>
                 <SignedIn>
-                  <Link href="/forums" className="btn-primary text-base">
+                  <Link href="/forums" className="btn-secondary text-base">
                     Jump into the Forums 💬
-                  </Link>
-                  <Link href="/events" className="btn-secondary text-base">
-                    See Upcoming Events
                   </Link>
                 </SignedIn>
               </div>
               <SignedOut>
                 <p className="text-sm text-plum/60 mt-5">
-                  Already a member?{' '}
-                  <Link href="/members/login" className="font-bold text-brand-teal hover:underline">
-                    Sign in
-                  </Link>
-                  . Or{' '}
+                  Membership is free and not required.{' '}
                   <Link href="/members/join" className="font-bold text-brand-teal hover:underline">
-                    create a free profile
+                    Create a profile
+                  </Link>
+                  {' '}or{' '}
+                  <Link href="/members/login" className="font-bold text-brand-teal hover:underline">
+                    sign in
                   </Link>
                   .
                 </p>
@@ -126,10 +138,74 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* The first meetup. Sits above the shelter drive because it's the thing a
-          first-time visitor most needs to leave with, and it carries its own
-          RSVP so nobody has to navigate in order to commit. */}
-      <section id="walk" className="bg-brand-cream pt-4 pb-4 scroll-mt-24">
+      {/* The directory. The reason to be on this page at all. */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="section-title">The Local Dog Directory</h2>
+            <p className="text-plum/60 mt-3 max-w-2xl mx-auto">
+              {totalListings} listings across {resourceSections.length} categories,
+              checked by hand. Phone numbers you can tap and directions that open
+              in your maps app.
+            </p>
+          </div>
+
+          {/* The most useful thing on the site, placed where a worried person
+              does not have to read anything else first. */}
+          {emergencyRoom?.phone && (
+            <div className="card border-l-4 border-red-500 p-5 mb-10 flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex-1">
+                <p className="text-xs font-extrabold text-red-600 uppercase tracking-wider mb-1">
+                  If something is wrong right now
+                </p>
+                <p className="font-extrabold text-plum">{emergencyRoom.name}</p>
+                <p className="text-sm text-plum/60">{emergencyRoom.detail}</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-4">
+                <a
+                  href={`tel:${tel(emergencyRoom.phone)}`}
+                  className="btn-primary text-base whitespace-nowrap"
+                >
+                  📞 {emergencyRoom.phone}
+                </a>
+                <Link
+                  href="/local#emergency"
+                  className="text-sm font-bold text-brand-teal hover:underline"
+                >
+                  All emergency and poison numbers
+                </Link>
+              </div>
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {resourceSections.map((section) => (
+              <Link
+                key={section.slug}
+                href={`/local#${section.slug}`}
+                className="card group p-5 hover:-translate-y-1 text-center"
+              >
+                <div className="text-3xl mb-2">{section.icon}</div>
+                <h3 className="font-extrabold text-plum text-sm leading-snug mb-1">{section.title}</h3>
+                <p className="text-xs font-semibold text-plum/40 uppercase tracking-wider">
+                  {listingCount(section)} listed
+                </p>
+              </Link>
+            ))}
+          </div>
+
+          <div className="text-center mt-10">
+            <Link href="/local" className="btn-primary text-base px-8">
+              Open the Full Directory
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* The first meetup. Below the directory now, because the directory is
+          what a first-time visitor can use today, but still with its own RSVP
+          so nobody has to navigate in order to commit. */}
+      <section id="walk" className="bg-brand-cream pt-12 pb-4 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <KickoffCallout />
         </div>
@@ -141,35 +217,6 @@ export default function HomePage() {
       <section className="bg-brand-cream pb-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ShelterEventCallout />
-        </div>
-      </section>
-
-      {/* What we offer */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="section-title">Everything Your Pack Needs</h2>
-            <p className="text-plum/60 mt-3 max-w-xl mx-auto">One community for Palm Springs area dog dads, online and on the trail.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: '🎓', title: 'Learn', desc: 'Printable guides: heat safety, health, leash skills, recall, the Handbook.', href: '/learn', color: 'from-plum to-plum-light' },
-              { icon: '📋', title: 'Local', desc: 'Vets, groomers, parks and dog-friendly patios, plus the pros who come to you.', href: '/local', color: 'from-brand-golden to-brand-golden-light' },
-              { icon: '💬', title: 'Community', desc: 'The forums and the member directory. Ask anything, meet the pack.', href: '/forums', color: 'from-brand-teal to-brand-teal-light' },
-              { icon: '📅', title: 'Events', desc: 'Dog walks, yappy hours, pool parties, and community meetups.', href: '/events', color: 'from-brand-orange to-brand-orange-light' },
-            ].map(({ icon, title, desc, href, color }) => (
-              <Link key={title} href={href} className="card group p-6 hover:-translate-y-1">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center text-2xl mb-4 shadow-md`}>
-                  {icon}
-                </div>
-                <h3 className="font-extrabold text-plum text-lg mb-2">{title}</h3>
-                <p className="text-plum/60 text-sm leading-relaxed">{desc}</p>
-                <div className="mt-4 text-brand-orange font-semibold text-sm group-hover:translate-x-1 transition-transform inline-block">
-                  Explore →
-                </div>
-              </Link>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -215,25 +262,25 @@ export default function HomePage() {
       <UpcomingEventsPreview />
       <LatestDiscussionsPreview />
 
-      {/* CTA Banner, visitors only */}
+      {/* Membership, offered last and offered plainly. */}
       <SignedOut>
         <section className="bg-plum py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-              Start with a walk
+              Membership is there if you want it
             </h2>
             <p className="text-white/70 text-lg mb-8 max-w-xl mx-auto">
-              Saturday, October 17 at 8am, Ruth Hardy Park. A name and an email
-              is all it takes to say you are coming. A profile is here whenever
-              you want one.
+              Everything above is open to everyone, no account and no dues. A
+              free profile adds the forums, the member directory and messaging,
+              and you can make one whenever you feel like it.
             </p>
-            <Link href="/#walk" className="btn-primary text-base sm:text-lg px-6 sm:px-10 py-3.5 sm:py-4 inline-block">
-              Tell us you are coming 🐾
+            <Link href="/members/join" className="btn-primary text-base sm:text-lg px-6 sm:px-10 py-3.5 sm:py-4 inline-block">
+              Create a Free Profile 🐾
             </Link>
             <p className="text-white/50 text-sm mt-6">
-              Rather set up a profile first?{' '}
-              <Link href="/members/join" className="font-bold text-brand-golden hover:underline">
-                Join PS Dog Dad, it is free
+              Or just{' '}
+              <Link href="/#walk" className="font-bold text-brand-golden hover:underline">
+                come on the walk on October 17
               </Link>
               .
             </p>

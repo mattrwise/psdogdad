@@ -1,0 +1,214 @@
+/**
+ * THE LOCAL DIRECTORY. Every listing on the site lives here.
+ *
+ * This used to sit inside app/local/page.tsx. It moved out when the homepage
+ * started leading with the directory: the category tiles and the listing counts
+ * there have to be the real ones, and the only way to keep them honest is for
+ * both pages to read the same array. A count that drifts is a count that lies.
+ */
+
+export type Resource = {
+  name: string
+  detail: string
+  address: string | null
+  phone: string | null
+  map: string | null
+  badge: string
+  badgeColor: string
+  stars: number | null
+  note: string | null
+}
+
+export type Section = {
+  slug: string
+  icon: string
+  title: string
+  color: string
+  titleColor: string
+  resources: Resource[]
+  subsections?: { title: string; resources: Resource[] }[]
+}
+
+// "(760) 778-9999" -> "+17607789999" for tappable tel: links
+export const tel = (phone: string) => '+1' + phone.replace(/\D/g, '')
+
+// Opens Google Maps in a new window with the destination pinned and directions ready
+export const mapsUrl = (query: string) =>
+  `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`
+
+// Every entry here is a real business with an address or a phone number we can
+// point at, or a national hotline. Six entries used to have neither, which is
+// the signature of mockup filler rather than a researched listing, and they have
+// been removed: Desert Veterinary Clinic, The Pampered Pup PS, Desert Doggy Spa,
+// Fetch Pet Resort, Palm Springs Feed Company, The Dog Bar. Sending a member to
+// a groomer that may not exist is worse than a shorter list. If any of them turn
+// out to be real, they come back with an address and a number attached.
+//
+// Removing two of those left Pet Supplies as a single Petco, which is its own
+// kind of wrong: the valley has plenty of stores, we just had the invented ones
+// listed instead of the real ones. That section was researched properly and now
+// carries the independents (Bones-N-Scones, Cold Nose Warm Heart) alongside the
+// chains, all with an address and a number.
+//
+// The address-less entries that remain are legitimate: two national poison
+// hotlines, three trailheads, and a generic Airbnb/VRBO pointer.
+export const resourceSections: Section[] = [
+  {
+    slug: 'emergency',
+    icon: '🚨',
+    title: 'Emergency',
+    color: 'border-red-400',
+    titleColor: 'text-red-600',
+    resources: [
+      { name: 'VEG ER for Pets', detail: 'Palm Desert · Open 24 hours, 7 days', address: '73495 Hwy 111, Palm Desert', phone: '(760) 249-2279', map: 'VEG ER for Pets, 73495 Hwy 111, Palm Desert, CA', badge: 'Emergency 24/7', badgeColor: 'bg-red-100 text-red-600', stars: 5, note: 'No appointment needed. You speak to the vet directly and can stay with your dog.' },
+      { name: 'Rancho Mirage Animal and Emergency Hospital', detail: 'Rancho Mirage · Emergency, advertises 24/7', address: '71950 Hwy 111, Rancho Mirage', phone: '(442) 228-6857', map: 'Rancho Mirage Animal and Emergency Hospital, Rancho Mirage, CA', badge: 'Emergency', badgeColor: 'bg-red-100 text-red-600', stars: null, note: 'Second ER option, and closer if you are mid-valley. Call as you set off.' },
+      { name: 'Veterinary Urgent Care of the Desert', detail: 'Palm Desert · Urgent care, not overnight', address: '36955 Cook St, Ste 14A, Palm Desert', phone: '(760) 851-0668', map: 'Veterinary Urgent Care of the Desert, Palm Desert, CA', badge: 'Urgent Care', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: 'Roughly 7am to 10pm Monday to Thursday, 7am to 8pm Friday to Sunday. Closes overnight, so ring first.' },
+    ],
+    subsections: [
+      {
+        title: 'Poison Control',
+        resources: [
+          { name: 'ASPCA Animal Poison Control', detail: 'Hotline · 24 hours', address: null, phone: '(888) 426-4435', map: null, badge: 'Hotline 24/7', badgeColor: 'bg-brand-golden/20 text-plum', stars: null, note: 'Consultation fee applies' },
+          { name: 'Pet Poison Helpline', detail: 'Hotline · 24 hours', address: null, phone: '(855) 764-7661', map: null, badge: 'Hotline 24/7', badgeColor: 'bg-brand-golden/20 text-plum', stars: null, note: 'Consultation fee applies' },
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'veterinarians',
+    icon: '🏥',
+    title: 'Veterinarians',
+    color: 'border-brand-teal',
+    titleColor: 'text-brand-teal',
+    resources: [
+      { name: 'VCA Desert Animal Hospital', detail: 'Full Service', address: '4299 E Ramon Rd, Palm Springs', phone: '(760) 778-9999', map: 'VCA Desert Animal Hospital, 4299 E Ramon Rd, Palm Springs, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: 'Mon, Fri 7am, 6pm, Sat 7:30am, 5pm · Member favorite' },
+      { name: 'Palm Springs Animal Hospital', detail: 'Full Service', address: '4500 E Palm Canyon Dr, Palm Springs', phone: '(760) 324-0450', map: 'Palm Springs Animal Hospital, 4500 E Palm Canyon Dr, Palm Springs, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: null },
+      { name: 'Pet Lux', detail: '', address: '1801 E Tahquitz Canyon Way, Ste 102, Palm Springs', phone: '(760) 297-7747', map: 'Pet Lux, Palm Springs, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
+      { name: 'Animal Samaritans', detail: '', address: '72120 Pet Land Pl, Thousand Palms', phone: '(760) 343-3477', map: 'Animal Samaritans, Thousand Palms, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
+      { name: 'El Paseo Animal Hospital', detail: '', address: '72608 El Paseo, Ste 4, Palm Desert', phone: '(760) 491-1008', map: 'El Paseo Animal Hospital, Palm Desert, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
+      { name: 'Paws and Claws', detail: '', address: '72895 Fred Waring Dr, Palm Desert', phone: '(760) 610-2454', map: 'Paws and Claws, Palm Desert, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
+      { name: 'Palm Desert Pet Hospital', detail: '', address: '41990 Cook St, Ste B201, Palm Desert', phone: '(760) 568-9377', map: 'Palm Desert Pet Hospital, Palm Desert, CA', badge: 'Recommended', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
+    ],
+  },
+  {
+    slug: 'groomers',
+    icon: '✂️',
+    title: 'Groomers',
+    color: 'border-brand-orange',
+    titleColor: 'text-brand-orange',
+    resources: [
+      { name: 'The Wizard of Paws', detail: 'Nail trims & full grooming', address: '400 El Cielo Rd, Palm Springs', phone: '(760) 620-5098', map: 'The Wizard of Paws, 400 El Cielo Rd, Palm Springs, CA', badge: 'Member Favorite', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 5, note: "Lucy's go-to for nail trims 🐾 · Cage-free, quiet environment" },
+      { name: 'Barking Beauties', detail: '', address: '1717 E Vista Chino, Ste J3, Palm Springs', phone: '(760) 766-6169', map: 'Barking Beauties, Palm Springs, CA', badge: 'Grooming', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
+      { name: 'The Grooming Plug', detail: '', address: '4565 E Camino Parocela, Palm Springs', phone: '(760) 620-3189', map: 'The Grooming Plug, Palm Springs, CA', badge: 'Grooming', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
+      { name: "Miriam's Poochella", detail: '', address: '1504 S Palm Canyon Dr, Palm Springs', phone: '(760) 832-6913', map: 'Miriam\'s Poochella, Palm Springs, CA', badge: 'Grooming', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
+      { name: 'The Barking Lot', detail: '', address: '67730 E Palm Canyon Dr, Ste 102C, Cathedral City', phone: '(760) 647-2275', map: 'The Barking Lot, Cathedral City, CA', badge: 'Grooming', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
+    ],
+  },
+  {
+    slug: 'daycare-boarding',
+    icon: '🦴',
+    title: 'Daycare & Boarding',
+    color: 'border-plum',
+    titleColor: 'text-plum',
+    resources: [
+      { name: "Doggie's Day Out", detail: '', address: '740 Vella Rd, Ste 770, Palm Springs', phone: '(760) 422-6259', map: 'Doggie\'s Day Out, Palm Springs, CA', badge: 'Daycare', badgeColor: 'bg-plum/10 text-plum', stars: null, note: null },
+      { name: 'Dogs R Dope', detail: '', address: '888 E Research Dr, Palm Springs', phone: '(760) 778-3647', map: 'Dogs R Dope, Palm Springs, CA', badge: 'Daycare', badgeColor: 'bg-plum/10 text-plum', stars: null, note: null },
+      { name: 'Tailwaggers', detail: '', address: '1124 E Tahquitz Canyon Way, Palm Springs', phone: '(323) 464-9600', map: 'Tailwaggers, Palm Springs, CA', badge: 'Daycare', badgeColor: 'bg-plum/10 text-plum', stars: null, note: null },
+      { name: 'Barkingham Pet Hotel', detail: '', address: '73650 Dinah Shore Dr, Palm Desert', phone: '(760) 699-8328', map: 'Barkingham Pet Hotel, Palm Desert, CA', badge: 'Boarding', badgeColor: 'bg-plum/10 text-plum', stars: null, note: null },
+    ],
+  },
+  {
+    slug: 'shelters',
+    icon: '🏠',
+    title: 'Shelters',
+    color: 'border-brand-teal',
+    titleColor: 'text-brand-teal',
+    resources: [
+      { name: 'Palm Springs Animal Shelter', detail: '', address: '4575 E Mesquite Ave, Palm Springs', phone: '(760) 416-5718', map: 'Palm Springs Animal Shelter, Palm Springs, CA', badge: 'Adopt', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
+      { name: 'Loving All Animals', detail: 'Rescue and foster network', address: '83496 Avenue 51, Coachella', phone: '(760) 834-7000', map: 'Loving All Animals, Coachella, CA', badge: 'Adopt', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
+      { name: 'Desert Hot Springs Animal Care and Control', detail: '', address: '65810 Hacienda Ave, Desert Hot Springs', phone: '(760) 329-0203', map: 'Desert Hot Springs Animal Care and Control, Desert Hot Springs, CA', badge: 'Shelter', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
+    ],
+  },
+  {
+    slug: 'parks-trails',
+    icon: '🌳',
+    title: 'Dog Parks & Trails',
+    color: 'border-brand-golden',
+    titleColor: 'text-plum',
+    resources: [
+      { name: 'Ruth Hardy Park', detail: 'Off-leash fenced area', address: '700 E Tamarisk Rd, Palm Springs', phone: null, map: 'Ruth Hardy Park, Palm Springs, CA', badge: 'Off-Leash', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: 'Best morning walk spot. Community meetup location.' },
+      { name: 'Demuth Park Dog Run', detail: 'Large & small dog areas', address: '4365 E Mesquite Ave, Palm Springs', phone: null, map: 'Demuth Park, Palm Springs, CA', badge: 'Off-Leash', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 4, note: 'Small dog area recently renovated (May 2025)' },
+      { name: 'Araby Trail', detail: 'South PS · Moderate 2-mile hike', address: null, phone: null, map: 'Araby Trail, Palm Springs, CA', badge: 'Leashed', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 5, note: 'Go at sunrise or sunset in summer, rocky terrain' },
+      { name: 'South Lykken Trail', detail: 'Museum Dr · Scenic ridge trail', address: null, phone: null, map: 'South Lykken Trail, Palm Springs, CA', badge: 'Leashed', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 4, note: 'Bring extra water. No shade. Incredible views.' },
+      { name: 'Tahquitz Creek Trail', detail: 'Gene Autry Trail · Flat, shaded', address: null, phone: null, map: 'Tahquitz Creek Trail, Palm Springs, CA', badge: 'Leashed', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 4, note: 'Best summer option, stays cooler' },
+      { name: 'David H. Ready Palm Springs Dog Park', detail: 'Behind City Hall', address: '222 N Civic Dr, Palm Springs', phone: '(760) 323-8253', map: 'David H. Ready Palm Springs Dog Park, Palm Springs, CA', badge: 'Off-Leash', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
+      { name: 'Rancho Mirage Dog Park', detail: '', address: '34100 Key Largo Ave, Rancho Mirage', phone: '(760) 324-4511', map: 'Rancho Mirage Dog Park, Rancho Mirage, CA', badge: 'Off-Leash', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
+      { name: 'Panorama Park Dog Park', detail: '', address: '28905 Avenida Maravilla, Cathedral City', phone: '(760) 770-0340', map: 'Panorama Park, Cathedral City, CA', badge: 'Off-Leash', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
+      { name: 'Palm Desert Dog Park', detail: 'In Civic Center Park', address: '43900 San Pablo Ave, Palm Desert', phone: null, map: 'Palm Desert Dog Park, Palm Desert, CA', badge: 'Off-Leash', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: null, note: null },
+    ],
+  },
+  {
+    slug: 'restaurants-bars',
+    icon: '🍔',
+    title: 'Pet-Friendly Restaurants & Bars',
+    color: 'border-plum',
+    titleColor: 'text-plum',
+    resources: [
+      { name: 'Bootlegger Tiki', detail: 'Dog-friendly patio', address: '1101 N Palm Canyon Dr, Palm Springs', phone: null, map: 'Bootlegger Tiki, Palm Springs, CA', badge: 'Patio Dogs', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: 'Yappy Hour HQ. Try the Zombie.' },
+      { name: 'Eight4Nine Restaurant', detail: 'Upscale patio', address: '849 N Palm Canyon Dr, Palm Springs', phone: null, map: 'Eight4Nine, Palm Springs, CA', badge: 'Patio Dogs', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: null },
+      { name: 'Cheeky\'s', detail: 'Brunch spot', address: '622 N Palm Canyon Dr, Palm Springs', phone: null, map: 'Cheeky\'s, Palm Springs, CA', badge: 'Patio Dogs', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 4, note: 'Weekend brunch. Water bowls provided.' },
+      { name: 'Workshop Kitchen + Bar', detail: 'Dinner', address: '800 N Palm Canyon Dr, Ste G, Palm Springs', phone: null, map: 'Workshop Kitchen + Bar, Palm Springs, CA', badge: 'Patio Dogs', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 4, note: null },
+    ],
+  },
+  {
+    slug: 'hotels-rentals',
+    icon: '🏨',
+    title: 'Pet-Friendly Hotels & Rentals',
+    color: 'border-brand-teal',
+    titleColor: 'text-brand-teal',
+    resources: [
+      { name: 'Alcazar Palm Springs', detail: 'Boutique hotel', address: '622 N Palm Canyon Dr, Palm Springs', phone: null, map: 'Alcazar Palm Springs, Palm Springs, CA', badge: 'Dogs Welcome', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 5, note: 'Small dogs (under 25 lbs). Request pool view.' },
+      { name: 'Arrive Palm Springs', detail: 'Boutique hotel', address: '1551 N Palm Canyon Dr, Palm Springs', phone: null, map: 'ARRIVE Palm Springs, Palm Springs, CA', badge: 'Dogs Welcome', badgeColor: 'bg-brand-teal/10 text-brand-teal', stars: 4, note: 'Pet fee applies. Very dog-welcoming staff.' },
+      { name: 'Various Airbnb / VRBO', detail: 'Filter: "Pets Allowed"', address: null, phone: null, map: null, badge: 'Filter Needed', badgeColor: 'bg-plum/10 text-plum', stars: null, note: 'Always confirm dog policy before booking, many have weight/breed limits' },
+    ],
+  },
+  {
+    slug: 'supplies-stores',
+    icon: '🛒',
+    title: 'Pet Supplies & Stores',
+    color: 'border-brand-orange',
+    titleColor: 'text-brand-orange',
+    resources: [
+      { name: 'Bones-N-Scones', detail: 'South Palm Springs · Locally owned', address: '633 S Palm Canyon Dr, Ste 26, Palm Springs', phone: '(760) 864-1133', map: 'Bones-N-Scones, 633 S Palm Canyon Dr, Palm Springs, CA', badge: 'Local', badgeColor: 'bg-brand-golden/20 text-plum', stars: null, note: 'Independent pet food and supplies. Two valley locations.' },
+      { name: 'Bones-N-Scones North Palm Springs', detail: 'Vista Chino · Locally owned', address: '1717 E Vista Chino, Ste B-3, Palm Springs', phone: '(760) 832-9010', map: 'Bones-N-Scones, 1717 E Vista Chino, Palm Springs, CA', badge: 'Local', badgeColor: 'bg-brand-golden/20 text-plum', stars: null, note: null },
+      { name: 'Cold Nose Warm Heart', detail: 'Downtown Palm Springs · Locally owned', address: '453 E Tahquitz Canyon Way, Palm Springs', phone: '(562) 508-8199', map: 'Cold Nose Warm Heart, 453 E Tahquitz Canyon Way, Palm Springs, CA', badge: 'Boutique', badgeColor: 'bg-plum/10 text-plum', stars: null, note: 'Treats, toys, collars and clothing. Closed some weekdays, so call first.' },
+      { name: 'Petco Palm Springs', detail: 'Full-service store', address: '2465 E Palm Canyon Dr, Palm Springs', phone: '(760) 864-1393', map: 'Petco, 2465 E Palm Canyon Dr, Palm Springs, CA', badge: 'Full Service', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
+      { name: 'Petco Palm Desert', detail: 'Full-service store', address: '72453 Hwy 111, Palm Desert', phone: null, map: 'Petco, Palm Desert, CA', badge: 'Full Service', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: 3, note: null },
+      { name: 'PetSmart Palm Springs', detail: 'Full-service store', address: '5601 E Ramon Rd, Palm Springs', phone: '(760) 325-9711', map: 'PetSmart, 5601 E Ramon Rd, Palm Springs, CA', badge: 'Full Service', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
+      { name: 'PetSmart Palm Desert (Monterey)', detail: 'Full-service store', address: '34900 Monterey Ave, Palm Desert', phone: '(760) 324-3059', map: 'PetSmart, 34900 Monterey Ave, Palm Desert, CA', badge: 'Full Service', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
+      { name: 'PetSmart Palm Desert (Town Center)', detail: 'Full-service store', address: '44425 Town Center Way, Ste A, Palm Desert', phone: '(760) 469-5320', map: 'PetSmart, 44425 Town Center Way, Palm Desert, CA', badge: 'Full Service', badgeColor: 'bg-brand-orange/10 text-brand-orange', stars: null, note: null },
+    ],
+  },
+]
+
+/** Everything in a section, including anything filed in a subsection. */
+export function listingCount(section: Section): number {
+  const subs = section.subsections?.reduce((n, sub) => n + sub.resources.length, 0) ?? 0
+  return section.resources.length + subs
+}
+
+/** For the homepage stats row. Real, and it moves when the list does. */
+export const totalListings = resourceSections.reduce(
+  (total, section) => total + listingCount(section),
+  0,
+)
+
+/**
+ * The first 24 hour emergency room in the list. The homepage puts its number
+ * where a worried person can tap it without reading anything else first, which
+ * is the single most useful thing this site does.
+ */
+export const emergencyRoom =
+  resourceSections
+    .find(section => section.slug === 'emergency')
+    ?.resources.find(resource => resource.phone !== null) ?? null
