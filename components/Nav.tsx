@@ -205,8 +205,12 @@ export default function Nav() {
                 <Link href="/members/login" className="ml-3 btn-secondary text-sm px-5 py-2 whitespace-nowrap">
                   Sign In
                 </Link>
-                <Link href="/members/join" className="ml-2 btn-primary text-sm px-5 py-2 whitespace-nowrap">
-                  Join Now
+                {/* Membership is optional, so it reads as an offer rather than
+                    the loudest thing in the bar. Still a real link, still one
+                    tap away, just not shouting at somebody who came here to
+                    find a groomer. */}
+                <Link href="/members/join" className="ml-4 mr-1 text-sm font-bold text-brand-teal hover:underline whitespace-nowrap">
+                  Join Free
                 </Link>
               </>
             )}
@@ -297,8 +301,8 @@ export default function Nav() {
               <Link href="/members/login" onClick={() => setOpen(false)} className="btn-secondary text-center mt-2">
                 Sign In
               </Link>
-              <Link href="/members/join" onClick={() => setOpen(false)} className="btn-primary text-center mt-2">
-                Join Now
+              <Link href="/members/join" onClick={() => setOpen(false)} className="text-center mt-4 text-sm font-bold text-brand-teal hover:underline min-h-[44px] flex items-center justify-center">
+                Join Free
               </Link>
             </>
           )}
