@@ -29,7 +29,7 @@ export default function Footer() {
             {/* No space-y: each row is a 44px tap target and carries its own
                 height. Stacked gaps on top of that just spread the footer out. */}
             <ul className="text-sm">
-              {[['Start Here', '/learn/roadmap'], ['Learn', '/learn'], ['Local', '/local'], ...(DIRECTORY_IS_PUBLIC ? [['Dog Pros', '/pros']] : []), ['Community', '/forums'], ['Events', '/events']].map(([label, href]) => (
+              {[['Start Here', '/learn/roadmap'], ['Learn', '/learn'], ['Local Resources', '/local'], ...(DIRECTORY_IS_PUBLIC ? [['Dog Pros', '/pros']] : []), ['Community', '/forums'], ['Events', '/events']].map(([label, href]) => (
                 <li key={href}>
                   <Link href={href} className="flex items-center min-h-[44px] hover:text-brand-orange transition-colors">{label}</Link>
                 </li>

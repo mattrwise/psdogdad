@@ -27,7 +27,7 @@ import { unreadCount } from '@/lib/messages'
 const links = [
   { href: '/', label: 'Home', match: ['/'] },
   { href: '/learn', label: 'Learn', match: ['/learn'] },
-  { href: '/local', label: 'Local', match: ['/local', '/pros'] },
+  { href: '/local', label: 'Local Resources', match: ['/local', '/pros'] },
   { href: '/forums', label: 'Community', match: ['/forums', '/members'] },
   { href: '/events', label: 'Events', match: ['/events'] },
 ]

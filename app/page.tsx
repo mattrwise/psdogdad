@@ -67,11 +67,10 @@ export default function HomePage() {
                 <span className="text-brand-orange">They&apos;re Our Kids.</span>
               </h1>
               <p className="text-lg md:text-xl text-plum/70 mb-8 leading-relaxed">
-                Start with the directory. Vets, emergency clinics, groomers,
-                daycare, dog parks and the patios that will not mind a dog under
-                the table, across Palm Springs and the surrounding cities. Every
-                listing is a real business with an address or a phone number, and
-                there is nothing to sign up for.
+                Vets, emergency clinics, groomers, daycare, dog parks and the
+                patios that will not mind a dog under the table. Every listing is
+                a real business with a number you can tap, and there is nothing
+                to sign up for.
               </p>
               {/* The smallest ask first. The directory costs a visitor nothing,
                   the walk costs them a Saturday morning, and a profile is the
@@ -142,7 +141,7 @@ export default function HomePage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <h2 className="section-title">The Local Dog Directory</h2>
+            <h2 className="section-title">Local Resources</h2>
             <p className="text-plum/60 mt-3 max-w-2xl mx-auto">
               {totalListings} listings across {resourceSections.length} categories,
               checked by hand. Phone numbers you can tap and directions that open
@@ -196,7 +195,7 @@ export default function HomePage() {
 
           <div className="text-center mt-10">
             <Link href="/local" className="btn-primary text-base px-8">
-              Open the Full Directory
+              See All Local Resources
             </Link>
           </div>
         </div>

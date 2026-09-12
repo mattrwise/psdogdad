@@ -11,7 +11,7 @@ import {
 } from '@/lib/local'
 
 export const metadata: Metadata = {
-  title: 'Local, PS Dog Dad',
+  title: 'Local Resources, PS Dog Dad',
   description: 'Vets, emergency clinics, groomers, daycare, dog parks and pet-friendly spots across Palm Springs and the surrounding cities.',
 }
 
@@ -74,7 +74,7 @@ export default function LocalPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-4">
         <div>
-          <h1 className="section-title">Local</h1>
+          <h1 className="section-title">Local Resources</h1>
           <p className="text-plum/60 mt-2">
             Pet services, parks, and dog-friendly spots around Palm Springs and the surrounding cities.
           </p>
