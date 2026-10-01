@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import ProposeEventModal from '@/components/events/ProposeEventModal'
 import ShelterEventCallout from '@/components/ShelterEventCallout'
-import KickoffCallout from '@/components/KickoffCallout'
 import { supabase } from '@/lib/supabase/client'
 import { useUser } from '@/lib/useUser'
 import {
@@ -15,7 +14,6 @@ import {
   type EventRow,
   type RsvpState,
 } from '@/lib/events'
-import { KICKOFF_TITLE } from '@/lib/kickoff'
 import { ADMIN_EMAIL } from '@/lib/site'
 
 type RealEvent = EventRow
@@ -198,9 +196,6 @@ export default function EventsPage() {
 
   useEffect(() => { loadReal() }, [loadReal])
 
-  // The kickoff has its own callout above, with its own RSVP button.
-  const otherEvents = realEvents.filter(e => e.title !== KICKOFF_TITLE)
-
   async function handleRealRsvp(event: RealEvent) {
     if (!user) { setSignInTitle(event.title); return }
     const current = realRsvps[event.id] ?? EMPTY_RSVP
@@ -225,12 +220,6 @@ export default function EventsPage() {
       {/* Admin: create events (visible to admin only) */}
       {user?.email === ADMIN_EMAIL && <AdminEventForm onCreated={() => loadReal()} />}
 
-      {/* The first meetup leads, with its own RSVP. It is filtered out of the
-          list below so the same event does not appear twice on one page. */}
-      <section className="mb-14">
-        <KickoffCallout />
-      </section>
-
       {/* The homepage leads with this and its button points here, so landing on
           an empty calendar made the site look like it had lost the event. */}
       <section className="mb-14">
@@ -241,7 +230,7 @@ export default function EventsPage() {
       <section className="mb-14">
         <h2 className="font-extrabold text-plum text-xl mb-5">Upcoming Events</h2>
         <div className="space-y-5">
-          {otherEvents.map((event, i) => {
+          {realEvents.map((event, i) => {
             const rsvp = realRsvps[event.id] ?? EMPTY_RSVP
             const badge = dateBadge(event.event_date)
             return (
@@ -315,7 +304,7 @@ export default function EventsPage() {
             </div>
           )}
 
-          {!loadingReal && !loadError && otherEvents.length === 0 && (
+          {!loadingReal && !loadError && realEvents.length === 0 && (
             <div className="card p-10 text-center">
               <div className="text-5xl mb-4">🌴</div>
               <h3 className="font-extrabold text-plum text-xl mb-2">This calendar is yours to build</h3>

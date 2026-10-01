@@ -4,7 +4,6 @@ import HeatAlertBanner from '@/components/HeatAlertBanner'
 import SignedIn from '@/components/auth/SignedIn'
 import SignedOut from '@/components/auth/SignedOut'
 import ShelterEventCallout from '@/components/ShelterEventCallout'
-import KickoffCallout from '@/components/KickoffCallout'
 import UpcomingEventsPreview from '@/components/home/UpcomingEventsPreview'
 import LatestDiscussionsPreview from '@/components/home/LatestDiscussionsPreview'
 import { emergencyRoom, listingCount, resourceSections, tel, totalListings } from '@/lib/local'
@@ -20,7 +19,7 @@ import heroArt from '@/public/psdogdadbullprint_transparent.png'
  * pointed at the people who know us least. The directory asks for nothing, it
  * is useful the first time somebody lands here, and it is the part that is
  * genuinely finished. Membership is offered underneath it rather than demanded
- * in front of it, and the walk is the middle step between the two.
+ * in front of it.
  */
 
 // Every number here is read off the directory itself, so none of them can drift
@@ -34,24 +33,14 @@ const stats = [
 ]
 
 /**
- * Rebuilt hourly so the date-sensitive pieces (the kickoff callout, the shelter
- * weekend callout) can retire themselves without waiting for a deploy.
+ * Rebuilt hourly so the date-sensitive pieces (the shelter weekend
+ * callout) can retire themselves without waiting for a deploy.
  */
 export const revalidate = 3600
 
 export default function HomePage() {
   return (
     <div>
-      {/* Kickoff notice */}
-      <div className="bg-brand-golden text-plum text-center px-4 py-3 text-sm font-semibold">
-        🐾 Our first group walk is Saturday, October 17 at 8am, Ruth Hardy
-        Park. Everyone is welcome, no account needed, {' '}
-        <Link href="/#walk" className="underline font-bold hover:text-brand-orange">
-          tell us you are coming
-        </Link>
-        .
-      </div>
-
       {/* Hero */}
       <section className="bg-brand-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
@@ -73,15 +62,15 @@ export default function HomePage() {
                 to sign up for.
               </p>
               {/* The smallest ask first. The directory costs a visitor nothing,
-                  the walk costs them a Saturday morning, and a profile is the
+                  events come next, and a profile is the
                   quiet line underneath rather than the headline. */}
               <div className="flex flex-wrap gap-4">
                 <Link href="/local" className="btn-primary text-base">
                   Local Resources
                 </Link>
                 <SignedOut>
-                  <Link href="/#walk" className="btn-secondary text-base">
-                    Come on the Walk 🐾
+                  <Link href="/events" className="btn-secondary text-base">
+                    See Upcoming Events 📅
                   </Link>
                 </SignedOut>
                 <SignedIn>
@@ -201,19 +190,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* The first meetup. Below the directory now, because the directory is
-          what a first-time visitor can use today, but still with its own RSVP
-          so nobody has to navigate in order to commit. */}
-      <section id="walk" className="bg-brand-cream pt-12 pb-4 scroll-mt-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <KickoffCallout />
-        </div>
-      </section>
-
       {/* The shelter's adoption drive. Time-sensitive, and against cream rather
           than the plum Training band so two dark blocks don't stack. Retires
           itself after the weekend. */}
-      <section className="bg-brand-cream pb-4">
+      <section className="bg-brand-cream pt-12 pb-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ShelterEventCallout />
         </div>
@@ -276,13 +256,6 @@ export default function HomePage() {
             <Link href="/members/join" className="btn-primary text-base sm:text-lg px-6 sm:px-10 py-3.5 sm:py-4 inline-block">
               Create a Free Profile 🐾
             </Link>
-            <p className="text-white/50 text-sm mt-6">
-              Or just{' '}
-              <Link href="/#walk" className="font-bold text-brand-golden hover:underline">
-                come on the walk on October 17
-              </Link>
-              .
-            </p>
           </div>
         </section>
       </SignedOut>
