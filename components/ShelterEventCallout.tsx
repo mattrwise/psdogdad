@@ -1,11 +1,10 @@
 import Link from 'next/link'
 
 /**
- * Points members at the Palm Springs Animal Shelter's adoption weekend. The club's
- * own start is the October 17th group walk, see KickoffCallout, so this no
- * longer claims the two are the same date. Deliberately built from our own type and colours,
- * the shelter's own artwork carries NBC/Univision/sponsor logos and a trademark,
- * so none of it is reused here. Dates, times and venue are plain facts.
+ * Points members at the Palm Springs Animal Shelter's adoption weekend.
+ * Deliberately built from our own type and colours, the shelter's own artwork
+ * carries NBC/Univision/sponsor logos and a trademark, so none of it is reused
+ * here. Dates, times and venue are plain facts.
  *
  * We are not a partner or sponsor, and the copy is written so as not to imply it.
  *
@@ -63,7 +62,7 @@ export default function ShelterEventCallout() {
               The Palm Springs Animal Shelter is running its annual adoption drive over the
               weekend of <strong className="text-white">August 15&nbsp;&amp;&nbsp;16, 10am&nbsp;&ndash;&nbsp;5pm</strong>.
               A community built around dogs who needed someone may as well help a few more
-              of them find people. Our own first outing is the group walk on October 17th.
+              of them find people.
             </p>
 
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-white/60 mb-6">

@@ -20,8 +20,8 @@
  * "Pros" is absent from the nav, the footer, the sitemap and the pointer on
  * /local. Members are not invited into an empty room.
  *
- * The same rule the October kickoff callout follows: render nothing rather than
- * advertise a meetup nobody can RSVP to. An empty directory behind a nav tab
+ * The same rule the event callouts elsewhere on the site follow: render nothing
+ * rather than advertise something nobody can act on. An empty directory behind a nav tab
  * reads as a site nobody uses, and it is a poor thing to show a trainer you are
  * trying to sign up.
  *
