@@ -58,8 +58,8 @@ export default function HomePage() {
               <p className="text-lg md:text-xl text-plum/70 mb-8 leading-relaxed">
                 Vets, emergency clinics, groomers, daycare, dog parks and the
                 patios that will not mind a dog under the table. Every listing is
-                a real business with a number you can tap, and there is nothing
-                to sign up for.
+                a real business with a number you can tap, and membership is
+                optional.
               </p>
               {/* The smallest ask first. The directory costs a visitor nothing,
                   and a profile is the quiet line underneath rather than the
