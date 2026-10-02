@@ -29,3 +29,7 @@ next-env.d.ts
 *.pem
 npm-debug.log*
 .env*
+
+# local working files, never part of the site
+Claude outputs/
+.claude/settings.local.json

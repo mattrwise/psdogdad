@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { freeGuides, memberGuides, type Guide } from '@/lib/guides'
+import { kits, bundle, kitsTotal, type Kit } from '@/lib/kits'
 
 export const metadata: Metadata = {
   title: 'Learn, PS Dog Dad',
@@ -127,6 +128,43 @@ function GuideCard({ card }: { card: Card }) {
   )
 }
 
+/**
+ * A kit is a thing you buy, so its card says so: the cover, the price, and a
+ * link that leaves the site for the Payhip checkout. Plain <img> rather than
+ * next/image because these are five small static covers and the optimizer buys
+ * nothing here.
+ */
+function KitCard({ kit }: { kit: Kit }) {
+  return (
+    <a
+      href={kit.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="card flex flex-col hover:-translate-y-0.5"
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={kit.cover}
+        alt={`Cover of ${kit.title}`}
+        width={600}
+        height={776}
+        loading="lazy"
+        className="w-full h-auto border-b border-plum/10"
+      />
+      <div className="p-5 flex flex-col flex-1">
+        <h3 className="font-extrabold text-plum text-lg mb-1">{kit.title}</h3>
+        <p className="text-sm text-plum/60 leading-relaxed flex-1">{kit.blurb}</p>
+        <div className="flex items-center justify-between mt-4">
+          <span className="text-sm font-semibold text-brand-teal">Get the kit →</span>
+          <span className="text-sm text-plum/50">
+            {kit.pages} pages · <span className="font-extrabold text-plum">${kit.price}</span>
+          </span>
+        </div>
+      </div>
+    </a>
+  )
+}
+
 export default function LearnPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -158,6 +196,46 @@ export default function LearnPage() {
           View Roadmap →
         </span>
       </Link>
+
+      {/* The kits. The header comment above said a real program to sell would
+          earn its own heading back, and these are that: printable PDFs with
+          plans, checklists, scripts, and logs, sold through Payhip. They sit
+          above the free guides because they are the fuller versions of the
+          same subjects, not because the free ones matter less. */}
+      <div className="flex items-center gap-3 mb-2 flex-wrap no-print">
+        <h2 className="text-2xl font-extrabold text-plum">Printable Kits</h2>
+        <span className="badge bg-brand-orange/10 text-brand-orange">New</span>
+      </div>
+      <p className="text-plum/60 text-sm mb-6 max-w-2xl no-print">
+        The full versions, built to be used with a pen: plans, checklists, scripts, and logs
+        you can follow on a tired day. Instant PDF download.
+      </p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-6 no-print">
+        {kits.map(kit => (
+          <KitCard key={kit.slug} kit={kit} />
+        ))}
+        <a
+          href={bundle.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-2xl bg-plum text-white p-6 flex flex-col justify-center hover:-translate-y-0.5 transition-transform"
+        >
+          <div className="badge bg-brand-golden text-plum self-start mb-3">Best value</div>
+          <h3 className="font-extrabold text-xl mb-1">{bundle.title}</h3>
+          <p className="text-white/70 text-sm leading-relaxed">
+            {bundle.blurb} Bought one at a time they come to ${kitsTotal}.
+          </p>
+          <div className="mt-5 flex items-end justify-between">
+            <span className="text-sm font-bold text-brand-golden">Get all five →</span>
+            <span className="text-3xl font-extrabold">${bundle.price}</span>
+          </div>
+        </a>
+      </div>
+      <p className="text-plum/50 text-xs mb-14 no-print">
+        Launch prices through Sunday, October 11. General education, not veterinary or
+        behavior advice.
+      </p>
 
       <div className="flex items-center gap-3 mb-2 flex-wrap">
         <h2 className="text-2xl font-extrabold text-plum">Guides</h2>
