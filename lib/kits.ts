@@ -14,7 +14,8 @@ export type Kit = {
   pages: number
   price: number
   cover: string
-  href: string
+  /** The Payhip product code: the last part of payhip.com/b/<code>. */
+  product: string
 }
 
 export const kits: Kit[] = [
@@ -25,7 +26,7 @@ export const kits: Kit[] = [
     pages: 17,
     price: 9,
     cover: '/kits/separation-anxiety.jpg',
-    href: 'https://payhip.com/b/u9W24',
+    product: 'u9W24',
   },
   {
     slug: 'when-company-comes',
@@ -34,7 +35,7 @@ export const kits: Kit[] = [
     pages: 8,
     price: 9,
     cover: '/kits/when-company-comes.jpg',
-    href: 'https://payhip.com/b/tAeTo',
+    product: 'tAeTo',
   },
   {
     slug: 'starter-kit',
@@ -43,7 +44,7 @@ export const kits: Kit[] = [
     pages: 19,
     price: 9,
     cover: '/kits/starter-kit.jpg',
-    href: 'https://payhip.com/b/u3Loi',
+    product: 'u3Loi',
   },
   {
     slug: 'desert-dog',
@@ -52,7 +53,7 @@ export const kits: Kit[] = [
     pages: 30,
     price: 12,
     cover: '/kits/desert-dog.jpg',
-    href: 'https://payhip.com/b/SFaHr',
+    product: 'SFaHr',
   },
   {
     slug: 'reliable-recall',
@@ -61,15 +62,18 @@ export const kits: Kit[] = [
     pages: 13,
     price: 9,
     cover: '/kits/reliable-recall.jpg',
-    href: 'https://payhip.com/b/4Ungm',
+    product: '4Ungm',
   },
 ]
 
+// All five PDFs in one ordinary Payhip product. It was a Payhip "bundle" for
+// about an afternoon; Payhip's on-site checkout does not work for bundles, so
+// it became a plain digital product holding five files instead.
 export const bundle = {
   title: 'The PS Dog Dad Guide Library',
   blurb: 'All five kits in one download.',
   price: 29,
-  href: 'https://payhip.com/b/Pld5o',
+  product: 'eMf21',
 }
 
 /** What the five cost bought one at a time, so the bundle saving is never typed by hand. */

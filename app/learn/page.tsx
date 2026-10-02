@@ -1,7 +1,9 @@
 import Link from 'next/link'
+import Script from 'next/script'
 import type { Metadata } from 'next'
 import { freeGuides, memberGuides, type Guide } from '@/lib/guides'
 import { kits, bundle, kitsTotal, type Kit } from '@/lib/kits'
+import KitLink from '@/components/KitLink'
 
 export const metadata: Metadata = {
   title: 'Learn, PS Dog Dad',
@@ -130,18 +132,13 @@ function GuideCard({ card }: { card: Card }) {
 
 /**
  * A kit is a thing you buy, so its card says so: the cover, the price, and a
- * link that leaves the site for the Payhip checkout. Plain <img> rather than
+ * link that opens the Payhip checkout over this page. Plain <img> rather than
  * next/image because these are five small static covers and the optimizer buys
  * nothing here.
  */
 function KitCard({ kit }: { kit: Kit }) {
   return (
-    <a
-      href={kit.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="card flex flex-col hover:-translate-y-0.5"
-    >
+    <KitLink product={kit.product} className="card flex flex-col hover:-translate-y-0.5">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={kit.cover}
@@ -161,13 +158,16 @@ function KitCard({ kit }: { kit: Kit }) {
           </span>
         </div>
       </div>
-    </a>
+    </KitLink>
   )
 }
 
 export default function LearnPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Payhip's checkout overlay, so buying a kit does not mean leaving the
+          site. See components/KitLink.tsx for what happens when it is absent. */}
+      <Script src="https://payhip.com/payhip.js" strategy="afterInteractive" />
 
       <div className="mb-8">
         <h1 className="section-title">Learn</h1>
@@ -215,10 +215,8 @@ export default function LearnPage() {
         {kits.map(kit => (
           <KitCard key={kit.slug} kit={kit} />
         ))}
-        <a
-          href={bundle.href}
-          target="_blank"
-          rel="noopener noreferrer"
+        <KitLink
+          product={bundle.product}
           className="rounded-2xl bg-plum text-white p-6 flex flex-col justify-center hover:-translate-y-0.5 transition-transform"
         >
           <div className="badge bg-brand-golden text-plum self-start mb-3">Best value</div>
@@ -230,7 +228,7 @@ export default function LearnPage() {
             <span className="text-sm font-bold text-brand-golden">Get all five →</span>
             <span className="text-3xl font-extrabold">${bundle.price}</span>
           </div>
-        </a>
+        </KitLink>
       </div>
       <p className="text-plum/50 text-xs mb-14 no-print">
         Launch prices through Sunday, October 11. General education, not veterinary or
