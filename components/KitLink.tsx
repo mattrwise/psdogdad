@@ -1,20 +1,15 @@
-'use client'
-
-import { useEffect } from 'react'
 import type { ReactNode } from 'react'
 
 /**
- * A buy button for one of the printable kits, using Payhip's official embed.
+ * A link straight to a product's Payhip checkout, opened in a new tab so this
+ * site stays open behind it.
  *
- * Payhip's own script (https://payhip.com/payhip.js) looks for elements with
- * the class `payhip-buy-button` and a `data-product` code, and opens that
- * product's checkout in a popup over the current page. The element is an
- * ordinary link to the product as well, so if the script is blocked or has not
- * loaded the click still reaches Payhip. Payhip itself skips the popup inside
- * some in-app browsers and sends the visitor to its own page instead.
- *
- * There is deliberately no target="_blank" here: the popup is how the visitor
- * stays on the site, and a new tab was what this replaced.
+ * This briefly tried to open Payhip's checkout as an overlay on top of the
+ * page. Payhip still ships the script for that, but in a current browser it
+ * redirects the whole tab to payhip.com instead, which took the visitor off the
+ * site in the one way a new tab does not. So: a plain link, a new tab, and the
+ * payment form rather than the product page, because the card they just
+ * clicked already told them what the kit is.
  */
 export default function KitLink({
   product,
@@ -27,34 +22,12 @@ export default function KitLink({
 }) {
   return (
     <a
-      href={`https://payhip.com/b/${product}`}
-      className={`payhip-buy-button ${className ?? ''}`}
-      data-theme="none"
-      data-product={product}
+      href={`https://payhip.com/buy?link=${product}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={className}
     >
       {children}
     </a>
   )
-}
-
-/**
- * Loads Payhip's script, once per visit to the page that holds the buttons.
- *
- * The script only attaches to buttons that exist when it runs. A script tag
- * added once per browser session would miss the buttons on a second client-side
- * visit to /learn (the old ones are gone, the new ones were never seen), so
- * this adds a fresh tag every time the page mounts and removes it again on the
- * way out. Every button is new on each mount, so none is bound twice.
- */
-export function PayhipEmbed() {
-  useEffect(() => {
-    const script = document.createElement('script')
-    script.src = 'https://payhip.com/payhip.js'
-    script.async = true
-    document.body.appendChild(script)
-    return () => {
-      script.remove()
-    }
-  }, [])
-  return null
 }

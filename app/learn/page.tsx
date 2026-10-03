@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { freeGuides, memberGuides, type Guide } from '@/lib/guides'
 import { kits, bundle, kitsTotal, type Kit } from '@/lib/kits'
-import KitLink, { PayhipEmbed } from '@/components/KitLink'
+import KitLink from '@/components/KitLink'
 
 export const metadata: Metadata = {
   title: 'Learn, PS Dog Dad',
@@ -131,7 +131,7 @@ function GuideCard({ card }: { card: Card }) {
 
 /**
  * A kit is a thing you buy, so its card says so: the cover, the price, and a
- * Payhip buy button that opens checkout in a popup. Plain <img> rather than
+ * link that opens the Payhip checkout in a new tab. Plain <img> rather than
  * next/image because these are five small static covers and the optimizer buys
  * nothing here.
  */
@@ -164,7 +164,6 @@ function KitCard({ kit }: { kit: Kit }) {
 export default function LearnPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <PayhipEmbed />
 
       <div className="mb-6">
         <h1 className="section-title">Learn</h1>
