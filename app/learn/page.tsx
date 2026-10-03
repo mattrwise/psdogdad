@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { freeGuides, memberGuides, type Guide } from '@/lib/guides'
 import { kits, bundle, kitsTotal, type Kit } from '@/lib/kits'
-import KitLink from '@/components/KitLink'
+import KitLink, { PayhipEmbed } from '@/components/KitLink'
 
 export const metadata: Metadata = {
   title: 'Learn, PS Dog Dad',
@@ -131,7 +131,7 @@ function GuideCard({ card }: { card: Card }) {
 
 /**
  * A kit is a thing you buy, so its card says so: the cover, the price, and a
- * link that opens the Payhip checkout in a new tab. Plain <img> rather than
+ * Payhip buy button that opens checkout in a popup. Plain <img> rather than
  * next/image because these are five small static covers and the optimizer buys
  * nothing here.
  */
@@ -164,33 +164,11 @@ function KitCard({ kit }: { kit: Kit }) {
 export default function LearnPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <PayhipEmbed />
 
-      <div className="mb-8">
+      <div className="mb-6">
         <h1 className="section-title">Learn</h1>
-        <p className="text-plum/60 mt-2 max-w-2xl">
-          Everything we&rsquo;ve written down for desert dog dads, in one place. Every one of
-          them prints, so you can put it on the fridge or hand it to a dog sitter.
-        </p>
       </div>
-
-      {/* Start here. This was buried at /resources/roadmap and reachable only
-          from a panel on the old Guides page, which is a poor place for the one
-          page written specifically for somebody who has just arrived. */}
-      <Link
-        href="/learn/roadmap"
-        className="flex flex-col sm:flex-row sm:items-center gap-4 bg-plum rounded-2xl p-5 sm:p-6 mb-14 text-white hover:-translate-y-0.5 transition-transform"
-      >
-        <div className="text-4xl flex-shrink-0">🗺️</div>
-        <div className="flex-1">
-          <h2 className="font-extrabold text-lg">New here? Start with the Roadmap</h2>
-          <p className="text-white/70 text-sm mt-0.5">
-            A step-by-step run through everything worth exploring first. Printable.
-          </p>
-        </div>
-        <span className="text-sm font-bold text-brand-golden whitespace-nowrap self-start sm:self-auto">
-          View Roadmap →
-        </span>
-      </Link>
 
       {/* The kits. The header comment above said a real program to sell would
           earn its own heading back, and these are that: printable PDFs with
@@ -230,12 +208,33 @@ export default function LearnPage() {
         behavior advice.
       </p>
 
+      {/* Start here. This was buried at /resources/roadmap and reachable only
+          from a panel on the old Guides page, which is a poor place for the one
+          page written specifically for somebody who has just arrived. */}
+      <Link
+        href="/learn/roadmap"
+        className="flex flex-col sm:flex-row sm:items-center gap-4 bg-plum rounded-2xl p-5 sm:p-6 mb-14 text-white hover:-translate-y-0.5 transition-transform"
+      >
+        <div className="text-4xl flex-shrink-0">🗺️</div>
+        <div className="flex-1">
+          <h2 className="font-extrabold text-lg">New here? Start with the Roadmap</h2>
+          <p className="text-white/70 text-sm mt-0.5">
+            A step-by-step run through everything worth exploring first. Printable.
+          </p>
+        </div>
+        <span className="text-sm font-bold text-brand-golden whitespace-nowrap self-start sm:self-auto">
+          View Roadmap →
+        </span>
+      </Link>
+
       <div className="flex items-center gap-3 mb-2 flex-wrap">
         <h2 className="text-2xl font-extrabold text-plum">Guides</h2>
         <span className="badge bg-brand-teal/10 text-brand-teal">All printable</span>
       </div>
       <p className="text-plum/60 text-sm mb-6 max-w-2xl">
-        The long ones first, then the shorter reads.
+        Everything we&rsquo;ve written down for desert dog dads, in one place. Every one of
+        them prints, so you can put it on the fridge or hand it to a dog sitter. The long
+        ones first, then the shorter reads.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-14">
