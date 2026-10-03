@@ -178,6 +178,7 @@ async function main() {
     user_metadata: { name: 'Demo Visitor', city: 'Desert Springs', dogs: [{ name: 'Sample', breed: 'Mixed Breed' }], dog_name: 'Sample', dog_breed: 'Mixed Breed' },
   })
   if (e5) console.warn('  Demo login not created: ' + e5.message)
+  else if (process.env.DEMO_LOGIN_PASSWORD) console.log('\nDemo login for sales calls:  demo@example.com  (password is the DEMO_LOGIN_PASSWORD you set)')
   else console.log(`\nDemo login for sales calls:  demo@example.com  /  ${demoPassword}`)
 
   console.log('\nDone. 120 members (including the demo login), 48 threads, 30 pro listings and events are in.')

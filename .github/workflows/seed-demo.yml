@@ -1,0 +1,45 @@
+name: Seed demo database
+
+# Fills the DEMO Supabase project with invented sample content. Run it by hand
+# from the Actions tab. It reads three repository secrets and nothing else, and
+# the script itself refuses to touch the live project or any database that
+# holds a non-example.com account.
+#
+# Secrets (Settings -> Secrets and variables -> Actions):
+#   DEMO_SUPABASE_URL                 https://<demo-ref>.supabase.co
+#   DEMO_SUPABASE_SERVICE_ROLE_KEY    the DEMO project's service_role key
+#   DEMO_LOGIN_PASSWORD               any password you choose for demo@example.com
+
+on:
+  workflow_dispatch:
+    inputs:
+      reset:
+        description: 'Wipe the demo content and rebuild it (only needed to run it a second time)'
+        type: boolean
+        default: false
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - name: Check the three secrets are set
+        env:
+          A: ${{ secrets.DEMO_SUPABASE_URL }}
+          B: ${{ secrets.DEMO_SUPABASE_SERVICE_ROLE_KEY }}
+          C: ${{ secrets.DEMO_LOGIN_PASSWORD }}
+        run: |
+          for v in A B C; do
+            if [ -z "${!v}" ]; then echo "A required secret is missing. See the comment at the top of this workflow."; exit 1; fi
+          done
+      - name: Seed the demo
+        env:
+          DEMO_SUPABASE_URL: ${{ secrets.DEMO_SUPABASE_URL }}
+          DEMO_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.DEMO_SUPABASE_SERVICE_ROLE_KEY }}
+          DEMO_LOGIN_PASSWORD: ${{ secrets.DEMO_LOGIN_PASSWORD }}
+          CONFIRM_DEMO: 'yes'
+        run: node scripts/seed-demo.mjs ${{ inputs.reset && '--reset' || '' }}

@@ -29,19 +29,21 @@ That one file controls all of it.
 5. Authentication -> Providers -> Email: turn **Confirm email** off, and consider
    turning **Allow new users to sign up** off, so strangers cannot add accounts to the demo.
 
-### 2. Fill it with sample content
-```
-npm install
-DEMO_SUPABASE_URL=https://YOUR-DEMO-REF.supabase.co \
-DEMO_SUPABASE_SERVICE_ROLE_KEY=YOUR-DEMO-SERVICE-KEY \
-CONFIRM_DEMO=yes \
-node scripts/seed-demo.mjs
-```
-It prints a demo login (`demo@example.com` and a password) for sales calls.
-To wipe and rebuild: add `--reset`.
+### 2. Fill it with sample content (no terminal needed)
+1. In your GitHub repo: **Settings -> Secrets and variables -> Actions -> New repository secret**.
+   Add three secrets:
+   - `DEMO_SUPABASE_URL`: the demo project's URL (Supabase -> Project Settings -> API)
+   - `DEMO_SUPABASE_SERVICE_ROLE_KEY`: the demo project's `service_role` key (same page, click Reveal)
+   - `DEMO_LOGIN_PASSWORD`: any password you choose, for `demo@example.com`
+2. **Actions** tab -> **Seed demo database** -> **Run workflow** -> Run.
+3. When it shows a green tick (about a minute), the demo has 120 members, 48 threads, 30 pro listings and events.
 
-The script refuses to run against the live project, and refuses if the database holds
-any account that is not `@example.com`.
+To wipe and rebuild, run it again with **reset** ticked. Prefer a terminal? From the repo folder:
+```
+DEMO_SUPABASE_URL=... DEMO_SUPABASE_SERVICE_ROLE_KEY=... CONFIRM_DEMO=yes node scripts/seed-demo.mjs
+```
+The script refuses to run against the live project, and refuses if the database holds any
+account that is not `@example.com`.
 
 ### 3. Deploy (Vercel)
 1. vercel.com -> **Add New -> Project** -> pick this repo. Name it `desert-springs-demo`.
