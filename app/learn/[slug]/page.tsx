@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -13,7 +14,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const guide = getGuide(params.slug)
   if (!guide) return {}
   return {
-    title: `${guide.title}, PS Dog Dad`,
+    title: `${guide.title}, ${brand.name}`,
     description: guide.description,
   }
 }
@@ -49,7 +50,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
               <h1 className="text-3xl sm:text-4xl font-extrabold text-plum leading-tight mb-2">
                 {guide.emoji} {guide.title}
               </h1>
-              <p className="text-sm text-plum/50">By PS Dog Dad</p>
+              <p className="text-sm text-plum/50">By {brand.name}</p>
             </div>
             <PrintButton className="btn-secondary self-start whitespace-nowrap flex-shrink-0" />
           </div>

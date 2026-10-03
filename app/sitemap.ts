@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 import { publishedGuides } from '@/lib/guides'
 import { SITE_URL } from '@/lib/site'
 import { DIRECTORY_IS_PUBLIC } from '@/lib/pros'
+import { IS_DEMO } from '@/lib/brand'
 
 /**
  * Listed by hand rather than crawled, so a page only appears here once it is
@@ -45,6 +46,8 @@ const forumCategories = [
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  // Nothing for search engines to find on the demo.
+  if (IS_DEMO) return []
   const lastModified = new Date()
   return [
     ...staticPaths.map(path => ({

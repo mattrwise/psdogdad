@@ -1,8 +1,10 @@
+import { brand } from '@/lib/brand'
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
+import DemoBanner from '@/components/DemoBanner'
 import { SITE_URL } from '@/lib/site'
 
 // Self hosted at build time rather than fetched from fonts.googleapis.com on
@@ -17,31 +19,32 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
-const TITLE = 'PS Dog Dad, Palm Springs Dog Dads Community'
+const TITLE = `${brand.name}, ${brand.tagline}`
 const DESCRIPTION =
-  'The Palm Springs community for gay men and their dogs. Forums, meetups, member profiles, and local resources.'
+  `The ${brand.city} community for ${brand.audience}. Forums, meetups, member profiles, and local resources.`
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   // Pages set their own title; this one fills in for any that don't.
   title: { default: TITLE, template: '%s' },
   description: DESCRIPTION,
-  keywords: 'Coachella Valley, Palm Springs, gay, dog dad, community, dog meetups, forums',
+  keywords: `${brand.region}, ${brand.city}, ${brand.isDemo ? 'dog owners' : 'gay'}, dog dad, community, dog meetups, forums`,
   alternates: { canonical: '/' },
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
     url: SITE_URL,
-    siteName: 'PS Dog Dad',
+    siteName: brand.name,
     locale: 'en_US',
     type: 'website',
-    images: [{ url: '/logo-full.png', width: 1200, height: 630, alt: 'PS Dog Dad' }],
+    images: brand.isDemo ? [] : [{ url: brand.logoFull, width: 1200, height: 630, alt: brand.name }],
   },
+  robots: brand.isDemo ? { index: false, follow: false, nocache: true } : undefined,
   twitter: {
     card: 'summary_large_image',
     title: TITLE,
     description: DESCRIPTION,
-    images: ['/logo-full.png'],
+    images: brand.isDemo ? [] : [brand.logoFull],
   },
 }
 
@@ -54,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`scroll-smooth ${inter.variable}`}>
       <body className="min-h-screen flex flex-col">
+        <DemoBanner />
         <Nav />
         <main className="flex-1">{children}</main>
         <Footer />

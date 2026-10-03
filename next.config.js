@@ -52,6 +52,7 @@ const nextConfig = {
     }))
   },
   async headers() {
+    const demo = process.env.NEXT_PUBLIC_DEMO === 'true'
     return [
       {
         source: '/:path*',
@@ -60,6 +61,8 @@ const nextConfig = {
             key: 'Strict-Transport-Security',
             value: 'max-age=63072000; includeSubDomains; preload',
           },
+          // The demo must never be indexed, whatever a crawler makes of robots.txt.
+          ...(demo ? [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }] : []),
           {
             key: 'X-Frame-Options',
             value: 'DENY',

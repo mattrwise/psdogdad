@@ -1,5 +1,6 @@
 'use client'
 
+import { brand } from '@/lib/brand'
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -96,10 +97,10 @@ function WelcomeContent() {
         {/* Friendly message card */}
         <div className="bg-white rounded-3xl shadow-lg p-6 sm:p-10 mb-10 text-center">
           <h2 className="text-2xl font-extrabold text-plum mb-4">
-            You&apos;re officially a PS Dog Dad 🌴
+            You&apos;re officially a {brand.name} 🌴
           </h2>
           <p className="text-plum/70 leading-relaxed mb-3">
-            This is a warm, welcoming community of gay men across Palm Springs and the surrounding cities who share a love for their dogs.
+            This is a warm, welcoming community of {brand.members} across {brand.regionPhrase} who share a love for their dogs.
             Whether you&apos;re looking for a trail buddy, a vet recommendation, or just want to show off your pup, 
             you&apos;re in the right place.
           </p>
@@ -133,7 +134,7 @@ function WelcomeContent() {
               href: '/members',
               icon: '👥',
               label: 'Members',
-              desc: 'Browse member profiles and meet the dog dads of Palm Springs and the surrounding cities.',
+              desc: `Browse member profiles and meet the ${brand.members} of ${brand.regionPhrase}.`,
               gradient: 'from-brand-orange to-brand-orange-light',
               btn: 'btn-primary',
             },
@@ -159,9 +160,9 @@ function WelcomeContent() {
           <ul className="space-y-4">
             {[
               { icon: '👋', text: 'Post an introduction in the Forums, tell us about yourself and your dog.' },
-              { icon: '📅', text: 'RSVP for an upcoming event, our morning walks at Ruth Hardy Park are a great way to meet people.' },
+              { icon: '📅', text: `RSVP for an upcoming event, our morning walks at ${brand.park} are a great way to meet people.` },
               { icon: '🌴', text: 'Check Local for our curated guide to PS vets, groomers, and dog-friendly spots.' },
-              { icon: '🐶', text: 'Browse the Member Directory and connect with dog dads near your neighborhood.' },
+              { icon: '🐶', text: `Browse the Member Directory and connect with ${brand.members} near your neighborhood.` },
             ].map(({ icon, text }) => (
               <li key={text} className="flex items-start gap-3">
                 <span className="text-2xl flex-shrink-0">{icon}</span>
@@ -183,10 +184,10 @@ function WelcomeContent() {
           <p className="text-plum/70 text-sm leading-relaxed">
             Questions or need help with your account? Reach us anytime at{' '}
             <a
-              href="mailto:hello@psdogdad.com"
+              href={`mailto:${brand.contactEmail}`}
               className="font-semibold text-brand-orange hover:underline"
             >
-              hello@psdogdad.com
+              {brand.contactEmail}
             </a>
             . We&apos;re a small community and we actually read every email.
           </p>

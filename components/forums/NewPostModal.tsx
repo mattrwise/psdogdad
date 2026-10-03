@@ -1,5 +1,6 @@
 'use client'
 
+import { brand } from '@/lib/brand'
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { useUser } from '@/lib/useUser'
@@ -90,7 +91,7 @@ export default function NewPostModal({ category, categoryTitle, onClose, onPoste
             maxLength={140}
             value={title}
             onChange={e => setTitle(e.target.value)}
-            placeholder="e.g. Hello from Cathedral City 🐶"
+            placeholder={`e.g. Hello from ${brand.towns[1]} 🐶`}
             className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-plum placeholder:text-plum/30 focus:outline-none focus:border-brand-teal"
           />
         </div>

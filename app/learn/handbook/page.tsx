@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand'
 import PrintButton from '@/components/PrintButton'
 
 const chapters = [
@@ -45,7 +46,7 @@ const chapters = [
     number: 4,
     icon: '🌱',
     title: 'Life Stages & Transitions',
-    intro: 'Your dog will change. The best dog dads change with them.',
+    intro: `Your dog will change. The best ${brand.members} change with them.`,
     topics: [
       { title: 'Puppyhood (0 to 1 year)', text: 'Socialization window closes fast, safely expose them to the world early. Expect teething, testing, and a hundred small wins.' },
       { title: 'Adolescence (1 to 3 years)', text: 'The teenage phase is real: selective hearing and boundary testing. Stay consistent, this is when most dogs get surrendered, and when they most need you.' },
@@ -71,10 +72,10 @@ const chapters = [
 const lessons = [
   { icon: '⏳', title: 'Patience beats perfection', text: 'Your dog is not giving you a hard time, they are having a hard time. Breathe, lower the difficulty, try again.' },
   { icon: '🔁', title: 'Routine is love', text: 'Predictable days make confident dogs. Boring on purpose is a feature, not a bug.' },
-  { icon: '👀', title: 'Watch more, assume less', text: 'Your dog is talking constantly with their body. The best dog dads are the best listeners.' },
+  { icon: '👀', title: 'Watch more, assume less', text: `Your dog is talking constantly with their body. The best ${brand.members} are the best listeners.` },
   { icon: '🎓', title: 'Training never ends', text: 'Five minutes a day, forever. Skills rust without practice, and dogs love having a job.' },
   { icon: '☀️', title: 'Respect the desert', text: 'Heat kills. Dawn walks, palm-test the pavement, carry water, know the heat-stress signs.' },
-  { icon: '🤝', title: 'Ask for help early', text: 'Trainers, vets, and fellow dog dads have seen it all. Struggling alone helps nobody, least of all your dog.' },
+  { icon: '🤝', title: 'Ask for help early', text: `Trainers, vets, and fellow ${brand.members} have seen it all. Struggling alone helps nobody, least of all your dog.` },
 ]
 
 const mantras = [

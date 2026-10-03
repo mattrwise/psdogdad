@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import { DIRECTORY_IS_PUBLIC } from '@/lib/pros'
 
@@ -10,13 +11,13 @@ export default function Footer() {
             <div className="flex items-center gap-2 mb-3">
               <span className="text-2xl">🐾</span>
               <div>
-                <span className="font-extrabold text-white text-xl">PS</span>
-                <span className="font-extrabold text-brand-teal text-xl"> DOG </span>
-                <span className="font-extrabold text-brand-orange text-xl">DAD</span>
+                <span className="font-extrabold text-white text-xl">{brand.logoWords[0]}</span>
+                <span className="font-extrabold text-brand-teal text-xl"> {brand.logoWords[1]} </span>
+                <span className="font-extrabold text-brand-orange text-xl">{brand.logoWords[2]}</span>
               </div>
             </div>
             <p className="text-sm text-white/60 max-w-xs leading-relaxed">
-              The Palm Springs community for gay men and their dogs. Connect, share, and wag together.
+              The {brand.city} community for {brand.audience}. Connect, share, and wag together.
             </p>
           </div>
 
@@ -52,7 +53,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/10 mt-10 pt-6 text-xs text-center text-white/40">
-          © {new Date().getFullYear()} PS Dog Dad · Palm Springs, CA · Made with 🐾 and ☀️
+          © {new Date().getFullYear()} {brand.name} · {brand.cityState} · Made with 🐾 and ☀️
         </div>
       </div>
     </footer>

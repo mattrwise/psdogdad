@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -21,8 +22,8 @@ const categories: Record<string, {
     color: 'bg-brand-teal/10 border-brand-teal/30',
     badge: 'bg-brand-teal/10 text-brand-teal',
     ideas: [
-      'Just moved to Palm Springs with a two year old lab, where do you all walk?',
-      'Hello from Cathedral City, this is Biscuit',
+      `Just moved to ${brand.city} with a two year old lab, where do you all walk?`,
+      `Hello from ${brand.towns[1]}, this is Biscuit`,
       'First time dog dad, what do you wish you had known?',
     ],
   },
@@ -53,7 +54,7 @@ const categories: Record<string, {
   'local-spots': {
     icon: '🌴',
     title: 'Local Spots',
-    description: 'Dog parks, hiking trails, pet-friendly patios and more in Palm Springs and the surrounding cities.',
+    description: `Dog parks, hiking trails, pet-friendly patios and more in ${brand.regionPhrase}.`,
     color: 'bg-brand-golden/10 border-brand-golden/30',
     badge: 'bg-brand-golden/10 text-plum',
     ideas: [
@@ -105,7 +106,7 @@ const categories: Record<string, {
     color: 'bg-brand-golden/10 border-brand-golden/30',
     badge: 'bg-brand-golden/10 text-plum',
     ideas: [
-      'Would anyone come to an early morning walk at Ruth Hardy Park?',
+      `Would anyone come to an early morning walk at ${brand.park}?`,
       'Yappy hour, which patio should we try first?',
       'Pool party season, anyone willing to host?',
     ],
@@ -117,8 +118,8 @@ export async function generateMetadata(
   { params }: { params: { category: string } },
 ): Promise<Metadata> {
   const cat = categories[params.category]
-  if (!cat) return { title: 'Forum not found, PS Dog Dad' }
-  return { title: `${cat.title}, PS Dog Dad Forums`, description: cat.description }
+  if (!cat) return { title: `Forum not found, ${brand.name}` }
+  return { title: `${cat.title}, ${brand.name} Forums`, description: cat.description }
 }
 
 export default function CategoryPage({ params }: { params: { category: string } }) {

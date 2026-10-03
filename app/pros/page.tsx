@@ -1,5 +1,6 @@
 'use client'
 
+import { brand } from '@/lib/brand'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import ProCard from '@/components/pros/ProCard'
@@ -162,7 +163,7 @@ export default function ProsPage() {
         <div className="text-4xl mb-4">🦮</div>
         <h2 className="text-2xl font-extrabold mb-3">Work with dogs for a living?</h2>
         <p className="text-white/70 mb-6 max-w-lg mx-auto leading-relaxed">
-          One flat fee puts you in front of the dog owners of Palm Springs and the surrounding cities. You set your
+          One flat fee puts you in front of the dog owners of {brand.regionPhrase}. You set your
           own rates and you keep every dollar of what you charge.
         </p>
         {/* One button, since the rate card folded into /pros/list. Two that go

@@ -1,5 +1,6 @@
 'use client'
 
+import { brand } from '@/lib/brand'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -80,7 +81,7 @@ export default function LoginPage() {
             🐾
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-plum">Welcome Back</h1>
-          <p className="text-plum/60 mt-2">Sign in to your PS Dog Dad account.</p>
+          <p className="text-plum/60 mt-2">Sign in to your {brand.name} account.</p>
           <p className="text-sm text-plum/50 mt-1">
             Not a member yet?{' '}
             <Link href="/members/join" className="text-brand-orange font-semibold hover:underline">
@@ -179,7 +180,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-sm text-plum/50 mt-6">
-          New to PS Dog Dad?{' '}
+          New to {brand.name}?{' '}
           <Link href="/members/join" className="text-brand-orange font-semibold hover:underline">
             Create a free account
           </Link>

@@ -18,3 +18,17 @@ jobs:
           curl -sf "https://spjeepflyxdnztxposoi.supabase.co/rest/v1/profiles?select=id&limit=1" \
             -H "apikey: sb_publishable_0RD8bo_ekJT7KRoZ8oxv9g_I2FIUCE8" > /dev/null
           echo "Supabase pinged successfully"
+
+  # The demo's own Supabase project, kept awake the same way. Skipped unless both
+  # repository secrets exist, so nothing here can ever point at the live database.
+  ping-demo:
+    runs-on: ubuntu-latest
+    env:
+      DEMO_URL: ${{ secrets.DEMO_SUPABASE_URL }}
+      DEMO_KEY: ${{ secrets.DEMO_SUPABASE_ANON_KEY }}
+    steps:
+      - name: Ping demo database
+        run: |
+          if [ -z "$DEMO_URL" ] || [ -z "$DEMO_KEY" ]; then echo "Demo secrets not set, skipping"; exit 0; fi
+          curl -sf "$DEMO_URL/rest/v1/profiles?select=id&limit=1" -H "apikey: $DEMO_KEY" > /dev/null
+          echo "Demo Supabase pinged successfully"

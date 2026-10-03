@@ -1,5 +1,6 @@
 'use client'
 
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
@@ -119,11 +120,12 @@ export default function Nav() {
           {/* Logo */}
           <Link href="/" className="flex items-center group outline-none focus-visible:ring-2 focus-visible:ring-plum/30 rounded-md">
             <Image
-              src="/logo-nav.png"
-              alt="PS Dog Dad"
+              src={brand.logoNav}
+              alt={brand.name}
               width={399}
               height={192}
               priority
+              unoptimized={brand.logoNav.endsWith('.svg')}
               className="h-10 sm:h-12 w-auto"
             />
           </Link>

@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { ADMIN_EMAIL, SITE_URL } from '@/lib/site'
 import {
@@ -33,7 +34,7 @@ import {
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
 const RESEND_API_KEY = process.env.RESEND_API_KEY
-const FROM = 'PS Dog Dad <noreply@psdogdad.com>'
+const FROM = `${brand.name} <noreply@${brand.domain}>`
 
 const STATUSES: ProStatus[] = ['pending', 'approved', 'published', 'hidden']
 
@@ -217,7 +218,7 @@ async function tellThem(
     }
 
     const accepted = {
-      subject: `You're in — ${listing.business_name} on PS Dog Dad`,
+      subject: `You're in — ${listing.business_name} on ${brand.name}`,
       text:
         `We have read your listing and we would like you in the directory.\n\n` +
         `There is one step left. Sign in and you will find it waiting on your ` +
@@ -233,7 +234,7 @@ async function tellThem(
     }
 
     const live = {
-      subject: `${listing.business_name} is live on PS Dog Dad`,
+      subject: `${listing.business_name} is live on ${brand.name}`,
       text:
         `You are in the directory — that is everything done.\n\n` +
         `Your page: ${SITE_URL}/pros/${listing.id}\n` +

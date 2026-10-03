@@ -1,10 +1,11 @@
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import SignedOut from '@/components/auth/SignedOut'
 
 export const metadata: Metadata = {
-  title: 'About Us, PS Dog Dad',
-  description: 'Learn about the Palm Springs Dog Dad community, who we are, what we do, and how to get involved.',
+  title: `About Us, ${brand.name}`,
+  description: `Learn about the ${brand.city} Dog Dad community, who we are, what we do, and how to get involved.`,
 }
 
 export default function AboutPage() {
@@ -14,9 +15,9 @@ export default function AboutPage() {
 
         {/* Header, matches the main nav pages */}
         <div>
-          <h1 className="section-title">About PS Dog Dad</h1>
+          <h1 className="section-title">About {brand.name}</h1>
           <p className="text-plum/60 mt-2 max-w-2xl">
-            A community for men across Palm Springs and the surrounding cities who love their dogs, and love connecting with others who do too.
+            A community for men across {brand.regionPhrase} who love their dogs, and love connecting with others who do too.
           </p>
         </div>
 
@@ -29,8 +30,8 @@ export default function AboutPage() {
             back. That is a strange way to run a neighborhood.
           </p>
           <p className="text-plum/70 leading-relaxed mb-4">
-            PS Dog Dad is deliberately none of that. It is a small, independent community for people
-            across Palm Springs and the surrounding cities who love their dogs, run by one person rather than a company
+            {brand.name} is deliberately none of that. It is a small, independent community for people
+            across {brand.regionPhrase} who love their dogs, run by one person rather than a company
             that needs your attention to grow.
           </p>
           <p className="text-plum/70 leading-relaxed">
@@ -68,7 +69,7 @@ export default function AboutPage() {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {[
-              { icon: '🐕', title: 'Dog Walks', desc: 'Morning walks at Ruth Hardy Park and other local spots. All breeds, all ages, leash or off leash depending on where we end up.' },
+              { icon: '🐕', title: 'Dog Walks', desc: `Morning walks at ${brand.park} and other local spots. All breeds, all ages, leash or off leash depending on where we end up.` },
               { icon: '🍹', title: 'Yappy Hours', desc: 'Patio meetups at dog friendly bars and restaurants on Palm Canyon Drive. Happy hour specials, great dogs, great people.' },
               { icon: '🏊', title: 'Pool Parties', desc: 'Member hosted summer pool parties for you and your pup. Somebody has to host the first one.' },
               { icon: '💬', title: 'Online Community', desc: 'Forums for health questions, training tips, local recommendations, and everything else that comes with dog parenthood in the desert.' },
@@ -88,7 +89,7 @@ export default function AboutPage() {
           <ul className="space-y-4">
             {[
               { icon: '🤝', title: 'Welcoming', text: 'This is a judgment-free space. All dogs welcome. All experience levels welcome. Whether you\'ve had dogs your whole life or just got your first pup, you belong here.' },
-              { icon: '🌴', title: 'Local First', text: 'This is for Palm Springs and the surrounding cities specifically. Recommendations, events and conversations should come from people who actually live here and walk their dogs in this heat.' },
+              { icon: '🌴', title: 'Local First', text: `This is for ${brand.regionPhrase} specifically. Recommendations, events and conversations should come from people who actually live here and walk their dogs in this heat.` },
               { icon: '🐾', title: 'Dog-Centered', text: 'The dogs come first. We share knowledge, resources, and experiences that make us better, more informed, and more loving pet owners.' },
               { icon: '🫶', title: 'Respectful', text: 'We treat each other, and each other\'s dogs, with kindness. See our Code of Conduct for the full details.' },
             ].map(({ icon, title, text }) => (
@@ -109,8 +110,8 @@ export default function AboutPage() {
           <p className="text-plum/60 mb-6 leading-relaxed">
             Questions about the community, ideas for events, or just want to say hi?<br />
             Email us at{' '}
-            <a href="mailto:hello@psdogdad.com" className="text-brand-orange font-semibold hover:underline">
-              hello@psdogdad.com
+            <a href={`mailto:${brand.contactEmail}`} className="text-brand-orange font-semibold hover:underline">
+              {brand.contactEmail}
             </a>
             . We read everything.
           </p>

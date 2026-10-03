@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import PrintButton from '@/components/PrintButton'
 
@@ -61,7 +62,7 @@ export default function TrainingResourcesPage() {
         <div>
           <h1 className="section-title">Professional Training Techniques</h1>
           <p className="text-plum/60 mt-2 max-w-2xl">
-            The methods professional trainers actually use, broken down for everyday dog dads.
+            The methods professional trainers actually use, broken down for everyday {brand.members}.
           </p>
         </div>
         <PrintButton />

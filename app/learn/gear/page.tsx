@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand'
 import PrintButton from '@/components/PrintButton'
 
 const shoppingTips = [
@@ -105,7 +106,7 @@ export default function ProductsPage() {
 
       {/* Disclaimer */}
       <div className="bg-brand-golden/10 border border-brand-golden/30 rounded-xl p-4 mb-10 text-sm text-plum/70">
-        <strong className="text-plum">Just so you know:</strong> PS Dog Dad is not affiliated with, sponsored by, or paid by any brand or retailer. These are general recommendations from our community&apos;s experience, the &ldquo;View Options&rdquo; buttons simply open a shopping search so you can compare brands and prices yourself.
+        <strong className="text-plum">Just so you know:</strong> {brand.name} is not affiliated with, sponsored by, or paid by any brand or retailer. These are general recommendations from our community&apos;s experience, the &ldquo;View Options&rdquo; buttons simply open a shopping search so you can compare brands and prices yourself.
       </div>
 
       {/* Smart shopping tips */}

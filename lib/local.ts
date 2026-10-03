@@ -7,6 +7,9 @@
  * both pages to read the same array. A count that drifts is a count that lies.
  */
 
+import { IS_DEMO } from '@/lib/brand'
+import { demoResourceSections } from '@/lib/demoData'
+
 export type Resource = {
   name: string
   detail: string
@@ -52,7 +55,7 @@ export const mapsUrl = (query: string) =>
 //
 // The address-less entries that remain are legitimate: two national poison
 // hotlines, three trailheads, and a generic Airbnb/VRBO pointer.
-export const resourceSections: Section[] = [
+const realSections: Section[] = [
   {
     slug: 'emergency',
     icon: '🚨',
@@ -190,6 +193,9 @@ export const resourceSections: Section[] = [
     ],
   },
 ]
+
+/** The demo shows invented businesses; the live site shows the researched list above. */
+export const resourceSections: Section[] = IS_DEMO ? demoResourceSections : realSections
 
 /** Everything in a section, including anything filed in a subsection. */
 export function listingCount(section: Section): number {

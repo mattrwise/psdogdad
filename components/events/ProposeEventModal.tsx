@@ -1,5 +1,6 @@
 'use client'
 
+import { brand } from '@/lib/brand'
 import { useState } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
@@ -290,13 +291,13 @@ export default function ProposeEventModal({ onClose }: Props) {
             <div className="bg-plum/5 border border-plum/10 rounded-xl p-4 text-xs text-plum/70 space-y-2 leading-relaxed">
               <p className="font-bold text-plum text-sm">Event Disclaimer & Community Responsibility</p>
               <p>
-                PS Dog Dads is a community organizing platform, we are <strong>not responsible</strong> for any injuries, incidents, property damage, or disputes that occur before, during, or after any community event.
+                {brand.name}s is a community organizing platform, we are <strong>not responsible</strong> for any injuries, incidents, property damage, or disputes that occur before, during, or after any community event.
               </p>
               <p>
                 By proposing an event, you agree that: (1) attendees participate at their own risk; (2) each dog owner is solely responsible for their dog's behavior and any damage or injury caused; (3) you as the event proposer have provided accurate information about the venue, time, and requirements; and (4) all participants are expected to follow our <a href="/conduct" className="text-brand-teal underline" target="_blank">Community Code of Conduct</a>.
               </p>
               <p>
-                PS Dog Dads reserves the right to remove any event listing that does not meet community standards or has not been appropriately confirmed with a venue.
+                {brand.name}s reserves the right to remove any event listing that does not meet community standards or has not been appropriately confirmed with a venue.
               </p>
             </div>
 

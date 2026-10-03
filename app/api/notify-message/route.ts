@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand'
 import { createClient } from '@supabase/supabase-js'
 
 /**
@@ -19,8 +20,8 @@ import { createClient } from '@supabase/supabase-js'
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
 const RESEND_API_KEY = process.env.RESEND_API_KEY
-const FROM = 'PS Dog Dad <noreply@psdogdad.com>'
-const SITE = 'https://www.psdogdad.com'
+const FROM = `${brand.name} <noreply@${brand.domain}>`
+const SITE = `https://www.${brand.domain}`
 
 export async function POST(request: Request) {
   if (!SUPABASE_URL || !SERVICE_ROLE_KEY || !RESEND_API_KEY) {
@@ -82,9 +83,9 @@ export async function POST(request: Request) {
     body: JSON.stringify({
       from: FROM,
       to: recipient.user.email,
-      subject: `${senderName} sent you a message on PS Dog Dad`,
+      subject: `${senderName} sent you a message on ${brand.name}`,
       text:
-        `${senderName} has sent you a message on PS Dog Dad.\n\n` +
+        `${senderName} has sent you a message on ${brand.name}.\n\n` +
         `Read it here: ${threadUrl}\n\n` +
         `You can turn these emails off on your profile: ${SITE}/members/profile\n`,
     }),

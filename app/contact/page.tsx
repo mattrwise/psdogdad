@@ -1,10 +1,11 @@
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import SignedOut from '@/components/auth/SignedOut'
 
 export const metadata: Metadata = {
-  title: 'Contact, PS Dog Dad',
-  description: 'Get in touch with the PS Dog Dad community team.',
+  title: `Contact, ${brand.name}`,
+  description: `Get in touch with the ${brand.name} community team.`,
 }
 
 export default function ContactPage() {
@@ -34,10 +35,10 @@ export default function ContactPage() {
                 For general questions, account help, event ideas, or anything else.
               </p>
               <a
-                href="mailto:hello@psdogdad.com"
+                href={`mailto:${brand.contactEmail}`}
                 className="font-bold text-brand-orange hover:underline break-all"
               >
-                hello@psdogdad.com
+                {brand.contactEmail}
               </a>
             </div>
 
@@ -48,8 +49,8 @@ export default function ContactPage() {
                 To report a conduct issue confidentially, please email us directly.
                 All reports are taken seriously.
               </p>
-              <a href="mailto:hello@psdogdad.com" className="font-bold text-brand-orange hover:underline">
-                hello@psdogdad.com
+              <a href={`mailto:${brand.contactEmail}`} className="font-bold text-brand-orange hover:underline">
+                {brand.contactEmail}
               </a>
             </div>
 
@@ -57,7 +58,7 @@ export default function ContactPage() {
               <div className="text-3xl mb-3">📍</div>
               <h3 className="font-extrabold text-plum text-lg mb-1">Based In</h3>
               <p className="text-plum/60 text-sm leading-relaxed">
-                Palm Springs, California
+                {brand.cityStateLong}
               </p>
             </div>
 
@@ -91,7 +92,7 @@ export default function ContactPage() {
                   },
                   {
                     q: 'How do I delete my account?',
-                    a: 'Email us at hello@psdogdad.com and we\'ll remove your account and data within 5 business days.',
+                    a: `Email us at ${brand.contactEmail} and we'll remove your account and data within 5 business days.`,
                     link: null,
                   },
                 ].map(({ q, a, link }) => (
@@ -117,11 +118,11 @@ export default function ContactPage() {
             <div className="text-4xl mb-3">🐾</div>
             <h2 className="text-2xl font-extrabold mb-3">Not a member yet?</h2>
             <p className="text-white/70 mb-6 max-w-md mx-auto">
-              We&apos;re just getting started in Palm Springs and the surrounding cities, which makes this a good moment
+              We&apos;re just getting started in {brand.regionPhrase}, which makes this a good moment
               to be one of the first. It&apos;s free and always will be.
             </p>
             <Link href="/members/join" className="btn-primary text-base px-8">
-              Join PS Dog Dad
+              Join {brand.name}
             </Link>
           </div>
         </SignedOut>

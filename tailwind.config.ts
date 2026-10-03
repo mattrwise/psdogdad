@@ -1,35 +1,35 @@
 import type { Config } from 'tailwindcss'
+import { brand } from './lib/brand'
+
+const c = brand.colors
 
 const config: Config = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './lib/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
       colors: {
-        plum: {
-          DEFAULT: '#3D1A5C',
-          light: '#5C2D8A',
-          dark: '#2A1140',
-        },
+        plum: { DEFAULT: c.plum, light: c.plumLight, dark: c.plumDark },
         brand: {
-          orange: '#E8621A',
-          'orange-light': '#F07840',
-          golden: '#F5B82A',
-          'golden-light': '#F9CC6A',
-          teal: '#2A9D8F',
-          'teal-light': '#3BBFAF',
-          cream: '#FFF8F0',
+          orange: c.primary,
+          'orange-light': c.primaryLight,
+          golden: c.accent,
+          'golden-light': c.accentLight,
+          teal: c.secondary,
+          'teal-light': c.secondaryLight,
+          cream: c.cream,
         },
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
       },
       backgroundImage: {
-        'hero-gradient': 'linear-gradient(135deg, #3D1A5C 0%, #5C2D8A 40%, #E8621A 100%)',
-        'card-gradient': 'linear-gradient(135deg, #3D1A5C, #2A9D8F)',
+        'hero-gradient': `linear-gradient(135deg, ${c.plum} 0%, ${c.plumLight} 40%, ${c.primary} 100%)`,
+        'card-gradient': `linear-gradient(135deg, ${c.plum}, ${c.secondary})`,
       },
     },
   },

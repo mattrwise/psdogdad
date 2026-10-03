@@ -1,5 +1,6 @@
 'use client'
 
+import { brand } from '@/lib/brand'
 import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import ProposeEventModal from '@/components/events/ProposeEventModal'
@@ -137,11 +138,11 @@ function AdminEventForm({ onCreated }: { onCreated: (event: RealEvent) => void }
           </div>
           <div>
             <label htmlFor="evLocation" className="block text-sm font-bold text-plum mb-1">Location <span className="text-brand-orange">*</span></label>
-            <input id="evLocation" type="text" required value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. Ruth Hardy Park, Palm Springs" className={inputClass} />
+            <input id="evLocation" type="text" required value={location} onChange={e => setLocation(e.target.value)} placeholder={`e.g. ${brand.park}, ${brand.city}`} className={inputClass} />
           </div>
           <div>
             <label htmlFor="evHost" className="block text-sm font-bold text-plum mb-1">Hosted by</label>
-            <input id="evHost" type="text" value={host} onChange={e => setHost(e.target.value)} placeholder="Leave blank for PS Dog Dad's own events" className={inputClass} />
+            <input id="evHost" type="text" value={host} onChange={e => setHost(e.target.value)} placeholder={`Leave blank for ${brand.name}'s own events`} className={inputClass} />
             <p className="text-xs text-plum/40 mt-1">Name whoever is actually running it: a shelter, a business, a member. Blank shows no host at all.</p>
           </div>
           <div>
@@ -210,7 +211,7 @@ export default function EventsPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
         <div>
           <h1 className="section-title">Events & Meetups</h1>
-          <p className="text-plum/60 mt-2">Dog walks, yappy hours, pool parties, and community meetups across Palm Springs, Cathedral City, Rancho Mirage, and beyond.</p>
+          <p className="text-plum/60 mt-2">Dog walks, yappy hours, pool parties, and community meetups across {brand.city}, {brand.towns[1]}, {brand.towns[2]}, and beyond.</p>
         </div>
         <button onClick={() => setProposeOpen(true)} className="btn-primary self-start md:self-auto whitespace-nowrap">
           + Propose an Event
@@ -223,7 +224,7 @@ export default function EventsPage() {
       {/* The homepage leads with this and its button points here, so landing on
           an empty calendar made the site look like it had lost the event. */}
       <section className="mb-14">
-        <ShelterEventCallout />
+        {!brand.isDemo && <ShelterEventCallout />}
       </section>
 
       {/* Upcoming Events */}
@@ -309,7 +310,7 @@ export default function EventsPage() {
               <div className="text-5xl mb-4">🌴</div>
               <h3 className="font-extrabold text-plum text-xl mb-2">This calendar is yours to build</h3>
               <p className="text-plum/60 text-sm max-w-md mx-auto mb-6 leading-relaxed">
-                PS Dog Dad is brand new. Every walk, yappy hour, and pool party that ends up here
+                {brand.name} is brand new. Every walk, yappy hour, and pool party that ends up here
                 will be one a member started, so the first ones are up for grabs. Got a favorite
                 trail, patio, or park? Put it on the map.
               </p>

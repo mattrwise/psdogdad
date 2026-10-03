@@ -1,3 +1,5 @@
+import { brand, IS_DEMO } from '@/lib/brand'
+
 /**
  * The directory of solo dog professionals, and the one place to change how it
  * is sold. Everything a listing costs, what it includes and who to contact is
@@ -34,7 +36,7 @@
  * behind a red warning banner so they can never ship. A directory of people who
  * do not exist is the fastest way to lose the trust the rest of the site runs on.
  */
-export const DIRECTORY_IS_PUBLIC = false
+export const DIRECTORY_IS_PUBLIC = IS_DEMO
 
 // ─── What a listing costs ─────────────────────────────────────────────────────
 
@@ -54,7 +56,7 @@ const PRICE_TBD = 'Price not set yet'
 
 export const PRO_DIRECTORY = {
   /** Where a provider writes to ask about listing. */
-  contactEmail: 'hello@psdogdad.com',
+  contactEmail: brand.contactEmail,
 
   listingFee: LISTING_FEE,
   priceTBD: PRICE_TBD,
@@ -100,7 +102,7 @@ export const PRO_DIRECTORY = {
    * touch instead, because a payment button that goes nowhere is worse than an
    * honest gap.
    */
-  stripeLink: 'https://buy.stripe.com/dRmdRaerTe8B8uE81Gd7q01',
+  stripeLink: brand.stripeLink,
 } as const
 
 /**
@@ -151,6 +153,8 @@ export const SERVICES = [
   { id: 'photography', icon: '📷', label: 'Photography', blurb: 'Portraits of the dog who will not sit still.' },
   { id: 'transport', icon: '🚐', label: 'Transport', blurb: 'Vet runs, airport trips, driving across the valley.' },
   { id: 'yard', icon: '🧹', label: 'Yard Cleanup', blurb: 'Regular scooping and one-off cleanups.' },
+  // Demo only until it is added to the live directory on purpose.
+  ...(IS_DEMO ? [{ id: 'vets', icon: '🩺', label: 'Veterinary', blurb: 'House-call and mobile vets, wellness visits at home.' }] : []),
   { id: 'other', icon: '🐾', label: 'Something Else', blurb: 'Anything dog-shaped that is not on this list.' },
 ] as const
 
@@ -174,19 +178,7 @@ export function serviceIcon(id: string): string {
  * filter dropdown on /pros is still built from the towns pros actually chose,
  * so an option can never find nobody.
  */
-export const VALLEY_CITIES = [
-  'Palm Springs',
-  'Cathedral City',
-  'Rancho Mirage',
-  'Palm Desert',
-  'Indian Wells',
-  'La Quinta',
-  'Indio',
-  'Coachella',
-  'Desert Hot Springs',
-  'Thousand Palms',
-  'Bermuda Dunes',
-] as const
+export const VALLEY_CITIES: readonly string[] = brand.towns
 
 // ─── The listing itself ───────────────────────────────────────────────────────
 

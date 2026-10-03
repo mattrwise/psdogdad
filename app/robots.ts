@@ -1,7 +1,11 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/site'
+import { IS_DEMO } from '@/lib/brand'
 
 export default function robots(): MetadataRoute.Robots {
+  // The demo is never to be indexed.
+  if (IS_DEMO) return { rules: { userAgent: '*', disallow: '/' } }
+
   return {
     rules: {
       userAgent: '*',
