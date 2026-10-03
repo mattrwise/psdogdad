@@ -16,6 +16,8 @@ export type Guide = {
   category: string
   minutes: number
   tier: 'free' | 'members' | 'premium'
+  /** false = kept here but not listed, not in the sitemap, and not routed. */
+  published?: boolean
   description: string
   body: GuideBlock[]
 }
@@ -61,6 +63,7 @@ export const guides: Guide[] = [
     category: 'Local Life',
     minutes: 5,
     tier: 'members',
+    published: false,
     description:
       'Just moved to the desert with your dog? Everything to set up in your first month, vet, licenses, parks, and heat prep.',
     body: [
@@ -87,6 +90,7 @@ export const guides: Guide[] = [
     category: 'Training Basics',
     minutes: 7,
     tier: 'members',
+    published: false,
     description:
       "The one command that can save your dog's life. Train a recall that works even with distractions.",
     body: [
@@ -155,15 +159,19 @@ export const guides: Guide[] = [
   },
 ]
 
-export const freeGuides = guides.filter(g => g.tier === 'free')
-export const memberGuides = guides.filter(g => g.tier === 'members')
-export const premiumGuides = guides.filter(g => g.tier === 'premium')
+// Two guides became paid kits (see lib/kits.ts) and are unpublished: their text
+// stays above, their old URLs redirect to the kits section (next.config.js).
+export const publishedGuides = guides.filter(g => g.published !== false)
+
+export const freeGuides = publishedGuides.filter(g => g.tier === 'free')
+export const memberGuides = publishedGuides.filter(g => g.tier === 'members')
+export const premiumGuides = publishedGuides.filter(g => g.tier === 'premium')
 
 export function getGuide(slug: string): Guide | undefined {
-  return guides.find(g => g.slug === slug)
+  return publishedGuides.find(g => g.slug === slug)
 }
 
 /** The two related guides shown at the bottom of each guide page. */
 export function relatedGuides(slug: string): Guide[] {
-  return guides.filter(g => g.slug !== slug && g.tier !== 'premium').slice(0, 2)
+  return publishedGuides.filter(g => g.slug !== slug && g.tier !== 'premium').slice(0, 2)
 }

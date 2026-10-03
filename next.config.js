@@ -27,6 +27,12 @@ const moved = [
   // URL to /learn/desert-heat-safety and make the browser ask twice.
   ['/training/desert-heat-safety', '/learn/heat'],
   ['/learn/desert-heat-safety', '/learn/heat'],
+  // These two guides became paid kits and were unpublished. Like the pair
+  // above, the /training forms must sit above the general rule below.
+  ['/learn/new-to-palm-springs', '/learn#printable-kits'],
+  ['/learn/reliable-recall', '/learn#printable-kits'],
+  ['/training/new-to-palm-springs', '/learn#printable-kits'],
+  ['/training/reliable-recall', '/learn#printable-kits'],
   ['/training/:slug', '/learn/:slug'],
   ['/resources', '/local'],
   ['/resources/roadmap', '/learn/roadmap'],

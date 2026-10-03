@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getGuide, guides, relatedGuides } from '@/lib/guides'
+import { getGuide, publishedGuides, relatedGuides } from '@/lib/guides'
 import GuideBody from '@/components/training/GuideBody'
 import PrintButton from '@/components/PrintButton'
 
 export function generateStaticParams() {
-  return guides.map(g => ({ slug: g.slug }))
+  return publishedGuides.map(g => ({ slug: g.slug }))
 }
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {

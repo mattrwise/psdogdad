@@ -169,8 +169,7 @@ export default function LearnPage() {
         <h1 className="section-title">Learn</h1>
         <p className="text-plum/60 mt-2 max-w-2xl">
           Everything we&rsquo;ve written down for desert dog dads, in one place. Every one of
-          them prints, so you can put it on the fridge or hand it to a dog sitter. A couple
-          need a free account.
+          them prints, so you can put it on the fridge or hand it to a dog sitter.
         </p>
       </div>
 
@@ -198,7 +197,7 @@ export default function LearnPage() {
           plans, checklists, scripts, and logs, sold through Payhip. They sit
           above the free guides because they are the fuller versions of the
           same subjects, not because the free ones matter less. */}
-      <div className="flex items-center gap-3 mb-2 flex-wrap no-print">
+      <div id="printable-kits" className="flex items-center gap-3 mb-2 flex-wrap no-print scroll-mt-24">
         <h2 className="text-2xl font-extrabold text-plum">Printable Kits</h2>
         <span className="badge bg-brand-orange/10 text-brand-orange">New</span>
       </div>
@@ -236,11 +235,7 @@ export default function LearnPage() {
         <span className="badge bg-brand-teal/10 text-brand-teal">All printable</span>
       </div>
       <p className="text-plum/60 text-sm mb-6 max-w-2xl">
-        The long ones first, then the shorter reads.{' '}
-        <Link href="/members/join" className="text-brand-orange font-semibold hover:underline">
-          Join free
-        </Link>{' '}
-        to unlock the two marked Members.
+        The long ones first, then the shorter reads.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-14">

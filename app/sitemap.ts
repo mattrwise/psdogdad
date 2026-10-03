@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { guides } from '@/lib/guides'
+import { publishedGuides } from '@/lib/guides'
 import { SITE_URL } from '@/lib/site'
 import { DIRECTORY_IS_PUBLIC } from '@/lib/pros'
 
@@ -55,7 +55,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Premium courses are left out for the same reason the pro directory is:
     // the tier is not open, so a searcher landing on one finds a paywall with
     // nothing behind it. The pages still resolve for anyone holding a link.
-    ...guides
+    ...publishedGuides
       .filter(g => g.tier !== 'premium')
       .map(g => ({
         url: `${SITE_URL}/learn/${g.slug}`,
