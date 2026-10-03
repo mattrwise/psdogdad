@@ -23,9 +23,8 @@ That one file controls all of it.
 ### 1. Create the demo database (Supabase)
 1. supabase.com -> **New project**. Name it `desert-springs-demo`. **Not** the live one.
 2. Copy its **Project URL**, **anon key** and **service_role key** somewhere private.
-3. On your computer, in the repo folder, run: `./scripts/build-demo-sql.sh`
-4. Open the new file `demo-setup.sql`, copy everything, and paste it into the demo
-   project's **SQL Editor -> New query -> Run**. If it shows an error, send me the
+3. Open `supabase/demo/demo-setup.sql` on GitHub, click the copy button, and paste it into the demo
+   project's **SQL Editor -> New query -> Run**. (It is already built. If a file in `/supabase` ever changes, rebuild it with `./scripts/build-demo-sql.sh`, which writes `demo-setup.sql` at the repo root.) If it shows an error, send me the
    message. (I could not run this against a real database from here.)
 5. Authentication -> Providers -> Email: turn **Confirm email** off, and consider
    turning **Allow new users to sign up** off, so strangers cannot add accounts to the demo.
