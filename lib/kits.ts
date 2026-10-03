@@ -11,6 +11,8 @@ export type Kit = {
   slug: string
   title: string
   blurb: string
+  /** One short line (about 22 characters) for the compact phone card. */
+  short: string
   pages: number
   price: number
   cover: string
@@ -22,6 +24,7 @@ export const kits: Kit[] = [
   {
     slug: 'separation-anxiety',
     title: 'Separation Anxiety Workbook',
+    short: 'A 14-day calm plan',
     blurb: 'A fourteen day plan for dogs who panic when you leave, with scripts and a progress log.',
     pages: 17,
     price: 9,
@@ -31,6 +34,7 @@ export const kits: Kit[] = [
   {
     slug: 'when-company-comes',
     title: 'When Company Comes',
+    short: 'A calm guest plan',
     blurb: 'A calm visitor plan for dogs who bark, lunge, or nip when people come over.',
     pages: 8,
     price: 9,
@@ -40,6 +44,7 @@ export const kits: Kit[] = [
   {
     slug: 'starter-kit',
     title: 'New PS Dog Dad Starter Kit',
+    short: 'Your first 30 days',
     blurb: 'Your first 30 days with a rescue: day one, week one, and every week after.',
     pages: 19,
     price: 9,
@@ -49,6 +54,7 @@ export const kits: Kit[] = [
   {
     slug: 'desert-dog',
     title: 'Desert Dog',
+    short: 'Heat, snakes, safety',
     blurb: 'Heat, snakes, valley fever, emergency numbers, and where to go when it is 118.',
     pages: 30,
     price: 12,
@@ -58,6 +64,7 @@ export const kits: Kit[] = [
   {
     slug: 'reliable-recall',
     title: 'Building a Reliable Recall',
+    short: 'Come when called',
     blurb: 'A four week plan for a dog who comes when called, five minutes at a time.',
     pages: 13,
     price: 9,
@@ -72,6 +79,7 @@ export const kits: Kit[] = [
 export const bundle = {
   title: 'The PS Dog Dad Guide Library',
   blurb: 'All five kits in one download.',
+  short: 'All five, one download',
   price: 29,
   product: 'eMf21',
 }
