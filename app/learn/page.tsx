@@ -130,43 +130,101 @@ function GuideCard({ card }: { card: Card }) {
 }
 
 /**
- * A kit is a thing you buy, so its card says so: the cover, the price, and a
- * link that opens the Payhip checkout in a new tab. Plain <img> rather than
- * next/image because these are five small static covers and the optimizer buys
- * nothing here.
+ * The orange buy button. One class string so every kit and the bundle match,
+ * and so the button stays a 44px-tall tap target on a phone.
+ */
+const buyButton =
+  'inline-flex items-center justify-center whitespace-nowrap rounded-full bg-brand-orange px-3 sm:px-4 min-h-[44px] text-[13px] sm:text-sm font-bold text-white shadow-md transition-colors hover:bg-brand-orange-light'
+
+/**
+ * A kit is a thing you buy, so its card says so: a cropped cover, the title,
+ * a line about it, and a "Buy now" button with the price on it. On a phone it
+ * is a compact horizontal row (small cover, text, button); from `sm` up it is a
+ * vertical card. Only the top of the cover is shown, because that is the logo
+ * and title and the rest of the image is empty paper. Plain <img> rather than
+ * next/image because these are five small static covers.
  */
 function KitCard({ kit }: { kit: Kit }) {
   return (
-    <KitLink product={kit.product} className="card flex flex-col hover:-translate-y-0.5">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={kit.cover}
-        alt={`Cover of ${kit.title}`}
-        width={600}
-        height={776}
-        loading="lazy"
-        className="w-full h-auto border-b border-plum/10"
-      />
-      <div className="p-5 flex flex-col flex-1">
-        <h3 className="font-extrabold text-plum text-lg mb-1">{kit.title}</h3>
-        <p className="text-sm text-plum/60 leading-relaxed flex-1">{kit.blurb}</p>
-        <div className="flex items-center justify-between mt-4">
-          <span className="text-sm font-semibold text-brand-teal">Get the kit →</span>
-          <span className="text-sm text-plum/50">
-            {kit.pages} pages · <span className="font-extrabold text-plum">${kit.price}</span>
-          </span>
+    <div className="card flex flex-row sm:flex-col items-center sm:items-stretch gap-2.5 sm:gap-0 p-3 sm:p-0">
+      <KitLink
+        product={kit.product}
+        className="block w-16 sm:w-full flex-shrink-0 aspect-square sm:aspect-[600/450] overflow-hidden rounded-lg sm:rounded-none sm:border-b border-plum/10"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={kit.cover}
+          alt={`Cover of ${kit.title}`}
+          width={600}
+          height={776}
+          loading="lazy"
+          className="h-full w-full object-cover object-top"
+        />
+      </KitLink>
+      <div className="min-w-0 flex-1 sm:px-4 sm:py-3 sm:flex sm:flex-col">
+        <h3 className="font-extrabold text-plum text-[15px] leading-snug sm:text-base">{kit.title}</h3>
+        <p className="truncate text-xs text-plum/60 sm:hidden">{kit.short}</p>
+        <p className="hidden sm:block line-clamp-2 text-sm text-plum/60 leading-snug mt-0.5 flex-1">{kit.blurb}</p>
+        <div className="hidden sm:flex items-center justify-between gap-3 mt-2">
+          <span className="text-xs text-plum/50">{kit.pages} pages</span>
+          <KitLink product={kit.product} className={buyButton}>
+            Buy now · ${kit.price}
+          </KitLink>
+        </div>
+        <p className="text-[11px] text-plum/40 sm:hidden">{kit.pages} pages</p>
+      </div>
+      <KitLink product={kit.product} className={`${buyButton} sm:hidden`}>
+        Buy now · ${kit.price}
+      </KitLink>
+    </div>
+  )
+}
+
+/** The bundle, featured above the single kits. */
+function BundleCard() {
+  return (
+    <div className="mb-4 rounded-2xl bg-plum p-4 text-white ring-2 ring-brand-golden shadow-lg">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="badge bg-brand-golden text-plum">Best value</span>
+            <h3 className="font-extrabold text-base sm:text-lg leading-snug">{bundle.title}</h3>
+          </div>
+          <p className="text-xs sm:text-sm text-white/70 mt-0.5">
+            {bundle.blurb} <span className="hidden sm:inline">Bought one at a time they come to ${kitsTotal}.</span>
+            <span className="sm:hidden">Separately ${kitsTotal}.</span>
+          </p>
+        </div>
+        <div className="flex items-center justify-between sm:justify-end gap-4">
+          <div className="flex -space-x-2" aria-hidden="true">
+            {kits.map(kit => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={kit.slug}
+                src={kit.cover}
+                alt=""
+                width={40}
+                height={40}
+                loading="lazy"
+                className="h-10 w-10 rounded-md border-2 border-plum object-cover object-top"
+              />
+            ))}
+          </div>
+          <KitLink product={bundle.product} className={buyButton}>
+            Buy now · ${bundle.price}
+          </KitLink>
         </div>
       </div>
-    </KitLink>
+    </div>
   )
 }
 
 export default function LearnPage() {
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
 
-      <div className="mb-6">
-        <h1 className="section-title">Learn</h1>
+      <div className="mb-2">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-plum">Learn</h1>
       </div>
 
       {/* The kits. The header comment above said a real program to sell would
@@ -174,33 +232,19 @@ export default function LearnPage() {
           plans, checklists, scripts, and logs, sold through Payhip. They sit
           above the free guides because they are the fuller versions of the
           same subjects, not because the free ones matter less. */}
-      <div id="printable-kits" className="flex items-center gap-3 mb-2 flex-wrap no-print scroll-mt-24">
-        <h2 className="text-2xl font-extrabold text-plum">Printable Kits</h2>
-        <span className="badge bg-brand-orange/10 text-brand-orange">New</span>
+      <div id="printable-kits" className="flex items-baseline gap-3 mb-3 flex-wrap no-print scroll-mt-24">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-plum">Printable Kits</h2>
+        <span className="badge bg-brand-orange/10 text-brand-orange self-center">New</span>
+        <span className="text-plum/60 text-sm">Plans, checklists, scripts and logs. Instant PDF download.</span>
       </div>
-      <p className="text-plum/60 text-sm mb-6 max-w-2xl no-print">
-        The full versions, built to be used with a pen: plans, checklists, scripts, and logs
-        you can follow on a tired day. Instant PDF download.
-      </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-6 no-print">
-        {kits.map(kit => (
-          <KitCard key={kit.slug} kit={kit} />
-        ))}
-        <KitLink
-          product={bundle.product}
-          className="rounded-2xl bg-plum text-white p-6 flex flex-col justify-center hover:-translate-y-0.5 transition-transform"
-        >
-          <div className="badge bg-brand-golden text-plum self-start mb-3">Best value</div>
-          <h3 className="font-extrabold text-xl mb-1">{bundle.title}</h3>
-          <p className="text-white/70 text-sm leading-relaxed">
-            {bundle.blurb} Bought one at a time they come to ${kitsTotal}.
-          </p>
-          <div className="mt-5 flex items-end justify-between">
-            <span className="text-sm font-bold text-brand-golden">Get all five →</span>
-            <span className="text-3xl font-extrabold">${bundle.price}</span>
-          </div>
-        </KitLink>
+      <div className="no-print">
+        <BundleCard />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6">
+          {kits.map(kit => (
+            <KitCard key={kit.slug} kit={kit} />
+          ))}
+        </div>
       </div>
       <p className="text-plum/50 text-xs mb-14 no-print">
         Launch prices through Sunday, October 11. General education, not veterinary or
