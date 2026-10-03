@@ -1,8 +1,10 @@
+import { brand } from '@/lib/brand'
+
 /**
  * Canonical origin. The apex redirects here with a 308, so www is the address
  * that should appear in search results, sitemaps and link previews.
  */
-export const SITE_URL = 'https://www.psdogdad.com'
+export const SITE_URL = brand.siteUrl
 
 /**
  * Who runs the site. One copy, because it is now checked in more than one
@@ -17,4 +19,4 @@ export const SITE_URL = 'https://www.psdogdad.com'
  * sent. Changing this line moves both, and a page check on its own has never
  * been what keeps anybody out.
  */
-export const ADMIN_EMAIL = 'psmattreid@gmail.com'
+export const ADMIN_EMAIL = brand.adminEmail

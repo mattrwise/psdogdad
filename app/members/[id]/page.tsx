@@ -1,5 +1,6 @@
 'use client'
 
+import { brand } from '@/lib/brand'
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
@@ -96,7 +97,7 @@ export default function MemberProfilePage() {
             )}
           </div>
           <div className="text-center sm:text-left pb-1">
-            <h1 className="section-title leading-tight">{profile.name || 'PS Dog Dad'}</h1>
+            <h1 className="section-title leading-tight">{profile.name || brand.name}</h1>
             <p className="text-plum/60 mt-1">
               {profile.city && <span>📍 {profile.city} · </span>}
               Member since {memberSince}

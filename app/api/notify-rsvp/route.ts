@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand'
 import { createClient } from '@supabase/supabase-js'
 
 /**
@@ -18,10 +19,10 @@ import { createClient } from '@supabase/supabase-js'
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
 const RESEND_API_KEY = process.env.RESEND_API_KEY
-const FROM = 'PS Dog Dad <noreply@psdogdad.com>'
-const REPLY_TO = 'hello@psdogdad.com'
-const ADMIN_EMAIL = 'psmattreid@gmail.com'
-const SITE = 'https://www.psdogdad.com'
+const FROM = `${brand.name} <noreply@${brand.domain}>`
+const REPLY_TO = brand.contactEmail
+const ADMIN_EMAIL = brand.adminEmail
+const SITE = `https://www.${brand.domain}`
 
 async function send(payload: Record<string, unknown>): Promise<boolean> {
   const res = await fetch('https://api.resend.com/emails', {

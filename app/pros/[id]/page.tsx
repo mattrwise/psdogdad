@@ -1,5 +1,6 @@
 'use client'
 
+import { brand } from '@/lib/brand'
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
@@ -197,7 +198,7 @@ export default function ProListingPage() {
                 </span>
               ))
             ) : (
-              <span className="text-sm text-plum/60">Across Palm Springs and the surrounding cities</span>
+              <span className="text-sm text-plum/60">Across {brand.regionPhrase}</span>
             )}
           </div>
 
@@ -245,7 +246,7 @@ export default function ProListingPage() {
 
       {/* Booking happens off this site, so the site cannot stand behind it. */}
       <div className="mt-6 bg-white rounded-2xl border border-plum/10 p-5 text-sm text-plum/60 leading-relaxed">
-        <strong className="text-plum">You are booking with them, not with us.</strong> PS Dog Dad
+        <strong className="text-plum">You are booking with them, not with us.</strong> {brand.name}
         does not take a cut of the work, hold your money, or vouch for what happens next.{' '}
         {pro.contact_name} pays a flat fee to be listed here and that is the whole of the
         arrangement. If something goes wrong, or a listing is not what it claims, tell us at{' '}

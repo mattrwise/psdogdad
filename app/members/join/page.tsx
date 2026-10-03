@@ -1,5 +1,6 @@
 'use client'
 
+import { brand } from '@/lib/brand'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -467,7 +468,7 @@ export default function JoinPage() {
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-plum rounded-2xl text-3xl mb-4 shadow-lg">🐾</div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-plum">Join the Pack</h1>
-          <p className="text-plum/60 mt-2">Create your free PS Dog Dad account, it only takes a minute.</p>
+          <p className="text-plum/60 mt-2">Create your free {brand.name} account, it only takes a minute.</p>
           <p className="text-sm text-plum/50 mt-1">
             Already a member?{' '}
             <Link href="/members/login" className="text-brand-orange font-semibold hover:underline">Sign in here</Link>
@@ -502,7 +503,7 @@ export default function JoinPage() {
                 <div>
                   <label htmlFor="city" className="block text-sm font-semibold text-plum mb-1.5">City / Neighborhood</label>
                   <input id="city" name="city" type="text" autoComplete="address-level2"
-                    value={form.city} onChange={handleChange} placeholder="Palm Springs, Uptown PS, Rancho Mirage…"
+                    value={form.city} onChange={handleChange} placeholder={`${brand.city}, ${brand.neighborhood}, ${brand.towns[2]}…`}
                     className={`w-full rounded-xl border px-4 py-3 text-sm text-plum placeholder-plum/30 focus:outline-none focus:ring-2 transition min-h-[44px] ${errors.city ? 'border-red-400 focus:ring-red-200 bg-red-50' : 'border-plum/20 focus:ring-brand-teal/30 bg-white'}`} />
                   {errors.city && <p className="mt-1.5 text-xs text-red-600">{errors.city}</p>}
                 </div>
@@ -648,7 +649,7 @@ export default function JoinPage() {
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   {loadingMsg}
                 </span>
-              ) : 'Join PS Dog Dad 🐾'}
+              ) : `Join ${brand.name} 🐾`}
             </button>
 
           </form>

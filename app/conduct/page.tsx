@@ -1,9 +1,10 @@
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Code of Conduct, PS Dog Dad',
-  description: 'The PS Dog Dad community code of conduct. How we treat each other, our dogs, and our shared spaces.',
+  title: `Code of Conduct, ${brand.name}`,
+  description: `The ${brand.name} community code of conduct. How we treat each other, our dogs, and our shared spaces.`,
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -27,7 +28,7 @@ export default function ConductPage() {
           <div className="text-4xl mb-4">🤝</div>
           <h1 className="text-3xl sm:text-4xl font-extrabold mb-3">Code of Conduct</h1>
           <p className="text-white/70 max-w-xl mx-auto leading-relaxed">
-            PS Dog Dad is a community built on mutual respect, for each other, our dogs, and our shared spaces.
+            {brand.name} is a community built on mutual respect, for each other, our dogs, and our shared spaces.
             These are the standards we hold ourselves to.
           </p>
         </div>
@@ -43,7 +44,7 @@ export default function ConductPage() {
             <p className="text-plum/70 text-sm leading-relaxed">
               Be kind. Be welcoming. Look after your dog and others'. Don't be a jerk.
               If something feels wrong, it probably is, reach out to us at{' '}
-              <a href="mailto:hello@psdogdad.com" className="text-brand-orange font-semibold hover:underline">hello@psdogdad.com</a>.
+              <a href={`mailto:${brand.contactEmail}`} className="text-brand-orange font-semibold hover:underline">{brand.contactEmail}</a>.
             </p>
           </div>
         </div>
@@ -54,13 +55,13 @@ export default function ConductPage() {
             Disagreements happen, that&apos;s fine. Personal attacks, harassment, and deliberate cruelty are not.
           </p>
           <p>
-            This applies in forums, at events, in direct messages, and anywhere you represent the PS Dog Dad community.
+            This applies in forums, at events, in direct messages, and anywhere you represent the {brand.name} community.
           </p>
         </Section>
 
         <Section title="2. Keep It Welcoming">
           <p>
-            We want PS Dog Dad to feel like a warm front porch, not a gatekeeping club. Whether someone has a
+            We want {brand.name} to feel like a warm front porch, not a gatekeeping club. Whether someone has a
             purebred show dog or a scruffy mutt from the shelter, whether they&apos;re new to the valley or a 30-year
             local, everyone deserves a genuine welcome.
           </p>
@@ -72,7 +73,7 @@ export default function ConductPage() {
 
         <Section title="3. Dog Safety Comes First">
           <p>
-            At all PS Dog Dad events, your dog&apos;s safety and the safety of other dogs is paramount:
+            At all {brand.name} events, your dog&apos;s safety and the safety of other dogs is paramount:
           </p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Know your dog&apos;s temperament and keep them on leash unless in a designated off-leash area.</li>
@@ -93,7 +94,7 @@ export default function ConductPage() {
         <Section title="5. Privacy">
           <p>
             What&apos;s shared in the community stays in the community. Don&apos;t screenshot or share members&apos; posts,
-            photos, or personal information outside of PS Dog Dad without explicit permission.
+            photos, or personal information outside of {brand.name} without explicit permission.
           </p>
           <p>
             Member-hosted events involve sharing home addresses with attendees. Treat that information with care.
@@ -103,7 +104,7 @@ export default function ConductPage() {
         <Section title="6. Reporting & Enforcement">
           <p>
             If you witness or experience behaviour that violates this code of conduct, please reach out to us at{' '}
-            <a href="mailto:hello@psdogdad.com" className="text-brand-orange font-semibold hover:underline">hello@psdogdad.com</a>.
+            <a href={`mailto:${brand.contactEmail}`} className="text-brand-orange font-semibold hover:underline">{brand.contactEmail}</a>.
             All reports are taken seriously and handled confidentially.
           </p>
           <p>
@@ -116,7 +117,7 @@ export default function ConductPage() {
           <p>
             This code of conduct will be updated as the community grows and evolves. If you have suggestions,
             we genuinely want to hear them. Email us at{' '}
-            <a href="mailto:hello@psdogdad.com" className="text-brand-orange font-semibold hover:underline">hello@psdogdad.com</a>.
+            <a href={`mailto:${brand.contactEmail}`} className="text-brand-orange font-semibold hover:underline">{brand.contactEmail}</a>.
           </p>
           <p className="text-plum/40 text-xs">Last updated: May 2025</p>
         </Section>

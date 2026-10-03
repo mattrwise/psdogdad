@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand'
 import { createClient } from '@supabase/supabase-js'
 import { ADMIN_EMAIL, SITE_URL } from '@/lib/site'
 
@@ -18,7 +19,7 @@ import { ADMIN_EMAIL, SITE_URL } from '@/lib/site'
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
 const RESEND_API_KEY = process.env.RESEND_API_KEY
-const FROM = 'PS Dog Dad <noreply@psdogdad.com>'
+const FROM = `${brand.name} <noreply@${brand.domain}>`
 
 export async function POST(request: Request) {
   if (!SUPABASE_URL || !SERVICE_ROLE_KEY || !RESEND_API_KEY) {

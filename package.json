@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed:demo": "node scripts/seed-demo.mjs",
+    "dev:demo": "NEXT_PUBLIC_DEMO=true next dev"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.1",

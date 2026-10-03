@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 
 /**
@@ -59,14 +60,14 @@ export default function ShelterEventCallout() {
             </h2>
 
             <p className="text-white/75 leading-relaxed mb-5 max-w-xl">
-              The Palm Springs Animal Shelter is running its annual adoption drive over the
+              The {brand.city} Animal Shelter is running its annual adoption drive over the
               weekend of <strong className="text-white">August 15&nbsp;&amp;&nbsp;16, 10am&nbsp;&ndash;&nbsp;5pm</strong>.
               A community built around dogs who needed someone may as well help a few more
               of them find people.
             </p>
 
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-white/60 mb-6">
-              <span>📍 Palm Springs Animal Shelter</span>
+              <span>📍 {brand.city} Animal Shelter</span>
               <span>🕐 10:00 AM &ndash; 5:00 PM</span>
             </div>
 
@@ -80,7 +81,7 @@ export default function ShelterEventCallout() {
             </div>
 
             <p className="text-xs text-white/40 mt-6 leading-relaxed">
-              PS Dog Dad isn&rsquo;t affiliated with the shelter or the campaign, we just think
+              {brand.name} isn&rsquo;t affiliated with the shelter or the campaign, we just think
               it&rsquo;s a good weekend to meet your next family member. Check the shelter&rsquo;s
               own channels for the latest details.
             </p>

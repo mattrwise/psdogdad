@@ -1,8 +1,9 @@
+import { brand } from '@/lib/brand'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Community Forums, PS Dog Dad',
-  description: 'Ask questions and swap tips with dog dads across Palm Springs and the surrounding cities, health, training, local spots and more.',
+  title: `Community Forums, ${brand.name}`,
+  description: `Ask questions and swap tips with ${brand.members} across ${brand.regionPhrase}, health, training, local spots and more.`,
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {

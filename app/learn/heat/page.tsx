@@ -1,9 +1,10 @@
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import PrintButton from '@/components/PrintButton'
 
 export const metadata: Metadata = {
-  title: 'High Heat Guide, PS Dog Dad',
+  title: `High Heat Guide, ${brand.name}`,
   description: 'How to keep your dog safe in the desert heat, the 7-second pavement test, walk timing, heatstroke warning signs, and everyday heat rules.',
 }
 
@@ -39,7 +40,7 @@ const everydayRules = [
 // section the folded-in guide had that this page had no equivalent of, and it
 // is the part people ask for: not "stay inside" but "go here instead".
 const summerSpots = [
-  { icon: '🌅', text: 'Early-morning walks at Ruth Hardy Park, before the pavement has come up' },
+  { icon: '🌅', text: `Early-morning walks at ${brand.park}, before the pavement has come up` },
   { icon: '🌳', text: 'The shaded stretches of Tahquitz Creek Trail' },
   { icon: '🏠', text: 'Indoor play. A puzzle feeder and ten minutes of nose work tires a dog out more than a hot mile does.' },
 ]

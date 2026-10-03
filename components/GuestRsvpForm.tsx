@@ -1,5 +1,6 @@
 'use client'
 
+import { brand } from '@/lib/brand'
 import { useRef, useState } from 'react'
 import Link from 'next/link'
 import { addGuestRsvp, looksLikeEmail } from '@/lib/guestRsvp'
@@ -122,7 +123,7 @@ export default function GuestRsvpForm({ eventId }: { eventId: string }) {
         <p aria-live="polite" className="text-sm font-semibold text-red-600 mt-3">
           {problem === 'name' && 'Please tell us your first name, so we know who to look for.'}
           {problem === 'email' && 'That email does not look right. Check it and try again.'}
-          {problem === 'save' && 'Something went wrong saving that. Please try again, or email hello@psdogdad.com.'}
+          {problem === 'save' && `Something went wrong saving that. Please try again, or email ${brand.contactEmail}.`}
         </p>
       )}
 

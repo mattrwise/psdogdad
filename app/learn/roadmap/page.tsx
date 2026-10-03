@@ -1,5 +1,6 @@
 'use client'
 
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 
 const steps = [
@@ -8,7 +9,7 @@ const steps = [
     icon: '🌴',
     title: 'Browse the Local directory',
     color: 'bg-brand-teal',
-    text: 'Our full guide to vets, groomers, parks, trails, and dog-friendly spots across Palm Springs and the surrounding cities, everything local in one place.',
+    text: `Our full guide to vets, groomers, parks, trails, and dog-friendly spots across ${brand.regionPhrase}, everything local in one place.`,
     href: '/local',
     linkLabel: 'Browse Resources',
   },
@@ -35,7 +36,7 @@ const steps = [
     icon: '👥',
     title: 'Meet the Members',
     color: 'bg-brand-golden',
-    text: 'See who else is already part of the community and find dog dads near your part of the valley.',
+    text: `See who else is already part of the community and find ${brand.members} near your part of the valley.`,
     href: '/members',
     linkLabel: 'Meet the Members',
   },
@@ -51,7 +52,7 @@ const exploreAnytime = [
   {
     icon: '💪',
     title: 'Training Techniques',
-    text: 'Core principles, common mistakes, and pro tips from other dog dads.',
+    text: `Core principles, common mistakes, and pro tips from other ${brand.members}.`,
     href: '/learn/techniques',
   },
   {
@@ -68,7 +69,7 @@ export default function RoadmapPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
         <div>
-          <h1 className="section-title">Your PS Dog Dad Roadmap</h1>
+          <h1 className="section-title">Your {brand.name} Roadmap</h1>
           <p className="text-plum/60 mt-2 max-w-xl">
             Now that you&apos;re a member, here&apos;s where things are richest. This order is a good default, but feel free to jump around.
           </p>
@@ -82,7 +83,7 @@ export default function RoadmapPage() {
       </div>
 
       <div className="hidden print:block text-center text-plum/50 text-sm mb-8 border-b border-plum/10 pb-4">
-        psdogdad.com &middot; Your Getting Started Roadmap
+        {brand.domain} &middot; Your Getting Started Roadmap
       </div>
 
       {/* Step-by-step trail */}
@@ -112,7 +113,7 @@ export default function RoadmapPage() {
                   {step.linkLabel} →
                 </Link>
                 <p className="hidden print:block mt-3 text-sm text-plum/50">
-                  psdogdad.com{step.href}
+                  {brand.domain}{step.href}
                 </p>
               </div>
             </div>
@@ -136,7 +137,7 @@ export default function RoadmapPage() {
                 Take a look →
               </Link>
               <p className="hidden print:block mt-2 text-sm text-plum/50">
-                psdogdad.com{item.href}
+                {brand.domain}{item.href}
               </p>
             </div>
           ))}
@@ -147,8 +148,8 @@ export default function RoadmapPage() {
       <div className="mt-12 bg-plum/5 border border-plum/15 rounded-2xl p-6 text-center no-print">
         <p className="text-plum/70 text-sm leading-relaxed">
           Questions along the way? Reach us anytime at{' '}
-          <a href="mailto:hello@psdogdad.com" className="font-semibold text-brand-orange hover:underline">
-            hello@psdogdad.com
+          <a href={`mailto:${brand.contactEmail}`} className="font-semibold text-brand-orange hover:underline">
+            {brand.contactEmail}
           </a>
           .
         </p>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" role="img" aria-label="Desert Springs Dog Dad">
+  <circle cx="60" cy="60" r="44" fill="#E9C46A"/>
+  <path d="M10 96 Q60 56 110 96 Z" fill="#B8702A"/>
+  <g fill="#0F3D3E">
+    <ellipse cx="60" cy="68" rx="14" ry="11"/>
+    <ellipse cx="40" cy="52" rx="6" ry="8"/><ellipse cx="52" cy="42" rx="6" ry="8"/>
+    <ellipse cx="68" cy="42" rx="6" ry="8"/><ellipse cx="80" cy="52" rx="6" ry="8"/>
+  </g>
+  <text x="120" y="52" font-family="Inter,system-ui,sans-serif" font-weight="800" font-size="30" fill="#0F3D3E">DESERT SPRINGS</text>
+  <text x="120" y="88" font-family="Inter,system-ui,sans-serif" font-weight="800" font-size="30" fill="#2A9D8F">DOG <tspan fill="#B8702A">DAD</tspan></text>
+</svg>

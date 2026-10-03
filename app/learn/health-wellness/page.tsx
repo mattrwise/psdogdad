@@ -1,5 +1,7 @@
 'use client'
 
+import { brand, IS_DEMO } from '@/lib/brand'
+import { demoVets } from '@/lib/demoData'
 import { useState } from 'react'
 import PrintButton from '@/components/PrintButton'
 
@@ -62,7 +64,7 @@ type Vet = {
   address: string | null
 }
 
-const vets: Vet[] = [
+const realVets: Vet[] = [
   { name: 'Desert Veterinary Specialists', city: 'Palm Desert', specialty: 'Specialty Care', phone: '(760) 772-2222', address: '42065 Washington St, Ste D, Palm Desert' },
   { name: 'Animal Hospital of Desert', city: 'Palm Desert', specialty: 'General Practice', phone: '(760) 568-5151', address: '44350 Monterey Ave, Palm Desert' },
   { name: 'Carter Animal Hospital', city: 'Cathedral City', specialty: 'General Practice', phone: '(760) 324-8811', address: '68766 Perez Rd, Cathedral City' },
@@ -85,7 +87,9 @@ const vets: Vet[] = [
   { name: 'Pet Lux Inc', city: 'Palm Springs', specialty: 'General Practice', phone: '(760) 297-7747', address: '1801 E Tahquitz Canyon Way, Palm Springs' },
 ]
 
-const cities = ['Palm Springs', 'Desert Hot Springs', 'Cathedral City', 'Rancho Mirage', 'Palm Desert', 'Indian Wells', 'La Quinta', 'Indio', 'Coachella', 'Thermal', 'Thousand Palms', 'Mecca']
+const vets: Vet[] = IS_DEMO ? demoVets : realVets
+
+const cities = IS_DEMO ? brand.towns : ['Palm Springs', 'Desert Hot Springs', 'Cathedral City', 'Rancho Mirage', 'Palm Desert', 'Indian Wells', 'La Quinta', 'Indio', 'Coachella', 'Thermal', 'Thousand Palms', 'Mecca']
 const specialties = ['Specialty Care', 'General Practice', 'Urgent Care', 'Mobile Service', 'Emergency']
 
 const specialtyBadge: Record<string, string> = {
@@ -112,7 +116,7 @@ export default function HealthWellnessPage() {
         <div>
           <h1 className="section-title">Keeping Your Best Friend Healthy</h1>
           <p className="text-plum/60 mt-2 max-w-2xl">
-            The essentials of desert dog health, plus a directory of trusted veterinarians across Palm Springs and the surrounding cities.
+            The essentials of desert dog health, plus a directory of trusted veterinarians across {brand.regionPhrase}.
           </p>
         </div>
         <PrintButton />
@@ -204,7 +208,13 @@ export default function HealthWellnessPage() {
         )}
 
         <div className="mt-8 bg-brand-golden/10 border border-brand-golden/30 rounded-xl p-4 text-sm text-plum/70">
-          <strong className="text-plum">In an emergency:</strong> VEG ER for Pets in Palm Desert is the valley&apos;s only true 24/7 ER, <a href="tel:+17602492279" className="font-semibold text-brand-teal hover:underline">(760) 249-2279</a>. Always call ahead so they can prepare for your arrival.
+          <strong className="text-plum">In an emergency:</strong>{' '}
+          {brand.isDemo ? (
+            <>Desert Springs Pet ER is open 24/7, <a href="tel:+15555550110" className="font-semibold text-brand-teal hover:underline">(555) 555-0110</a> (a sample number).</>
+          ) : (
+            <>VEG ER for Pets in Palm Desert is the valley&apos;s only true 24/7 ER, <a href="tel:+17602492279" className="font-semibold text-brand-teal hover:underline">(760) 249-2279</a>.</>
+          )}{' '}
+          Always call ahead so they can prepare for your arrival.
         </div>
       </div>
     </div>

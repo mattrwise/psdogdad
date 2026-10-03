@@ -33,3 +33,6 @@ npm-debug.log*
 # local working files, never part of the site
 Claude outputs/
 .claude/settings.local.json
+
+# demo
+/demo-setup.sql

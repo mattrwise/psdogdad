@@ -1,8 +1,9 @@
+import { brand } from '@/lib/brand'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Messages, PS Dog Dad',
-  description: 'Your PS Dog Dad conversations.',
+  title: `Messages, ${brand.name}`,
+  description: `Your ${brand.name} conversations.`,
   robots: { index: false },
 }
 

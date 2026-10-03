@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand'
 import type { Metadata } from 'next'
 import SuggestResourceButton from '@/components/resources/SuggestResourceButton'
 import SectionTabs from '@/components/SectionTabs'
@@ -11,8 +12,8 @@ import {
 } from '@/lib/local'
 
 export const metadata: Metadata = {
-  title: 'Local Resources, PS Dog Dad',
-  description: 'Vets, emergency clinics, groomers, daycare, dog parks and pet-friendly spots across Palm Springs and the surrounding cities.',
+  title: `Local Resources, ${brand.name}`,
+  description: `Vets, emergency clinics, groomers, daycare, dog parks and pet-friendly spots across ${brand.regionPhrase}.`,
 }
 
 function ResourceCard({ resource }: { resource: Resource }) {
@@ -76,7 +77,7 @@ export default function LocalPage() {
         <div>
           <h1 className="section-title">Local Resources</h1>
           <p className="text-plum/60 mt-2">
-            Pet services, parks, and dog-friendly spots around Palm Springs and the surrounding cities.
+            Pet services, parks, and dog-friendly spots around {brand.regionPhrase}.
           </p>
         </div>
         <SuggestResourceButton className="btn-secondary self-start">

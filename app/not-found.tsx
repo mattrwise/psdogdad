@@ -1,8 +1,9 @@
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Page not found, PS Dog Dad',
+  title: `Page not found, ${brand.name}`,
   robots: { index: false },
 }
 
@@ -25,7 +26,7 @@ export default function NotFound() {
       <h1 className="section-title mb-3">This trail goes nowhere</h1>
       <p className="text-plum/60 max-w-md mx-auto mb-10 leading-relaxed">
         We couldn&rsquo;t find that page. It may have moved, or the link may have a typo in it.
-        Here&rsquo;s where most dog dads are headed instead.
+        Here&rsquo;s where most {brand.members} are headed instead.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left mb-10">

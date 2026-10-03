@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import Image from 'next/image'
 import HeatAlertBanner from '@/components/HeatAlertBanner'
@@ -10,7 +11,6 @@ import { emergencyRoom, listingCount, resourceSections, tel, totalListings } fro
 // Imported (not linked by URL) so Next.js serves it from /_next/static/… and
 // fingerprints it. This originally worked around the under construction gate,
 // which intercepted plain /public files; it is the right default anyway.
-import heroArt from '@/public/psdogdadbullprint_transparent.png'
 
 /**
  * The homepage leads with the directory.
@@ -29,7 +29,7 @@ const stats = [
   { value: String(totalListings), label: 'Local Listings' },
   { value: '24/7', label: 'Emergency Numbers' },
   { value: 'Free', label: 'No Account Needed' },
-  { value: '🌴', label: 'Palm Springs Area' },
+  { value: '🌴', label: `${brand.city} Area` },
 ]
 
 /**
@@ -49,7 +49,7 @@ export default function HomePage() {
             {/* Left: headline & CTAs */}
             <div>
               <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 text-sm font-semibold text-plum shadow-sm border border-plum/10 mb-6">
-                <span>🌴</span> Palm Springs, CA
+                <span>🌴</span> {brand.cityState}
               </div>
               <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6 text-plum">
                 They&apos;re Not Pets.{' '}
@@ -97,11 +97,12 @@ export default function HomePage() {
             {/* Right: illustration */}
             <div className="flex justify-center lg:justify-end">
               <Image
-                src={heroArt}
-                alt="PS Dog Dad, a dog dad and his bulldog in the Palm Springs sun"
+                src={brand.heroArt}
+                alt={`${brand.name}, a dog dad and his bulldog in the ${brand.city} sun`}
                 width={640}
                 height={640}
                 priority
+                unoptimized={brand.heroArt.endsWith('.svg')}
                 className="w-full max-w-sm md:max-w-md lg:max-w-lg h-auto"
               />
             </div>
@@ -195,7 +196,7 @@ export default function HomePage() {
           itself after the weekend. */}
       <section className="bg-brand-cream pb-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ShelterEventCallout />
+          {!brand.isDemo && <ShelterEventCallout />}
         </div>
       </section>
 

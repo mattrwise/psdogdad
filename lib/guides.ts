@@ -2,6 +2,8 @@
 // lost. Each one renders at /learn/<slug>. The premium entries are kept here on
 // purpose but are not listed on /learn or in the sitemap; see app/learn/page.tsx.
 
+import { brand } from '@/lib/brand'
+
 export type GuideBlock =
   | { type: 'p'; text: string }
   | { type: 'h2'; text: string }
@@ -77,9 +79,9 @@ export const guides: Guide[] = [
       { type: 'h2', text: 'Week 2: Learn the terrain' },
       { type: 'p', text: "Walk your neighborhood early and note the hazards that are new here: rattlesnakes in brushy areas (keep dogs leashed on trails), coyotes at dawn and dusk (small dogs stay close), and cholla cactus that seems magnetically attracted to paws. Carry a comb in your car, it's the tool for flicking cholla out." },
       { type: 'h2', text: 'Week 3: Find your spots' },
-      { type: 'p', text: 'Ruth Hardy Park and Demuth Park have off-leash areas. Tahquitz Creek Trail is the best shaded walk in summer. Half the patios on Palm Canyon Drive welcome dogs, our Resources page lists member favorites.' },
+      { type: 'p', text: `${brand.localSpots}, our Resources page lists member favorites.` },
       { type: 'h2', text: 'Week 4: Meet people' },
-      { type: 'p', text: "Come to a community event. The biweekly morning walk at Ruth Hardy Park is the easiest entry point, show up, say hi, and you'll leave with three new friends and a list of local tips no guide can cover." },
+      { type: 'p', text: `Come to a community event. The biweekly morning walk at ${brand.park} is the easiest entry point, show up, say hi, and you'll leave with three new friends and a list of local tips no guide can cover.` },
     ],
   },
   {
@@ -130,7 +132,7 @@ export const guides: Guide[] = [
         "How to find and work at your dog's threshold distance",
         'The "engage-disengage" game, step by step with progressions',
         'Handling surprise encounters when a dog appears around a corner',
-        'Palm Springs-specific practice locations with good sightlines',
+        `${brand.city}-specific practice locations with good sightlines`,
         'When to bring in a professional, and how to choose one',
       ] },
     ],

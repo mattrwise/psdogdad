@@ -1,5 +1,6 @@
 'use client'
 
+import { brand } from '@/lib/brand'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -477,7 +478,7 @@ export default function ProfilePage() {
                   <div>
                     <label htmlFor="city" className="block text-sm font-semibold text-plum mb-1.5">City / Neighborhood</label>
                     <input id="city" name="city" type="text"
-                      value={form.city} onChange={handleChange} placeholder="Palm Springs, Uptown PS…"
+                      value={form.city} onChange={handleChange} placeholder={`${brand.city}, ${brand.neighborhood}…`}
                       className={`w-full rounded-xl border px-4 py-3 text-sm text-plum placeholder-plum/30 focus:outline-none focus:ring-2 transition min-h-[44px] ${errors.city ? 'border-red-400 focus:ring-red-200 bg-red-50' : 'border-plum/20 focus:ring-brand-teal/30 bg-white'}`} />
                     {errors.city && <p className="mt-1.5 text-xs text-red-600">{errors.city}</p>}
                   </div>

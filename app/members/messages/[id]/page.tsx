@@ -1,5 +1,6 @@
 'use client'
 
+import { brand } from '@/lib/brand'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -486,7 +487,7 @@ export default function ConversationPage() {
         Messages are private between the two of you. Please keep to the{' '}
         <Link href="/conduct" className="text-brand-teal hover:underline">Community Guidelines</Link>, 
         if someone makes you uncomfortable, block them and let us know at{' '}
-        <a href="mailto:hello@psdogdad.com" className="text-brand-teal hover:underline">hello@psdogdad.com</a>.
+        <a href={`mailto:${brand.contactEmail}`} className="text-brand-teal hover:underline">{brand.contactEmail}</a>.
       </p>
     </div>
   )

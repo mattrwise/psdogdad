@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { freeGuides, memberGuides, type Guide } from '@/lib/guides'
@@ -5,9 +6,9 @@ import { kits, bundle, kitsTotal, type Kit } from '@/lib/kits'
 import KitLink from '@/components/KitLink'
 
 export const metadata: Metadata = {
-  title: 'Learn, PS Dog Dad',
+  title: `Learn, ${brand.name}`,
   description:
-    'Everything we have written down for Palm Springs area dog dads: health, desert heat, training technique, gear, and the Dog Dad Handbook. All printable.',
+    `Everything we have written down for ${brand.city} area ${brand.members}: health, desert heat, training technique, gear, and the Dog Dad Handbook. All printable.`,
 }
 
 /**
@@ -232,6 +233,9 @@ export default function LearnPage() {
           plans, checklists, scripts, and logs, sold through Payhip. They sit
           above the free guides because they are the fuller versions of the
           same subjects, not because the free ones matter less. */}
+      {/* The kits are the real site's paid products and link to its real checkout, so the demo leaves them out. */}
+      {!brand.isDemo && (
+        <>
       <div id="printable-kits" className="flex items-baseline gap-3 mb-3 flex-wrap no-print scroll-mt-24">
         <h2 className="text-xl sm:text-2xl font-extrabold text-plum">Printable Kits</h2>
         <span className="badge bg-brand-orange/10 text-brand-orange self-center">New</span>
@@ -250,6 +254,8 @@ export default function LearnPage() {
         Launch prices through Sunday, October 11. General education, not veterinary or
         behavior advice.
       </p>
+        </>
+      )}
 
       {/* Start here. This was buried at /resources/roadmap and reachable only
           from a panel on the old Guides page, which is a poor place for the one
@@ -294,7 +300,7 @@ export default function LearnPage() {
           Members can contribute guides. Send us your idea or draft and we&apos;ll review it for
           publishing, with full credit to you and your pup.
         </p>
-        <a href="mailto:hello@psdogdad.com?subject=Guide%20submission" className="btn-primary text-base px-8">
+        <a href={`mailto:${brand.contactEmail}?subject=Guide%20submission`} className="btn-primary text-base px-8">
           Submit a Guide Idea
         </a>
       </div>

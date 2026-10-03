@@ -1,9 +1,10 @@
+import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy, PS Dog Dad',
-  description: 'How PS Dog Dad collects, uses, and protects your personal information.',
+  title: `Privacy Policy, ${brand.name}`,
+  description: `How ${brand.name} collects, uses, and protects your personal information.`,
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -38,7 +39,7 @@ export default function PrivacyPage() {
         <div className="bg-brand-golden/10 border border-brand-golden/30 rounded-2xl p-5">
           <p className="text-sm text-plum/70 leading-relaxed">
             <strong className="text-plum">Effective date: May 2025.</strong>{' '}
-            PS Dog Dad (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) operates psdogdad.com. By using this site you agree to the
+            {brand.name} (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) operates {brand.domain}. By using this site you agree to the
             collection and use of information as described in this policy.
           </p>
         </div>
@@ -96,8 +97,8 @@ export default function PrivacyPage() {
           </ul>
           <p>
             To exercise any of these rights, email{' '}
-            <a href="mailto:hello@psdogdad.com" className="text-brand-orange hover:underline font-semibold">
-              hello@psdogdad.com
+            <a href={`mailto:${brand.contactEmail}`} className="text-brand-orange hover:underline font-semibold">
+              {brand.contactEmail}
             </a>{' '}
             and we&apos;ll respond within 5 business days.
           </p>
@@ -123,8 +124,8 @@ export default function PrivacyPage() {
         <Section title="Contact">
           <p>
             Questions about this policy? Email us at{' '}
-            <a href="mailto:hello@psdogdad.com" className="text-brand-orange hover:underline font-semibold">
-              hello@psdogdad.com
+            <a href={`mailto:${brand.contactEmail}`} className="text-brand-orange hover:underline font-semibold">
+              {brand.contactEmail}
             </a>
             .
           </p>
