@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import { getGuide, publishedGuides, relatedGuides } from '@/lib/guides'
 import GuideBody from '@/components/training/GuideBody'
 import PrintButton from '@/components/PrintButton'
+import FullPlanBox from '@/components/FullPlanBox'
 
 export function generateStaticParams() {
   return publishedGuides.map(g => ({ slug: g.slug }))
@@ -34,7 +35,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
   return (
     <div className="bg-brand-cream min-h-screen py-12 px-4">
       <div className="max-w-2xl mx-auto">
-        <Link href="/learn" className="text-brand-orange font-bold text-sm hover:underline no-print">
+        <Link href="/guides" className="text-brand-orange font-bold text-sm hover:underline no-print">
           ← All guides
         </Link>
 
@@ -58,6 +59,10 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
 
         {/* Body, client component handles auth gate */}
         <GuideBody guide={guide} />
+
+        {guide.slug === 'loose-leash-walking' && (
+          <FullPlanBox kit="training-techniques" label="Get the complete Training Techniques kit" />
+        )}
 
         {/* Related guides. Navigation, so it stays off the paper. */}
         <div className="mt-10 no-print">

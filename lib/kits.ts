@@ -18,8 +18,6 @@ export type Kit = {
   cover: string
   /** The Payhip product code: the last part of payhip.com/b/<code>. */
   product: string
-  /** True for a kit sold on its own that is not one of the five in the bundle. */
-  outsideBundle?: boolean
 }
 
 export const kits: Kit[] = [
@@ -82,22 +80,19 @@ export const kits: Kit[] = [
     price: 15,
     cover: '/kits/training-techniques.jpg',
     product: 'Qvcr7',
-    outsideBundle: true,
   },
 ]
 
-export const bundledKits = kits.filter(k => !k.outsideBundle)
-
-// All five PDFs in one ordinary Payhip product. It was a Payhip "bundle" for
+// All six PDFs in one ordinary Payhip product. It was a Payhip "bundle" for
 // about an afternoon; Payhip's on-site checkout does not work for bundles, so
-// it became a plain digital product holding five files instead.
+// it became a plain digital product holding the kit files instead.
 export const bundle = {
-  title: 'The PS Dog Dad Guide Library',
-  blurb: 'All five kits in one download.',
-  short: 'All five, one download',
-  price: 29,
+  title: 'The PS Dog Dad Kit Library',
+  blurb: 'All six kits in one download.',
+  short: 'All six, one download',
+  price: 39,
   product: 'eMf21',
 }
 
-/** What the five cost bought one at a time, so the bundle saving is never typed by hand. */
-export const kitsTotal = bundledKits.reduce((sum, k) => sum + k.price, 0)
+/** What the six cost bought one at a time, so the bundle saving is never typed by hand. */
+export const kitsTotal = kits.reduce((sum, k) => sum + k.price, 0)
