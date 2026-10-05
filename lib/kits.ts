@@ -87,8 +87,8 @@ export const kits: Kit[] = [
 // about an afternoon; Payhip's on-site checkout does not work for bundles, so
 // it became a plain digital product holding the kit files instead.
 export const bundle = {
-  title: 'The PS Dog Dad Kit Library',
-  blurb: 'All six kits in one download.',
+  title: 'The PS Dog Dad Guide Library',
+  blurb: 'All six guides in one download.',
   short: 'All six, one download',
   price: 39,
   product: 'eMf21',

@@ -17,7 +17,7 @@ import { unreadCount } from '@/lib/messages'
  * beside it — Training next to Guides, Guides next to Resources, Pros held back
  * from Resources. When a nav needs footnotes, the sections are wrong, not the
  * labels. Training and Guides are now one section, with the free guides at
- * /guides (footer only) and the paid kits at /learn, labelled Kits; Resources and Dog Pros
+ * /guides (footer only) and the paid kits at /learn, labelled Guides; Resources and Dog Pros
  * are two views of one Local directory; Forums and Members are two views of
  * Community.
  *
@@ -28,7 +28,7 @@ import { unreadCount } from '@/lib/messages'
  */
 const links = [
   { href: '/', label: 'Home', match: ['/'] },
-  { href: '/learn', label: 'Kits', match: [], exact: ['/learn'] },
+  { href: '/learn', label: 'Guides', match: [], exact: ['/learn'] },
   { href: '/local', label: 'Local Resources', match: ['/local', '/pros'] },
   { href: '/forums', label: 'Community', match: ['/forums', '/members'] },
   { href: '/events', label: 'Events', match: ['/events'] },
@@ -112,7 +112,7 @@ export default function Nav() {
   // Exact match for '/', prefix match for everything else, so a section stays
   // lit on its own sub-pages.
   // `exact` is for a label that owns one address but not what lives under it:
-  // Kits is /learn, while the guides still sit at /learn/<guide>.
+  // Guides (the paid ones) is /learn, while the guides still sit at /learn/<guide>.
   const isActive = (match: string[], exact: string[] = []) =>
     exact.includes(pathname) ||
     match.some(m => (m === '/' ? pathname === '/' : pathname === m || pathname.startsWith(m + '/')))
