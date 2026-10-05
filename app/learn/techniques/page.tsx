@@ -1,6 +1,8 @@
 import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import PrintButton from '@/components/PrintButton'
+import KitLink from '@/components/KitLink'
+import { kits } from '@/lib/kits'
 
 const principles = [
   { icon: '📅', title: 'Consistency is Key', text: 'Same cues, same rules, same rewards, from everyone in the house. Dogs learn fastest when the answer never changes.' },
@@ -149,7 +151,9 @@ export default function TrainingResourcesPage() {
         <p className="text-white/70 mb-6 max-w-lg mx-auto">
           Our Training section has full written guides, from loose-leash walking to desert heat safety.
         </p>
-        <Link href="/learn" className="btn-primary text-base px-8">Back to Learn</Link>
+        <KitLink product={kits.find(k => k.slug === 'training-techniques')!.product} className="btn-primary text-base px-8">
+          Get the complete Training Techniques kit
+        </KitLink>
       </div>
     </div>
   )

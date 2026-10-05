@@ -2,7 +2,7 @@ import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { freeGuides, memberGuides, type Guide } from '@/lib/guides'
-import { kits, bundle, kitsTotal, type Kit } from '@/lib/kits'
+import { kits, bundledKits, bundle, kitsTotal, type Kit } from '@/lib/kits'
 import KitLink from '@/components/KitLink'
 
 export const metadata: Metadata = {
@@ -198,7 +198,7 @@ function BundleCard() {
         </div>
         <div className="flex items-center justify-between sm:justify-end gap-4">
           <div className="flex -space-x-2" aria-hidden="true">
-            {kits.map(kit => (
+            {bundledKits.map(kit => (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 key={kit.slug}
