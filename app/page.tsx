@@ -218,7 +218,7 @@ export default function HomePage() {
                 valley living, plus the Dog Dad Handbook. Every one of them prints. Most are
                 open to everyone, a couple unlock with a free account.
               </p>
-              <Link href="/learn" className="btn-primary">Go to Learn</Link>
+              <Link href="/guides" className="btn-primary">Go to Free Guides</Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[

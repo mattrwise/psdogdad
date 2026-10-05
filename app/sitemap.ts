@@ -12,6 +12,7 @@ import { IS_DEMO } from '@/lib/brand'
 const staticPaths = [
   '/',
   '/learn',
+  '/guides',
   '/forums',
   '/members',
   '/events',

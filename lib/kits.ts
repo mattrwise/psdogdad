@@ -71,18 +71,28 @@ export const kits: Kit[] = [
     cover: '/kits/reliable-recall.jpg',
     product: '4Ungm',
   },
+  {
+    slug: 'training-techniques',
+    title: 'Training Techniques',
+    short: 'Train in 5 min a day',
+    blurb: 'The complete guide to training your dog at home in five minutes a day, with five printable pages.',
+    pages: 20,
+    price: 15,
+    cover: '/kits/training-techniques.jpg',
+    product: 'Qvcr7',
+  },
 ]
 
-// All five PDFs in one ordinary Payhip product. It was a Payhip "bundle" for
+// All six PDFs in one ordinary Payhip product. It was a Payhip "bundle" for
 // about an afternoon; Payhip's on-site checkout does not work for bundles, so
-// it became a plain digital product holding five files instead.
+// it became a plain digital product holding the kit files instead.
 export const bundle = {
-  title: 'The PS Dog Dad Guide Library',
-  blurb: 'All five kits in one download.',
-  short: 'All five, one download',
-  price: 29,
+  title: 'The PS Dog Dad Kit Library',
+  blurb: 'All six kits in one download.',
+  short: 'All six, one download',
+  price: 39,
   product: 'eMf21',
 }
 
-/** What the five cost bought one at a time, so the bundle saving is never typed by hand. */
+/** What the six cost bought one at a time, so the bundle saving is never typed by hand. */
 export const kitsTotal = kits.reduce((sum, k) => sum + k.price, 0)

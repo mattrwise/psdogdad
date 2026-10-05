@@ -19,7 +19,7 @@ const steps = [
     title: 'Explore the courses and guides',
     color: 'bg-brand-orange',
     text: 'Real, practical guides on everything from loose-leash walking to desert heat safety.',
-    href: '/learn',
+    href: '/guides',
     linkLabel: 'See Training Guides',
   },
   {

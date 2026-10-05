@@ -2,6 +2,7 @@ import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import PrintButton from '@/components/PrintButton'
+import FullPlanBox from '@/components/FullPlanBox'
 
 export const metadata: Metadata = {
   title: `High Heat Guide, ${brand.name}`,
@@ -157,6 +158,8 @@ export default function HeatGuidePage() {
           </p>
           <Link href="/local" className="btn-primary">Browse Vet Listings</Link>
         </section>
+
+        <FullPlanBox kit="desert-dog" label="Get the Desert Dog kit" />
 
       </div>
     </div>

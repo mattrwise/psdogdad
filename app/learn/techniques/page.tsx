@@ -1,6 +1,7 @@
 import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import PrintButton from '@/components/PrintButton'
+import FullPlanBox from '@/components/FullPlanBox'
 
 const principles = [
   { icon: '📅', title: 'Consistency is Key', text: 'Same cues, same rules, same rewards, from everyone in the house. Dogs learn fastest when the answer never changes.' },
@@ -103,7 +104,7 @@ export default function TrainingResourcesPage() {
                 </li>
               ))}
             </ul>
-            <Link href="/learn" className="text-sm font-semibold text-brand-teal hover:underline">
+            <Link href="/guides" className="text-sm font-semibold text-brand-teal hover:underline">
               Learn More →
             </Link>
           </div>
@@ -143,14 +144,7 @@ export default function TrainingResourcesPage() {
         ))}
       </div>
 
-      <div className="mt-12 bg-plum rounded-3xl p-6 sm:p-10 text-center text-white">
-        <div className="text-4xl mb-4">🎓</div>
-        <h2 className="text-2xl font-extrabold mb-3">Want step-by-step guides?</h2>
-        <p className="text-white/70 mb-6 max-w-lg mx-auto">
-          Our Training section has full written guides, from loose-leash walking to desert heat safety.
-        </p>
-        <Link href="/learn" className="btn-primary text-base px-8">Back to Learn</Link>
-      </div>
+      <FullPlanBox kit="training-techniques" label="Get the complete Training Techniques kit" />
     </div>
   )
 }

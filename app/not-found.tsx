@@ -14,7 +14,7 @@ export const metadata: Metadata = {
  */
 export default function NotFound() {
   const suggestions = [
-    ['🎓', 'Learn', 'Guides on heat safety, health, leash skills and recall', '/learn'],
+    ['🎓', 'Free Guides', 'Guides on heat safety, health, leash skills and recall', '/guides'],
     ['📋', 'Local Resources', 'Vets, groomers, parks and patios', '/local'],
     ['💬', 'Forums', 'Ask the pack anything', '/forums'],
     ['📅', 'Events', 'Walks, yappy hours and meetups', '/events'],
