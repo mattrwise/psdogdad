@@ -78,7 +78,7 @@ export const kits: Kit[] = [
     title: 'Training Techniques',
     short: 'Train in 5 min a day',
     blurb: 'The complete guide to training your dog at home in five minutes a day, with five printable pages.',
-    pages: 5,
+    pages: 20,
     price: 15,
     cover: '/kits/training-techniques.jpg',
     product: 'Qvcr7',
