@@ -5,7 +5,7 @@ import { kits, bundle, kitsTotal, type Kit } from '@/lib/kits'
 import KitLink from '@/components/KitLink'
 
 export const metadata: Metadata = {
-  title: `Printable Kits, ${brand.name}`,
+  title: `Printable Guides, ${brand.name}`,
   description:
     `Printable plans, checklists, scripts and logs for ${brand.city} area ${brand.members}. Instant PDF download.`,
 }
@@ -116,7 +116,7 @@ export default function LearnPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       <div id="printable-kits" className="mb-4 scroll-mt-24">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-plum">Printable Kits</h1>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-plum">Printable Guides</h1>
       </div>
 
       <BundleCard />

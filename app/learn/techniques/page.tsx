@@ -144,7 +144,7 @@ export default function TrainingResourcesPage() {
         ))}
       </div>
 
-      <FullPlanBox kit="training-techniques" label="Get the complete Training Techniques kit" />
+      <FullPlanBox kit="training-techniques" label="Get the complete Training Techniques guide" />
     </div>
   )
 }

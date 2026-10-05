@@ -159,7 +159,7 @@ export default function HeatGuidePage() {
           <Link href="/local" className="btn-primary">Browse Vet Listings</Link>
         </section>
 
-        <FullPlanBox kit="desert-dog" label="Get the Desert Dog kit" />
+        <FullPlanBox kit="desert-dog" label="Get the Desert Dog guide" />
 
       </div>
     </div>

@@ -61,7 +61,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
         <GuideBody guide={guide} />
 
         {guide.slug === 'loose-leash-walking' && (
-          <FullPlanBox kit="training-techniques" label="Get the complete Training Techniques kit" />
+          <FullPlanBox kit="training-techniques" label="Get the complete Training Techniques guide" />
         )}
 
         {/* Related guides. Navigation, so it stays off the paper. */}
