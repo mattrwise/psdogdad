@@ -26,7 +26,7 @@ import { unreadCount } from '@/lib/messages'
  * the forums but stays lit in the member directory. Without that, following a
  * tab makes the tab you followed go dark.
  */
-const links = [
+const links: { href: string; label: string; match: string[]; exact?: string[] }[] = [
   { href: '/', label: 'Home', match: ['/'] },
   { href: '/learn', label: 'Learn', match: ['/learn'] },
   { href: '/guides', label: 'Guides', match: ['/guides'] },
