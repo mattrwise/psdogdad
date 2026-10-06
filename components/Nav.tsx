@@ -10,14 +10,14 @@ import type { User } from '@supabase/supabase-js'
 import { unreadCount } from '@/lib/messages'
 
 /**
- * Five items, and each one is a place rather than a page.
+ * Six items, and each one is a place rather than a page.
  *
  * This row used to carry eight, and the comments that lived here were the tell:
  * each new tab arrived with a paragraph explaining how it differed from the one
  * beside it — Training next to Guides, Guides next to Resources, Pros held back
  * from Resources. When a nav needs footnotes, the sections are wrong, not the
  * labels. Training and Guides are now one section, with the free guides at
- * /guides (footer only) and the paid kits at /learn, labelled Guides; Resources and Dog Pros
+ * /learn and the paid guides at /guides; Resources and Dog Pros
  * are two views of one Local directory; Forums and Members are two views of
  * Community.
  *
@@ -26,9 +26,10 @@ import { unreadCount } from '@/lib/messages'
  * the forums but stays lit in the member directory. Without that, following a
  * tab makes the tab you followed go dark.
  */
-const links = [
+const links: { href: string; label: string; match: string[]; exact?: string[] }[] = [
   { href: '/', label: 'Home', match: ['/'] },
-  { href: '/learn', label: 'Guides', match: [], exact: ['/learn'] },
+  { href: '/learn', label: 'Learn', match: ['/learn'] },
+  { href: '/guides', label: 'Guides', match: ['/guides'] },
   { href: '/local', label: 'Local Resources', match: ['/local', '/pros'] },
   { href: '/forums', label: 'Community', match: ['/forums', '/members'] },
   { href: '/events', label: 'Events', match: ['/events'] },

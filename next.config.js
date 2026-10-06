@@ -18,7 +18,7 @@
  * it and the approval queue is being built against it.
  */
 const moved = [
-  ['/training', '/guides'],
+  ['/training', '/learn'],
   // The desert heat guide was folded into /learn/heat, which already covered
   // the same ground. Both of its old addresses land there in one hop, so this
   // pair has to sit above the general /training/:slug rule below — Next takes
@@ -28,10 +28,10 @@ const moved = [
   ['/learn/desert-heat-safety', '/learn/heat'],
   // These two guides became paid kits and were unpublished. Like the pair
   // above, the /training forms must sit above the general rule below.
-  ['/learn/new-to-palm-springs', '/learn#printable-kits'],
-  ['/learn/reliable-recall', '/learn#printable-kits'],
-  ['/training/new-to-palm-springs', '/learn#printable-kits'],
-  ['/training/reliable-recall', '/learn#printable-kits'],
+  ['/learn/new-to-palm-springs', '/guides'],
+  ['/learn/reliable-recall', '/guides'],
+  ['/training/new-to-palm-springs', '/guides'],
+  ['/training/reliable-recall', '/guides'],
   ['/training/:slug', '/learn/:slug'],
   ['/resources', '/local'],
   ['/resources/roadmap', '/learn/roadmap'],
