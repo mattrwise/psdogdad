@@ -104,7 +104,7 @@ export default function TrainingResourcesPage() {
                 </li>
               ))}
             </ul>
-            <Link href="/guides" className="text-sm font-semibold text-brand-teal hover:underline">
+            <Link href="/learn" className="text-sm font-semibold text-brand-teal hover:underline">
               Learn More →
             </Link>
           </div>

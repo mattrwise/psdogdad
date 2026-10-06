@@ -35,7 +35,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
   return (
     <div className="bg-brand-cream min-h-screen py-12 px-4">
       <div className="max-w-2xl mx-auto">
-        <Link href="/guides" className="text-brand-orange font-bold text-sm hover:underline no-print">
+        <Link href="/learn" className="text-brand-orange font-bold text-sm hover:underline no-print">
           ← All guides
         </Link>
 

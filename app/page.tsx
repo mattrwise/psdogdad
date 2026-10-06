@@ -7,7 +7,6 @@ import SignedOut from '@/components/auth/SignedOut'
 import ShelterEventCallout from '@/components/ShelterEventCallout'
 import UpcomingEventsPreview from '@/components/home/UpcomingEventsPreview'
 import LatestDiscussionsPreview from '@/components/home/LatestDiscussionsPreview'
-import { kits, bundle } from '@/lib/kits'
 import { emergencyRoom, listingCount, resourceSections, tel, totalListings } from '@/lib/local'
 // Imported (not linked by URL) so Next.js serves it from /_next/static/… and
 // fingerprints it. This originally worked around the under construction gate,
@@ -68,6 +67,9 @@ export default function HomePage() {
               <div className="flex flex-wrap gap-4">
                 <Link href="/local" className="btn-primary text-base">
                   Local Resources
+                </Link>
+                <Link href="/guides" className="btn-primary text-base">
+                  Get the Guides
                 </Link>
                 <SignedOut>
                   <Link href="/events" className="btn-secondary text-base">
@@ -198,74 +200,6 @@ export default function HomePage() {
       <section className="bg-brand-cream pb-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {!brand.isDemo && <ShelterEventCallout />}
-        </div>
-      </section>
-
-      {/* Learn */}
-      <section className="py-16 bg-plum text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, #F5B82A 0%, transparent 50%)' }} />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-2 text-sm font-semibold mb-5">
-                🎓 Learn
-              </div>
-              <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-                Learn to raise a great dog, <span className="text-brand-golden">in the desert</span>
-              </h2>
-              <p className="text-white/70 leading-relaxed mb-6">
-                Written guides on heat safety, health, leash skills, recall, gear and desert
-                valley living, plus the Dog Dad Handbook. Every one of them prints. Most are
-                open to everyone, a couple unlock with a free account.
-              </p>
-              <Link href="/guides" className="btn-primary">Go to Free Guides</Link>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[
-                { href: '/learn/heat', icon: '🔥', label: 'High Heat Guide', tier: 'Free' },
-                { href: '/learn/loose-leash-walking', icon: '🦮', label: 'Loose-Leash Walking', tier: 'Free' },
-                { href: '/learn/reliable-recall', icon: '📣', label: 'Reliable Recall', tier: 'Members' },
-                { href: '/learn/handbook', icon: '📖', label: 'The Dog Dad Handbook', tier: 'Free' },
-              ].map(({ href, icon, label, tier }) => (
-                <Link key={label} href={href} className="bg-white/10 hover:bg-white/20 rounded-2xl p-5 transition-colors block">
-                  <div className="text-3xl mb-2">{icon}</div>
-                  <div className="font-bold text-sm mb-1">{label}</div>
-                  <span className="text-xs text-brand-golden font-semibold">{tier}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Paid guides. Count and price come from lib/kits.ts, so this always matches /learn. */}
-      <section className="py-16 bg-cream">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-                {kits.length} printable guides, one download
-              </h2>
-              <p className="text-gray-600 leading-relaxed mb-6">
-                {bundle.title}: all {kits.length} guides for ${bundle.price}.
-              </p>
-              <Link href="/learn" className="btn-primary">See the Guides</Link>
-            </div>
-            <div className="grid grid-cols-3 gap-3">
-              {kits.map(kit => (
-                <Link key={kit.slug} href="/learn" className="block">
-                  <Image
-                    src={kit.cover}
-                    alt={`${kit.title} cover`}
-                    width={300}
-                    height={388}
-                    className="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
-                  />
-                </Link>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
 
