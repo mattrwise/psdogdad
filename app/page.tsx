@@ -7,6 +7,7 @@ import SignedOut from '@/components/auth/SignedOut'
 import ShelterEventCallout from '@/components/ShelterEventCallout'
 import UpcomingEventsPreview from '@/components/home/UpcomingEventsPreview'
 import LatestDiscussionsPreview from '@/components/home/LatestDiscussionsPreview'
+import { kits, bundle } from '@/lib/kits'
 import { emergencyRoom, listingCount, resourceSections, tel, totalListings } from '@/lib/local'
 // Imported (not linked by URL) so Next.js serves it from /_next/static/… and
 // fingerprints it. This originally worked around the under construction gate,
@@ -231,6 +232,36 @@ export default function HomePage() {
                   <div className="text-3xl mb-2">{icon}</div>
                   <div className="font-bold text-sm mb-1">{label}</div>
                   <span className="text-xs text-brand-golden font-semibold">{tier}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Paid guides. Count and price come from lib/kits.ts, so this always matches /learn. */}
+      <section className="py-16 bg-cream">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+                {kits.length} printable guides, one download
+              </h2>
+              <p className="text-gray-600 leading-relaxed mb-6">
+                {bundle.title}: all {kits.length} guides for ${bundle.price}.
+              </p>
+              <Link href="/learn" className="btn-primary">See the Guides</Link>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              {kits.map(kit => (
+                <Link key={kit.slug} href="/learn" className="block">
+                  <Image
+                    src={kit.cover}
+                    alt={`${kit.title} cover`}
+                    width={300}
+                    height={388}
+                    className="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                  />
                 </Link>
               ))}
             </div>
