@@ -17,6 +17,7 @@ const staticPaths = [
   '/members',
   '/events',
   '/local',
+  '/local/weekend',
   // The pro directory and the two pages a provider needs before they list.
   // Left out entirely until DIRECTORY_IS_PUBLIC, so search engines are not sent
   // to an empty directory either.
