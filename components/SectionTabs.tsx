@@ -31,6 +31,12 @@ export default function SectionTabs({ tabs }: { tabs: SectionTab[] }) {
   // One tab is not a choice, it is decoration.
   if (tabs.length < 2) return null
 
+  // Longest matching tab wins, so /local/weekend lights "This Weekend", not "/local".
+  const activeHref = tabs
+    .map((t) => t.href)
+    .filter((h) => pathname === h || pathname.startsWith(h + '/'))
+    .sort((a, b) => b.length - a.length)[0]
+
   return (
     <div
       className="flex flex-wrap gap-2 mb-8 border-b border-plum/10 pb-4"
@@ -38,7 +44,7 @@ export default function SectionTabs({ tabs }: { tabs: SectionTab[] }) {
       aria-label="Section"
     >
       {tabs.map(({ href, label, icon }) => {
-        const active = pathname === href || pathname.startsWith(href + '/')
+        const active = href === activeHref
         return (
           <Link
             key={href}
