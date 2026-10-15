@@ -2,9 +2,54 @@
   "weekendStart": "2026-10-16",
   "weekendEnd": "2026-10-18",
   "updatedAt": "2026-10-15",
-  "summary": "",
-  "heatNote": "",
-  "topPick": "",
-  "picks": [],
-  "sources": []
+  "summary": "A relaxed weekend of park mornings, a scenic hike and a shelter visit, with cooler weather finally on our side.",
+  "heatNote": "Highs run about 81 to 88°F. Go out before 10 am or after 5 pm, bring water, and press the back of your hand on pavement for 7 seconds: if it is too hot for you, it is too hot for paws.",
+  "topPick": "City Hall Dog Park",
+  "picks": [
+    {
+      "name": "City Hall Dog Park",
+      "kind": "community",
+      "when": "Saturday or Sunday, 7 to 9 am (open daily 6 am to 10 pm)",
+      "where": "Behind City Hall, 3200 E. Tahquitz Canyon Way, Palm Springs",
+      "cost": "Free",
+      "why": "Morning regulars gather here, so it is the easiest place to meet the same dog owners week after week. There is a separate area for small dogs.",
+      "check": "Bring water and poop bags, and keep your dog's vaccines current before off leash play.",
+      "link": "https://www.palmspringsca.gov/government/departments/parks-recreation/parks-facilities/dog-park"
+    },
+    {
+      "name": "Demuth Dog Park",
+      "kind": "outing",
+      "when": "Any morning or evening, 6 am to dusk",
+      "where": "Demuth Park, along the CV Link, Palm Springs",
+      "cost": "Free",
+      "why": "Pair a park visit with a walk on the CV Link path, where you will pass plenty of other walkers and their dogs.",
+      "check": "Closes at dusk, and the CV Link path heats up fast in the sun.",
+      "link": "https://www.palmspringsca.gov/government/departments/parks-recreation/parks-facilities/dog-park"
+    },
+    {
+      "name": "Palm Springs Animal Shelter",
+      "kind": "community",
+      "when": "Saturday or Sunday, 11 am to 5 pm",
+      "where": "Palm Springs",
+      "cost": "Free to visit",
+      "why": "A great way to meet rescue minded locals and volunteers, and to find out about upcoming adoption events.",
+      "check": "Call ahead before bringing your own dog, since shelters often ask visitors to leave pets at home.",
+      "link": "https://psanimalshelter.org"
+    },
+    {
+      "name": "Whitewater Preserve Canyon View Loop",
+      "kind": "outing",
+      "when": "Saturday or Sunday, start by 8 am",
+      "where": "Whitewater Preserve, about 25 minutes northwest of Palm Springs",
+      "cost": "Free",
+      "why": "A dog friendly 3.5 mile loop with mountain views, popular with hikers who bring their dogs.",
+      "check": "Confirm preserve hours and leash rules before you drive out, and carry plenty of water for both of you.",
+      "link": "https://visitgreaterpalmsprings.com/articles/trail-tails-dog-friendly-hikes-in-greater-palm-springs"
+    }
+  ],
+  "sources": [
+    { "title": "City of Palm Springs: Dog Parks", "url": "https://www.palmspringsca.gov/government/departments/parks-recreation/parks-facilities/dog-park" },
+    { "title": "NBC Palm Springs: Animal Shelter hours", "url": "https://www.nbcpalmsprings.com/2026/07/30/palm-springs-animal-shelter-announces-new-hours" },
+    { "title": "Visit Greater Palm Springs: Dog friendly hikes", "url": "https://visitgreaterpalmsprings.com/articles/trail-tails-dog-friendly-hikes-in-greater-palm-springs" }
+  ]
 }
