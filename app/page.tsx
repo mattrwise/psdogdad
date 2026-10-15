@@ -2,7 +2,6 @@ import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import Image from 'next/image'
 import HeatAlertBanner from '@/components/HeatAlertBanner'
-import SignedIn from '@/components/auth/SignedIn'
 import SignedOut from '@/components/auth/SignedOut'
 import ShelterEventCallout from '@/components/ShelterEventCallout'
 import UpcomingEventsPreview from '@/components/home/UpcomingEventsPreview'
@@ -61,29 +60,27 @@ export default function HomePage() {
                 a real business with a number you can tap, and membership is
                 optional.
               </p>
-              {/* The smallest ask first. The directory costs a visitor nothing,
-                  and a profile is the quiet line underneath rather than the
-                  headline. */}
-              <div className="flex flex-wrap gap-4">
-                <Link href="/local" className="btn-primary text-base">
-                  Local Resources
-                </Link>
-                <Link href="/guides" className="btn-primary text-base">
-                  Get the Guides
-                </Link>
-                <Link href="/local/weekend" className="btn-secondary text-base">
-                  This Weekend 🗓️
-                </Link>
-                <SignedOut>
-                  <Link href="/events" className="btn-secondary text-base">
-                    See Events 🐾
+              {/* Three doors, shown rather than asked about. Each card says in
+                  plain words who it is for, so a newcomer recognises their own
+                  reason for coming instead of decoding four similar buttons. */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {[
+                  { href: '/local', icon: '🩺', title: 'Local help', line: 'Vets, groomers and emergency care near you' },
+                  { href: '/local/weekend', icon: '🗓️', title: 'This weekend', line: 'Dog friendly things to do' },
+                  { href: '/guides', icon: '📘', title: 'Guides', line: 'Practical help for life with your dog' },
+                ].map((door) => (
+                  <Link
+                    key={door.href}
+                    href={door.href}
+                    className="group block bg-white rounded-2xl p-4 border-2 border-plum/10 shadow-sm hover:border-brand-orange hover:-translate-y-0.5 transition-all"
+                  >
+                    <span className="text-2xl" aria-hidden>{door.icon}</span>
+                    <span className="block font-extrabold text-plum mt-1 group-hover:text-brand-orange">
+                      {door.title} <span aria-hidden>→</span>
+                    </span>
+                    <span className="block text-sm text-plum/60 mt-0.5 leading-snug">{door.line}</span>
                   </Link>
-                </SignedOut>
-                <SignedIn>
-                  <Link href="/forums" className="btn-secondary text-base">
-                    Jump into the Forums 💬
-                  </Link>
-                </SignedIn>
+                ))}
               </div>
               <SignedOut>
                 <p className="text-sm text-plum/60 mt-5">
