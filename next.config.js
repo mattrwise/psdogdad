@@ -18,6 +18,8 @@
  * it and the approval queue is being built against it.
  */
 const moved = [
+  // This Weekend moved from Local to Events in Oct 2026.
+  ['/local/weekend', '/events/weekend'],
   ['/training', '/learn'],
   // The desert heat guide was folded into /learn/heat, which already covered
   // the same ground. Both of its old addresses land there in one hop, so this

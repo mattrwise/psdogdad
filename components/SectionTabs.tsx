@@ -31,7 +31,7 @@ export default function SectionTabs({ tabs }: { tabs: SectionTab[] }) {
   // One tab is not a choice, it is decoration.
   if (tabs.length < 2) return null
 
-  // Longest matching tab wins, so /local/weekend lights "This Weekend", not "/local".
+  // Longest matching tab wins, so a deeper tab outranks its parent section.
   const activeHref = tabs
     .map((t) => t.href)
     .filter((h) => pathname === h || pathname.startsWith(h + '/'))
