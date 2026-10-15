@@ -26,9 +26,13 @@ function PickCard({ pick, isTop }: { pick: WeekendPick; isTop: boolean }) {
       </div>
       {isTop && <p className="text-xs font-bold text-brand-orange mt-1">⭐ Our top pick this weekend</p>}
 
-      <p className="text-sm text-plum/70 mt-2">🗓️ {pick.when}</p>
-      {pick.where && <p className="text-sm text-plum/70 mt-1">📍 {pick.where}</p>}
-      <p className="text-sm text-plum/70 mt-1">💵 {pick.cost}</p>
+      {/* When, where and cost are what people scan for, so they get full
+          strength type rather than the muted grey used for descriptions. */}
+      <div className="mt-3 space-y-1.5 text-plum">
+        <p className="text-base font-bold">🗓️ {pick.when}</p>
+        {pick.where && <p className="text-base font-semibold">📍 {pick.where}</p>}
+        <p className="text-base font-semibold">💵 {pick.cost}</p>
+      </div>
       <p className="text-sm text-plum mt-3">🐾 {pick.why}</p>
 
       <div className="mt-3 text-sm text-plum/80 bg-brand-golden/10 border border-brand-golden/30 rounded-lg px-3 py-2">
@@ -55,10 +59,9 @@ export default function WeekendPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-4">
         <h1 className="section-title">This Weekend With Your Dog</h1>
-        <p className="text-plum/60 mt-2">
-          {hasPicks
-            ? `${weekendLabel()}. Fresh picks around ${brand.regionPhrase}, updated every Thursday.`
-            : `Fresh dog friendly picks around ${brand.regionPhrase}, updated every Thursday.`}
+        {hasPicks && <p className="text-xl font-extrabold text-plum mt-2">{weekendLabel()}</p>}
+        <p className="text-plum/60 mt-1">
+          Fresh dog friendly picks around {brand.regionPhrase}, updated every Thursday.
         </p>
       </div>
 
