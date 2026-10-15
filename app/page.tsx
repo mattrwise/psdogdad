@@ -71,6 +71,9 @@ export default function HomePage() {
                 <Link href="/guides" className="btn-primary text-base">
                   Get the Guides
                 </Link>
+                <Link href="/local/weekend" className="btn-secondary text-base">
+                  This Weekend 🗓️
+                </Link>
                 <SignedOut>
                   <Link href="/events" className="btn-secondary text-base">
                     See Events 🐾
