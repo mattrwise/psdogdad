@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 function PickCard({ pick, isTop }: { pick: WeekendPick; isTop: boolean }) {
   return (
-    <div className={`card p-5 ${isTop ? 'ring-2 ring-brand-orange' : ''}`}>
+    <div className={`card p-5 ring-2 transition-shadow ${isTop ? 'ring-brand-orange' : 'ring-transparent hover:ring-brand-orange'}`}>
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-extrabold text-plum text-lg">{pick.name}</h3>
         <span
