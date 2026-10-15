@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { brand } from '@/lib/brand'
-import SectionTabs from '@/components/SectionTabs'
-import { localTabs } from '@/lib/sections'
+import Link from 'next/link'
 import { weekend, weekendLabel, isStale, type WeekendPick } from '@/lib/weekend'
 
 // Re-check hourly so the page notices when the listed weekend is over.
@@ -63,7 +62,11 @@ export default function WeekendPage() {
         </p>
       </div>
 
-      <SectionTabs tabs={localTabs} />
+      <p className="mb-8">
+        <Link href="/events" className="text-sm font-semibold text-brand-teal hover:underline">
+          ← All events & meetups
+        </Link>
+      </p>
 
       {!hasPicks ? (
         <div className="card p-8 text-center">

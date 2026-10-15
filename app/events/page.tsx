@@ -218,6 +218,19 @@ export default function EventsPage() {
         </button>
       </div>
 
+      {/* Weekly picks, refreshed every Thursday, sit at the top of Events
+          because "what can we do this weekend" is the first question here. */}
+      <Link
+        href="/events/weekend"
+        className="group flex items-center gap-4 bg-white rounded-2xl p-5 mb-10 border-2 border-brand-orange/30 shadow-sm hover:border-brand-orange hover:-translate-y-0.5 transition-all"
+      >
+        <span className="text-3xl" aria-hidden>🗓️</span>
+        <span className="flex-1">
+          <span className="block font-extrabold text-plum text-lg group-hover:text-brand-orange">This Weekend With Your Dog →</span>
+          <span className="block text-sm text-plum/60">Dog friendly things to do around {brand.city}, updated every Thursday.</span>
+        </span>
+      </Link>
+
       {/* Admin: create events (visible to admin only) */}
       {user?.email === ADMIN_EMAIL && <AdminEventForm onCreated={() => loadReal()} />}
 

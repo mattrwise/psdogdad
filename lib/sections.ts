@@ -21,7 +21,6 @@ import type { SectionTab } from '@/components/SectionTabs'
  */
 export const localTabs: SectionTab[] = [
   { href: '/local', label: 'Places & Businesses', icon: '📋' },
-  { href: '/local/weekend', label: 'This Weekend', icon: '🗓️' },
   ...(DIRECTORY_IS_PUBLIC ? [{ href: '/pros', label: 'Dog Pros', icon: '🦮' }] : []),
 ]
 
