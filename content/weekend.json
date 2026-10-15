@@ -2,39 +2,48 @@
   "weekendStart": "2026-10-16",
   "weekendEnd": "2026-10-18",
   "updatedAt": "2026-10-15",
-  "summary": "A relaxed weekend of park mornings, a scenic hike and a shelter visit, with cooler weather finally on our side.",
-  "heatNote": "Highs run about 81 to 88°F. Go out before 10 am or after 5 pm, bring water, and press the back of your hand on pavement for 7 seconds: if it is too hot for you, it is too hot for paws.",
-  "topPick": "City Hall Dog Park",
+  "summary": "Patio brunch, a dog loving coffee shop and a Sunday fundraiser make this a social weekend. Heads up: David H. Ready Dog Park is closed until December 23 and Demuth Park's dog parks are closed until early November.",
+  "heatNote": "Highs run about 81 to 88°F. Mornings are most comfortable. Bring water and a bowl, ask for shaded seating, and press the back of your hand on pavement for 7 seconds: if it is too hot for you, it is too hot for paws. Recheck wind before sitting outside.",
+  "topPick": "Boozehounds brunch",
   "picks": [
     {
-      "name": "City Hall Dog Park",
+      "name": "Boozehounds brunch",
       "kind": "community",
-      "when": "Saturday or Sunday, 7 to 9 am (open daily 6 am to 10 pm)",
-      "where": "Behind City Hall, 3200 E. Tahquitz Canyon Way, Palm Springs",
-      "cost": "Free",
-      "why": "Morning regulars gather here, so it is the easiest place to meet the same dog owners week after week. There is a separate area for small dogs.",
-      "check": "Bring water and poop bags, and keep your dog's vaccines current before off leash play.",
-      "link": "https://www.palmspringsca.gov/government/departments/parks-recreation/parks-facilities/dog-park"
+      "when": "Friday to Sunday, 10 am to 3 pm",
+      "where": "2080 N. Palm Canyon Drive, Palm Springs",
+      "cost": "Pay for what you order",
+      "why": "A restaurant built for dogs and their people, so the tables around you are full of fellow dog owners. Dogs are welcome on the shaded patio and open air atrium.",
+      "check": "Reserve a dog friendly table and confirm there is no private event. 760 656 0067.",
+      "link": "https://boozehoundsps.com"
     },
     {
-      "name": "Demuth Dog Park",
+      "name": "4 Paws Coffee Co.",
+      "kind": "community",
+      "when": "Saturday and Sunday, 6:30 am to 3 pm (8 to 9 am is a nice time)",
+      "where": "2500 N. Palm Canyon Drive, Suite A5, Palm Springs",
+      "cost": "Pay for what you order",
+      "why": "A neighborhood coffee shop centered on dogs and community, which makes easy conversations with other dog owners natural.",
+      "check": "Keep your dog leashed and ask about shaded seating and water. 760 832 8021.",
+      "link": "https://4pawscoffeeco.com"
+    },
+    {
+      "name": "Sips & Psychics animal fundraiser",
+      "kind": "community",
+      "when": "Sunday, October 18, 1 to 4 pm",
+      "where": "Sottovoce Café, 73575 El Paseo, Suite 1320, Palm Desert",
+      "cost": "Prices not published yet",
+      "why": "Coffee and conversation with pet lovers, raising money for Desert Paws Sanctuary and the Coachella Valley Cat Club. Pets are welcome.",
+      "check": "Call to confirm fees, dog seating and whether you need a reservation. 760 833 2909."
+    },
+    {
+      "name": "Palm Springs Air Museum",
       "kind": "outing",
-      "when": "Any morning or evening, 6 am to dusk",
-      "where": "Demuth Park, along the CV Link, Palm Springs",
-      "cost": "Free",
-      "why": "Pair a park visit with a walk on the CV Link path, where you will pass plenty of other walkers and their dogs.",
-      "check": "Closes at dusk, and the CV Link path heats up fast in the sun.",
-      "link": "https://www.palmspringsca.gov/government/departments/parks-recreation/parks-facilities/dog-park"
-    },
-    {
-      "name": "Palm Springs Animal Shelter",
-      "kind": "community",
-      "when": "Saturday or Sunday, 11 am to 5 pm",
-      "where": "Palm Springs",
-      "cost": "Free to visit",
-      "why": "A great way to meet rescue minded locals and volunteers, and to find out about upcoming adoption events.",
-      "check": "Call ahead before bringing your own dog, since shelters often ask visitors to leave pets at home.",
-      "link": "https://psanimalshelter.org"
+      "when": "Daily, 10 am to 5 pm",
+      "where": "745 N. Gene Autry Trail, Palm Springs",
+      "cost": "$26 adult admission",
+      "why": "A fresh outing with air conditioned hangars where friendly, leashed dogs are welcome, and plenty of visitors to chat with.",
+      "check": "Ask about flight demonstrations or loud engine noise before bringing a noise sensitive dog. 760 778 6262.",
+      "link": "https://palmspringsairmuseum.org"
     },
     {
       "name": "Whitewater Preserve Canyon View Loop",
@@ -42,14 +51,16 @@
       "when": "Saturday or Sunday, start by 8 am",
       "where": "Whitewater Preserve, about 25 minutes northwest of Palm Springs",
       "cost": "Free",
-      "why": "A dog friendly 3.5 mile loop with mountain views, popular with hikers who bring their dogs.",
-      "check": "Confirm preserve hours and leash rules before you drive out, and carry plenty of water for both of you.",
+      "why": "A dog friendly 3.5 mile hike with mountain views, popular with hikers who bring their dogs.",
+      "check": "Confirm preserve hours and leash rules, and check wind conditions in the pass before you drive out.",
       "link": "https://visitgreaterpalmsprings.com/articles/trail-tails-dog-friendly-hikes-in-greater-palm-springs"
     }
   ],
   "sources": [
-    { "title": "City of Palm Springs: Dog Parks", "url": "https://www.palmspringsca.gov/government/departments/parks-recreation/parks-facilities/dog-park" },
-    { "title": "NBC Palm Springs: Animal Shelter hours", "url": "https://www.nbcpalmsprings.com/2026/07/30/palm-springs-animal-shelter-announces-new-hours" },
+    { "title": "NBC Palm Springs: 2026 park closure schedule", "url": "https://www.nbcpalmsprings.com/2026/08/03/palm-springs-parks-are-getting-their-fall-glowup" },
+    { "title": "NBC Palm Springs: Demuth Park construction", "url": "https://www.nbcpalmsprings.com/local-and-community/2026/03/02/construction-begins-on-75-million-upgrade-at-demuth-park-in-palm-springs" },
+    { "title": "Boozehounds", "url": "https://boozehoundsps.com" },
+    { "title": "4 Paws Coffee Co.", "url": "https://4pawscoffeeco.com" },
     { "title": "Visit Greater Palm Springs: Dog friendly hikes", "url": "https://visitgreaterpalmsprings.com/articles/trail-tails-dog-friendly-hikes-in-greater-palm-springs" }
   ]
 }
