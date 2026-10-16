@@ -220,7 +220,7 @@ export default function EventsPage() {
       </div>
 
       {/* This weekend's picks, shown right here rather than a click away. */}
-      <WeekendPicks />
+      <WeekendPicks onSuggest={() => setProposeOpen(true)} />
 
       {/* Admin: create events (visible to admin only) */}
       {user?.email === ADMIN_EMAIL && <AdminEventForm onCreated={() => loadReal()} />}

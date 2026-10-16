@@ -45,7 +45,7 @@ function PickCard({ pick, isTop }: { pick: WeekendPick; isTop: boolean }) {
   )
 }
 
-export default function WeekendPicks() {
+export default function WeekendPicks({ onSuggest }: { onSuggest?: () => void }) {
   if (weekend.picks.length === 0 || isStale()) return null
   const picks = [...weekend.picks].sort(
     (a, b) => Number(b.name === weekend.topPick) - Number(a.name === weekend.topPick),
@@ -72,6 +72,14 @@ export default function WeekendPicks() {
           <PickCard key={pick.name} pick={pick} isTop={pick.name === weekend.topPick} />
         ))}
       </div>
+
+      {onSuggest && (
+        <div className="mt-6 text-center">
+          <button onClick={onSuggest} className="btn-secondary">
+            Got an event to add to the calendar? Let us know here
+          </button>
+        </div>
+      )}
 
       {weekend.sources.length > 0 && (
         <p className="mt-4 text-xs text-plum/50">
