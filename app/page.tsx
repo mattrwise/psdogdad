@@ -66,7 +66,7 @@ export default function HomePage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
                   { href: '/local', icon: '🩺', title: 'Local help', line: 'Vets, groomers and emergency care near you' },
-                  { href: '/events/weekend', icon: '🗓️', title: 'This weekend', line: 'Dog friendly things to do' },
+                  { href: '/events#this-weekend', icon: '🗓️', title: 'This weekend', line: 'Dog friendly things to do' },
                   { href: '/guides', icon: '📘', title: 'Guides', line: 'Practical help for life with your dog' },
                 ].map((door) => (
                   <Link
