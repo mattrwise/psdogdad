@@ -1,7 +1,7 @@
 import data from '@/content/weekend.json'
 
 /**
- * "This Weekend" picks. content/weekend.json is rewritten every Thursday by a
+ * "This Weekend" picks. content/weekend.json is rewritten every Monday by a
  * scheduled task that opens a pull request; merging it publishes the new list.
  * Keep the shape below in sync with that task's instructions.
  */

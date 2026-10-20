@@ -3,7 +3,7 @@ import { weekend, weekendLabel, isStale, type WeekendPick } from '@/lib/weekend'
 
 /**
  * This weekend's picks, shown directly on the Events page. Filled every
- * Thursday from content/weekend.json by a scheduled task. Renders nothing once
+ * Monday from content/weekend.json by a scheduled task. Renders nothing once
  * the listed weekend is over, so Events never shows stale picks.
  */
 function PickCard({ pick, isTop }: { pick: WeekendPick; isTop: boolean }) {
@@ -56,7 +56,7 @@ export default function WeekendPicks({ onSuggest }: { onSuggest?: () => void }) 
       <h2 className="font-extrabold text-plum text-xl">This Weekend With Your Dog</h2>
       <p className="text-lg font-extrabold text-plum mt-1">{weekendLabel()}</p>
       <p className="text-plum/60 text-sm mt-1 mb-4">
-        Dog friendly picks around {brand.regionPhrase}, updated every Thursday.
+        Dog friendly picks around {brand.regionPhrase}, updated every Monday.
       </p>
 
       {weekend.summary && <p className="text-plum mb-4">{weekend.summary}</p>}
