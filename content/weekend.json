@@ -1,64 +1,66 @@
-	
-weekendStart	"2026-10-23"
-weekendEnd	"2026-10-25"
-updatedAt	"2026-10-20"
-summary	"A relaxed, social weekend: patio brunch and happy hour where dog owners gather, a dog loving coffee shop and a museum that welcomes leashed dogs. We did not find any dated dog events for this weekend. Heads up: David H. Ready Dog Park is closed until December 23, Demuth Park's dog parks are closed until early November and Ruth Hardy Park turf is closed until November 20."
-heatNote	"Expected highs are in the upper 70s °F, so this should be a comfortable weekend. Mornings are still best for walks. Bring water and a bowl, test pavement with the back of your hand, and recheck the forecast and wind closer to the day."
-topPick	"Boozehounds weekend brunch"
-picks	
-0	
-name	"Boozehounds weekend brunch"
-kind	"community"
-when	"Friday to Sunday, 10 am to 3 pm"
-where	"2080 N. Palm Canyon Drive, Palm Springs"
-cost	"Pay for what you order"
-why	"A restaurant built around dogs, with a doggy door, a dog menu and a shaded patio full of fellow dog owners."
-check	"Dogs are allowed on the patio and atrium only. Reserve on OpenTable and confirm hours. 760 656 0067."
-link	"https://boozehoundsps.com"
-1	
-name	"4 Paws Coffee Co."
-kind	"community"
-when	"Saturday and Sunday, 6:30 am to 3 pm; Friday until 2 pm"
-where	"2500 N. Palm Canyon Drive, Suite A5, Palm Springs"
-cost	"Pay for what you order"
-why	"A dog focused neighborhood coffee shop with pup cups, where chatting with other dog owners comes naturally."
-check	"Keep your dog leashed and ask about outdoor seating. 760 832 8021."
-link	"https://4pawscoffeeco.com"
-2	
-name	"Boozehounds happy hour"
-kind	"community"
-when	"Friday to Sunday, 3 to 5 pm"
-where	"2080 N. Palm Canyon Drive, Palm Springs"
-cost	"Happy hour pricing; pay for what you order"
-why	"A late afternoon option at the same dog centered patio, often a good time to meet regulars and their pups."
-check	"Patio and atrium only for dogs. Call to confirm happy hour times and any private events. 760 656 0067."
-link	"https://boozehoundsps.com"
-3	
-name	"Palm Springs Air Museum"
-kind	"outing"
-when	"Daily, 10 am to 5 pm"
-where	"745 N. Gene Autry Trail, Palm Springs"
-cost	"Paid admission; see the museum website for current prices"
-why	"A rare indoor attraction that welcomes friendly leashed dogs, so you and your dog can explore together and meet other visitors."
-check	"Dogs must be friendly and on a leash. Confirm ticket prices before you go. 760 778 6262."
-link	"https://palmspringsairmuseum.org/visit/"
-sources	
-0	
-title	"NBC Palm Springs: Palm Springs parks fall turf schedule"
-url	"https://www.nbcpalmsprings.com/2026/08/03/palm-springs-parks-are-getting-their-fall-glowup"
-1	
-title	"Boozehounds Palm Springs"
-url	"https://boozehoundsps.com"
-2	
-title	"Boozehounds on OpenTable"
-url	"https://www.opentable.com.au/r/boozehounds-palm-springs"
-3	
-title	"4 Paws Coffee Co."
-url	"https://4pawscoffeeco.com"
-4	
-title	"Palm Springs Air Museum: Visit"
-url	"https://palmspringsairmuseum.org/visit/"
-5	
-title	"National Weather Service forecast for Palm Springs"
-url	"https://forecast.weather.gov/MapClick.php?lat=33.8303&lon=-116.5453"
-weekendStart
+{
+  "weekendStart": "2026-10-23",
+  "weekendEnd": "2026-10-25",
+  "updatedAt": "2026-10-20",
+  "summary": "Cooler fall weather makes this a great weekend for coffee, brunch and a morning hike with your dog. Heads up: David H. Ready Dog Park is closed until December 23, Demuth Park's dog parks are closed until early November, and Ruth Hardy Park's turf is closed until November 20. Coming up next Saturday, October 31: the Hallo Wiener dachshund race in Palm Desert.",
+  "heatNote": "Expected highs are about 76°F Friday, 81°F Saturday and 82°F Sunday, with no rain in the forecast. Mornings are most comfortable. Bring water and a bowl, and recheck the forecast closer to the day.",
+  "topPick": "4 Paws Coffee Co.",
+  "picks": [
+    {
+      "name": "4 Paws Coffee Co.",
+      "kind": "community",
+      "when": "Saturday and Sunday, 6:30 am to 3 pm (8 to 9 am is a nice time)",
+      "where": "2500 N. Palm Canyon Drive, Suite A5, Palm Springs",
+      "cost": "Pay for what you order",
+      "why": "A neighborhood coffee shop centered on dogs and community, so easy conversations with other dog owners come naturally.",
+      "check": "Keep your dog leashed and ask about shaded seating and water. 760 832 8021.",
+      "link": "https://4pawscoffeeco.com"
+    },
+    {
+      "name": "Boozehounds brunch",
+      "kind": "community",
+      "when": "Friday to Sunday, 10 am to 3 pm",
+      "where": "2080 N. Palm Canyon Drive, Palm Springs",
+      "cost": "Pay for what you order",
+      "why": "A restaurant built for dogs and their people, so the tables around you are full of fellow dog owners. Dogs are welcome on the shaded patio and open air atrium.",
+      "check": "Reserve a dog friendly table and confirm there is no private event. 760 656 0067.",
+      "link": "https://boozehoundsps.com"
+    },
+    {
+      "name": "Palm Springs Animal Shelter",
+      "kind": "community",
+      "when": "Saturday or Sunday, 11 am to 5 pm",
+      "where": "Palm Springs",
+      "cost": "Free to visit",
+      "why": "A friendly place to meet rescue minded locals and volunteers, and to hear about upcoming adoption events.",
+      "check": "Call ahead before bringing your own dog, since shelters often ask visitors to leave pets at home.",
+      "link": "https://psanimalshelter.org"
+    },
+    {
+      "name": "Whitewater Preserve Canyon View Loop",
+      "kind": "outing",
+      "when": "Saturday or Sunday, start by 8 am",
+      "where": "Whitewater Preserve, about 25 minutes northwest of Palm Springs",
+      "cost": "Free",
+      "why": "A dog friendly 3.5 mile hike with mountain views, popular with hikers who bring their dogs. The cooler weather makes it a great pick this week.",
+      "check": "Confirm preserve hours and leash rules, and check wind conditions in the pass before you drive out.",
+      "link": "https://visitgreaterpalmsprings.com/articles/trail-tails-dog-friendly-hikes-in-greater-palm-springs"
+    },
+    {
+      "name": "Palm Springs Air Museum",
+      "kind": "outing",
+      "when": "Daily, 10 am to 5 pm",
+      "where": "745 N. Gene Autry Trail, Palm Springs",
+      "cost": "$26 adult admission",
+      "why": "A fresh outing where friendly, leashed dogs are welcome in the hangars, with plenty of visitors to chat with.",
+      "check": "Ask about flight demonstrations or loud engine noise before bringing a noise sensitive dog. 760 778 6262.",
+      "link": "https://palmspringsairmuseum.org"
+    }
+  ],
+  "sources": [
+    { "title": "NBC Palm Springs: 2026 park closure schedule", "url": "https://www.nbcpalmsprings.com/2026/08/03/palm-springs-parks-are-getting-their-fall-glowup" },
+    { "title": "NBC Palm Springs: Animal Shelter hours", "url": "https://www.nbcpalmsprings.com/2026/07/30/palm-springs-animal-shelter-announces-new-hours" },
+    { "title": "Find the Run: Hallo Wiener dog race", "url": "https://www.findtherun.com/race/143971/wiener-dog-race-hallo-wiener" },
+    { "title": "Visit Greater Palm Springs: Dog friendly hikes", "url": "https://visitgreaterpalmsprings.com/articles/trail-tails-dog-friendly-hikes-in-greater-palm-springs" }
+  ]
+}
