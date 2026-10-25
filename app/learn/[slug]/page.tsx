@@ -11,7 +11,8 @@ export function generateStaticParams() {
   return publishedGuides.map(g => ({ slug: g.slug }))
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const guide = getGuide(params.slug)
   if (!guide) return {}
   return {
@@ -26,7 +27,8 @@ const tierBadge: Record<string, { label: string; className: string }> = {
   premium: { label: '★ Premium', className: 'bg-brand-golden text-plum' },
 }
 
-export default function GuidePage({ params }: { params: { slug: string } }) {
+export default async function GuidePage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const guide = getGuide(params.slug)
   if (!guide) notFound()
 

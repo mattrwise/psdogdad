@@ -114,15 +114,15 @@ const categories: Record<string, {
 }
 
 /** Each category gets its own title, so a search result says which forum it is. */
-export async function generateMetadata(
-  { params }: { params: { category: string } },
-): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ category: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const cat = categories[params.category]
   if (!cat) return { title: `Forum not found, ${brand.name}` }
   return { title: `${cat.title}, ${brand.name} Forums`, description: cat.description }
 }
 
-export default function CategoryPage({ params }: { params: { category: string } }) {
+export default async function CategoryPage(props: { params: Promise<{ category: string }> }) {
+  const params = await props.params;
   const cat = categories[params.category]
   if (!cat) notFound()
 
