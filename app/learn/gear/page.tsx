@@ -88,8 +88,14 @@ const budgetTips = [
   'Skip gimmicks; spend where safety lives, harness, ID, and vet fund come before outfits.',
 ]
 
-const shopUrl = (product: string) =>
-  `https://www.google.com/search?tbm=shop&q=${encodeURIComponent('dog ' + product)}`
+// Amazon Associates store ID. Every Shop button carries it, so qualifying
+// purchases made within 24 hours of the click earn a commission.
+const AMAZON_TAG = 'parkerhatfiel-20'
+
+const shopUrl = (product: string) => {
+  const query = /dog/i.test(product) ? product : `dog ${product}`
+  return `https://www.amazon.com/s?k=${encodeURIComponent(query)}&tag=${AMAZON_TAG}`
+}
 
 export default function ProductsPage() {
   return (
@@ -106,7 +112,7 @@ export default function ProductsPage() {
 
       {/* Disclaimer */}
       <div className="bg-brand-golden/10 border border-brand-golden/30 rounded-xl p-4 mb-10 text-sm text-plum/70">
-        <strong className="text-plum">Just so you know:</strong> {brand.name} is not affiliated with, sponsored by, or paid by any brand or retailer. These are general recommendations from our community&apos;s experience, the &ldquo;View Options&rdquo; buttons simply open a shopping search so you can compare brands and prices yourself.
+        <strong className="text-plum">Just so you know:</strong> As an Amazon Associate, {brand.name} earns from qualifying purchases. The &ldquo;Shop on Amazon&rdquo; buttons open an Amazon search so you can compare brands and prices yourself. Buying through them costs you nothing extra and helps keep {brand.name} running. No brand pays us to be on this page.
       </div>
 
       {/* Smart shopping tips */}
@@ -141,10 +147,10 @@ export default function ProductsPage() {
                   <a
                     href={shopUrl(p.name)}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="sponsored noopener noreferrer"
                     className="btn-secondary text-sm text-center mt-4"
                   >
-                    View Options ↗
+                    Shop on Amazon ↗
                   </a>
                 </div>
               ))}
