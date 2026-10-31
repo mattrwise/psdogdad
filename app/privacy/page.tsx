@@ -85,6 +85,11 @@ export default function PrivacyPage() {
             cookies or tracking pixels. You can disable cookies in your browser settings, but some features
             of the site may not work correctly without them.
           </p>
+          <p>
+            Our Gear page links to Amazon. If you click one of those links, Amazon and other third parties
+            may place and read cookies in your browser, or use web beacons, to track the visit and any
+            purchase. That happens on Amazon&apos;s side and is covered by Amazon&apos;s privacy notice.
+          </p>
         </Section>
 
         <Section title="Your Rights">
@@ -109,6 +114,7 @@ export default function PrivacyPage() {
           <ul className="list-disc pl-5 space-y-1">
             <li><strong className="text-plum">Supabase</strong>, authentication and data storage</li>
             <li><strong className="text-plum">Vercel</strong>, website hosting and deployment</li>
+            <li><strong className="text-plum">Amazon Associates</strong>, affiliate links on our Gear page. As an Amazon Associate we earn from qualifying purchases.</li>
           </ul>
           <p>Each service has its own privacy policy governing how they handle data.</p>
         </Section>
@@ -118,7 +124,7 @@ export default function PrivacyPage() {
             We may update this policy from time to time. When we do, we&apos;ll post the new version here and
             update the effective date. For significant changes we&apos;ll also send an email to all members.
           </p>
-          <p className="text-plum/40 text-xs">Last updated: May 2025</p>
+          <p className="text-plum/40 text-xs">Last updated: October 2026</p>
         </Section>
 
         <Section title="Contact">
