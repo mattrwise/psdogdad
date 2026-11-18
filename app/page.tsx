@@ -6,6 +6,7 @@ import SignedOut from '@/components/auth/SignedOut'
 import ShelterEventCallout from '@/components/ShelterEventCallout'
 import UpcomingEventsPreview from '@/components/home/UpcomingEventsPreview'
 import LatestDiscussionsPreview from '@/components/home/LatestDiscussionsPreview'
+import { SHOW_COMMUNITY, SHOW_GUIDES } from '@/lib/features'
 import { emergencyRoom, listingCount, resourceSections, tel, totalListings } from '@/lib/local'
 // Imported (not linked by URL) so Next.js serves it from /_next/static/… and
 // fingerprints it. This originally worked around the under construction gate,
@@ -57,8 +58,7 @@ export default function HomePage() {
               <p className="text-lg md:text-xl text-plum/70 mb-8 leading-relaxed">
                 Vets, emergency clinics, groomers, daycare, dog parks and the
                 patios that will not mind a dog under the table. Every listing is
-                a real business with a number you can tap, and membership is
-                optional.
+                a real business with a number you can tap. No account needed.
               </p>
               {/* Three doors, shown rather than asked about. Each card says in
                   plain words who it is for, so a newcomer recognises their own
@@ -67,7 +67,9 @@ export default function HomePage() {
                 {[
                   { href: '/local', icon: '🩺', title: 'Local help', line: 'Vets, groomers and emergency care near you' },
                   { href: '/events#this-weekend', icon: '🗓️', title: 'This weekend', line: 'Dog friendly things to do' },
-                  { href: '/guides', icon: '📘', title: 'Guides', line: 'Practical help for life with your dog' },
+                  SHOW_GUIDES
+                    ? { href: '/guides', icon: '📘', title: 'Guides', line: 'Practical help for life with your dog' }
+                    : { href: '/learn/gear', icon: '🛒', title: 'Gear', line: 'Leashes, cooling gear and more we trust' },
                 ].map((door) => (
                   <Link
                     key={door.href}
@@ -82,7 +84,7 @@ export default function HomePage() {
                   </Link>
                 ))}
               </div>
-              <SignedOut>
+              {SHOW_COMMUNITY && <SignedOut>
                 <p className="text-sm text-plum/60 mt-5">
                   Membership is free and not required.{' '}
                   <Link href="/members/join" className="font-bold text-brand-teal hover:underline">
@@ -94,7 +96,7 @@ export default function HomePage() {
                   </Link>
                   .
                 </p>
-              </SignedOut>
+              </SignedOut>}
             </div>
 
             {/* Right: illustration */}
@@ -205,10 +207,10 @@ export default function HomePage() {
 
       {/* Both load live from Supabase, no placeholder listings. */}
       <UpcomingEventsPreview />
-      <LatestDiscussionsPreview />
+      {SHOW_COMMUNITY && <LatestDiscussionsPreview />}
 
       {/* Membership, offered last and offered plainly. */}
-      <SignedOut>
+      {SHOW_COMMUNITY && <SignedOut>
         <section className="bg-plum py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
@@ -231,7 +233,7 @@ export default function HomePage() {
             </p>
           </div>
         </section>
-      </SignedOut>
+      </SignedOut>}
     </div>
   )
 }

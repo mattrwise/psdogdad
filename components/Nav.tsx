@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import { unreadCount } from '@/lib/messages'
+import { SHOW_COMMUNITY, SHOW_GUIDES } from '@/lib/features'
 
 /**
  * Six items, and each one is a place rather than a page.
@@ -26,7 +27,7 @@ import { unreadCount } from '@/lib/messages'
  * the forums but stays lit in the member directory. Without that, following a
  * tab makes the tab you followed go dark.
  */
-const links: { href: string; label: string; match: string[]; exact?: string[] }[] = [
+const allLinks: { href: string; label: string; match: string[]; exact?: string[] }[] = [
   { href: '/', label: 'Home', match: ['/'] },
   { href: '/learn', label: 'Learn', match: ['/learn'] },
   { href: '/guides', label: 'Guides', match: ['/guides'] },
@@ -34,6 +35,10 @@ const links: { href: string; label: string; match: string[]; exact?: string[] }[
   { href: '/forums', label: 'Community', match: ['/forums', '/members'] },
   { href: '/events', label: 'Events', match: ['/events'] },
 ]
+
+const links = allLinks.filter(l =>
+  (SHOW_GUIDES || l.href !== '/guides') && (SHOW_COMMUNITY || l.href !== '/forums'),
+)
 
 function Avatar({ user }: { user: User }) {
   const avatarUrl = user.user_metadata?.avatar_url as string | undefined
@@ -204,7 +209,7 @@ export default function Nav() {
                   </div>
                 )}
               </div>
-            ) : (
+            ) : !SHOW_COMMUNITY ? null : (
               <>
                 {/* nowrap because the row is one item wider than it used to be:
                     without it these two break as "Sign / In" and "Join / Now"
@@ -230,6 +235,7 @@ export default function Nav() {
             {loading ? (
               <div className="h-11 w-[84px] rounded-full bg-plum/5" aria-hidden />
             ) : !user ? (
+              !SHOW_COMMUNITY ? null :
               <Link href="/members/login" className="btn-secondary text-sm px-4 py-2">
                 Sign In
               </Link>
@@ -303,7 +309,7 @@ export default function Nav() {
                 🚪 Sign Out
               </button>
             </>
-          ) : (
+          ) : !SHOW_COMMUNITY ? null : (
             <>
               <Link href="/members/login" onClick={() => setOpen(false)} className="btn-secondary text-center mt-2">
                 Sign In

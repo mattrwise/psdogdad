@@ -47,11 +47,21 @@ const moved = [
 
 const nextConfig = {
   async redirects() {
-    return moved.map(([source, destination]) => ({
-      source,
-      destination,
-      permanent: true,
-    }))
+    // Sections switched off for now (see lib/features.ts). Temporary (307), so
+    // they can come back without browsers remembering the redirect.
+    const paused = [
+      ['/guides', '/'],
+      ['/forums', '/'],
+      ['/forums/:path*', '/'],
+    ].map(([source, destination]) => ({ source, destination, permanent: false }))
+    return [
+      ...paused,
+      ...moved.map(([source, destination]) => ({
+        source,
+        destination,
+        permanent: true,
+      })),
+    ]
   },
   async headers() {
     const demo = process.env.NEXT_PUBLIC_DEMO === 'true'

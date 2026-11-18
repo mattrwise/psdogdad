@@ -1,6 +1,7 @@
 import { brand } from '@/lib/brand'
 import Link from 'next/link'
 import { DIRECTORY_IS_PUBLIC } from '@/lib/pros'
+import { SHOW_COMMUNITY, SHOW_GUIDES, SHOW_PRO_SIGNUP } from '@/lib/features'
 
 export default function Footer() {
   return (
@@ -17,7 +18,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-sm text-white/60 max-w-xs leading-relaxed">
-              The {brand.city} community for {brand.audience}. Connect, share, and wag together.
+              The {brand.city} community for {brand.audience}. Local help, weekend plans, and gear we trust.
             </p>
           </div>
 
@@ -30,7 +31,7 @@ export default function Footer() {
             {/* No space-y: each row is a 44px tap target and carries its own
                 height. Stacked gaps on top of that just spread the footer out. */}
             <ul className="text-sm">
-              {[['Start Here', '/learn/roadmap'], ['Guides', '/guides'], ['Local Resources', '/local'], ...(DIRECTORY_IS_PUBLIC ? [['Dog Pros', '/pros']] : []), ['Community', '/forums'], ['Events', '/events']].map(([label, href]) => (
+              {[['Start Here', '/learn/roadmap'], ...(SHOW_GUIDES ? [['Guides', '/guides']] : []), ['Local Resources', '/local'], ...(DIRECTORY_IS_PUBLIC ? [['Dog Pros', '/pros']] : []), ...(SHOW_COMMUNITY ? [['Community', '/forums']] : []), ['Events', '/events']].map(([label, href]) => (
                 <li key={href}>
                   <Link href={href} className="flex items-center min-h-[44px] hover:text-brand-orange transition-colors">{label}</Link>
                 </li>
@@ -43,7 +44,7 @@ export default function Footer() {
             {/* No space-y: each row is a 44px tap target and carries its own
                 height. Stacked gaps on top of that just spread the footer out. */}
             <ul className="text-sm">
-              {[['About Us', '/about'], ['Code of Conduct', '/conduct'], ['List Your Services', '/pros/list'], ['Privacy Policy', '/privacy'], ['Contact', '/contact']].map(([label, href]) => (
+              {[['About Us', '/about'], ['Code of Conduct', '/conduct'], ...(SHOW_PRO_SIGNUP ? [['List Your Services', '/pros/list']] : []), ['Privacy Policy', '/privacy'], ['Contact', '/contact']].map(([label, href]) => (
                 <li key={href}>
                   <Link href={href} className="flex items-center min-h-[44px] hover:text-brand-orange transition-colors">{label}</Link>
                 </li>
