@@ -1,39 +1,39 @@
 {
-  "weekendStart": "2026-11-20",
-  "weekendEnd": "2026-11-22",
-  "updatedAt": "2026-11-17",
-  "summary": "We did not find a dated dog event for this weekend, so these are dependable spots where you can meet other dog owners. Heads up: David H. Ready Dog Park is closed until December 23, and we could not confirm the Demuth Park dog parks have reopened after construction, so call the city before you go.",
-  "heatNote": "Late November highs in Palm Springs are expected to be in the 70s, comfortable for dogs, but afternoons can feel warm and wind can pick up. Bring water, and recheck the forecast closer to the day.",
-  "topPick": "Boozehounds brunch",
+  "weekendStart": "2026-11-27",
+  "weekendEnd": "2026-11-29",
+  "updatedAt": "2026-11-23",
+  "summary": "It is Thanksgiving weekend and we did not find a dated dog meetup or adoption event, so here is one dog friendly holiday lights outing plus dependable spots to meet other dog owners. David H. Ready Dog Park is closed until December 23, and we could not confirm the Demuth Park dog parks have reopened after construction, so call the city before you go.",
+  "heatNote": "Late November days in the Coachella Valley are expected to be in the 70s, which is comfortable for dogs, with cool evenings and possible afternoon wind. Bring water and a jacket for night outings, and recheck the forecast closer to the day.",
+  "topPick": "Magic of Lights at Empire Polo Club",
   "picks": [
     {
-      "name": "Boozehounds brunch",
+      "name": "Magic of Lights at Empire Polo Club",
+      "kind": "outing",
+      "when": "Nightly through January 2, 5:30 pm to 10 pm Friday and Saturday, 5:30 pm to 9 pm Sunday",
+      "where": "Empire Polo Club, Indio",
+      "cost": "Ticket prices not confirmed, past seasons were priced per vehicle",
+      "why": "A holiday lights show listed as dog friendly, with plenty of families and dog owners out for the season.",
+      "check": "Dog friendly status comes from a third party listing, so confirm the leash policy and ticket price on the official site before you go. Expect crowds on a holiday weekend.",
+      "link": "https://www.magicoflights.com/locations/coachella-valley-ca"
+    },
+    {
+      "name": "Boozehounds",
       "kind": "community",
-      "when": "Friday to Sunday, brunch 10 am to 3 pm",
+      "when": "Friday to Sunday, brunch 10 am to 3 pm, dinner 5 pm to 9 pm or 10 pm",
       "where": "2080 N. Palm Canyon Drive, Palm Springs",
       "cost": "Pay for what you order",
       "why": "A restaurant built around dogs and their people, so the tables around you are full of fellow dog owners.",
-      "check": "Hours differ a little between listings, so confirm brunch hours and ask about a dog friendly table. 760 656 0067.",
+      "check": "Listed hours differ between sites and we found no holiday weekend hours, so call to confirm. 760 656 0067.",
       "link": "https://boozehoundsps.com"
-    },
-    {
-      "name": "4 Paws Coffee Co.",
-      "kind": "community",
-      "when": "Saturday and Sunday morning (listings show roughly 7 am to 3 pm)",
-      "where": "2500 N. Palm Canyon Drive, Suite A5, Palm Springs",
-      "cost": "Pay for what you order",
-      "why": "A neighborhood coffee shop centered on dogs and community, where dogs are welcome on the outdoor patio and conversations come easily.",
-      "check": "Listed hours conflict, so call to confirm before you go. Keep your dog leashed. 760 832 8021.",
-      "link": "https://4pawscoffeeco.com"
     },
     {
       "name": "Palm Springs Air Museum",
       "kind": "outing",
-      "when": "Daily, 10 am to 5 pm",
+      "when": "Typically daily, 10 am to 5 pm",
       "where": "745 N. Gene Autry Trail, Palm Springs",
       "cost": "$25 adult admission, $23 seniors and teens",
-      "why": "A fresh outing where friendly dogs on a leash are welcome, with plenty of visitors to chat with.",
-      "check": "Ask about loud engine runs or demonstrations before bringing a noise sensitive dog. 760 778 6262.",
+      "why": "A fresh outing where friendly leashed dogs are welcome, with plenty of visitors to chat with.",
+      "check": "We could not reconfirm holiday weekend hours, so call first and ask about loud engine runs if your dog is noise sensitive. 760 778 6262.",
       "link": "https://palmspringsairmuseum.org"
     },
     {
@@ -43,11 +43,19 @@
       "where": "Whitewater Preserve, about 25 minutes northwest of Palm Springs",
       "cost": "Free",
       "why": "Leashed dogs are allowed on the preserve trails, and cool fall mornings are ideal for a hike where you will likely cross paths with other dog owners.",
-      "check": "Confirm weekend hours with the Wildlands Conservancy, keep your dog on a leash, and check wind in the pass before you drive out.",
+      "check": "Confirm weekend hours and any reservation requirement with the Wildlands Conservancy, keep your dog on a leash, and check wind in the pass before you drive out.",
       "link": "https://wildlandsconservancy.org/preserves/whitewater"
     }
   ],
   "sources": [
+    {
+      "title": "BringFido: Magic of Lights dog friendly listing",
+      "url": "https://www.bringfido.com/event/49639"
+    },
+    {
+      "title": "Empire Polo Club public events",
+      "url": "https://www.empirepoloclubevents.com/public-events"
+    },
     {
       "title": "NBC Palm Springs: 2026 park closure schedule",
       "url": "https://www.nbcpalmsprings.com/2026/08/03/palm-springs-parks-are-getting-their-fall-glowup"
@@ -57,12 +65,12 @@
       "url": "https://www.nbcpalmsprings.com/2026/03/02/75-million-upgrade-begins-at-demuth-park-in-palm-springs-dog-parks-to-temporarily-close"
     },
     {
-      "title": "Wildlands Conservancy: Whitewater Preserve",
-      "url": "https://wildlandsconservancy.org/preserves/whitewater/weekendreservations"
-    },
-    {
       "title": "Gay Desert Guide: Boozehounds Palm Springs",
       "url": "https://gaydesertguide.com/business/boozehounds-palm-springs"
+    },
+    {
+      "title": "Wildlands Conservancy: Whitewater Preserve",
+      "url": "https://wildlandsconservancy.org/preserves/whitewater"
     }
   ]
 }
